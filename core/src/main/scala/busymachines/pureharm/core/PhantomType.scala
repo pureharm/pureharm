@@ -8,7 +8,7 @@ import shapeless.tag.@@
   * {{{
   * package object api {
   *   object SpecificString extends PhantomType[String]
-  *   type SpecificString = SpecificString.Phantom
+  *   type SpecificString = SpecificString.Type
   * }
   * }}}
   *
@@ -17,20 +17,17 @@ import shapeless.tag.@@
   *
   */
 trait PhantomType[T] {
+  final type Type = T @@ this.type
 
-  protected type Tag <: this.type
-
-  type Phantom = T @@ Tag
-
-  @inline def apply(value: T): @@[T, Tag] =
-    shapeless.tag[Tag](value)
+  @inline final def apply(value: T): T @@ this.type =
+    shapeless.tag[this.type](value)
 
   /**
     * alias for [[apply]]
     */
-  @inline def spook(value: T): @@[T, Tag] =
-    shapeless.tag[Tag](value)
+  @inline final def spook(value: T): T @@ this.type =
+    shapeless.tag[this.type](value)
 
-  @inline def despook(phantom: Phantom): T =
+  @inline final def despook(phantom: T @@ this.type): T =
     identity(phantom)
 }

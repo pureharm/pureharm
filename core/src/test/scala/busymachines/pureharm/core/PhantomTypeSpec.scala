@@ -24,5 +24,5 @@ final class PhantomTypeSpec extends mutable.Specification {
 
 private object PhantomTypeSpec {
   private object Spooked extends PhantomType[String]
-  private type Spooked = Spooked.Phantom
+  private type Spooked = Spooked.Type
 }
