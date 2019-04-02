@@ -39,16 +39,31 @@ private[dbslick] object HikariTransactorImpl {
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
   def resource[F[_]: Async](
-                             dbProfile: JdbcProfileAPI,
+    dbProfile: JdbcProfileAPI,
   )(
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
     config:   DBBlockingIOExecutionConfig,
   ): Resource[F, Transactor[F]] = {
+    Resource.make(unsafeCreate[F](dbProfile)(url, username, password, config))(_.shutdown)
+  }
+
+  /**
+    * Prefer using [[resource]] unless you know what you are doing.
+    * @tparam F
+    */
+  def unsafeCreate[F[_]: Async](
+    dbProfile: JdbcProfileAPI,
+  )(
+    url:      JDBCUrl,
+    username: DBUsername,
+    password: DBPassword,
+    config:   DBBlockingIOExecutionConfig,
+  ): F[Transactor[F]] = {
     val F = Async[F]
 
-    val transactor: F[Transactor[F]] = for {
+    for {
       hikari <- F.delay {
                  val hikariConfig = new HikariConfig()
                  hikariConfig.setJdbcUrl(url)
@@ -76,7 +91,5 @@ private[dbslick] object HikariTransactorImpl {
            )
       _ <- F.delay(db.createSession())
     } yield new HikariTransactorImpl(db)
-
-    Resource.make(transactor)(_.shutdown)
   }
 }

@@ -35,7 +35,7 @@ object Transactor {
   import cats.effect._
 
   def pgSQLHikari[F[_]: Async](
-                                dbProfile: JdbcProfileAPI,
+    dbProfile: JdbcProfileAPI,
   )(
     url:      JDBCUrl,
     username: DBUsername,
@@ -43,6 +43,29 @@ object Transactor {
     config:   DBBlockingIOExecutionConfig,
   ): Resource[F, Transactor[F]] =
     impl.HikariTransactorImpl.resource[F](
+      dbProfile = dbProfile,
+    )(
+      url      = url,
+      username = username,
+      password = password,
+      config   = config,
+    )
+
+  /**
+    * Prefer using [[pgSQLHikari]] instead.
+    *
+    * You really need to know what you are doing and
+    * ensure proper cleanup if using this.
+    */
+  def pgSQLHikariUnsafe[F[_]: Async](
+    dbProfile: JdbcProfileAPI,
+  )(
+    url:      JDBCUrl,
+    username: DBUsername,
+    password: DBPassword,
+    config:   DBBlockingIOExecutionConfig,
+  ): F[Transactor[F]] =
+    impl.HikariTransactorImpl.unsafeCreate[F](
       dbProfile = dbProfile,
     )(
       url      = url,
