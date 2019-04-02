@@ -1,3 +1,24 @@
+addCommandAlias("build",          ";compile;Test/compile")
+addCommandAlias("rebuild",        ";clean;compile;Test/compile")
+addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
+addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
+addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
+addCommandAlias("doLocal",        ";rebuild-update;publishLocal")
+
+/**
+  * Use with care.
+  *
+  * All instructions for publishing to sonatype can be found in
+  * ``z-publishing-artifcats/README.md``.
+  */
+addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
+
+//*****************************************************************************
+//*****************************************************************************
+//********************************* PROJECTS **********************************
+//*****************************************************************************
+//*****************************************************************************
+
 lazy val root = Project(id = "pureharm", base = file("."))
   .settings(PublishingSettings.noPublishSettings)
   .settings(Settings.commonSettings)
