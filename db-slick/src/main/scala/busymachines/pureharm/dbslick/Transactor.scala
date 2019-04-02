@@ -27,7 +27,7 @@ trait Transactor[F[_]] {
     *   The underlying slick representation of a Database, used to
     *   run your DBIOActions.
     */
-  def unsafeUnderlyingDB: SlickDBType
+  def unsafeUnderlyingDB: SlickDB
 }
 
 object Transactor {

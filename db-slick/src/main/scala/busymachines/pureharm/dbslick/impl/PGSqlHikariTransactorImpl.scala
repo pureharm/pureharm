@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext
   *
   */
 private[dbslick] class PGSqlHikariTransactorImpl[F[_]] private (
-  private val db: SlickDBType
+  private val db: SlickDB
 )(
   implicit
   private val F: Async[F]
@@ -29,7 +29,7 @@ private[dbslick] class PGSqlHikariTransactorImpl[F[_]] private (
     */
   override def ioExecutionContext: ExecutionContext = db.ioExecutionContext
 
-  override def unsafeUnderlyingDB: SlickDBType = db
+  override def unsafeUnderlyingDB: SlickDB = db
 }
 
 private[dbslick] object PGSqlHikariTransactorImpl {
@@ -71,7 +71,7 @@ private[dbslick] object PGSqlHikariTransactorImpl {
                ds             = hikari,
                maxConnections = Option(config.maxConnections),
                executor       = exec
-             )
+             ): SlickDB
            )
       _ <- F.delay(db.createSession())
     } yield new PGSqlHikariTransactorImpl(db)

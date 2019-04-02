@@ -12,7 +12,7 @@ package object dbslick {
   type ConnectionIO[T] = slick.dbio.DBIO[T]
   val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  type SlickDBType = slick.jdbc.PostgresProfile#API#Database
+  type SlickDB = slick.jdbc.PostgresProfile#API#Database
 
   object JDBCUrl extends PhantomType[String]
   type JDBCUrl = JDBCUrl.Phantom
