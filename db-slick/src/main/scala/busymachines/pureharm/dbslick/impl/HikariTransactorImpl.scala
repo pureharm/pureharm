@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
   * @since 02 Apr 2019
   *
   */
-private[dbslick] class PGSqlHikariTransactorImpl[F[_]] private (
+private[dbslick] class HikariTransactorImpl[F[_]] private (
   private val db: SlickDB
 )(
   implicit
@@ -32,18 +32,19 @@ private[dbslick] class PGSqlHikariTransactorImpl[F[_]] private (
   override def unsafeUnderlyingDB: SlickDB = db
 }
 
-private[dbslick] object PGSqlHikariTransactorImpl {
+private[dbslick] object HikariTransactorImpl {
 
-  import slick.jdbc.PostgresProfile
   import slick.util.AsyncExecutor
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
   def resource[F[_]: Async](
+    dbProfile: DBProfileAPI,
+  )(
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
-    config:   DBBlockingIOExecutionConfig
+    config:   DBBlockingIOExecutionConfig,
   ): Resource[F, Transactor[F]] = {
     val F = Async[F]
 
@@ -67,14 +68,14 @@ private[dbslick] object PGSqlHikariTransactorImpl {
                )
              )
       db <- F.delay(
-             PostgresProfile.api.Database.forDataSource(
+             dbProfile.api.Database.forDataSource(
                ds             = hikari,
                maxConnections = Option(config.maxConnections),
                executor       = exec
              ): SlickDB
            )
       _ <- F.delay(db.createSession())
-    } yield new PGSqlHikariTransactorImpl(db)
+    } yield new HikariTransactorImpl(db)
 
     Resource.make(transactor)(_.shutdown)
   }
