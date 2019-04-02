@@ -1,6 +1,6 @@
 package busymachines.pureharm
 
-import busymachines.pureharm.core.PhantomType
+import busymachines.pureharm.dbslick.types.DBSlickTypes
 
 /**
   *
@@ -8,18 +8,4 @@ import busymachines.pureharm.core.PhantomType
   * @since 02 Apr 2019
   *
   */
-package object dbslick {
-  type ConnectionIO[T] = slick.dbio.DBIO[T]
-  val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
-
-  type SlickDB = slick.jdbc.PostgresProfile#API#Database
-
-  object JDBCUrl extends PhantomType[String]
-  type JDBCUrl = JDBCUrl.Phantom
-
-  object DBUsername extends PhantomType[String]
-  type DBUsername = DBUsername.Phantom
-
-  object DBPassword extends PhantomType[String]
-  type DBPassword = DBPassword.Phantom
-}
+package object dbslick extends DBSlickTypes
