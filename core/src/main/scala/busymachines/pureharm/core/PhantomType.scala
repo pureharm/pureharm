@@ -1,6 +1,7 @@
 package busymachines.pureharm.core
 
-import shapeless.tag.@@
+import shapeless.tag
+import tag.@@
 
 /**
   *
@@ -17,17 +18,17 @@ import shapeless.tag.@@
   *
   */
 trait PhantomType[T] {
-  final type Type = T @@ this.type
+  protected type Tag <: this.type
+  final type Type = T @@ Tag
 
-  @inline final def apply(value: T): T @@ this.type =
-    shapeless.tag[this.type](value)
+  @inline final def apply(value: T): T @@ Tag =
+    tag[Tag](value)
 
   /**
     * alias for [[apply]]
     */
-  @inline final def spook(value: T): T @@ this.type =
-    shapeless.tag[this.type](value)
+  @inline final def spook(value: T): T @@ Tag =
+    tag[Tag](value)
 
-  @inline final def despook(phantom: T @@ this.type): T =
-    identity(phantom)
+  @inline final def despook(spook: T @@ Tag): T = spook
 }
