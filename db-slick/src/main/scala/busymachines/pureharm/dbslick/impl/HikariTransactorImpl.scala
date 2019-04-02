@@ -39,7 +39,7 @@ private[dbslick] object HikariTransactorImpl {
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
   def resource[F[_]: Async](
-    dbProfile: DBProfileAPI,
+                             dbProfile: JdbcProfileAPI,
   )(
     url:      JDBCUrl,
     username: DBUsername,

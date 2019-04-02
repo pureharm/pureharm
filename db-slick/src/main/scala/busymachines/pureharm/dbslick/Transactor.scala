@@ -35,11 +35,12 @@ object Transactor {
   import cats.effect._
 
   def pgSQLHikari[F[_]: Async](
-    url:       JDBCUrl,
-    username:  DBUsername,
-    password:  DBPassword,
-    config:    DBBlockingIOExecutionConfig,
-    dbProfile: DBProfileAPI,
+                                dbProfile: JdbcProfileAPI,
+  )(
+    url:      JDBCUrl,
+    username: DBUsername,
+    password: DBPassword,
+    config:   DBBlockingIOExecutionConfig,
   ): Resource[F, Transactor[F]] =
     impl.HikariTransactorImpl.resource[F](
       dbProfile = dbProfile,
