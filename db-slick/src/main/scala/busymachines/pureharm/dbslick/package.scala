@@ -1,7 +1,6 @@
 package busymachines.pureharm
 
 import busymachines.pureharm.core.PhantomType
-import busymachines.pureharm.dbslick.types.ConnectionIOCatsInstances
 
 /**
   *
@@ -9,7 +8,7 @@ import busymachines.pureharm.dbslick.types.ConnectionIOCatsInstances
   * @since 02 Apr 2019
   *
   */
-package object dbslick extends ConnectionIOCatsInstances {
+package object dbslick {
   final type ConnectionIO[T] = slick.dbio.DBIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
