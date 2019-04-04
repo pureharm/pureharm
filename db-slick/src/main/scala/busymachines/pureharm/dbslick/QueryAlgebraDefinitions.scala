@@ -48,11 +48,11 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
     * @tparam TA
     *   Slick Table definition
     */
-  abstract class QueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
+  abstract class DBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC
-  ) extends CommonInterface[ConnectionIO, E, PK] {
+  ) extends DAOAlgebra[ConnectionIO, E, PK] {
     import cats.implicits._
     import implicits._
 
@@ -99,7 +99,7 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
     private def eid(e: E): PK = identifiable.id(e)
   }
 
-  object QueryAlgebra {
+  object DBQueryAlgebra {
 
     def fromTableQuery[E, PK, TA <: TableWithPK[E, PK]](
       qt: TableQuery[TA]
@@ -108,8 +108,8 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
       connectionIOEC: ConnectionIOEC
-    ): QueryAlgebra[E, PK, TA] = {
-      new QueryAlgebra[E, PK, TA]() {
+    ): DBQueryAlgebra[E, PK, TA] = {
+      new DBQueryAlgebra[E, PK, TA]() {
         override val dao: TableQuery[TA] = qt
       }
     }
@@ -124,9 +124,9 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC
-  ) extends CommonInterface[F, E, PK] {
+  ) extends DAOAlgebra[F, E, PK] {
 
-    protected def queries: QueryAlgebra[E, PK, TA]
+    protected def queries: DBQueryAlgebra[E, PK, TA]
 
     override def find(pk: PK): F[Option[E]] = transactor.run(queries.find(pk))
 
@@ -154,7 +154,7 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
   object DBAlgebra {
 
     def fromQueryAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      q: QueryAlgebra[E, PK, TA]
+      q: DBQueryAlgebra[E, PK, TA]
     )(
       implicit tr: Transactor[F]
     ): DBAlgebra[F, E, PK, TA] = {
@@ -164,7 +164,7 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
         identifiable   = q.identifiable,
         connectionIOEC = q.connectionIOEC,
       ) {
-        override protected val queries: QueryAlgebra[E, PK, TA] = q
+        override protected val queries: DBQueryAlgebra[E, PK, TA] = q
       }
     }
 
@@ -176,35 +176,7 @@ trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
       identifiable:        Identifiable[E, PK],
       connectionIOEC:      ConnectionIOEC
     ): DBAlgebra[F, E, PK, TA] = {
-      fromQueryAlgebra(QueryAlgebra.fromTableQuery(qt))
+      fromQueryAlgebra(DBQueryAlgebra.fromTableQuery(qt))
     }
-  }
-
-  //===========================================================================
-  //===========================================================================
-  //===========================================================================
-
-  private[QueryAlgebraDefinitions] trait CommonInterface[R[_], E, PK] {
-    def find(pk: PK): R[Option[E]]
-
-    def retrieve(pk: PK): R[E]
-
-    def insert(e: E): R[PK]
-
-    def insertMany(es: Iterable[E]): R[Unit]
-
-    def update(e: E): R[E]
-
-    def updateMany[M[_]: Traverse](es: M[E]): R[Unit]
-
-    def delete(pk: PK): R[Unit]
-
-    def deleteMany(pks: Traversable[PK]): R[Unit]
-
-    def exists(pk: PK): R[Boolean]
-
-    def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
-
-    def existAll(pks: Traversable[PK]): R[Boolean]
   }
 }
