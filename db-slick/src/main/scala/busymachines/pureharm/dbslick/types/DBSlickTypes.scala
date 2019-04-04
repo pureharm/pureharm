@@ -24,20 +24,26 @@ trait DBSlickTypes {
   final type ConnectionIO[T] = dbslick.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickDB  = dbslick.SlickDB
-  final type SlickAPI = dbslick.SlickAPI
+  final type SlickDB  = dbslick.SlickBackendDB
+  final type SlickAPI = dbslick.SlickJDBCProfileAPI
 
   final val JDBCUrl: dbslick.JDBCUrl.type = dbslick.JDBCUrl
-  final type JDBCUrl = dbslick.JDBCUrl.Type
+  final type JDBCUrl = dbslick.JDBCUrl
 
   final val DBUsername: dbslick.DBUsername.type = dbslick.DBUsername
-  final type DBUsername = dbslick.DBUsername.Type
+  final type DBUsername = dbslick.DBUsername
 
   final val DBPassword: dbslick.DBPassword.type = dbslick.DBPassword
-  final type DBPassword = dbslick.DBPassword.Type
+  final type DBPassword = dbslick.DBPassword
 
-  final type JdbcProfileAPI = dbslick.JdbcProfileAPI
-  final val JdbcProfileAPI: dbslick.JdbcProfileAPI.type = dbslick.JdbcProfileAPI
+  final val TableName = dbslick.DBPassword
+  final type TableName = dbslick.DBPassword
+
+  final val JDBCProfileAPI: dbslick.JDBCProfileAPI.type = dbslick.JDBCProfileAPI
+  final type JDBCProfileAPI = dbslick.JDBCProfileAPI
+
+  final val DatabaseBackend: dbslick.DatabaseBackend.type = dbslick.DatabaseBackend
+  final type DatabaseBackend = dbslick.DatabaseBackend
 
   final type Transactor[F[_]] = dbslick.Transactor[F]
   final val Transactor: dbslick.Transactor.type = dbslick.Transactor
