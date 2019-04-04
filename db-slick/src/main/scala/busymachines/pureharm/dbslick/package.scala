@@ -1,6 +1,7 @@
 package busymachines.pureharm
 
 import busymachines.pureharm.core.PhantomType
+import busymachines.pureharm.dbslick.types.ConnectionIOCatsInstances
 
 /**
   *
@@ -8,12 +9,12 @@ import busymachines.pureharm.core.PhantomType
   * @since 02 Apr 2019
   *
   */
-package object dbslick {
+package object dbslick extends ConnectionIOCatsInstances {
   final type ConnectionIO[T] = slick.dbio.DBIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickDB  = slick.jdbc.JdbcProfile#Backend#Database
-  final type SlickAPI = slick.jdbc.JdbcProfile#API
+  final type SlickBackendDB      = slick.jdbc.JdbcProfile#Backend#Database
+  final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
 
   final object JDBCUrl extends PhantomType[String]
   final type JDBCUrl = JDBCUrl.Type
@@ -23,4 +24,13 @@ package object dbslick {
 
   final object DBPassword extends PhantomType[String]
   final type DBPassword = DBPassword.Type
+
+  final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
+  final type JDBCProfileAPI = JDBCProfileAPI.Type
+
+  final object DatabaseBackend extends PhantomType[SlickBackendDB]
+  final type DatabaseBackend = DatabaseBackend.Type
+
+  final object TableName extends PhantomType[String]
+  final type TableName = TableName.Type
 }
