@@ -27,7 +27,22 @@ trait Transactor[F[_]] {
     *   The underlying slick representation of a Database, used to
     *   run your DBIOActions.
     */
-  def unsafeUnderlyingDB: SlickDB
+  val slickDB: DatabaseBackend
+
+  /**
+    * Please use only to compensate for the lacks of this evergrowing
+    * API. Prefer to make this wrapper support what you want to do,
+    * rather than using this thing.
+    *
+    * @return
+    *   The underlying JDBC profile you used to instantiate this
+    *   [[Transactor]]. Most likely that one global object in your
+    *   project that you instantiated once, and then forgot about.
+    *   Now available to import through here for more localized
+    *   reasoning in case you need it.
+    */
+  val slickAPI: JDBCProfileAPI
+
 }
 
 object Transactor {
@@ -35,7 +50,7 @@ object Transactor {
   import cats.effect._
 
   def pgSQLHikari[F[_]: Async](
-    dbProfile: JdbcProfileAPI,
+    dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
     username: DBUsername,
@@ -58,7 +73,7 @@ object Transactor {
     * ensure proper cleanup if using this.
     */
   def pgSQLHikariUnsafe[F[_]: Async](
-    dbProfile: JdbcProfileAPI,
+    dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
     username: DBUsername,
@@ -66,7 +81,7 @@ object Transactor {
     config:   DBBlockingIOExecutionConfig,
   ): F[Transactor[F]] =
     impl.HikariTransactorImpl.unsafeCreate[F](
-      dbProfile = dbProfile,
+      slickProfile = dbProfile,
     )(
       url      = url,
       username = username,
