@@ -1,10 +1,8 @@
 package busymachines.pureharm.dbslick.impl
 
 import cats._
+import busymachines.pureharm.dbslick.{ConnectionIO, ConnectionIOEC}
 
-import busymachines.pureharm.dbslick.ConnectionIO
-
-import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 /**
@@ -13,7 +11,7 @@ import scala.util.{Failure, Success}
   * @since 04 Apr 2019
   *
   */
-private[dbslick] class ConnectionIOMonadError(implicit ec: ExecutionContext)
+private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
     extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 

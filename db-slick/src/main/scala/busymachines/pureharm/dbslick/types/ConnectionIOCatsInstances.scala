@@ -1,11 +1,8 @@
 package busymachines.pureharm.dbslick.types
 
 import cats.MonadError
-
-import busymachines.pureharm.dbslick.ConnectionIO
+import busymachines.pureharm.dbslick.{ConnectionIO, ConnectionIOEC}
 import busymachines.pureharm.dbslick.impl.ConnectionIOMonadError
-
-import scala.concurrent.ExecutionContext
 
 /**
   *
@@ -14,6 +11,6 @@ import scala.concurrent.ExecutionContext
   *
   */
 trait ConnectionIOCatsInstances {
-  implicit def connectionIOInstance(implicit ec: ExecutionContext): MonadError[ConnectionIO, Throwable] =
+  implicit def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
     new ConnectionIOMonadError
 }

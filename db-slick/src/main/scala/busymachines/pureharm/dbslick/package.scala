@@ -32,4 +32,13 @@ package object dbslick {
 
   final object TableName extends PhantomType[String]
   final type TableName = TableName.Type
+
+  /**
+    * Basically used to run computation when mapping slick's DBIO's,
+    * mostly used for CPU bound computation, since all IO is done
+    * within slick's AsyncExecutor configured via the [[DBBlockingIOExecutionConfig]]
+    * when instantiating a [[Transactor]]
+    */
+  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
+  final type ConnectionIOEC = ConnectionIOEC.Type
 }
