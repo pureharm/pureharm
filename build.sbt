@@ -48,12 +48,41 @@ lazy val root = Project(id = "pureharm", base = file("."))
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
+  .dependsOn(
+    phantom,
+    identifiable,
+  )
+  .aggregate(
+    phantom,
+    identifiable,
+  )
+
+lazy val phantom = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-core",
+    name in ThisProject := "pureharm-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
     ),
+  )
+
+lazy val identifiable = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name in ThisProject := "pureharm-identifiable",
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    phantom,
+  )
+  .aggregate(
+    phantom,
   )
 
 lazy val `db-slick` = project
@@ -66,8 +95,14 @@ lazy val `db-slick` = project
       specs2 % Test,
     ),
   )
-  .dependsOn(core)
-  .aggregate(core)
+  .dependsOn(
+    phantom,
+    identifiable,
+  )
+  .aggregate(
+    phantom,
+    identifiable,
+  )
 
 //*****************************************************************************
 //*****************************************************************************

@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.core.types
-
-import busymachines.pureharm.core.{FieldName, Identifiable}
+package busymachines.pureharm.core
 
 /**
   *
@@ -26,9 +24,9 @@ import busymachines.pureharm.core.{FieldName, Identifiable}
   *
   */
 trait IdentifiableLowPriorityImplicits {
+  import IdentifiableLowPriorityImplicits._
   import shapeless._
   import shapeless.ops.record._
-  import IdentifiableLowPriorityImplicits._
 
   def apply[T, ID](implicit instance: Identifiable[T, ID]): Identifiable[T, ID] = instance
 
@@ -41,7 +39,8 @@ trait IdentifiableLowPriorityImplicits {
 
 }
 
-private[types] object IdentifiableLowPriorityImplicits {
+private[core] object IdentifiableLowPriorityImplicits {
+  import fieldname._
   private val IdFieldName: FieldName = FieldName("id")
   private trait IdentifiableByID[T, ID] extends Identifiable[T, ID] {
     override def fieldName: FieldName = IdFieldName

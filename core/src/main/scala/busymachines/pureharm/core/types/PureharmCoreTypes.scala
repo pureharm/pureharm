@@ -29,8 +29,8 @@ import busymachines.pureharm.core
   *
   */
 trait PureharmCoreTypes {
-  type FieldName = core.FieldName
-  val FieldName: core.FieldName.type = core.FieldName
+  type FieldName = core.fieldname.FieldName
+  val FieldName: core.fieldname.FieldName.type = core.fieldname.FieldName
 
   type Identifiable[T, ID] = core.Identifiable[T, ID]
   val Identifiable: core.Identifiable.type = core.Identifiable
