@@ -48,6 +48,9 @@ lazy val root = Project(id = "pureharm", base = file("."))
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
+  .settings(
+    name in ThisProject := "pureharm-core",
+  )
   .dependsOn(
     phantom,
     identifiable,
