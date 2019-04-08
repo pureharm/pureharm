@@ -25,9 +25,7 @@ package busymachines.pureharm.dbslick
   * in the foot by providing a possibly dead-locking config.
   *
   * @param queueSize
-  *
   * @param maxConnections
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
   */

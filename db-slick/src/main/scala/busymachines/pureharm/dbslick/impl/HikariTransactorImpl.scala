@@ -33,7 +33,7 @@ private[dbslick] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(
-  implicit private val F: Async[F]
+  implicit private val F: Async[F],
 ) extends Transactor[F] {
 
   override def run[T](cio: ConnectionIO[T]): F[T] =
@@ -66,6 +66,7 @@ private[dbslick] object HikariTransactorImpl {
 
   /**
     * Prefer using [[resource]] unless you know what you are doing.
+    *
     * @tparam F
     */
   def unsafeCreate[F[_]: Async](
@@ -80,32 +81,32 @@ private[dbslick] object HikariTransactorImpl {
 
     for {
       hikari <- F.delay {
-                 val hikariConfig = new HikariConfig()
-                 hikariConfig.setJdbcUrl(url)
-                 hikariConfig.setUsername(username)
-                 hikariConfig.setPassword(password)
+        val hikariConfig = new HikariConfig()
+        hikariConfig.setJdbcUrl(url)
+        hikariConfig.setUsername(username)
+        hikariConfig.setPassword(password)
 
-                 new HikariDataSource(hikariConfig)
-               }
+        new HikariDataSource(hikariConfig)
+      }
 
       exec <- F.delay(
-               AsyncExecutor(
-                 name           = config.prefixName:     String,
-                 minThreads     = config.maxConnections: Int,
-                 maxThreads     = config.maxConnections: Int,
-                 queueSize      = config.queueSize:      Int,
-                 maxConnections = config.maxConnections: Int,
-               )
-             )
+        AsyncExecutor(
+          name           = config.prefixName:     String,
+          minThreads     = config.maxConnections: Int,
+          maxThreads     = config.maxConnections: Int,
+          queueSize      = config.queueSize:      Int,
+          maxConnections = config.maxConnections: Int,
+        ),
+      )
       slickDB <- F.delay(
-                  DatabaseBackend(
-                    slickProfile.Database.forDataSource(
-                      ds             = hikari,
-                      maxConnections = Option(config.maxConnections),
-                      executor       = exec
-                    )
-                  )
-                )
+        DatabaseBackend(
+          slickProfile.Database.forDataSource(
+            ds             = hikari,
+            maxConnections = Option(config.maxConnections),
+            executor       = exec,
+          ),
+        ),
+      )
       _ <- F.delay(slickDB.createSession())
     } yield new HikariTransactorImpl(slickProfile, slickDB)
   }
