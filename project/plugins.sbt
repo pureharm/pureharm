@@ -46,9 +46,10 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 /**
   * The best thing since sliced bread.
   *
-  * https://github.com/scalameta/scalafmt
+  * https://github.com/scalameta/sbt-scalafmt
+  * 
   */
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "1.5.1")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.0")
 
 /**
   * Refactoring/linting tool for scala.
@@ -70,7 +71,7 @@ addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "1.5.1")
   *
   * }}}
   */
-//addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.6.0-M1")
+//addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.4")
 
 /**
   * Used to build the documentation.
