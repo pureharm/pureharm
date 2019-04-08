@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2017-2018 BusyMachines
+  * Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
