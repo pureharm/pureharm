@@ -1,4 +1,4 @@
-package busymachines.pureharm.core
+package busymachines.pureharm
 
 import org.specs2.mutable
 

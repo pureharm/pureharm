@@ -15,37 +15,27 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.core
-
-import shapeless.tag
-import tag.@@
+package busymachines.pureharm
 
 /**
   *
-  * Example use case:
-  * {{{
-  * package object api {
-  *   object SpecificString extends PhantomType[String]
-  *   type SpecificString = SpecificString.Type
-  * }
-  * }}}
+  * Convenience trait to mix in into your own domain specific
+  * modules for easy single-import experiences
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 02 Apr 2019
+  * @since 04 Apr 2019
   *
   */
-trait PhantomType[T] {
-  type Tag <: this.type
-  final type Type = T @@ Tag
+trait PureharmCoreTypes {
+  type FieldName = _root_.busymachines.pureharm.fieldname.FieldName
 
-  @inline final def apply(value: T): T @@ Tag =
-    tag[Tag](value)
+  val FieldName: _root_.busymachines.pureharm.fieldname.FieldName.type =
+    _root_.busymachines.pureharm.fieldname.FieldName
 
-  /**
-    * alias for [[apply]]
-    */
-  @inline final def spook(value: T): T @@ Tag =
-    tag[Tag](value)
+  type Identifiable[T, ID] = _root_.busymachines.pureharm.Identifiable[T, ID]
 
-  @inline final def despook(spook: T @@ Tag): T = spook
+  val Identifiable: _root_.busymachines.pureharm.Identifiable.type =
+    _root_.busymachines.pureharm.Identifiable
+
+  type PhantomType[T] = _root_.busymachines.pureharm.PhantomType[T]
 }

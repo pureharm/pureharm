@@ -16,9 +16,6 @@
   * limitations under the License.
   */
 package busymachines.pureharm
-
-import busymachines.pureharm.core.PhantomType
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

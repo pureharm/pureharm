@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.dbslick
 
-import busymachines.pureharm.core.Identifiable
+import busymachines.pureharm.Identifiable
 import cats.Traverse
 
 import scala.util.control.NonFatal

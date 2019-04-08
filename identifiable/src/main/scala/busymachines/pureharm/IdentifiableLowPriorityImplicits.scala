@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.core
+package busymachines.pureharm
 
 /**
   *
@@ -39,7 +39,7 @@ trait IdentifiableLowPriorityImplicits {
 
 }
 
-private[core] object IdentifiableLowPriorityImplicits {
+private[pureharm] object IdentifiableLowPriorityImplicits {
   import fieldname._
   private val IdFieldName: FieldName = FieldName("id")
   private trait IdentifiableByID[T, ID] extends Identifiable[T, ID] {
