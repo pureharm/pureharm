@@ -10,11 +10,14 @@ import scala.util.control.NonFatal
   * Mix in into your global slick definition object.
   * You know which one, every application has one.
   *
+  * Unfortunately, there is no way to make these definitions available
+  * in your "api" object that you then import everywhere slick.
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   *
   */
-trait QueryAlgebraDefinitions extends slick.jdbc.JdbcProfile {
+trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   import api._
 
   /**
