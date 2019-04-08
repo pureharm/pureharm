@@ -30,7 +30,7 @@ import scala.annotation.implicitNotFound
   *
   */
 @implicitNotFound(
-  "If a case class T, has a field called 'id of type ID then an Identifiable[T, ID] will be generated for case class, otherwise, please provide one"
+  "If a case class T, has a field called 'id of type ID then an Identifiable[T, ID] will be generated for case class, otherwise, please provide one",
 )
 trait Identifiable[T, ID] {
   def id(t: T): ID

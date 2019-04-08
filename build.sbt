@@ -16,12 +16,12 @@
   * limitations under the License.
   */
 
-addCommandAlias("build",          ";compile;Test/compile")
-addCommandAlias("rebuild",        ";clean;compile;Test/compile")
+addCommandAlias("build", ";compile;Test/compile")
+addCommandAlias("rebuild", ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
-addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
-addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
-addCommandAlias("doLocal",        ";rebuild-update;publishLocal")
+addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
+addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
+addCommandAlias("doLocal", ";rebuild-update;publishLocal")
 
 /**
   * Use with care.
@@ -53,7 +53,7 @@ lazy val core = project
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
-    )
+    ),
   )
 
 lazy val `db-slick` = project
@@ -64,7 +64,7 @@ lazy val `db-slick` = project
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
       specs2 % Test,
-    )
+    ),
   )
   .dependsOn(core)
   .aggregate(core)

@@ -56,6 +56,6 @@ private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) exten
 
   override def attempt[A](fa: ConnectionIO[A]): ConnectionIO[Either[Throwable, A]] = fa.asTry.map {
     case Success(v) => Right[Throwable, A](v)
-    case Failure(t) => Left[Throwable,  A](t)
+    case Failure(t) => Left[Throwable, A](t)
   }
 }

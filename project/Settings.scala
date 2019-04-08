@@ -48,7 +48,7 @@ object Settings {
        * https://github.com/oleg-py/better-monadic-for
        */
       addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4"),
-      scalacOptions ++= customScalaCompileFlagList ++ betterForPluginCompilerFlags
+      scalacOptions ++= customScalaCompileFlagList ++ betterForPluginCompilerFlags,
     )
 
   /**
@@ -98,7 +98,7 @@ object Settings {
     "-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
     "-Ywarn-unused:privates", // Warn if a private member is unused.
     "-Ywarn-value-discard", // Warn when non-Unit expression results are unused.
-    "-Ypartial-unification" // Enable partial unification in type constructor inference
+    "-Ypartial-unification", // Enable partial unification in type constructor inference
 
     //"-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
 
@@ -117,6 +117,6 @@ object Settings {
   def betterForPluginCompilerFlags: Seq[String] = Seq(
     "-P:bm4:no-filtering:y", // see https://github.com/oleg-py/better-monadic-for#desugaring-for-patterns-without-withfilters--pbm4no-filteringy
     "-P:bm4:no-map-id:y", // see https://github.com/oleg-py/better-monadic-for#final-map-optimization--pbm4no-map-idy
-    "-P:bm4:no-tupling:y" // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
+    "-P:bm4:no-tupling:y", // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
   )
 }

@@ -62,17 +62,17 @@ object PublishingSettings {
     scmInfo := Option(
       ScmInfo(
         url("https://github.com/busymachines/pureharm"),
-        "scm:git@github.com:busymachines/pureharm.git"
-      )
+        "scm:git@github.com:busymachines/pureharm.git",
+      ),
     ),
     developers := List(
       Developer(
         id    = "lorandszakacs",
         name  = "Lorand Szakacs",
         email = "lorand.szakacs@busymachines.com",
-        url   = url("https://github.com/lorandszakacs")
-      )
-    )
+        url   = url("https://github.com/lorandszakacs"),
+      ),
+    ),
   )
 
   def noPublishSettings = Seq(
@@ -80,7 +80,7 @@ object PublishingSettings {
     publishLocal         := {},
     skip in publishLocal := true,
     skip in publish      := true,
-    publishArtifact      := false
+    publishArtifact      := false,
   )
 
 }

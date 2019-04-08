@@ -46,8 +46,8 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     *   also has the unique constraint.
     */
   abstract class TableWithPK[E, PK](tag: Tag, name: TableName)(
-    implicit val identifiable: Identifiable[E, PK],
-    implicit val columnTypePK: ColumnType[PK]
+    implicit val identifiable:           Identifiable[E, PK],
+    implicit val columnTypePK:           ColumnType[PK],
   ) extends Table[E](tag, name) {
     //override if you want different constraints, like autoincrement
     def id: Rep[PK] = column(identifiable.fieldName, O.PrimaryKey, O.Unique)
@@ -71,7 +71,7 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   abstract class DBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
-    implicit val connectionIOEC: ConnectionIOEC
+    implicit val connectionIOEC: ConnectionIOEC,
   ) extends DAOAlgebra[ConnectionIO, E, PK] {
     import cats.implicits._
     import implicits._
@@ -122,12 +122,12 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   object DBQueryAlgebra {
 
     def fromTableQuery[E, PK, TA <: TableWithPK[E, PK]](
-      qt: TableQuery[TA]
+      qt: TableQuery[TA],
     )(
       implicit
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
-      connectionIOEC: ConnectionIOEC
+      connectionIOEC: ConnectionIOEC,
     ): DBQueryAlgebra[E, PK, TA] = {
       new DBQueryAlgebra[E, PK, TA]() {
         override val dao: TableQuery[TA] = qt
@@ -143,7 +143,7 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     implicit val transactor:     Transactor[F],
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
-    implicit val connectionIOEC: ConnectionIOEC
+    implicit val connectionIOEC: ConnectionIOEC,
   ) extends DAOAlgebra[F, E, PK] {
 
     protected def queries: DBQueryAlgebra[E, PK, TA]
@@ -174,9 +174,9 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   object DBAlgebra {
 
     def fromQueryAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      q: DBQueryAlgebra[E, PK, TA]
+      q: DBQueryAlgebra[E, PK, TA],
     )(
-      implicit tr: Transactor[F]
+      implicit tr: Transactor[F],
     ): DBAlgebra[F, E, PK, TA] = {
       new DBAlgebra[F, E, PK, TA]()(
         transactor     = tr,
@@ -189,12 +189,12 @@ trait QueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     }
 
     def fromTableQuery[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      qt: TableQuery[TA]
+      qt: TableQuery[TA],
     )(
       implicit transactor: Transactor[F],
       columnTypePK:        ColumnType[PK],
       identifiable:        Identifiable[E, PK],
-      connectionIOEC:      ConnectionIOEC
+      connectionIOEC:      ConnectionIOEC,
     ): DBAlgebra[F, E, PK, TA] = {
       fromQueryAlgebra(DBQueryAlgebra.fromTableQuery(qt))
     }
