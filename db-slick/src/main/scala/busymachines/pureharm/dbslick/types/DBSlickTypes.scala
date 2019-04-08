@@ -36,8 +36,8 @@ trait DBSlickTypes {
   final val DBPassword: dbslick.DBPassword.type = dbslick.DBPassword
   final type DBPassword = dbslick.DBPassword
 
-  final val TableName = dbslick.DBPassword
-  final type TableName = dbslick.DBPassword
+  final val TableName = dbslick.TableName
+  final type TableName = dbslick.TableName
 
   final val JDBCProfileAPI: dbslick.JDBCProfileAPI.type = dbslick.JDBCProfileAPI
   final type JDBCProfileAPI = dbslick.JDBCProfileAPI
@@ -50,4 +50,6 @@ trait DBSlickTypes {
 
   final type DBBlockingIOExecutionConfig = dbslick.DBBlockingIOExecutionConfig
   final val DBBlockingIOExecutionConfig: dbslick.DBBlockingIOExecutionConfig.type = dbslick.DBBlockingIOExecutionConfig
+
+  final type DAOAlgebra[R[_], E, PK] = dbslick.DAOAlgebra[R, E, PK]
 }
