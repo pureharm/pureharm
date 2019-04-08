@@ -69,4 +69,7 @@ trait DBSlickTypes {
   final val DBBlockingIOExecutionConfig: dbslick.DBBlockingIOExecutionConfig.type = dbslick.DBBlockingIOExecutionConfig
 
   final type DAOAlgebra[R[_], E, PK] = dbslick.DAOAlgebra[R, E, PK]
+
+  type ConnectionIOEC = dbslick.ConnectionIOEC
+  val ConnectionIOEC: dbslick.ConnectionIOEC.type = dbslick.ConnectionIOEC
 }
