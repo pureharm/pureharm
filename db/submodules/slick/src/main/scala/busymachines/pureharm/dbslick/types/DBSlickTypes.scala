@@ -55,7 +55,8 @@ trait DBSlickTypes extends DBCoreTypes {
   final type Transactor[F[_]] = dbslick.Transactor[F]
   final val Transactor: dbslick.Transactor.type = dbslick.Transactor
 
-  final type DBBlockingIOExecutionConfig = dbslick.DBBlockingIOExecutionConfig
-  final val DBBlockingIOExecutionConfig: dbslick.DBBlockingIOExecutionConfig.type = dbslick.DBBlockingIOExecutionConfig
+  final type DBBlockingIOExecutionConfig = dbslick.SlickDBIOAsyncExecutorConfig
+  final val DBBlockingIOExecutionConfig: dbslick.SlickDBIOAsyncExecutorConfig.type =
+    dbslick.SlickDBIOAsyncExecutorConfig
 
 }

@@ -29,15 +29,15 @@ package busymachines.pureharm.dbslick
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
   */
-final case class DBBlockingIOExecutionConfig(
+final case class SlickDBIOAsyncExecutorConfig(
   prefixName:     String,
   queueSize:      Int,
   maxConnections: Int,
 )
 
-object DBBlockingIOExecutionConfig {
+object SlickDBIOAsyncExecutorConfig {
 
-  def default: DBBlockingIOExecutionConfig = DBBlockingIOExecutionConfig(
+  def default: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig(
     prefixName     = "pureharm-db",
     queueSize      = 2000,
     maxConnections = 20,

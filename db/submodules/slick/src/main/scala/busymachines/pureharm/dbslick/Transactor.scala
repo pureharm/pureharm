@@ -74,7 +74,7 @@ object Transactor {
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
-    config:   DBBlockingIOExecutionConfig,
+    config:   SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] =
     impl.HikariTransactorImpl.resource[F](
       dbProfile = dbProfile,
@@ -97,7 +97,7 @@ object Transactor {
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
-    config:   DBBlockingIOExecutionConfig,
+    config:   SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] =
     impl.HikariTransactorImpl.unsafeCreate[F](
       slickProfile = dbProfile,

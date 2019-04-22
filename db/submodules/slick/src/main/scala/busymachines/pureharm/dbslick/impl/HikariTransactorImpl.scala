@@ -60,7 +60,7 @@ private[dbslick] object HikariTransactorImpl {
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
-    config:   DBBlockingIOExecutionConfig,
+    config:   SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] = {
     Resource.make(unsafeCreate[F](dbProfile)(url, username, password, config))(_.shutdown)
   }
@@ -74,7 +74,7 @@ private[dbslick] object HikariTransactorImpl {
     url:      JDBCUrl,
     username: DBUsername,
     password: DBPassword,
-    config:   DBBlockingIOExecutionConfig,
+    config:   SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] = {
     val F = Async[F]
 
