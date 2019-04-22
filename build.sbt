@@ -42,8 +42,12 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .settings(Settings.commonSettings)
   .aggregate(
     core,
-    `db-slick`,
+    `db-core`,
   )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
@@ -88,11 +92,15 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
     `core-phantom`,
   )
 
-lazy val `db-slick` = project
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `db-core` = Project(id = "pureharm-db-core", base = file(s"./db"))
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-db-slick",
+    name in ThisProject := "pureharm-db-core",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
       specs2 % Test,
@@ -107,11 +115,28 @@ lazy val `db-slick` = project
     `core-identifiable`,
   )
 
+lazy val `db-slick` = subModule("db", "slick")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name in ThisProject := "pureharm-db-slick",
+    libraryDependencies ++= Seq(
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    `db-core`,
+  )
+  .aggregate(
+    `db-core`,
+  )
+
 //*****************************************************************************
 //*****************************************************************************
 //******************************** DEPENDENCIES *******************************
 //*****************************************************************************
 //*****************************************************************************
+
 lazy val catsVersion:       String = "1.6.0"
 lazy val catsEffectVersion: String = "1.2.0"
 
@@ -150,11 +175,19 @@ lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion w
 //================================= DATABASE ==================================
 //=============================================================================
 
-//https://github.com/slick/slick
-lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
-
 //https://github.com/brettwooldridge/HikariCP
 lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSources ()
+
+//=============================================================================
+//============================= DATABASE - DOOBIE =============================
+//=============================================================================
+
+//=============================================================================
+//============================= DATABASE - SLICK ==============================
+//=============================================================================
+
+//https://github.com/slick/slick
+lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
 
 //https://github.com/tminglei/slick-pg
 //lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPgVersion withSources ()

@@ -22,7 +22,7 @@ package busymachines.pureharm
   * @since 02 Apr 2019
   *
   */
-package object dbslick {
+package object db {
   final type ConnectionIO[T] = slick.dbio.DBIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 

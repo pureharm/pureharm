@@ -15,40 +15,31 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick
-
-import cats.Traverse
+package busymachines.pureharm.db
 
 /**
   *
-  * @tparam E
-  *   The type of elements manipulated by this DAO
-  * @tparam PK
-  *   The "primary key", or "id" if you will, by which elements
-  *   of type `E` are identified.
+  * For now we only expose one single configuration,
+  * in future versions we'll provide more configurable,
+  * and type-safe DSL, so you don't accidentally shoot yourself
+  * in the foot by providing a possibly dead-locking config.
+  *
+  * @param queueSize
+  * @param maxConnections
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 04 Apr 2019
+  * @since 02 Apr 2019
   */
-trait DAOAlgebra[R[_], E, PK] {
-  def find(pk: PK): R[Option[E]]
+final case class DBBlockingIOExecutionConfig(
+  prefixName:     String,
+  queueSize:      Int,
+  maxConnections: Int,
+)
 
-  def retrieve(pk: PK): R[E]
+object DBBlockingIOExecutionConfig {
 
-  def insert(e: E): R[PK]
-
-  def insertMany(es: Iterable[E]): R[Unit]
-
-  def update(e: E): R[E]
-
-  def updateMany[M[_]: Traverse](es: M[E]): R[Unit]
-
-  def delete(pk: PK): R[Unit]
-
-  def deleteMany(pks: Traversable[PK]): R[Unit]
-
-  def exists(pk: PK): R[Boolean]
-
-  def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
-
-  def existAll(pks: Traversable[PK]): R[Boolean]
+  def default: DBBlockingIOExecutionConfig = DBBlockingIOExecutionConfig(
+    prefixName     = "pureharm-db",
+    queueSize      = 2000,
+    maxConnections = 20,
+  )
 }

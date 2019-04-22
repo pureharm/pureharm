@@ -15,11 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.types
+package busymachines.pureharm.db
 
-import cats.MonadError
-import busymachines.pureharm.dbslick.{ConnectionIO, ConnectionIOEC}
-import busymachines.pureharm.dbslick.impl.ConnectionIOMonadError
+import busymachines.pureharm.db.types.ConnectionIOCatsInstances
 
 /**
   *
@@ -27,7 +25,4 @@ import busymachines.pureharm.dbslick.impl.ConnectionIOMonadError
   * @since 04 Apr 2019
   *
   */
-trait ConnectionIOCatsInstances {
-  implicit def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
-    new ConnectionIOMonadError
-}
+object implicits extends ConnectionIOCatsInstances

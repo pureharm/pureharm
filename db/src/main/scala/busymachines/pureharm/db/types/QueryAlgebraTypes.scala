@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.types
+package busymachines.pureharm.db.types
 
-import busymachines.pureharm.dbslick.QueryAlgebraDefinitions
+import busymachines.pureharm.db.QueryAlgebraDefinitions
 
 /**
   *
