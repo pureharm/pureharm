@@ -17,7 +17,6 @@
   */
 package busymachines.pureharm.dbslick.types
 
-import busymachines.pureharm.db.types.DBCoreTypes
 import busymachines.pureharm.dbslick
 
 /**
@@ -38,7 +37,7 @@ import busymachines.pureharm.dbslick
   * @since 02 Apr 2019
   *
   */
-trait DBSlickTypes extends DBCoreTypes {
+trait DBSlickTypes {
 
   final type ConnectionIO[T] = dbslick.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
