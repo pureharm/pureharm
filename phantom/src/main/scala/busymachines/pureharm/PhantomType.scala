@@ -38,14 +38,14 @@ trait PhantomType[T] {
   type Tag <: this.type
   final type Type = T @@ Tag
 
-  @inline final def apply(value: T): T @@ Tag =
+  @inline def apply(value: T): T @@ Tag =
     tag[Tag](value)
 
   /**
     * alias for [[apply]]
     */
-  @inline final def spook(value: T): T @@ Tag =
-    tag[Tag](value)
+  @inline def spook(value: T): T @@ Tag =
+    apply(value)
 
   @inline final def despook(spook: T @@ Tag): T = spook
 }
