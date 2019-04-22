@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.types
+package busymachines.pureharm.dbslick.types
 
-import busymachines.pureharm.db.QueryAlgebraDefinitions
+import busymachines.pureharm.dbslick.SlickQueryAlgebraDefinitions
 
 /**
   *
@@ -35,10 +35,10 @@ import busymachines.pureharm.db.QueryAlgebraDefinitions
   * @since 04 Apr 2019
   *
   */
-trait QueryAlgebraTypes { self: QueryAlgebraDefinitions =>
-  type DBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]] = self.DBQueryAlgebra[E, PK, TA]
+trait QueryAlgebraTypes { self: SlickQueryAlgebraDefinitions =>
+  type DBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBQueryAlgebra[E, PK, TA]
 
-  type DBAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = self.DBAlgebra[F, E, PK, TA]
+  type DBAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBAlgebra[F, E, PK, TA]
 
   type TableWithPK[E, PK] = self.TableWithPK[E, PK]
 }

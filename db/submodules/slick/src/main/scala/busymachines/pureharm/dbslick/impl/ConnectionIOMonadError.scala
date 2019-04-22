@@ -15,10 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.impl
+package busymachines.pureharm.dbslick.impl
 
 import cats._
-import busymachines.pureharm.db.{ConnectionIO, ConnectionIOEC}
+import busymachines.pureharm.db.ConnectionIOEC
+import busymachines.pureharm.dbslick._
 
 import scala.util.{Failure, Success}
 
@@ -28,7 +29,7 @@ import scala.util.{Failure, Success}
   * @since 04 Apr 2019
   *
   */
-private[db] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) extends MonadError[ConnectionIO, Throwable] {
+private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 
   override def map[A, B](fa: ConnectionIO[A])(f: A => B): ConnectionIO[B] = fa.map(f)

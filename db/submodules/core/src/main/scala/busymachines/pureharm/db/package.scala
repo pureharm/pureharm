@@ -15,14 +15,27 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db
-
-import busymachines.pureharm.db.types.ConnectionIOCatsInstances
+package busymachines.pureharm
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 04 Apr 2019
+  * @since 02 Apr 2019
   *
   */
-object implicits extends ConnectionIOCatsInstances
+package object db {
+  final object JDBCUrl extends PhantomType[String]
+  final type JDBCUrl = JDBCUrl.Type
+
+  final object DBUsername extends PhantomType[String]
+  final type DBUsername = DBUsername.Type
+
+  final object DBPassword extends PhantomType[String]
+  final type DBPassword = DBPassword.Type
+
+  final object TableName extends PhantomType[String]
+  final type TableName = TableName.Type
+
+  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
+  final type ConnectionIOEC = ConnectionIOEC.Type
+}

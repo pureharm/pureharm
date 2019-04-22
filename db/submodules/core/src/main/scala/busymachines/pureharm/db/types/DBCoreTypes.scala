@@ -28,7 +28,7 @@ import busymachines.pureharm.db
   * {{{
   *   package com.domainspecific
   *
-  *   package object db extends busymachines.pureharm.dbslick.types.DBSlickTypes {
+  *   package object db extends busymachines.pureharm.dbslick.types.DBCoreTypes // +driver specific ones {
   *     type DomainSpecificType = Int
   *   }
   * }}}
@@ -37,12 +37,7 @@ import busymachines.pureharm.db
   * @since 02 Apr 2019
   *
   */
-trait DBSlickTypes {
-  final type ConnectionIO[T] = db.ConnectionIO[T]
-  final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
-
-  final type SlickDB  = db.SlickBackendDB
-  final type SlickAPI = db.SlickJDBCProfileAPI
+trait DBCoreTypes {
 
   final val JDBCUrl: db.JDBCUrl.type = db.JDBCUrl
   final type JDBCUrl = db.JDBCUrl
@@ -55,18 +50,6 @@ trait DBSlickTypes {
 
   final val TableName = db.TableName
   final type TableName = db.TableName
-
-  final val JDBCProfileAPI: db.JDBCProfileAPI.type = db.JDBCProfileAPI
-  final type JDBCProfileAPI = db.JDBCProfileAPI
-
-  final val DatabaseBackend: db.DatabaseBackend.type = db.DatabaseBackend
-  final type DatabaseBackend = db.DatabaseBackend
-
-  final type Transactor[F[_]] = db.Transactor[F]
-  final val Transactor: db.Transactor.type = db.Transactor
-
-  final type DBBlockingIOExecutionConfig = db.DBBlockingIOExecutionConfig
-  final val DBBlockingIOExecutionConfig: db.DBBlockingIOExecutionConfig.type = db.DBBlockingIOExecutionConfig
 
   final type DAOAlgebra[R[_], E, PK] = db.DAOAlgebra[R, E, PK]
 

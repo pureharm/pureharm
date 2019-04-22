@@ -15,11 +15,12 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.impl
+package busymachines.pureharm.dbslick.impl
 
 import cats.implicits._
 import cats.effect._
 import busymachines.pureharm.db._
+import busymachines.pureharm.dbslick._
 
 import scala.concurrent.ExecutionContext
 
@@ -29,7 +30,7 @@ import scala.concurrent.ExecutionContext
   * @since 02 Apr 2019
   *
   */
-private[db] class HikariTransactorImpl[F[_]] private(
+private[dbslick] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(
@@ -47,7 +48,7 @@ private[db] class HikariTransactorImpl[F[_]] private(
   override def ioExecutionContext: ExecutionContext = slickDB.ioExecutionContext
 }
 
-private[db] object HikariTransactorImpl {
+private[dbslick] object HikariTransactorImpl {
 
   import slick.util.AsyncExecutor
 
@@ -66,8 +67,6 @@ private[db] object HikariTransactorImpl {
 
   /**
     * Prefer using [[resource]] unless you know what you are doing.
-    *
-    * @tparam F
     */
   def unsafeCreate[F[_]: Async](
     slickProfile: JDBCProfileAPI,

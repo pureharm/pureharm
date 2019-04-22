@@ -53,7 +53,7 @@ lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-core",
+    name := "pureharm-core",
   )
   .dependsOn(
     `core-phantom`,
@@ -68,7 +68,7 @@ lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-core-phantom",
+    name := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
@@ -79,7 +79,7 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-core-identifiable",
+    name := "pureharm-core-identifiable",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
@@ -96,12 +96,29 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `db-core` = Project(id = "pureharm-db-core", base = file(s"./db"))
+lazy val `db` = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-db-core",
+    name := "pureharm-db",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      catsEffect,
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    `db-core`,
+  )
+  .aggregate(
+    `db-core`,
+  )
+
+lazy val `db-core` = subModule("db", "core")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-db-core",
+    libraryDependencies ++= cats ++ Seq(
       catsEffect,
       specs2 % Test,
     ),
@@ -119,8 +136,9 @@ lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-db-slick",
-    libraryDependencies ++= Seq(
+    name := "pureharm-db-slick",
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      catsEffect,
       specs2 % Test,
     ),
   )

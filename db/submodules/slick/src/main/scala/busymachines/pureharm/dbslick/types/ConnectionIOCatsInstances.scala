@@ -15,11 +15,12 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.types
+package busymachines.pureharm.dbslick.types
 
 import cats.MonadError
-import busymachines.pureharm.db.{ConnectionIO, ConnectionIOEC}
-import busymachines.pureharm.db.impl.ConnectionIOMonadError
+import busymachines.pureharm.db.ConnectionIOEC
+import busymachines.pureharm.dbslick._
+import busymachines.pureharm.dbslick.impl.ConnectionIOMonadError
 
 /**
   *
