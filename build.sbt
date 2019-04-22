@@ -52,40 +52,40 @@ lazy val core = project
     name in ThisProject := "pureharm-core",
   )
   .dependsOn(
-    phantom,
-    identifiable,
+    `core-phantom`,
+    `core-identifiable`,
   )
   .aggregate(
-    phantom,
-    identifiable,
+    `core-phantom`,
+    `core-identifiable`,
   )
 
-lazy val phantom = project
+lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-phantom",
+    name in ThisProject := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
     ),
   )
 
-lazy val identifiable = project
+lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-identifiable",
+    name in ThisProject := "pureharm-core-identifiable",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
     ),
   )
   .dependsOn(
-    phantom,
+    `core-phantom`,
   )
   .aggregate(
-    phantom,
+    `core-phantom`,
   )
 
 lazy val `db-slick` = project
@@ -99,12 +99,12 @@ lazy val `db-slick` = project
     ),
   )
   .dependsOn(
-    phantom,
-    identifiable,
+    `core-phantom`,
+    `core-identifiable`,
   )
   .aggregate(
-    phantom,
-    identifiable,
+    `core-phantom`,
+    `core-identifiable`,
   )
 
 //*****************************************************************************
@@ -167,3 +167,10 @@ lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 
 //https://github.com/etorreborre/specs2
 lazy val specs2: ModuleID = "org.specs2" %% "specs2-core" % "4.3.6" withSources ()
+
+//=============================================================================
+//================================== HELPERS ==================================
+//=============================================================================
+
+def subModule(parent: String, mod: String): Project =
+  Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
