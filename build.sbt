@@ -43,6 +43,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .aggregate(
     core,
     `db-core`,
+    `db-slick`,
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
