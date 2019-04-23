@@ -42,38 +42,119 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .settings(Settings.commonSettings)
   .aggregate(
     core,
-    `db-slick`,
+    `db-core`,
   )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-core",
+    name := "pureharm-core",
+  )
+  .dependsOn(
+    `core-phantom`,
+    `core-identifiable`,
+  )
+  .aggregate(
+    `core-phantom`,
+    `core-identifiable`,
+  )
+
+lazy val `core-phantom` = subModule("core", "phantom")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       specs2 % Test,
     ),
   )
 
-lazy val `db-slick` = project
+lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name in ThisProject := "pureharm-db-slick",
+    name := "pureharm-core-identifiable",
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    `core-phantom`,
+  )
+  .aggregate(
+    `core-phantom`,
+  )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `db` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-db",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
       specs2 % Test,
     ),
   )
-  .dependsOn(core)
-  .aggregate(core)
+  .dependsOn(
+    `db-core`,
+  )
+  .aggregate(
+    `db-core`,
+  )
+
+lazy val `db-core` = subModule("db", "core")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-db-core",
+    libraryDependencies ++= cats ++ Seq(
+      catsEffect,
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    `core-phantom`,
+    `core-identifiable`,
+  )
+  .aggregate(
+    `core-phantom`,
+    `core-identifiable`,
+  )
+
+lazy val `db-slick` = subModule("db", "slick")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-db-slick",
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      catsEffect,
+      specs2 % Test,
+    ),
+  )
+  .dependsOn(
+    `db-core`,
+  )
+  .aggregate(
+    `db-core`,
+  )
 
 //*****************************************************************************
 //*****************************************************************************
 //******************************** DEPENDENCIES *******************************
 //*****************************************************************************
 //*****************************************************************************
+
 lazy val catsVersion:       String = "1.6.0"
 lazy val catsEffectVersion: String = "1.2.0"
 
@@ -112,11 +193,19 @@ lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion w
 //================================= DATABASE ==================================
 //=============================================================================
 
-//https://github.com/slick/slick
-lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
-
 //https://github.com/brettwooldridge/HikariCP
 lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSources ()
+
+//=============================================================================
+//============================= DATABASE - DOOBIE =============================
+//=============================================================================
+
+//=============================================================================
+//============================= DATABASE - SLICK ==============================
+//=============================================================================
+
+//https://github.com/slick/slick
+lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
 
 //https://github.com/tminglei/slick-pg
 //lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPgVersion withSources ()
@@ -129,3 +218,10 @@ lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 
 //https://github.com/etorreborre/specs2
 lazy val specs2: ModuleID = "org.specs2" %% "specs2-core" % "4.3.6" withSources ()
+
+//=============================================================================
+//================================== HELPERS ==================================
+//=============================================================================
+
+def subModule(parent: String, mod: String): Project =
+  Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
