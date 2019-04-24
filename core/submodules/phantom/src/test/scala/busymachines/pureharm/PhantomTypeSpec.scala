@@ -1,6 +1,6 @@
 package busymachines.pureharm
 
-import org.specs2.mutable
+import org.scalatest.FunSpec
 
 /**
   *
@@ -8,16 +8,25 @@ import org.specs2.mutable
   * @since 02 Apr 2019
   *
   */
-final class PhantomTypeSpec extends mutable.Specification {
+final class PhantomTypeSpec extends FunSpec {
   import PhantomTypeSpec._
 
-  "PhantomType" >> {
-    "should haunt and excorcise the types" >> {
+  describe("PhantomType") {
+    it("should haunt and excorcise the types") {
       val original:  String  = "EVERYTHING IS A SPOOK!"
-      val haunted:   Spooked = Spooked.spook(original)
-      val exorcised: String  = Spooked.despook(haunted)
+      val spooked:   Spooked = Spooked.spook(original)
+      val despooked: String  = Spooked.despook(spooked)
 
-      original must_=== exorcised
+      assert(original === despooked)
+    }
+
+    it("should not allow asigning a base type to a PhantomType") {
+
+      assertDoesNotCompile {
+        """
+          |val string: Spooked = "THIS IS A NON TAGGED STRING"
+        """.stripMargin
+      }
     }
   }
 }
