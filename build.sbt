@@ -72,7 +72,7 @@ lazy val `core-phantom` = subModule("core", "phantom")
     name := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
-      specs2 % Test,
+      scalaTest % Test,
     ),
   )
 
@@ -83,7 +83,7 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
     name := "pureharm-core-identifiable",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
-      specs2 % Test,
+      scalaTest % Test,
     ),
   )
   .dependsOn(
@@ -93,6 +93,20 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
     `core-phantom`,
   )
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++ EFFECTS ++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val effects = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-core-phantom",
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      scalaTest % Test,
+    ),
+  )
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -104,7 +118,7 @@ lazy val `db` = project
     name := "pureharm-db",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
-      specs2 % Test,
+      scalaTest % Test,
     ),
   )
   .dependsOn(
@@ -121,7 +135,7 @@ lazy val `db-core` = subModule("db", "core")
     name := "pureharm-db-core",
     libraryDependencies ++= cats ++ Seq(
       catsEffect,
-      specs2 % Test,
+      scalaTest % Test,
     ),
   )
   .dependsOn(
@@ -140,7 +154,7 @@ lazy val `db-slick` = subModule("db", "slick")
     name := "pureharm-db-slick",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
-      specs2 % Test,
+      scalaTest % Test,
     ),
   )
   .dependsOn(
@@ -164,6 +178,8 @@ lazy val shapelessVersion: String = "2.3.3"
 lazy val slickVersion:    String = "3.3.0"
 lazy val slickPgVersion:  String = "0.17.2"
 lazy val hikariCPVersion: String = "3.3.1"
+
+lazy val scalaTestVersion: String = "3.0.5"
 
 //=============================================================================
 //================================= TYPELEVEL =================================
@@ -219,6 +235,9 @@ lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 
 //https://github.com/etorreborre/specs2
 lazy val specs2: ModuleID = "org.specs2" %% "specs2-core" % "4.3.6" withSources ()
+
+//http://www.scalatest.org/
+lazy val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion withSources ()
 
 //=============================================================================
 //================================== HELPERS ==================================
