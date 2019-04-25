@@ -101,11 +101,15 @@ lazy val effects = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-core-phantom",
+    name := "pureharm-effects",
     libraryDependencies ++= cats ++ Seq(
-      shapeless,
+      catsEffect,
+      linebacker,
       scalaTest % Test,
     ),
+  )
+  .dependsOn(
+    `core-phantom`,
   )
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
@@ -173,6 +177,8 @@ lazy val `db-slick` = subModule("db", "slick")
 lazy val catsVersion:       String = "1.6.0"
 lazy val catsEffectVersion: String = "1.2.0"
 
+lazy val linebackerVersion: String = "0.2.0"
+
 lazy val shapelessVersion: String = "2.3.3"
 
 lazy val slickVersion:    String = "3.3.0"
@@ -205,6 +211,9 @@ lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVer
 
 //https://github.com/milessabin/shapeless
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
+
+//https://github.com/ChristopherDavenport/linebacker
+lazy val linebacker: ModuleID = "io.chrisdavenport" %% "linebacker" % linebackerVersion withSources ()
 
 //=============================================================================
 //================================= DATABASE ==================================
