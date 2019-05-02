@@ -175,7 +175,7 @@ lazy val `db-slick` = subModule("db", "slick")
 //*****************************************************************************
 
 lazy val catsVersion:       String = "1.6.0"
-lazy val catsEffectVersion: String = "1.2.0"
+lazy val catsEffectVersion: String = "1.3.0"
 
 lazy val linebackerVersion: String = "0.2.0"
 
