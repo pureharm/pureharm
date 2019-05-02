@@ -47,7 +47,7 @@ object Settings {
        *
        * https://github.com/oleg-py/better-monadic-for
        */
-      addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4"),
+      addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0"),
       scalacOptions ++= customScalaCompileFlagList ++ betterForPluginCompilerFlags,
     )
 
@@ -118,5 +118,7 @@ object Settings {
     "-P:bm4:no-filtering:y", // see https://github.com/oleg-py/better-monadic-for#desugaring-for-patterns-without-withfilters--pbm4no-filteringy
     "-P:bm4:no-map-id:y", // see https://github.com/oleg-py/better-monadic-for#final-map-optimization--pbm4no-map-idy
     "-P:bm4:no-tupling:y", // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
+    "-P:bm4:implicit-patterns:y", //see https://github.com/oleg-py/better-monadic-for#define-implicits-in-for-comprehensions-or-matches
+
   )
 }
