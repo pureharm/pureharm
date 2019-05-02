@@ -1,6 +1,7 @@
 package busymachines.pureharm
 
 import cats.{effect => ce}
+import scala.{concurrent => sc}
 
 /**
   *
@@ -140,6 +141,12 @@ trait PureharmEffectsTypeDefinitions {
   type ConcurrentEffect[F[_]] = ce.ConcurrentEffect[F]
   val ConcurrentEffect: ce.ConcurrentEffect.type = ce.ConcurrentEffect
 
+  type Timer[F[_]] = ce.Timer[F]
+  val Timer: ce.Timer.type = ce.Timer
+
+  type ContextShift[F[_]] = ce.ContextShift[F]
+  val contextShift: ce.ContextShift.type = ce.ContextShift
+
   type CancelToken[F[_]] = ce.CancelToken[F]
   type Fiber[F[_], A]    = ce.Fiber[F, A]
   val Fiber: ce.Fiber.type = ce.Fiber
@@ -156,6 +163,7 @@ trait PureharmEffectsTypeDefinitions {
   type ExitCode = ce.ExitCode
   val ExitCode: ce.ExitCode.type = ce.ExitCode
 
+  type Bracket[F[_], E] = ce.Bracket[F, E]
   val Bracket: ce.Bracket.type = ce.Bracket
 
   type Resource[F[_], A] = ce.Resource[F, A]
@@ -164,7 +172,7 @@ trait PureharmEffectsTypeDefinitions {
   type ExitCase[+E] = ce.ExitCase[E]
   val ExitCase: ce.ExitCase.type = ce.ExitCase
 
-  //----------- cats-effect- concurrent ------
+  //----------- cats-effect concurrent -----------
 
   type Semaphore[F[_]] = ce.concurrent.Semaphore[F]
   val Semaphore: ce.concurrent.Semaphore.type = ce.concurrent.Semaphore
@@ -216,4 +224,16 @@ trait PureharmEffectsTypeDefinitions {
   val Try:        scala.util.Try.type     = scala.util.Try
   val TryFailure: scala.util.Failure.type = scala.util.Failure
   val TrySuccess: scala.util.Success.type = scala.util.Success
+
+  //----------- scala Future -----------
+  type Future[+A] = sc.Future[A]
+  val Future: sc.Future.type = sc.Future
+
+  type ExecutionContext = sc.ExecutionContext
+  val ExecutionContext: sc.ExecutionContext.type = sc.ExecutionContext
+
+  type ExecutionContextExecutor        = sc.ExecutionContextExecutor
+  type ExecutionContextExecutorService = sc.ExecutionContextExecutorService
+
+  val Await: sc.Await.type = sc.Await
 }
