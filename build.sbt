@@ -117,7 +117,7 @@ lazy val effects = project
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 lazy val `db` = project
-  .settings(PublishingSettings.sonatypeSettings)
+  .settings(PublishingSettings.noPublishSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-db",
