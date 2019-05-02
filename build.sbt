@@ -70,7 +70,6 @@ lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       scalaTest % Test,
@@ -81,7 +80,6 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-core-identifiable",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       scalaTest % Test,
@@ -137,7 +135,6 @@ lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-db-core",
     libraryDependencies ++= cats ++ Seq(
       catsEffect,
       scalaTest % Test,
@@ -156,7 +153,6 @@ lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-db-slick",
     libraryDependencies ++= cats ++ dbSlick ++ Seq(
       catsEffect,
       scalaTest % Test,
@@ -255,3 +251,4 @@ lazy val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion withSourc
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
+    .settings(name := s"pureharm-$parent-$mod")
