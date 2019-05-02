@@ -42,6 +42,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .settings(Settings.commonSettings)
   .aggregate(
     core,
+    effects,
     `db-core`,
     `db-slick`,
   )
