@@ -52,7 +52,7 @@ trait PureharmEffectsTypeDefinitions {
   type TraverseFilter[F[_]] = cats.TraverseFilter[F]
   val TraverseFilter: cats.TraverseFilter.type = cats.TraverseFilter
 
-  type Bitraverse[F[_]] = cats.Bitraverse[F]
+  type Bitraverse[F[_, _]] = cats.Bitraverse[F]
   val Bitraverse: cats.Bitraverse.type = cats.Bitraverse
 
   type Semigroupal[F[_]] = cats.Semigroupal[F]
@@ -196,7 +196,7 @@ trait PureharmEffectsTypeDefinitions {
     * }}}
     */
   type ApplicativeAttempt[F[_]] = cats.ApplicativeError[F, Throwable]
-  val ApplicativeAttempt: cats.ApplicativeError.type = cats.ApplicativeError
+  val ApplicativeAttempt: effects_impl.ApplicativeAttempt.type = effects_impl.ApplicativeAttempt
 
   /**
     * Useful since we don't have partial kind application by default
@@ -206,7 +206,7 @@ trait PureharmEffectsTypeDefinitions {
     * }}}
     */
   type MonadAttempt[F[_]] = cats.MonadError[F, Throwable]
-  val MonadAttempt: cats.MonadError.type = cats.MonadError
+  val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
 
   //----------- standard scala types -----------
 
