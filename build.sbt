@@ -103,7 +103,6 @@ lazy val `effects-cats` = project
     name := "pureharm-effects-cats",
     libraryDependencies ++= cats ++ Seq(
       catsEffect,
-      linebacker,
       scalaTest % Test,
     ),
   )
