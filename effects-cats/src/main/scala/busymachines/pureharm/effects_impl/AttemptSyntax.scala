@@ -4,6 +4,13 @@ import busymachines.pureharm.effects._
 
 /**
   *
+  * This helps mimick operations on the ``Attempt`` using
+  * the standard ``Either`` companion, thus making all
+  * those ops also available.
+  *
+  * See [[MonadAttempt]] and [[ApplicativeAttempt]] for further
+  * details.
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Apr 2019
   *

@@ -42,6 +42,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .settings(Settings.commonSettings)
   .aggregate(
     core,
+    `effects-cats`,
     `db-core`,
     `db-slick`,
   )
@@ -69,7 +70,6 @@ lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-core-phantom",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       scalaTest % Test,
@@ -80,7 +80,6 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-core-identifiable",
     libraryDependencies ++= cats ++ Seq(
       shapeless,
       scalaTest % Test,
@@ -97,14 +96,13 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
 //++++++++++++++++++++++++++++++++++ EFFECTS ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val effects = project
+lazy val `effects-cats` = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-effects",
+    name := "pureharm-effects-cats",
     libraryDependencies ++= cats ++ Seq(
       catsEffect,
-      linebacker,
       scalaTest % Test,
     ),
   )
@@ -116,7 +114,7 @@ lazy val effects = project
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 lazy val `db` = project
-  .settings(PublishingSettings.sonatypeSettings)
+  .settings(PublishingSettings.noPublishSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-db",
@@ -125,47 +123,41 @@ lazy val `db` = project
       scalaTest % Test,
     ),
   )
-  .dependsOn(
-    `db-core`,
-  )
-  .aggregate(
-    `db-core`,
-  )
 
 lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-db-core",
-    libraryDependencies ++= cats ++ Seq(
-      catsEffect,
+    libraryDependencies ++= Seq(
       scalaTest % Test,
     ),
   )
   .dependsOn(
     `core-phantom`,
     `core-identifiable`,
+    `effects-cats`,
   )
   .aggregate(
     `core-phantom`,
     `core-identifiable`,
+    `effects-cats`,
   )
 
 lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    name := "pureharm-db-slick",
-    libraryDependencies ++= cats ++ dbSlick ++ Seq(
-      catsEffect,
+    libraryDependencies ++= dbSlick ++ Seq(
       scalaTest % Test,
     ),
   )
   .dependsOn(
     `db-core`,
+    `effects-cats`,
   )
   .aggregate(
     `db-core`,
+    `effects-cats`,
   )
 
 //*****************************************************************************
@@ -254,3 +246,4 @@ lazy val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion withSourc
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
+    .settings(name := s"pureharm-$parent-$mod")
