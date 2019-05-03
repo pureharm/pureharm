@@ -17,6 +17,7 @@ import scala.{concurrent => sc}
   *
   */
 trait PureharmEffectsTypeDefinitions {
+
   type Functor[F[_]] = cats.Functor[F]
   val Functor: cats.Functor.type = cats.Functor
 
@@ -215,6 +216,9 @@ trait PureharmEffectsTypeDefinitions {
     */
   type MonadAttempt[F[_]] = cats.MonadError[F, Throwable]
   val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
+
+  type BracketAttempt[F[_]] = cats.effect.Bracket[F, Throwable]
+  val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
 
   //----------- standard scala types -----------
 
