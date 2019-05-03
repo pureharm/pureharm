@@ -225,6 +225,8 @@ trait PureharmEffectsTypeDefinitions {
   val TryFailure: scala.util.Failure.type = scala.util.Failure
   val TrySuccess: scala.util.Success.type = scala.util.Success
 
+  val NonFatal: scala.util.control.NonFatal.type = scala.util.control.NonFatal
+
   //----------- scala Future -----------
   type Future[+A] = sc.Future[A]
   val Future: sc.Future.type = sc.Future
