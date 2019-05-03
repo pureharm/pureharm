@@ -1,4 +1,4 @@
-package busymachines.pureharm.effects_impl
+package busymachines.pureharm
 
 import cats.effect.syntax.AllCatsEffectSyntax
 import cats.{instances, syntax}
@@ -14,7 +14,7 @@ import cats.{instances, syntax}
   * @since 25 Apr 2019
   *
   */
-private[pureharm] object CatsAliases {
+object CatsAliases {
 
   trait Core
       extends syntax.AllSyntax with syntax.AllSyntaxBinCompat0 with syntax.AllSyntaxBinCompat1
