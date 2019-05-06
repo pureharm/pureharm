@@ -53,6 +53,7 @@ trait PureharmDBCoreTypeDefinitions {
 
   final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
 
+  @scala.deprecated("Will be moved to dbslick module", "0.2.0-M7")
   type ConnectionIOEC = db.ConnectionIOEC
   val ConnectionIOEC: db.ConnectionIOEC.type = db.ConnectionIOEC
 }
