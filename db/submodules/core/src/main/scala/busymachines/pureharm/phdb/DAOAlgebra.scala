@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db_impl
+package busymachines.pureharm.phdb
 
 import cats.Traverse
 

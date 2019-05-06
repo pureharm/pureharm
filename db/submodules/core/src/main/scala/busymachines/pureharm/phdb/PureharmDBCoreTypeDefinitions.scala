@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db_impl
+package busymachines.pureharm.phdb
 
 import busymachines.pureharm.db
 
@@ -51,7 +51,7 @@ trait PureharmDBCoreTypeDefinitions {
   final val TableName = db.TableName
   final type TableName = db.TableName
 
-  final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.db_impl.DAOAlgebra[R, E, PK]
+  final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
 
   type ConnectionIOEC = db.ConnectionIOEC
   val ConnectionIOEC: db.ConnectionIOEC.type = db.ConnectionIOEC

@@ -39,7 +39,7 @@ object db {
   final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
   final type ConnectionIOEC = ConnectionIOEC.Type
 
-  final type DAOAlgebra[R[_], E, PK] = db_impl.DAOAlgebra[R, E, PK]
+  final type DAOAlgebra[R[_], E, PK] = phdb.DAOAlgebra[R, E, PK]
 
-  final type PureharmDBCoreTypeDefinitions = db_impl.PureharmDBCoreTypeDefinitions
+  final type PureharmDBCoreTypeDefinitions = phdb.PureharmDBCoreTypeDefinitions
 }
