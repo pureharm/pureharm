@@ -26,7 +26,7 @@ package busymachines.pureharm
   * @since 04 Apr 2019
   *
   */
-trait PureharmCoreTypes {
+trait PureharmCoreTypeDefinitions {
   type FieldName = _root_.busymachines.pureharm.fieldname.FieldName
 
   val FieldName: _root_.busymachines.pureharm.fieldname.FieldName.type =
