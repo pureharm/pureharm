@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm
 
-import busymachines.pureharm.identifiable_impl.IdentifiableLowPriorityImplicits
+import busymachines.pureharm.phidentifiable.IdentifiableLowPriorityImplicits
 import fieldname._
 
 import scala.annotation.implicitNotFound

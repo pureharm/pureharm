@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.identifiable_impl
+package busymachines.pureharm.phidentifiable
 
 import busymachines.pureharm.{Identifiable, fieldname}
 
