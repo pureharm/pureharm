@@ -1,7 +1,5 @@
 package busymachines.pureharm
 
-import busymachines.pureharm.effects_impl
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
