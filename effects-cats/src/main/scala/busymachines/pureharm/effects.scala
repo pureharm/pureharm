@@ -1,6 +1,6 @@
 package busymachines.pureharm
 
-import busymachines.pureharm.{effects_impl => impl}
+import busymachines.pureharm.effects_impl
 
 /**
   *
@@ -8,13 +8,12 @@ import busymachines.pureharm.{effects_impl => impl}
   * @since 24 Apr 2019
   *
   */
-object effects extends PureharmEffectsTypeDefinitions {
+object effects extends effects_impl.PureharmEffectsTypeDefinitions {
 
-  //these you need to use only once in your project, therefore they're not
-  //part of the PureharmEffectsTypeDefinitions trait
-  
-  type CatsAliasesCore   = impl.CatsAliasesCore
-  type CatsAliasesEffect = impl.CatsAliasesEffect
+  //mix these into your libraries for one import experience
+  type PureharmEffectsSyntaxAll        = effects_impl.PureharmEffectsSyntaxAll
+  type PureharmEffectsTypeDefinitions  = effects_impl.PureharmEffectsTypeDefinitions
+  type PureharmEffectsAndCatsImplicits = effects_impl.PureharmEffectsAndCatsImplicits
 
   /**
     * !!! N.B. !!!
@@ -23,5 +22,5 @@ object effects extends PureharmEffectsTypeDefinitions {
     * This object is meant to bring in everything that is in cats + some extra, without burdening
     * the user with two different imports.
     */
-  object implicits extends PureharmEffectsSyntaxAll with impl.CatsAliasesCore with impl.CatsAliasesEffect
+  object implicits extends effects_impl.PureharmEffectsAndCatsImplicits
 }

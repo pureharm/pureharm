@@ -1,4 +1,6 @@
-package busymachines.pureharm
+package busymachines.pureharm.effects_impl
+
+import busymachines.pureharm.effects_impl
 
 /**
   *
