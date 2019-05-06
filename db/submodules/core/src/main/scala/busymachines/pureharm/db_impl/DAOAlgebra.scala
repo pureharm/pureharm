@@ -15,27 +15,40 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.db_impl
+
+import cats.Traverse
 
 /**
   *
+  * @tparam E
+  *   The type of elements manipulated by this DAO
+  * @tparam PK
+  *   The "primary key", or "id" if you will, by which elements
+  *   of type `E` are identified.
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 02 Apr 2019
-  *
+  * @since 04 Apr 2019
   */
-package object db {
-  final object JDBCUrl extends PhantomType[String]
-  final type JDBCUrl = JDBCUrl.Type
+trait DAOAlgebra[R[_], E, PK] {
+  def find(pk: PK): R[Option[E]]
 
-  final object DBUsername extends PhantomType[String]
-  final type DBUsername = DBUsername.Type
+  def retrieve(pk: PK): R[E]
 
-  final object DBPassword extends PhantomType[String]
-  final type DBPassword = DBPassword.Type
+  def insert(e: E): R[PK]
 
-  final object TableName extends PhantomType[String]
-  final type TableName = TableName.Type
+  def insertMany(es: Iterable[E]): R[Unit]
 
-  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
-  final type ConnectionIOEC = ConnectionIOEC.Type
+  def update(e: E): R[E]
+
+  def updateMany[M[_]: Traverse](es: M[E]): R[Unit]
+
+  def delete(pk: PK): R[Unit]
+
+  def deleteMany(pks: Traversable[PK]): R[Unit]
+
+  def exists(pk: PK): R[Boolean]
+
+  def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
+
+  def existAll(pks: Traversable[PK]): R[Boolean]
 }
