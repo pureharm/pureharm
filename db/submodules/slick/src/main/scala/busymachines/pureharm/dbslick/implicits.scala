@@ -23,4 +23,4 @@ package busymachines.pureharm.dbslick
   * @since 04 Apr 2019
   *
   */
-object implicits extends types.SlickConnectionIOCatsInstances
+object implicits extends types.PureharmDBSlickImplicits

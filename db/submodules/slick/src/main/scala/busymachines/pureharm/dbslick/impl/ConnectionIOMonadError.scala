@@ -17,11 +17,10 @@
   */
 package busymachines.pureharm.dbslick.impl
 
-import cats._
 import busymachines.pureharm.db.ConnectionIOEC
 import busymachines.pureharm.dbslick._
 
-import scala.util.{Failure, Success}
+import busymachines.pureharm.effects._
 
 /**
   *
@@ -45,18 +44,18 @@ private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) exten
 
   override def handleError[A](fea: ConnectionIO[A])(f: Throwable => A): ConnectionIO[A] =
     fea.asTry.map {
-      case Success(v) => v
-      case Failure(t) => f(t)
+      case TrySuccess(v) => v
+      case TryFailure(t) => f(t)
     }
 
   override def handleErrorWith[A](fa: ConnectionIO[A])(f: Throwable => ConnectionIO[A]): ConnectionIO[A] =
     fa.asTry.flatMap {
-      case Success(v) => pure(v)
-      case Failure(t) => f(t)
+      case TrySuccess(v) => pure(v)
+      case TryFailure(t) => f(t)
     }
 
   override def attempt[A](fa: ConnectionIO[A]): ConnectionIO[Either[Throwable, A]] = fa.asTry.map {
-    case Success(v) => Right[Throwable, A](v)
-    case Failure(t) => Left[Throwable, A](t)
+    case TrySuccess(v) => Right[Throwable, A](v)
+    case TryFailure(t) => Left[Throwable, A](t)
   }
 }

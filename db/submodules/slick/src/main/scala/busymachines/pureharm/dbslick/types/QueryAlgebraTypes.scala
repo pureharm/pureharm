@@ -36,9 +36,9 @@ import busymachines.pureharm.dbslick.SlickQueryAlgebraDefinitions
   *
   */
 trait QueryAlgebraTypes { self: SlickQueryAlgebraDefinitions =>
-  type DBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBQueryAlgebra[E, PK, TA]
+  type SlickDBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBQueryAlgebra[E, PK, TA]
 
-  type DBAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBAlgebra[F, E, PK, TA]
+  type SlickDBAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = self.SlickDBAlgebra[F, E, PK, TA]
 
   type TableWithPK[E, PK] = self.TableWithPK[E, PK]
 }

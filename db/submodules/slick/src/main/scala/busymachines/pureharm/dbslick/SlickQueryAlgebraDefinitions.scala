@@ -18,18 +18,20 @@
 package busymachines.pureharm.dbslick
 
 import busymachines.pureharm.Identifiable
-import busymachines.pureharm.db._
-import cats.Traverse
 
-import scala.util.control.NonFatal
+import busymachines.pureharm.effects._
+import busymachines.pureharm.db._
 
 /**
   *
   * Mix in into your global slick definition object.
   * You know which one, every application has one.
   *
-  * Unfortunately, there is no way to make these definitions available
+  * Unfortunately, there is no way to make these definitions directly available
   * in your "api" object that you then import everywhere slick.
+  *
+  * Copy the definitions from [[types.QueryAlgebraTypes]] to achieve
+  * the one import experience.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
