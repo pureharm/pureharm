@@ -1,4 +1,4 @@
-package busymachines.pureharm.dbslick.types
+package busymachines.pureharm.phdbslick.types
 
 /**
   *

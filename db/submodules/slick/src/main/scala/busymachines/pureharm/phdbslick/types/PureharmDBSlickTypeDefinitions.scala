@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.types
+package busymachines.pureharm.phdbslick.types
 
-import busymachines.pureharm.dbslick
+import busymachines.pureharm.phdbslick
 
 /**
   *
@@ -39,23 +39,23 @@ import busymachines.pureharm.dbslick
   */
 trait PureharmDBSlickTypeDefinitions {
 
-  final type ConnectionIO[T] = dbslick.ConnectionIO[T]
+  final type ConnectionIO[T] = phdbslick.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickDB  = dbslick.SlickBackendDB
-  final type SlickAPI = dbslick.SlickJDBCProfileAPI
+  final type SlickDB  = phdbslick.SlickBackendDB
+  final type SlickAPI = phdbslick.SlickJDBCProfileAPI
 
-  final val JDBCProfileAPI: dbslick.JDBCProfileAPI.type = dbslick.JDBCProfileAPI
-  final type JDBCProfileAPI = dbslick.JDBCProfileAPI
+  final val JDBCProfileAPI: phdbslick.JDBCProfileAPI.type = phdbslick.JDBCProfileAPI
+  final type JDBCProfileAPI = phdbslick.JDBCProfileAPI
 
-  final val DatabaseBackend: dbslick.DatabaseBackend.type = dbslick.DatabaseBackend
-  final type DatabaseBackend = dbslick.DatabaseBackend
+  final val DatabaseBackend: phdbslick.DatabaseBackend.type = phdbslick.DatabaseBackend
+  final type DatabaseBackend = phdbslick.DatabaseBackend
 
-  final type Transactor[F[_]] = dbslick.Transactor[F]
-  final val Transactor: dbslick.Transactor.type = dbslick.Transactor
+  final type Transactor[F[_]] = phdbslick.Transactor[F]
+  final val Transactor: phdbslick.Transactor.type = phdbslick.Transactor
 
-  final type DBBlockingIOExecutionConfig = dbslick.SlickDBIOAsyncExecutorConfig
-  final val DBBlockingIOExecutionConfig: dbslick.SlickDBIOAsyncExecutorConfig.type =
-    dbslick.SlickDBIOAsyncExecutorConfig
+  final type DBBlockingIOExecutionConfig = phdbslick.SlickDBIOAsyncExecutorConfig
+  final val DBBlockingIOExecutionConfig: phdbslick.SlickDBIOAsyncExecutorConfig.type =
+    phdbslick.SlickDBIOAsyncExecutorConfig
 
 }

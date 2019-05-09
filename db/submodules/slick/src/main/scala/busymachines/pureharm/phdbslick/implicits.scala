@@ -15,25 +15,12 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.phdbslick
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 22 Apr 2019
+  * @since 04 Apr 2019
   *
   */
-package object dbslick {
-  final type ConnectionIO[T] = slick.dbio.DBIO[T]
-  final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
-
-  final type SlickBackendDB      = slick.jdbc.JdbcProfile#Backend#Database
-  final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
-
-  final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
-  final type JDBCProfileAPI = JDBCProfileAPI.Type
-
-  final object DatabaseBackend extends PhantomType[SlickBackendDB]
-  final type DatabaseBackend = DatabaseBackend.Type
-
-}
+object implicits extends types.PureharmDBSlickImplicits
