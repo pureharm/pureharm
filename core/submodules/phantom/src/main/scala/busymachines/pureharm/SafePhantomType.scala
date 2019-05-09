@@ -24,7 +24,7 @@ trait SafePhantomType[E, A] {
   def check(value: A): Either[E, A]
 
   @inline final def apply(value: A): Either[E, Type] =
-    check(value).right.map(a => tag[Tag][A](a))
+    check(value).right.map(a => unsafe(a))
 
   /**
     * alias for [[apply]]
@@ -33,4 +33,17 @@ trait SafePhantomType[E, A] {
     apply(value)
 
   @inline final def despook(spook: Type): A = spook
+
+  /**
+    * Please use only when you know what you are doing,
+    * like when reading a value from a Database that
+    * was always typed with this specific Phantom.
+    *
+    * If you use it willy nilly sprinkled around your code,
+    * relying on a bunch of implicit non-local assumptions
+    * then you're a bad software engineer or you are under
+    * some heavy deadline.
+    */
+  @inline final def unsafe(value: A): Type =
+    tag[Tag][A](value)
 }
