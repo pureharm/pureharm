@@ -17,9 +17,6 @@
   */
 package busymachines.pureharm
 
-import shapeless.tag
-import tag.@@
-
 /**
   *
   * Example use case:
@@ -35,17 +32,24 @@ import tag.@@
   *
   */
 trait PhantomType[T] {
-  type Tag        = this.type
+  import shapeless.tag
+  import tag.@@
+
+  final type Tag  = this.type
   final type Type = T @@ Tag
 
-  @inline def apply(value: T): T @@ Tag =
-    tag[Tag](value)
+  /**
+    * Override if you want to do pure transformations on your value
+    * before tagging.
+    */
+  @inline def apply(value: T): Type =
+    tag[Tag][T](value)
 
   /**
     * alias for [[apply]]
     */
-  @inline def spook(value: T): T @@ Tag =
+  @inline final def spook(value: T): Type =
     apply(value)
 
-  @inline final def despook(spook: T @@ Tag): T = spook
+  @inline final def despook(spook: Type): T = spook
 }

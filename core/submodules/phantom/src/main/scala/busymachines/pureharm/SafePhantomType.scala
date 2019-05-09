@@ -1,8 +1,5 @@
 package busymachines.pureharm
 
-import shapeless.tag
-import tag.@@
-
 /**
   *
   * See [[PhantomType]], but basically, the apply
@@ -13,8 +10,10 @@ import tag.@@
   *
   */
 trait SafePhantomType[E, A] {
-  type Tag = this.type
+  import shapeless.tag
+  import tag.@@
 
+  final type Tag  = this.type
   final type Type = A @@ Tag
 
   /**
@@ -24,14 +23,14 @@ trait SafePhantomType[E, A] {
     */
   def check(value: A): Either[E, A]
 
-  @inline final def apply(value: A): Either[E, A @@ Tag] =
-    check(value).right.map(a => tag[Tag](a))
+  @inline final def apply(value: A): Either[E, Type] =
+    check(value).right.map(a => tag[Tag][A](a))
 
   /**
     * alias for [[apply]]
     */
-  @inline final def spook(value: A): Either[E, A @@ Tag] =
+  @inline final def spook(value: A): Either[E, Type] =
     apply(value)
 
-  @inline final def despook(spook: A @@ Tag): A = spook
+  @inline final def despook(spook: Type): A = spook
 }
