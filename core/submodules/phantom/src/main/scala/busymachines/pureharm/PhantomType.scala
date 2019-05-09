@@ -35,7 +35,7 @@ import tag.@@
   *
   */
 trait PhantomType[T] {
-  type Tag <: this.type
+  type Tag        = this.type
   final type Type = T @@ Tag
 
   @inline def apply(value: T): T @@ Tag =
