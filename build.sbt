@@ -70,7 +70,7 @@ lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= cats ++ Seq(
+    libraryDependencies ++= Seq(
       shapeless,
       scalaTest % Test,
     ),
@@ -80,7 +80,7 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= cats ++ Seq(
+    libraryDependencies ++= Seq(
       shapeless,
       scalaTest % Test,
     ),
