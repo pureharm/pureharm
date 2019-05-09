@@ -1,6 +1,25 @@
-package busymachines.pureharm
+/**
+  * Copyright (c) 2019 BusyMachines
+  *
+  * See company homepage at: https://www.busymachines.com/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
+package busymachines.pureharm.effects_impl.definitions
 
+import busymachines.pureharm.effects_impl
 import cats.{effect => ce}
+
 import scala.{concurrent => sc}
 
 /**
@@ -17,6 +36,7 @@ import scala.{concurrent => sc}
   *
   */
 trait PureharmEffectsTypeDefinitions {
+
   type Functor[F[_]] = cats.Functor[F]
   val Functor: cats.Functor.type = cats.Functor
 
@@ -216,6 +236,9 @@ trait PureharmEffectsTypeDefinitions {
   type MonadAttempt[F[_]] = cats.MonadError[F, Throwable]
   val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
 
+  type BracketAttempt[F[_]] = cats.effect.Bracket[F, Throwable]
+  val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
+
   //----------- standard scala types -----------
 
   //brought in for easy pattern matching. Failure, and Success are used way too often
@@ -224,6 +247,8 @@ trait PureharmEffectsTypeDefinitions {
   val Try:        scala.util.Try.type     = scala.util.Try
   val TryFailure: scala.util.Failure.type = scala.util.Failure
   val TrySuccess: scala.util.Success.type = scala.util.Success
+
+  val NonFatal: scala.util.control.NonFatal.type = scala.util.control.NonFatal
 
   //----------- scala Future -----------
   type Future[+A] = sc.Future[A]

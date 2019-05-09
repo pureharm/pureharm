@@ -15,21 +15,25 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick
+package busymachines.pureharm.phdbslick
 
 import busymachines.pureharm.Identifiable
-import busymachines.pureharm.db._
-import cats.Traverse
 
-import scala.util.control.NonFatal
+import busymachines.pureharm.effects._
+
+import busymachines.pureharm.db._
+import busymachines.pureharm.phdbslick.slickTypes._
 
 /**
   *
   * Mix in into your global slick definition object.
   * You know which one, every application has one.
   *
-  * Unfortunately, there is no way to make these definitions available
+  * Unfortunately, there is no way to make these definitions directly available
   * in your "api" object that you then import everywhere slick.
+  *
+  * Copy the definitions from [[definitions.SlickQueryAlgebraTypes]] to achieve
+  * the one import experience.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
@@ -37,6 +41,8 @@ import scala.util.control.NonFatal
   */
 trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   import api._
+  import busymachines.pureharm.effects.implicits._
+  import busymachines.pureharm.dbslick.implicits._
 
   /**
     * @tparam E
@@ -74,8 +80,6 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC,
   ) extends DAOAlgebra[ConnectionIO, E, PK] {
-    import cats.implicits._
-    import implicits._
 
     /**
       * Because creating this object is done via a macro,

@@ -15,26 +15,17 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl
+package busymachines.pureharm.effects_impl.definitions
 
-import busymachines.pureharm.effects
+import busymachines.pureharm.effects_impl.{CatsAliasesCore, CatsAliasesEffect}
 
 /**
   *
-  * Pseudo companion object for [[busymachines.pureharm.effects.MonadAttempt]]
-  * type, alias.
-  *
-  * The reason this is not implemented using the same pattern as in [[AttemptSyntax]]
-  * is because we cannot overload the apply method from ``MonadError`` based
-  * on type parameters. We'd need to be able to call an apply method with only the
-  * effect value, which is not possible, so we simply duplicate whatever is in
-  * [[cats.ApplicativeError]], luckily it only has only one method, unlike
-  * [[scala.Either]] which has A LOT!
+  * Mix this trait into your own effects package to get all cats, cats-effect, and pureharm syntax in one
+  * import!
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 29 Apr 2019
+  * @since 06 May 2019
   *
   */
-object MonadAttempt {
-  def apply[F[_]](implicit F: effects.MonadAttempt[F]): effects.MonadAttempt[F] = F
-}
+trait PureharmEffectsAndCatsImplicits extends PureharmEffectsSyntaxAll with CatsAliasesCore with CatsAliasesEffect

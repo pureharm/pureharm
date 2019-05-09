@@ -15,40 +15,27 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db
+package busymachines.pureharm.phdbslick
 
-import cats.Traverse
+import busymachines.pureharm.PhantomType
 
 /**
   *
-  * @tparam E
-  *   The type of elements manipulated by this DAO
-  * @tparam PK
-  *   The "primary key", or "id" if you will, by which elements
-  *   of type `E` are identified.
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 04 Apr 2019
+  * @since 22 Apr 2019
+  *
   */
-trait DAOAlgebra[R[_], E, PK] {
-  def find(pk: PK): R[Option[E]]
+object slickTypes {
+  final type ConnectionIO[T] = slick.dbio.DBIO[T]
+  final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  def retrieve(pk: PK): R[E]
+  final type SlickBackendDB      = slick.jdbc.JdbcProfile#Backend#Database
+  final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
 
-  def insert(e: E): R[PK]
+  final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
+  final type JDBCProfileAPI = JDBCProfileAPI.Type
 
-  def insertMany(es: Iterable[E]): R[Unit]
+  final object DatabaseBackend extends PhantomType[SlickBackendDB]
+  final type DatabaseBackend = DatabaseBackend.Type
 
-  def update(e: E): R[E]
-
-  def updateMany[M[_]: Traverse](es: M[E]): R[Unit]
-
-  def delete(pk: PK): R[Unit]
-
-  def deleteMany(pks: Traversable[PK]): R[Unit]
-
-  def exists(pk: PK): R[Boolean]
-
-  def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
-
-  def existAll(pks: Traversable[PK]): R[Boolean]
 }

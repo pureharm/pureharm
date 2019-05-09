@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.types
+package busymachines.pureharm.phdb
 
-import busymachines.pureharm.dbslick
+import busymachines.pureharm.db
 
 /**
   *
@@ -28,7 +28,7 @@ import busymachines.pureharm.dbslick
   * {{{
   *   package com.domainspecific
   *
-  *   package object db extends busymachines.pureharm.dbslick.types.DBSlickTypes {
+  *   package object db extends busymachines.pureharm.dbslick.types.DBCoreTypes // +driver specific ones {
   *     type DomainSpecificType = Int
   *   }
   * }}}
@@ -37,25 +37,23 @@ import busymachines.pureharm.dbslick
   * @since 02 Apr 2019
   *
   */
-trait DBSlickTypes {
+trait PureharmDBCoreTypeDefinitions {
 
-  final type ConnectionIO[T] = dbslick.ConnectionIO[T]
-  final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
+  final val JDBCUrl: db.JDBCUrl.type = db.JDBCUrl
+  final type JDBCUrl = db.JDBCUrl
 
-  final type SlickDB  = dbslick.SlickBackendDB
-  final type SlickAPI = dbslick.SlickJDBCProfileAPI
+  final val DBUsername: db.DBUsername.type = db.DBUsername
+  final type DBUsername = db.DBUsername
 
-  final val JDBCProfileAPI: dbslick.JDBCProfileAPI.type = dbslick.JDBCProfileAPI
-  final type JDBCProfileAPI = dbslick.JDBCProfileAPI
+  final val DBPassword: db.DBPassword.type = db.DBPassword
+  final type DBPassword = db.DBPassword
 
-  final val DatabaseBackend: dbslick.DatabaseBackend.type = dbslick.DatabaseBackend
-  final type DatabaseBackend = dbslick.DatabaseBackend
+  final val TableName = db.TableName
+  final type TableName = db.TableName
 
-  final type Transactor[F[_]] = dbslick.Transactor[F]
-  final val Transactor: dbslick.Transactor.type = dbslick.Transactor
+  final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
 
-  final type DBBlockingIOExecutionConfig = dbslick.SlickDBIOAsyncExecutorConfig
-  final val DBBlockingIOExecutionConfig: dbslick.SlickDBIOAsyncExecutorConfig.type =
-    dbslick.SlickDBIOAsyncExecutorConfig
-
+  @scala.deprecated("Will be moved to dbslick module", "0.2.0-M7")
+  type ConnectionIOEC = db.ConnectionIOEC
+  val ConnectionIOEC: db.ConnectionIOEC.type = db.ConnectionIOEC
 }

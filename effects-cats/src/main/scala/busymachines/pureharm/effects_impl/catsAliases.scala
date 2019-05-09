@@ -17,24 +17,25 @@
   */
 package busymachines.pureharm.effects_impl
 
-import busymachines.pureharm.effects
+import cats.effect.syntax.AllCatsEffectSyntax
+import cats.{instances, syntax}
 
 /**
   *
-  * Pseudo companion object for [[busymachines.pureharm.effects.MonadAttempt]]
-  * type, alias.
-  *
-  * The reason this is not implemented using the same pattern as in [[AttemptSyntax]]
-  * is because we cannot overload the apply method from ``MonadError`` based
-  * on type parameters. We'd need to be able to call an apply method with only the
-  * effect value, which is not possible, so we simply duplicate whatever is in
-  * [[cats.ApplicativeError]], luckily it only has only one method, unlike
-  * [[scala.Either]] which has A LOT!
+  * !! WARNING !! these traits will have to be upgraded with each new cats
+  * release. Simply check the implementation of cats.implicits and of
+  * cats.effect.implicits and make sure that the mixed in traits are always
+  * the same.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 29 Apr 2019
+  * @since 25 Apr 2019
   *
   */
-object MonadAttempt {
-  def apply[F[_]](implicit F: effects.MonadAttempt[F]): effects.MonadAttempt[F] = F
-}
+
+trait CatsAliasesCore
+    extends syntax.AllSyntax with syntax.AllSyntaxBinCompat0 with syntax.AllSyntaxBinCompat1
+    with syntax.AllSyntaxBinCompat2 with syntax.AllSyntaxBinCompat3 with syntax.AllSyntaxBinCompat4
+    with instances.AllInstances with instances.AllInstancesBinCompat0 with instances.AllInstancesBinCompat1
+    with instances.AllInstancesBinCompat2 with instances.AllInstancesBinCompat3
+
+trait CatsAliasesEffect extends AllCatsEffectSyntax

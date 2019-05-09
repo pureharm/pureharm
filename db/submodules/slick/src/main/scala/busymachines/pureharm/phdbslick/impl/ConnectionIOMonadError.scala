@@ -15,13 +15,12 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.impl
+package busymachines.pureharm.phdbslick.impl
 
-import cats._
 import busymachines.pureharm.db.ConnectionIOEC
-import busymachines.pureharm.dbslick._
+import busymachines.pureharm.phdbslick.slickTypes._
 
-import scala.util.{Failure, Success}
+import busymachines.pureharm.effects._
 
 /**
   *
@@ -29,7 +28,7 @@ import scala.util.{Failure, Success}
   * @since 04 Apr 2019
   *
   */
-private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) extends MonadError[ConnectionIO, Throwable] {
+private[phdbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 
   override def map[A, B](fa: ConnectionIO[A])(f: A => B): ConnectionIO[B] = fa.map(f)
@@ -45,18 +44,18 @@ private[dbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC) exten
 
   override def handleError[A](fea: ConnectionIO[A])(f: Throwable => A): ConnectionIO[A] =
     fea.asTry.map {
-      case Success(v) => v
-      case Failure(t) => f(t)
+      case TrySuccess(v) => v
+      case TryFailure(t) => f(t)
     }
 
   override def handleErrorWith[A](fa: ConnectionIO[A])(f: Throwable => ConnectionIO[A]): ConnectionIO[A] =
     fa.asTry.flatMap {
-      case Success(v) => pure(v)
-      case Failure(t) => f(t)
+      case TrySuccess(v) => pure(v)
+      case TryFailure(t) => f(t)
     }
 
   override def attempt[A](fa: ConnectionIO[A]): ConnectionIO[Either[Throwable, A]] = fa.asTry.map {
-    case Success(v) => Right[Throwable, A](v)
-    case Failure(t) => Left[Throwable, A](t)
+    case TrySuccess(v) => Right[Throwable, A](v)
+    case TryFailure(t) => Left[Throwable, A](t)
   }
 }

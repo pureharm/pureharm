@@ -15,30 +15,40 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.phdb
 
-import busymachines.pureharm.phidentifiable.IdentifiableLowPriorityImplicits
-import fieldname._
-
-import scala.annotation.implicitNotFound
+import busymachines.pureharm.effects.Traverse
 
 /**
   *
-  * @tparam T
-  *   the type
-  * @tparam ID
-  *   the value by which our value of type ``T`` can be uniquely identified
+  * @tparam E
+  *   The type of elements manipulated by this DAO
+  * @tparam PK
+  *   The "primary key", or "id" if you will, by which elements
+  *   of type `E` are identified.
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
-  *
   */
-@implicitNotFound(
-  "If a case class T, has a field called 'id of type ID then an Identifiable[T, ID] will be generated for case class, otherwise, please provide one",
-)
-trait Identifiable[T, ID] {
-  def id(t: T): ID
+trait DAOAlgebra[R[_], E, PK] {
+  def find(pk: PK): R[Option[E]]
 
-  def fieldName: FieldName
+  def retrieve(pk: PK): R[E]
+
+  def insert(e: E): R[PK]
+
+  def insertMany(es: Iterable[E]): R[Unit]
+
+  def update(e: E): R[E]
+
+  def updateMany[M[_]: Traverse](es: M[E]): R[Unit]
+
+  def delete(pk: PK): R[Unit]
+
+  def deleteMany(pks: Traversable[PK]): R[Unit]
+
+  def exists(pk: PK): R[Boolean]
+
+  def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
+
+  def existAll(pks: Traversable[PK]): R[Boolean]
 }
-
-object Identifiable extends IdentifiableLowPriorityImplicits

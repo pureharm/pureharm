@@ -15,12 +15,27 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick
+package busymachines.pureharm
 
 /**
+  *
+  * Convenience trait to mix in into your own domain specific
+  * modules for easy single-import experiences
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   *
   */
-object implicits extends types.SlickConnectionIOCatsInstances
+trait PureharmCoreTypeDefinitions {
+  type FieldName = _root_.busymachines.pureharm.fieldname.FieldName
+
+  val FieldName: _root_.busymachines.pureharm.fieldname.FieldName.type =
+    _root_.busymachines.pureharm.fieldname.FieldName
+
+  type Identifiable[T, ID] = _root_.busymachines.pureharm.Identifiable[T, ID]
+
+  val Identifiable: _root_.busymachines.pureharm.Identifiable.type =
+    _root_.busymachines.pureharm.Identifiable
+
+  type PhantomType[T] = _root_.busymachines.pureharm.PhantomType[T]
+}
