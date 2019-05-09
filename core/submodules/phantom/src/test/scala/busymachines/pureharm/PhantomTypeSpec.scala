@@ -12,7 +12,7 @@ final class PhantomTypeSpec extends FunSpec {
   import PhantomTypeSpec._
 
   describe("PhantomType") {
-    it("should haunt and excorcise the types") {
+    it("should spook and despook the types") {
       val original:  String  = "EVERYTHING IS A SPOOK!"
       val spooked:   Spooked = Spooked.spook(original)
       val despooked: String  = Spooked.despook(spooked)
@@ -20,11 +20,20 @@ final class PhantomTypeSpec extends FunSpec {
       assert(original === despooked)
     }
 
-    it("should not allow asigning a base type to a PhantomType") {
+    it("should not allow assigning a base type to a PhantomType") {
 
       assertDoesNotCompile {
         """
           |val string: Spooked = "THIS IS A NON TAGGED STRING"
+        """.stripMargin
+      }
+    }
+
+    it("should not allow assigning different Phantoms of the same base type to each other") {
+
+      assertDoesNotCompile {
+        """
+          |val spooked: Spooked = (??? : OtherSpooked)
         """.stripMargin
       }
     }
@@ -34,4 +43,7 @@ final class PhantomTypeSpec extends FunSpec {
 private object PhantomTypeSpec {
   private object Spooked extends PhantomType[String]
   private type Spooked = Spooked.Type
+
+  private[pureharm] object OtherSpooked extends PhantomType[String]
+  private[pureharm] type OtherSpooked = OtherSpooked.Type
 }
