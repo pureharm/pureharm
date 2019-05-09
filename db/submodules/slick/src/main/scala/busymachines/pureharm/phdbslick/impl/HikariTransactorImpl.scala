@@ -17,12 +17,12 @@
   */
 package busymachines.pureharm.phdbslick.impl
 
-import cats.implicits._
-import cats.effect._
 import busymachines.pureharm.db._
 import busymachines.pureharm.phdbslick._
+import busymachines.pureharm.phdbslick.slickTypes._
 
-import scala.concurrent.ExecutionContext
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 
 /**
   *
@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext
   * @since 02 Apr 2019
   *
   */
-private[phdbslick] class HikariTransactorImpl[F[_]] private(
+private[phdbslick] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(

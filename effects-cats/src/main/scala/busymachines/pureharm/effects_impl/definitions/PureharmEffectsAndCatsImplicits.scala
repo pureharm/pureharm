@@ -15,12 +15,17 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick
+package busymachines.pureharm.effects_impl.definitions
+
+import busymachines.pureharm.effects_impl.{CatsAliasesCore, CatsAliasesEffect}
 
 /**
   *
+  * Mix this trait into your own effects package to get all cats, cats-effect, and pureharm syntax in one
+  * import!
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 04 Apr 2019
+  * @since 06 May 2019
   *
   */
-object implicits extends types.PureharmDBSlickImplicits
+trait PureharmEffectsAndCatsImplicits extends PureharmEffectsSyntaxAll with CatsAliasesCore with CatsAliasesEffect

@@ -18,8 +18,9 @@
 package busymachines.pureharm.phdbslick
 
 import busymachines.pureharm.db._
+import busymachines.pureharm.phdbslick.slickTypes._
 
-import scala.concurrent.ExecutionContext
+import busymachines.pureharm.effects.ExecutionContext
 
 /**
   *
@@ -65,8 +66,7 @@ trait Transactor[F[_]] {
 }
 
 object Transactor {
-
-  import cats.effect._
+  import busymachines.pureharm.effects._
 
   def pgSQLHikari[F[_]: Async](
     dbProfile: JDBCProfileAPI,

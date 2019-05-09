@@ -17,18 +17,20 @@
   */
 package busymachines.pureharm
 
+import busymachines.pureharm.effects_impl.definitions
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Apr 2019
   *
   */
-object effects extends effects_impl.PureharmEffectsTypeDefinitions {
+object effects extends definitions.PureharmEffectsTypeDefinitions {
 
   //mix these into your libraries for one import experience
-  type PureharmEffectsSyntaxAll        = effects_impl.PureharmEffectsSyntaxAll
-  type PureharmEffectsTypeDefinitions  = effects_impl.PureharmEffectsTypeDefinitions
-  type PureharmEffectsAndCatsImplicits = effects_impl.PureharmEffectsAndCatsImplicits
+  type PureharmEffectsSyntaxAll        = definitions.PureharmEffectsSyntaxAll
+  type PureharmEffectsTypeDefinitions  = definitions.PureharmEffectsTypeDefinitions
+  type PureharmEffectsAndCatsImplicits = definitions.PureharmEffectsAndCatsImplicits
 
   /**
     * !!! N.B. !!!
@@ -37,5 +39,5 @@ object effects extends effects_impl.PureharmEffectsTypeDefinitions {
     * This object is meant to bring in everything that is in cats + some extra, without burdening
     * the user with two different imports.
     */
-  object implicits extends effects_impl.PureharmEffectsAndCatsImplicits
+  object implicits extends definitions.PureharmEffectsSyntaxAll with definitions.PureharmEffectsAndCatsImplicits
 }

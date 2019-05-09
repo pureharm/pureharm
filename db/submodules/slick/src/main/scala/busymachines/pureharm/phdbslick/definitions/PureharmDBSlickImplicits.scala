@@ -15,14 +15,12 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl
-
-import busymachines.pureharm.effects_impl
+package busymachines.pureharm.phdbslick.definitions
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 25 Apr 2019
+  * @since 06 May 2019
   *
   */
-trait PureharmEffectsSyntaxAll extends effects_impl.AttemptSyntax.Implicits
+trait PureharmDBSlickImplicits extends SlickConnectionIOCatsInstances {}

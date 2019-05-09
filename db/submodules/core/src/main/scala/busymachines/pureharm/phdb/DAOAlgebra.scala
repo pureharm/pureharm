@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.phdb
 
-import cats.Traverse
+import busymachines.pureharm.effects.Traverse
 
 /**
   *

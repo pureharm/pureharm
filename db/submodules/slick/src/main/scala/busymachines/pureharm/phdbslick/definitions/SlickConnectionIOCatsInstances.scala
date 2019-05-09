@@ -15,25 +15,20 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.phdbslick.definitions
+
+import busymachines.pureharm.effects.MonadError
+import busymachines.pureharm.db.ConnectionIOEC
+import busymachines.pureharm.phdbslick.slickTypes._
+import busymachines.pureharm.phdbslick.impl.ConnectionIOMonadError
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 22 Apr 2019
+  * @since 04 Apr 2019
   *
   */
-package object phdbslick {
-  final type ConnectionIO[T] = slick.dbio.DBIO[T]
-  final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
-
-  final type SlickBackendDB      = slick.jdbc.JdbcProfile#Backend#Database
-  final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
-
-  final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
-  final type JDBCProfileAPI = JDBCProfileAPI.Type
-
-  final object DatabaseBackend extends PhantomType[SlickBackendDB]
-  final type DatabaseBackend = DatabaseBackend.Type
-
+trait SlickConnectionIOCatsInstances {
+  implicit def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
+    new ConnectionIOMonadError
 }

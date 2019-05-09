@@ -15,9 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.types
+package busymachines.pureharm.phdbslick.definitions
 
 import busymachines.pureharm.phdbslick
+import busymachines.pureharm.phdbslick.slickTypes
 
 /**
   *
@@ -39,23 +40,23 @@ import busymachines.pureharm.phdbslick
   */
 trait PureharmDBSlickTypeDefinitions {
 
-  final type ConnectionIO[T] = phdbslick.ConnectionIO[T]
+  final type ConnectionIO[T] = slickTypes.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickDB  = phdbslick.SlickBackendDB
-  final type SlickAPI = phdbslick.SlickJDBCProfileAPI
+  final type SlickDB  = slickTypes.SlickBackendDB
+  final type SlickAPI = slickTypes.SlickJDBCProfileAPI
 
-  final val JDBCProfileAPI: phdbslick.JDBCProfileAPI.type = phdbslick.JDBCProfileAPI
-  final type JDBCProfileAPI = phdbslick.JDBCProfileAPI
+  final val JDBCProfileAPI: slickTypes.JDBCProfileAPI.type = slickTypes.JDBCProfileAPI
+  final type JDBCProfileAPI = slickTypes.JDBCProfileAPI
 
-  final val DatabaseBackend: phdbslick.DatabaseBackend.type = phdbslick.DatabaseBackend
-  final type DatabaseBackend = phdbslick.DatabaseBackend
+  final val DatabaseBackend: slickTypes.DatabaseBackend.type = slickTypes.DatabaseBackend
+  final type DatabaseBackend = slickTypes.DatabaseBackend
 
   final type Transactor[F[_]] = phdbslick.Transactor[F]
   final val Transactor: phdbslick.Transactor.type = phdbslick.Transactor
 
-  final type DBBlockingIOExecutionConfig = phdbslick.SlickDBIOAsyncExecutorConfig
-  final val DBBlockingIOExecutionConfig: phdbslick.SlickDBIOAsyncExecutorConfig.type =
+  final type SlickDBIOAsyncExecutorConfig = phdbslick.SlickDBIOAsyncExecutorConfig
+  final val SlickDBIOAsyncExecutorConfig: phdbslick.SlickDBIOAsyncExecutorConfig.type =
     phdbslick.SlickDBIOAsyncExecutorConfig
 
 }

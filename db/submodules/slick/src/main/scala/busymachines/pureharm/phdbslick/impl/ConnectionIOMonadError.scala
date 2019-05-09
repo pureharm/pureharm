@@ -18,7 +18,7 @@
 package busymachines.pureharm.phdbslick.impl
 
 import busymachines.pureharm.db.ConnectionIOEC
-import busymachines.pureharm.phdbslick._
+import busymachines.pureharm.phdbslick.slickTypes._
 
 import busymachines.pureharm.effects._
 
