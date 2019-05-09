@@ -37,7 +37,5 @@ trait PureharmCoreTypeDefinitions {
   val Identifiable: _root_.busymachines.pureharm.Identifiable.type =
     _root_.busymachines.pureharm.Identifiable
 
-  type PhantomType[T]        = _root_.busymachines.pureharm.PhantomType[T]
-  type SafePhantomType[E, T] = _root_.busymachines.pureharm.SafePhantomType[E, T]
-  type AttemptPhantomType[T] = _root_.busymachines.pureharm.SafePhantomType[Throwable, T]
+  type PhantomType[T] = _root_.busymachines.pureharm.PhantomType[T]
 }
