@@ -177,6 +177,9 @@ trait PureharmEffectsTypeDefinitions {
   type IO[+A] = ce.IO[A]
   val IO: ce.IO.type = ce.IO
 
+  type LiftIO[F[_]] = ce.LiftIO[F]
+  val LiftIO: ce.LiftIO.type = ce.LiftIO
+
   type IOApp = ce.IOApp
   val IOApp: ce.IOApp.type = ce.IOApp
 

@@ -1,6 +1,25 @@
+/**
+  * Copyright (c) 2019 BusyMachines
+  *
+  * See company homepage at: https://www.busymachines.com/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 package busymachines.pureharm.effects_impl
 
-import busymachines.pureharm.effects
+import busymachines.pureharm.effects._
+
+import scala.collection.generic.CanBuildFrom
 
 /**
   *
@@ -15,19 +34,30 @@ object PureharmSyntax {
     implicit def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
     implicit def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
 
-    import effects.Attempt
     implicit def pureharmFAttemptOps[F[_], A](foa: F[Attempt[A]]): FAttemptOps[F, A] = new FAttemptOps[F, A](foa)
     implicit def pureharmPureAttemptOps[A](aa:     Attempt[A]):    PureAttemptOps[A] = new PureAttemptOps[A](aa)
+
+    implicit final def pureharmAttemptPseudoCompanionSyntax(companion: Either.type): AttemptPseudoCompanionSyntax =
+      new AttemptPseudoCompanionSyntax(companion)
 
     implicit def pureharmFBooleanOps[F[_]](fb: F[Boolean]): FBooleanOps[F] = new FBooleanOps[F](fb)
     implicit def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
 
     implicit def pureharmAnyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
+
+    implicit def pureharmFuturePseudoCompanionOps(c: Future.type): FuturePseudoCompanionOps =
+      new FuturePseudoCompanionOps(c)
+
+    implicit def pureharmFutureReferenceEagerOps[A](f: Future[A]): FutureReferenceEagerOps[A] =
+      new FutureReferenceEagerOps[A](f)
+
+    implicit def pureharmFutureReferenceDelayedOps[A](f: => Future[A]): FutureReferenceDelayedOps[A] =
+      new FutureReferenceDelayedOps[A](f)
   }
 
   //--------------------------- OPTION ---------------------------
 
-  final class FOptionOps[F[_], A](val foa: F[Option[A]]) extends AnyVal {
+  final class FOptionOps[F[_], A] private[PureharmSyntax] (val foa: F[Option[A]]) extends AnyVal {
     import cats.implicits._
 
     def flatten(ifNone: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[A] =
@@ -61,7 +91,7 @@ object PureharmSyntax {
     }
   }
 
-  final class PureOptionOps[A](val oa: Option[A]) extends AnyVal {
+  final class PureOptionOps[A] private[PureharmSyntax] (val oa: Option[A]) extends AnyVal {
     import cats.implicits._
 
     def onError[F[_]](fu: F[_])(implicit F: cats.Monad[F]): F[Unit] = this.ifNoneRun(fu)
@@ -96,7 +126,7 @@ object PureharmSyntax {
 
   //--------------------------- ATTEMPT ---------------------------
 
-  final class FAttemptOps[F[_], A](val faa: F[effects.Attempt[A]]) extends AnyVal {
+  final class FAttemptOps[F[_], A] private[PureharmSyntax] (val faa: F[Attempt[A]]) extends AnyVal {
     import cats.implicits._
 
     @scala.deprecated(
@@ -107,7 +137,7 @@ object PureharmSyntax {
       faa.flatMap(_.liftTo[F])
   }
 
-  final class PureAttemptOps[A](val fa: effects.Attempt[A]) extends AnyVal {
+  final class PureAttemptOps[A] private[PureharmSyntax] (val fa: Attempt[A]) extends AnyVal {
     import cats.implicits._
 
     /**
@@ -121,9 +151,27 @@ object PureharmSyntax {
     }
   }
 
+  private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())
+
+  /**
+    * This helps mimick operations on the ``Attempt`` using
+    * the standard ``Either`` companion, thus making all
+    * those ops also available.
+    *
+    * See [[MonadAttempt]] and [[ApplicativeAttempt]] for further
+    * details.
+    */
+  final class AttemptPseudoCompanionSyntax private[PureharmSyntax] (val companion: Either.type) extends AnyVal {
+    def pure[A](a: A): Attempt[A] = Right[Throwable, A](a)
+
+    def raiseError[A](t: Throwable): Attempt[A] = Left[Throwable, A](t)
+
+    def unit: Attempt[Unit] = singletonUnitAttempt
+  }
+
   //--------------------------- BOOLEAN ---------------------------
 
-  final class FBooleanOps[F[_]](val fb: F[Boolean]) extends AnyVal {
+  final class FBooleanOps[F[_]] private[PureharmSyntax] (val fb: F[Boolean]) extends AnyVal {
     import cats.implicits._
 
     def ifFalseRaise(ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
@@ -139,7 +187,7 @@ object PureharmSyntax {
       fb.ifM(ifTrue = fu.void, ifFalse = F.unit)
   }
 
-  final class PureBooleanOps(val b: Boolean) extends AnyVal {
+  final class PureBooleanOps private[PureharmSyntax] (val b: Boolean) extends AnyVal {
     import cats.implicits._
 
     def ifFalseRaise[F[_]](ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
@@ -157,7 +205,7 @@ object PureharmSyntax {
 
   //--------------------------- ANY F --------------------------
 
-  final class AnyFOps[F[_], A](val fa: F[A]) extends AnyVal {
+  final class AnyFOps[F[_], A] private[PureharmSyntax] (val fa: F[A]) extends AnyVal {
     import cats.implicits._
     import cats.effect.Sync
 
@@ -169,4 +217,128 @@ object PureharmSyntax {
       case _ => fu.void
     }
   }
+
+  //--------------------------- Future --------------------------
+
+  /**
+    * The scala standard library is extremely annoying because
+    * various effects don't have similar syntax for essentially
+    * the same operation.
+    */
+  final class FuturePseudoCompanionOps private[PureharmSyntax] (val companion: Future.type) extends AnyVal {
+    def pure[A](a: A): Future[A] = companion.successful(a)
+
+    def raiseError[A](t: Throwable): Future[A] = companion.failed(t)
+
+    //=========================================================================
+    //=============================== Traversals ==============================
+    //=========================================================================
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.traverse]]
+      */
+    @inline def traverse_[A, B, M[X] <: TraversableOnce[X]](in: M[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[M[A], B, M[B]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.traverse_(in)(fn)
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.sequence]]
+      */
+    @inline def sequence_[A, M[X] <: TraversableOnce[X]](in: M[Future[A]])(
+      implicit
+      cbf: CanBuildFrom[M[Future[A]], A, M[A]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.sequence_(in)
+
+    /**
+      *
+      * Syntactically inspired from [[Future.traverse]], but it differs semantically
+      * insofar as this method does not attempt to run any futures in parallel. "M" stands
+      * for "monadic", as opposed to "applicative" which is the foundation for the formal definition
+      * of "traverse" (even though in Scala it is by accident-ish)
+      *
+      * For the vast majority of cases you should prefer this method over [[Future.sequence]]
+      * and [[Future.traverse]], since even small collections can easily wind up queuing so many
+      * [[Future]]s that you blow your execution context.
+      *
+      * Usage:
+      * {{{
+      *   import busymachines.effects.async._
+      *   val patches: Seq[Patch] = //...
+      *
+      *   //this ensures that no two changes will be applied in parallel.
+      *   val allPatches: Future[Seq[Patch]] = Future.serialize(patches){ patch: Patch =>
+      *     Future {
+      *       //apply patch
+      *     }
+      *   }
+      *   //... and so on, and so on!
+      * }}}
+      *
+      *
+      */
+    @inline def serialize[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[C[A], B, C[B]],
+      ec:  ExecutionContext,
+    ): Future[C[B]] = FutureOps.serialize(col)(fn)
+
+    /**
+      * @see [[serialize]]
+      *
+      * Similar to [[serialize]], but discards all content. i.e. used only
+      * for the combined effects.
+      */
+    @inline def serialize_[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[C[A], B, C[B]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.serialize_(col)(fn)
+  }
+
+  final class FutureReferenceEagerOps[A] private[PureharmSyntax] (val f: Future[A]) extends AnyVal {
+    import scala.concurrent.duration._
+    def unsafeRunSync(atMost: Duration = Duration.Inf): A = FutureOps.unsafeRunSync(f, atMost)
+  }
+
+  final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
+    /**
+      *
+      * Suspend the side-effects of this [[Future]] into an [[F]] which can be converted from
+      * and [[IO]]. This is the important operation when it comes to inter-op between
+      * standard Scala and typelevel.
+      *
+      * Usage. N.B. that this only makes sense if the creation of the Future itself
+      * is also suspended in the [[F]].
+      * {{{
+      * @inline def  writeToDB(v: Int, s: String): Future[Long] = ???
+      *   //...
+      *   val io = writeToDB(42, "string").suspendIn[IO]
+      *   //no database writes happened yet, since the future did
+      *   //not do its annoying running of side-effects immediately!
+      *
+      *   //when we want side-effects:
+      *   io.unsafeGetSync()
+      * }}}
+      *
+      * This is almost useless unless you are certain that ??? is a pure computation
+      * {{{
+      *   val f: Future[Int] = Future.apply(???)
+      *   f.suspendIn[IO]
+      * }}}
+      *
+      */
+    def suspendIn[F[_]: LiftIO]: F[A] = IO.fromFuture(IO(f)).to[F]
+  }
+
 }
