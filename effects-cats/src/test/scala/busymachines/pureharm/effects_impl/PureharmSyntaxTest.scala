@@ -1,7 +1,6 @@
 package busymachines.pureharm.effects_impl
 
 import org.scalatest.FunSpec
-
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
@@ -27,32 +26,32 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val ifEmpty = new RuntimeException("for empty option")
 
-    test("... flatten") {
+    test("flatten") {
       assert(pure.flatten(ifEmpty) == F.pure(value))
       assert(fail.flatten(ifEmpty) == F.raiseError(ifEmpty))
     }
 
-    test("... ifSomeRaise") {
+    test("ifSomeRaise") {
       assert(pure.ifSomeRaise(ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise(ifEmpty) == F.unit)
     }
 
-    test("... ifSomeRaise(A => Throwable)") {
+    test("ifSomeRaise(A => Throwable)") {
       assert(pure.ifSomeRaise((_: Int) => ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise((_: Int) => ifEmpty) == F.unit)
     }
 
-    test("... ifNoneRun") {
+    test("ifNoneRun") {
       assert(pure.ifNoneRun(F.raiseError(ifEmpty)) == F.unit)
       assert(fail.ifNoneRun(F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
     }
 
-    test("... ifSomeRun") {
+    test("ifSomeRun") {
       assert(pure.ifSomeRun(F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun(F.raiseError(ifEmpty)) == F.unit)
     }
 
-    test("... ifSomeRun(A => Throwable)") {
+    test("ifSomeRun(A => Throwable)") {
       assert(pure.ifSomeRun(_ => F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun(_ => F.raiseError(ifEmpty)) == F.unit)
     }
@@ -74,27 +73,27 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val ifEmpty = new RuntimeException("for empty option")
 
-    test("... ifSomeRaise") {
+    test("ifSomeRaise") {
       assert(pure.ifSomeRaise[F](ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise[F](ifEmpty) == F.unit)
     }
 
-    test("... ifSomeRaise(A => Throwable)") {
+    test("ifSomeRaise(A => Throwable)") {
       assert(pure.ifSomeRaise[F]((_: Int) => ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise[F]((_: Int) => ifEmpty) == F.unit)
     }
 
-    test("... ifNoneRun") {
+    test("ifNoneRun") {
       assert(pure.ifNoneRun[F](F.raiseError(ifEmpty)) == F.unit)
       assert(fail.ifNoneRun[F](F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
     }
 
-    test("... ifSomeRun") {
+    test("ifSomeRun") {
       assert(pure.ifSomeRun[F](F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun[F](F.raiseError(ifEmpty)) == F.unit)
     }
 
-    test("... ifSomeRun(A => Throwable)") {
+    test("ifSomeRun(A => Throwable)") {
       assert(pure.ifSomeRun[F]((_: Int) => F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun[F]((_: Int) => F.raiseError(ifEmpty)) == F.unit)
     }
@@ -105,7 +104,7 @@ final class PureharmSyntaxTest extends FunSpec {
     val value = 42
 
     val err = new RuntimeException("attempt—syntax")
-    test("... onError") {
+    test("onError") {
       val pure: Attempt[Int] = Attempt.pure(value)
       val fail: Attempt[Int] = Attempt.raiseError(err)
 
@@ -136,23 +135,23 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val failure = new RuntimeException("boolean throwable")
 
-    test("... ifFalseRaise") {
+    test("ifFalseRaise") {
       assert(trueF.ifFalseRaise(failure) == F.unit, "trueF")
       assert(falseF.ifFalseRaise(failure) == F.raiseError(failure), "falseF")
     }
 
-    test("... ifTrueRaise") {
+    test("ifTrueRaise") {
       assert(trueF.ifTrueRaise(failure) == F.raiseError(failure), "trueF")
       assert(falseF.ifTrueRaise(failure) == F.unit, "falseF")
     }
 
-    test("... ifFalseRun") {
+    test("ifFalseRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueF.ifFalseRun(F.raiseError(newFail)) == F.unit, "trueF")
       assert(falseF.ifFalseRun(F.raiseError(newFail)) == F.raiseError(newFail), "falseF")
     }
 
-    test("... ifTrueRun") {
+    test("ifTrueRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueF.ifTrueRun(F.raiseError(newFail)) == F.raiseError(newFail), "trueF")
       assert(falseF.ifTrueRun(F.raiseError(newFail)) == F.unit, "falseF")
@@ -169,23 +168,23 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val failure = new RuntimeException("boolean throwable")
 
-    test("... ifFalseRaise") {
+    test("ifFalseRaise") {
       assert(trueV.ifFalseRaise[F](failure) == F.unit, "trueF")
       assert(falseV.ifFalseRaise[F](failure) == F.raiseError(failure), "falseF")
     }
 
-    test("... ifTrueRaise") {
+    test("ifTrueRaise") {
       assert(trueV.ifTrueRaise[F](failure) == F.raiseError(failure), "trueF")
       assert(falseV.ifTrueRaise[F](failure) == F.unit, "falseF")
     }
 
-    test("... ifFalseRun") {
+    test("ifFalseRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueV.ifFalseRun(F.raiseError(newFail)) == F.unit, "trueF")
       assert(falseV.ifFalseRun(F.raiseError(newFail)) == F.raiseError(newFail), "falseF")
     }
 
-    test("... ifTrueRun") {
+    test("ifTrueRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueV.ifTrueRun(F.raiseError(newFail)) == F.raiseError(newFail), "trueF")
       assert(falseV.ifTrueRun(F.raiseError(newFail)) == F.unit, "falseF")
@@ -195,7 +194,7 @@ final class PureharmSyntaxTest extends FunSpec {
   describe("Any F syntax") {
     val value = 42
 
-    test("... onError(fu: F[_])") {
+    test("onError(fu: F[_])") {
       val failure = new RuntimeException("failure")
       val pure    = IO.pure(value)
       val fail    = IO.raiseError(failure)
@@ -351,6 +350,44 @@ final class PureharmSyntaxTest extends FunSpec {
           eventualResult.unsafeRunSync()
           assert(sideEffect == 0, "nothing should have happened")
         }
+      }
+    }
+
+    describe("suspendIn[...]") {
+
+      test("... IO") {
+        var sideEffect: Int = 0
+        val io: IO[Int] = Future[Int] {
+          sideEffect = 42
+          sideEffect
+        }.suspendIn[IO]
+        // we wait because in case this doesn't work,
+        // the Future is already running and doing all its side-effects
+        Thread.sleep(100)
+        if (sideEffect == 42) fail("side effect should not have been applied yet")
+        assert(io.unsafeRunSync() == 42, "value of suspended future")
+        assert(sideEffect == 42, "after unsafeRunSync side effect should be applied")
+      }
+
+      test("... final tagless F") {
+        var sideEffect: Int = 0
+
+        def testPureSuspension[F[_]: Async]: F[Int] = {
+          val f: F[Int] = Future[Int] {
+            sideEffect = 42
+            sideEffect
+          }.suspendIn[F]
+          // we wait because in case this doesn't work,
+          // the Future is already running and doing all its side-effects
+          Thread.sleep(100)
+          if (sideEffect == 42) fail("side effect should not have been applied yet")
+
+          f
+        }
+
+        val io = testPureSuspension[IO]
+        assert(io.unsafeRunSync() == 42, "value of suspended future")
+        assert(sideEffect == 42, "after unsafeRunSync side effect should be applied")
       }
     }
   }
