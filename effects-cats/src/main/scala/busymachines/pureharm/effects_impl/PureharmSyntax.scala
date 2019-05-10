@@ -22,7 +22,7 @@ object PureharmSyntax {
     implicit def pureharmFBooleanOps[F[_]](fb: F[Boolean]): FBooleanOps[F] = new FBooleanOps[F](fb)
     implicit def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
 
-    implicit def anyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
+    implicit def pureharmAnyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
   }
 
   //--------------------------- OPTION ---------------------------
@@ -96,7 +96,7 @@ object PureharmSyntax {
 
   //--------------------------- ATTEMPT ---------------------------
 
-  final class FAttemptOps[F[_], A](val faa: F[effects.Attempt[A]]) {
+  final class FAttemptOps[F[_], A](val faa: F[effects.Attempt[A]]) extends AnyVal {
     import cats.implicits._
 
     @scala.deprecated(
@@ -107,7 +107,7 @@ object PureharmSyntax {
       faa.flatMap(_.liftTo[F])
   }
 
-  final class PureAttemptOps[A](val fa: effects.Attempt[A]) {
+  final class PureAttemptOps[A](val fa: effects.Attempt[A]) extends AnyVal {
     import cats.implicits._
 
     /**
@@ -156,6 +156,7 @@ object PureharmSyntax {
   }
 
   //--------------------------- ANY F --------------------------
+
   final class AnyFOps[F[_], A](val fa: F[A]) extends AnyVal {
     import cats.implicits._
     import cats.effect.Sync
