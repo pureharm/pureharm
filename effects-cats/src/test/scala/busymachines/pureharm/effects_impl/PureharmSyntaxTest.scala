@@ -27,32 +27,32 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val ifEmpty = new RuntimeException("for empty option")
 
-    it("... flatten") {
+    test("... flatten") {
       assert(pure.flatten(ifEmpty) == F.pure(value))
       assert(fail.flatten(ifEmpty) == F.raiseError(ifEmpty))
     }
 
-    it("... ifSomeRaise") {
+    test("... ifSomeRaise") {
       assert(pure.ifSomeRaise(ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise(ifEmpty) == F.unit)
     }
 
-    it("... ifSomeRaise(A => Throwable)") {
+    test("... ifSomeRaise(A => Throwable)") {
       assert(pure.ifSomeRaise((_: Int) => ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise((_: Int) => ifEmpty) == F.unit)
     }
 
-    it("... ifNoneRun") {
+    test("... ifNoneRun") {
       assert(pure.ifNoneRun(F.raiseError(ifEmpty)) == F.unit)
       assert(fail.ifNoneRun(F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
     }
 
-    it("... ifSomeRun") {
+    test("... ifSomeRun") {
       assert(pure.ifSomeRun(F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun(F.raiseError(ifEmpty)) == F.unit)
     }
 
-    it("... ifSomeRun(A => Throwable)") {
+    test("... ifSomeRun(A => Throwable)") {
       assert(pure.ifSomeRun(_ => F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun(_ => F.raiseError(ifEmpty)) == F.unit)
     }
@@ -74,27 +74,27 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val ifEmpty = new RuntimeException("for empty option")
 
-    it("... ifSomeRaise") {
+    test("... ifSomeRaise") {
       assert(pure.ifSomeRaise[F](ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise[F](ifEmpty) == F.unit)
     }
 
-    it("... ifSomeRaise(A => Throwable)") {
+    test("... ifSomeRaise(A => Throwable)") {
       assert(pure.ifSomeRaise[F]((_: Int) => ifEmpty) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRaise[F]((_: Int) => ifEmpty) == F.unit)
     }
 
-    it("... ifNoneRun") {
+    test("... ifNoneRun") {
       assert(pure.ifNoneRun[F](F.raiseError(ifEmpty)) == F.unit)
       assert(fail.ifNoneRun[F](F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
     }
 
-    it("... ifSomeRun") {
+    test("... ifSomeRun") {
       assert(pure.ifSomeRun[F](F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun[F](F.raiseError(ifEmpty)) == F.unit)
     }
 
-    it("... ifSomeRun(A => Throwable)") {
+    test("... ifSomeRun(A => Throwable)") {
       assert(pure.ifSomeRun[F]((_: Int) => F.raiseError(ifEmpty)) == F.raiseError(ifEmpty))
       assert(fail.ifSomeRun[F]((_: Int) => F.raiseError(ifEmpty)) == F.unit)
     }
@@ -105,7 +105,7 @@ final class PureharmSyntaxTest extends FunSpec {
     val value = 42
 
     val err = new RuntimeException("attempt—syntax")
-    it("... onError") {
+    test("... onError") {
       val pure: Attempt[Int] = Attempt.pure(value)
       val fail: Attempt[Int] = Attempt.raiseError(err)
 
@@ -136,23 +136,23 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val failure = new RuntimeException("boolean throwable")
 
-    it("... ifFalseRaise") {
+    test("... ifFalseRaise") {
       assert(trueF.ifFalseRaise(failure) == F.unit, "trueF")
       assert(falseF.ifFalseRaise(failure) == F.raiseError(failure), "falseF")
     }
 
-    it("... ifTrueRaise") {
+    test("... ifTrueRaise") {
       assert(trueF.ifTrueRaise(failure) == F.raiseError(failure), "trueF")
       assert(falseF.ifTrueRaise(failure) == F.unit, "falseF")
     }
 
-    it("... ifFalseRun") {
+    test("... ifFalseRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueF.ifFalseRun(F.raiseError(newFail)) == F.unit, "trueF")
       assert(falseF.ifFalseRun(F.raiseError(newFail)) == F.raiseError(newFail), "falseF")
     }
 
-    it("... ifTrueRun") {
+    test("... ifTrueRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueF.ifTrueRun(F.raiseError(newFail)) == F.raiseError(newFail), "trueF")
       assert(falseF.ifTrueRun(F.raiseError(newFail)) == F.unit, "falseF")
@@ -169,23 +169,23 @@ final class PureharmSyntaxTest extends FunSpec {
 
     val failure = new RuntimeException("boolean throwable")
 
-    it("... ifFalseRaise") {
+    test("... ifFalseRaise") {
       assert(trueV.ifFalseRaise[F](failure) == F.unit, "trueF")
       assert(falseV.ifFalseRaise[F](failure) == F.raiseError(failure), "falseF")
     }
 
-    it("... ifTrueRaise") {
+    test("... ifTrueRaise") {
       assert(trueV.ifTrueRaise[F](failure) == F.raiseError(failure), "trueF")
       assert(falseV.ifTrueRaise[F](failure) == F.unit, "falseF")
     }
 
-    it("... ifFalseRun") {
+    test("... ifFalseRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueV.ifFalseRun(F.raiseError(newFail)) == F.unit, "trueF")
       assert(falseV.ifFalseRun(F.raiseError(newFail)) == F.raiseError(newFail), "falseF")
     }
 
-    it("... ifTrueRun") {
+    test("... ifTrueRun") {
       val newFail = new RuntimeException("other branch!")
       assert(trueV.ifTrueRun(F.raiseError(newFail)) == F.raiseError(newFail), "trueF")
       assert(falseV.ifTrueRun(F.raiseError(newFail)) == F.unit, "falseF")
@@ -195,7 +195,7 @@ final class PureharmSyntaxTest extends FunSpec {
   describe("Any F syntax") {
     val value = 42
 
-    it("... onError(fu: F[_])") {
+    test("... onError(fu: F[_])") {
       val failure = new RuntimeException("failure")
       val pure    = IO.pure(value)
       val fail    = IO.raiseError(failure)
