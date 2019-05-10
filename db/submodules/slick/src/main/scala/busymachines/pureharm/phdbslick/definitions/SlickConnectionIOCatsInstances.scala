@@ -18,7 +18,7 @@
 package busymachines.pureharm.phdbslick.definitions
 
 import busymachines.pureharm.effects.MonadError
-import busymachines.pureharm.db.ConnectionIOEC
+import busymachines.pureharm.dbslick.ConnectionIOEC
 import busymachines.pureharm.phdbslick.slickTypes._
 import busymachines.pureharm.phdbslick.impl.ConnectionIOMonadError
 

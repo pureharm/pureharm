@@ -59,4 +59,7 @@ trait PureharmDBSlickTypeDefinitions {
   final val SlickDBIOAsyncExecutorConfig: phdbslick.SlickDBIOAsyncExecutorConfig.type =
     phdbslick.SlickDBIOAsyncExecutorConfig
 
+  val ConnectionIOEC: slickTypes.ConnectionIOEC.type = slickTypes.ConnectionIOEC
+  type ConnectionIOEC = slickTypes.ConnectionIOEC.Type
+
 }

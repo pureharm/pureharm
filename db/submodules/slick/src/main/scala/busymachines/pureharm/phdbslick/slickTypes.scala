@@ -38,4 +38,7 @@ object slickTypes {
   final object DatabaseBackend extends PhantomType[SlickBackendDB]
   final type DatabaseBackend = DatabaseBackend.Type
 
+  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
+  final type ConnectionIOEC = ConnectionIOEC.Type
+
 }

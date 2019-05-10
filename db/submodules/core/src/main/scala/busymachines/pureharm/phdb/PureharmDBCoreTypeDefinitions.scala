@@ -40,20 +40,16 @@ import busymachines.pureharm.db
 trait PureharmDBCoreTypeDefinitions {
 
   final val JDBCUrl: db.JDBCUrl.type = db.JDBCUrl
-  final type JDBCUrl = db.JDBCUrl
+  final type JDBCUrl = db.JDBCUrl.Type
 
   final val DBUsername: db.DBUsername.type = db.DBUsername
-  final type DBUsername = db.DBUsername
+  final type DBUsername = db.DBUsername.Type
 
   final val DBPassword: db.DBPassword.type = db.DBPassword
-  final type DBPassword = db.DBPassword
+  final type DBPassword = db.DBPassword.Type
 
   final val TableName = db.TableName
-  final type TableName = db.TableName
+  final type TableName = db.TableName.Type
 
   final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
-
-  @scala.deprecated("Will be moved to dbslick module", "0.2.0-M7")
-  type ConnectionIOEC = db.ConnectionIOEC
-  val ConnectionIOEC: db.ConnectionIOEC.type = db.ConnectionIOEC
 }
