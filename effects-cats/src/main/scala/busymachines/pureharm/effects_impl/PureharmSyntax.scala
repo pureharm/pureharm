@@ -1,6 +1,23 @@
+/**
+  * Copyright (c) 2019 BusyMachines
+  *
+  * See company homepage at: https://www.busymachines.com/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 package busymachines.pureharm.effects_impl
 
-import busymachines.pureharm.effects
+import busymachines.pureharm.effects._
 
 /**
   *
@@ -15,9 +32,11 @@ object PureharmSyntax {
     implicit def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
     implicit def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
 
-    import effects.Attempt
     implicit def pureharmFAttemptOps[F[_], A](foa: F[Attempt[A]]): FAttemptOps[F, A] = new FAttemptOps[F, A](foa)
     implicit def pureharmPureAttemptOps[A](aa:     Attempt[A]):    PureAttemptOps[A] = new PureAttemptOps[A](aa)
+
+    implicit final def pureharmAttemptPseudoCompanionSyntax(companion: Either.type): AttemptPseudoCompanionSyntax =
+      new AttemptPseudoCompanionSyntax(companion)
 
     implicit def pureharmFBooleanOps[F[_]](fb: F[Boolean]): FBooleanOps[F] = new FBooleanOps[F](fb)
     implicit def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
@@ -27,7 +46,7 @@ object PureharmSyntax {
 
   //--------------------------- OPTION ---------------------------
 
-  final class FOptionOps[F[_], A](val foa: F[Option[A]]) extends AnyVal {
+  final class FOptionOps[F[_], A] private[PureharmSyntax] (val foa: F[Option[A]]) extends AnyVal {
     import cats.implicits._
 
     def flatten(ifNone: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[A] =
@@ -61,7 +80,7 @@ object PureharmSyntax {
     }
   }
 
-  final class PureOptionOps[A](val oa: Option[A]) extends AnyVal {
+  final class PureOptionOps[A] private[PureharmSyntax] (val oa: Option[A]) extends AnyVal {
     import cats.implicits._
 
     def onError[F[_]](fu: F[_])(implicit F: cats.Monad[F]): F[Unit] = this.ifNoneRun(fu)
@@ -96,7 +115,7 @@ object PureharmSyntax {
 
   //--------------------------- ATTEMPT ---------------------------
 
-  final class FAttemptOps[F[_], A](val faa: F[effects.Attempt[A]]) extends AnyVal {
+  final class FAttemptOps[F[_], A] private[PureharmSyntax] (val faa: F[Attempt[A]]) extends AnyVal {
     import cats.implicits._
 
     @scala.deprecated(
@@ -107,7 +126,7 @@ object PureharmSyntax {
       faa.flatMap(_.liftTo[F])
   }
 
-  final class PureAttemptOps[A](val fa: effects.Attempt[A]) extends AnyVal {
+  final class PureAttemptOps[A] private[PureharmSyntax] (val fa: Attempt[A]) extends AnyVal {
     import cats.implicits._
 
     /**
@@ -121,9 +140,27 @@ object PureharmSyntax {
     }
   }
 
+  private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())
+
+  /**
+    * This helps mimick operations on the ``Attempt`` using
+    * the standard ``Either`` companion, thus making all
+    * those ops also available.
+    *
+    * See [[MonadAttempt]] and [[ApplicativeAttempt]] for further
+    * details.
+    */
+  final class AttemptPseudoCompanionSyntax private[PureharmSyntax] (val companion: Either.type) extends AnyVal {
+    def pure[A](a: A): Attempt[A] = Right[Throwable, A](a)
+
+    def raiseError[A](t: Throwable): Attempt[A] = Left[Throwable, A](t)
+
+    def unit: Attempt[Unit] = singletonUnitAttempt
+  }
+
   //--------------------------- BOOLEAN ---------------------------
 
-  final class FBooleanOps[F[_]](val fb: F[Boolean]) extends AnyVal {
+  final class FBooleanOps[F[_]] private[PureharmSyntax] (val fb: F[Boolean]) extends AnyVal {
     import cats.implicits._
 
     def ifFalseRaise(ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
@@ -139,7 +176,7 @@ object PureharmSyntax {
       fb.ifM(ifTrue = fu.void, ifFalse = F.unit)
   }
 
-  final class PureBooleanOps(val b: Boolean) extends AnyVal {
+  final class PureBooleanOps private[PureharmSyntax] (val b: Boolean) extends AnyVal {
     import cats.implicits._
 
     def ifFalseRaise[F[_]](ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
@@ -157,7 +194,7 @@ object PureharmSyntax {
 
   //--------------------------- ANY F --------------------------
 
-  final class AnyFOps[F[_], A](val fa: F[A]) extends AnyVal {
+  final class AnyFOps[F[_], A] private[PureharmSyntax] (val fa: F[A]) extends AnyVal {
     import cats.implicits._
     import cats.effect.Sync
 
@@ -169,4 +206,6 @@ object PureharmSyntax {
       case _ => fu.void
     }
   }
+
+  //--------------------------- Pseudo companion ops --------------------------
 }
