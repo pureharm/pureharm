@@ -27,7 +27,7 @@ package busymachines.pureharm
   *
   */
 trait PureharmCoreTypeDefinitions {
-  type FieldName = _root_.busymachines.pureharm.fieldname.FieldName
+  type FieldName = _root_.busymachines.pureharm.fieldname.FieldName.Type
 
   val FieldName: _root_.busymachines.pureharm.fieldname.FieldName.type =
     _root_.busymachines.pureharm.fieldname.FieldName

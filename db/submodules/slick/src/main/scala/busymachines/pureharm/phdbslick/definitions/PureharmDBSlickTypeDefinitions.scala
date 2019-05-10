@@ -47,10 +47,10 @@ trait PureharmDBSlickTypeDefinitions {
   final type SlickAPI = slickTypes.SlickJDBCProfileAPI
 
   final val JDBCProfileAPI: slickTypes.JDBCProfileAPI.type = slickTypes.JDBCProfileAPI
-  final type JDBCProfileAPI = slickTypes.JDBCProfileAPI
+  final type JDBCProfileAPI = slickTypes.JDBCProfileAPI.Type
 
   final val DatabaseBackend: slickTypes.DatabaseBackend.type = slickTypes.DatabaseBackend
-  final type DatabaseBackend = slickTypes.DatabaseBackend
+  final type DatabaseBackend = slickTypes.DatabaseBackend.Type
 
   final type Transactor[F[_]] = phdbslick.Transactor[F]
   final val Transactor: phdbslick.Transactor.type = phdbslick.Transactor
