@@ -40,18 +40,21 @@ object PureharmSyntax {
     implicit final def pureharmAttemptPseudoCompanionSyntax(companion: Either.type): AttemptPseudoCompanionSyntax =
       new AttemptPseudoCompanionSyntax(companion)
 
-    implicit def pureharmFBooleanOps[F[_]](fb: F[Boolean]): FBooleanOps[F] = new FBooleanOps[F](fb)
-    implicit def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
+    implicit final def pureharmTryCompanionSyntax(companion: Try.type): TryCompanionSyntax =
+      new TryCompanionSyntax(companion)
 
-    implicit def pureharmAnyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
+    implicit final def pureharmFBooleanOps[F[_]](fb: F[Boolean]): FBooleanOps[F] = new FBooleanOps[F](fb)
+    implicit final def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
 
-    implicit def pureharmFuturePseudoCompanionOps(c: Future.type): FuturePseudoCompanionOps =
+    implicit final def pureharmAnyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
+
+    implicit final def pureharmFuturePseudoCompanionOps(c: Future.type): FuturePseudoCompanionOps =
       new FuturePseudoCompanionOps(c)
 
-    implicit def pureharmFutureReferenceEagerOps[A](f: Future[A]): FutureReferenceEagerOps[A] =
+    implicit final def pureharmFutureReferenceEagerOps[A](f: Future[A]): FutureReferenceEagerOps[A] =
       new FutureReferenceEagerOps[A](f)
 
-    implicit def pureharmFutureReferenceDelayedOps[A](f: => Future[A]): FutureReferenceDelayedOps[A] =
+    implicit final def pureharmFutureReferenceDelayedOps[A](f: => Future[A]): FutureReferenceDelayedOps[A] =
       new FutureReferenceDelayedOps[A](f)
   }
 
@@ -167,6 +170,20 @@ object PureharmSyntax {
     def raiseError[A](t: Throwable): Attempt[A] = Left[Throwable, A](t)
 
     def unit: Attempt[Unit] = singletonUnitAttempt
+  }
+
+  //--------------------------- TRY ---------------------------
+
+  private val singletonUnitTry: Try[Unit] = TrySuccess[Unit](())
+
+  final class TryCompanionSyntax private[PureharmSyntax] (val companion: Try.type) extends AnyVal {
+    def pure[A](a: A): Try[A] = TrySuccess(a)
+
+    def raiseError[A](t: Throwable): Try[A] = TryFailure(t)
+
+    def catchNonFatal[A](thunk: => A): Try[A] = companion.apply[A](thunk)
+
+    def unit: Try[Unit] = singletonUnitTry
   }
 
   //--------------------------- BOOLEAN ---------------------------
