@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.phidentifiable
 
-import busymachines.pureharm.{Identifiable, fieldname}
+import busymachines.pureharm.{fieldname, Identifiable}
 
 /**
   *
