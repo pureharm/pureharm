@@ -12,6 +12,7 @@ import busymachines.pureharm.effects.implicits._
   *
   */
 final class PureharmSyntaxTest extends FunSpec {
+  private def test: ItWord = it
 
   describe("F[Option[_]] syntax") {
     //makes testing more concise and easier to change
@@ -213,6 +214,144 @@ final class PureharmSyntaxTest extends FunSpec {
         assert(state == value, "state should change")
       }
 
+    }
+  }
+
+  describe("Future syntax") {
+    implicit val ec: ExecutionContext = ExecutionContext.global
+
+    describe("traversals") {
+
+      describe("Future.serialize") {
+
+        test("empty list") {
+          val input:    Seq[Int] = List()
+          val expected: Seq[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult = Future.serialize(input) { _ =>
+            Future[Int] {
+              sideEffect = 42
+              sideEffect
+            }
+          }
+
+          assert(eventualResult.unsafeRunSync() == expected)
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+
+        test("no two futures should run in parallel") {
+          val input: Seq[Int] = (1 to 100).toList
+          val expected = input.map(_.toString)
+
+          var previouslyProcessed: Option[Int] = None
+          var startedFlag:         Option[Int] = None
+
+          val eventualResult: Future[Seq[String]] = Future.serialize(input) { i =>
+            Future {
+              assert(
+                startedFlag.isEmpty,
+                s"started flag should have been empty at the start of each future but was: $startedFlag",
+              )
+              previouslyProcessed foreach { previous =>
+                assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
+                  actual = previous,
+                )
+              }
+              startedFlag         = Some(i)
+              startedFlag         = None
+              previouslyProcessed = Some(i)
+              i.toString
+            }
+          }
+          assert(expected == eventualResult.unsafeRunSync())
+          assert(previouslyProcessed == Option(100))
+        }
+      }
+
+      describe("Future.serialize_") {
+
+        test("empty list") {
+          val input: Seq[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult = Future.serialize_(input) { _ =>
+            Future {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+
+        test("no two futures should run in parallel") {
+          val input: Seq[Int] = (1 to 100).toList
+
+          var previouslyProcessed: Option[Int] = None
+          var startedFlag:         Option[Int] = None
+
+          val eventualResult: Future[Unit] = Future.serialize_(input) { i =>
+            Future {
+              assert(
+                startedFlag.isEmpty,
+                s"started flag should have been empty at the start of each future but was: $startedFlag",
+              )
+              previouslyProcessed foreach { previous =>
+                assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
+                  actual = previous,
+                )
+              }
+              startedFlag         = Some(i)
+              startedFlag         = None
+              previouslyProcessed = Some(i)
+              i.toString
+            }
+          }
+          eventualResult.unsafeRunSync()
+          assert(previouslyProcessed == Option(100))
+        }
+      }
+
+      describe("Future.traverse_") {
+
+        test("empty list") {
+          val input: Seq[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: Future[Unit] = Future.traverse_(input) { _ =>
+            Future {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("Future.sequence_") {
+
+        test("empty list") {
+          val input: Seq[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: Future[Unit] = Future.sequence_ {
+            input.map { _ =>
+              Future {
+                sideEffect = 42
+              }
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
     }
   }
 }

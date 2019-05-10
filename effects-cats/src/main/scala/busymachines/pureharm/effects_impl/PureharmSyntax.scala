@@ -19,6 +19,8 @@ package busymachines.pureharm.effects_impl
 
 import busymachines.pureharm.effects._
 
+import scala.collection.generic.CanBuildFrom
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -42,6 +44,15 @@ object PureharmSyntax {
     implicit def pureharmPureBooleanOps(b:     Boolean):    PureBooleanOps = new PureBooleanOps(b)
 
     implicit def pureharmAnyFOps[F[_], A](fa: F[A]): AnyFOps[F, A] = new AnyFOps[F, A](fa)
+
+    implicit def pureharmFuturePseudoCompanionOps(c: Future.type): FuturePseudoCompanionOps =
+      new FuturePseudoCompanionOps(c)
+
+    implicit def pureharmFutureReferenceEagerOps[A](f: Future[A]): FutureReferenceEagerOps[A] =
+      new FutureReferenceEagerOps[A](f)
+
+    implicit def pureharmFutureReferenceDelayedOps[A](f: => Future[A]): FutureReferenceDelayedOps[A] =
+      new FutureReferenceDelayedOps[A](f)
   }
 
   //--------------------------- OPTION ---------------------------
@@ -207,5 +218,127 @@ object PureharmSyntax {
     }
   }
 
-  //--------------------------- Pseudo companion ops --------------------------
+  //--------------------------- Future --------------------------
+
+  /**
+    * The scala standard library is extremely annoying because
+    * various effects don't have similar syntax for essentially
+    * the same operation.
+    */
+  final class FuturePseudoCompanionOps private[PureharmSyntax] (val companion: Future.type) extends AnyVal {
+    def pure[A](a: A): Future[A] = companion.successful(a)
+
+    def raiseError[A](t: Throwable): Future[A] = companion.failed(t)
+
+    //=========================================================================
+    //=============================== Traversals ==============================
+    //=========================================================================
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.traverse]]
+      */
+    @inline def traverse_[A, B, M[X] <: TraversableOnce[X]](in: M[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[M[A], B, M[B]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.traverse_(in)(fn)
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.sequence]]
+      */
+    @inline def sequence_[A, M[X] <: TraversableOnce[X]](in: M[Future[A]])(
+      implicit
+      cbf: CanBuildFrom[M[Future[A]], A, M[A]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.sequence_(in)
+
+    /**
+      *
+      * Syntactically inspired from [[Future.traverse]], but it differs semantically
+      * insofar as this method does not attempt to run any futures in parallel. "M" stands
+      * for "monadic", as opposed to "applicative" which is the foundation for the formal definition
+      * of "traverse" (even though in Scala it is by accident-ish)
+      *
+      * For the vast majority of cases you should prefer this method over [[Future.sequence]]
+      * and [[Future.traverse]], since even small collections can easily wind up queuing so many
+      * [[Future]]s that you blow your execution context.
+      *
+      * Usage:
+      * {{{
+      *   import busymachines.effects.async._
+      *   val patches: Seq[Patch] = //...
+      *
+      *   //this ensures that no two changes will be applied in parallel.
+      *   val allPatches: Future[Seq[Patch]] = Future.serialize(patches){ patch: Patch =>
+      *     Future {
+      *       //apply patch
+      *     }
+      *   }
+      *   //... and so on, and so on!
+      * }}}
+      *
+      *
+      */
+    @inline def serialize[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[C[A], B, C[B]],
+      ec:  ExecutionContext,
+    ): Future[C[B]] = FutureOps.serialize(col)(fn)
+
+    /**
+      * @see [[serialize]]
+      *
+      * Similar to [[serialize]], but discards all content. i.e. used only
+      * for the combined effects.
+      */
+    @inline def serialize_[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+      implicit
+      cbf: CanBuildFrom[C[A], B, C[B]],
+      ec:  ExecutionContext,
+    ): Future[Unit] = FutureOps.serialize_(col)(fn)
+  }
+
+  final class FutureReferenceEagerOps[A] private[PureharmSyntax] (val f: Future[A]) extends AnyVal {
+    import scala.concurrent.duration._
+    def unsafeRunSync(atMost: Duration = Duration.Inf): A = FutureOps.unsafeRunSync(f, atMost)
+  }
+
+  final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
+    /**
+      *
+      * Suspend the side-effects of this [[Future]] into an [[F]] which can be converted from
+      * and [[IO]]. This is the important operation when it comes to inter-op between
+      * standard Scala and typelevel.
+      *
+      * Usage. N.B. that this only makes sense if the creation of the Future itself
+      * is also suspended in the [[F]].
+      * {{{
+      * @inline def  writeToDB(v: Int, s: String): Future[Long] = ???
+      *   //...
+      *   val io = writeToDB(42, "string").suspendIn[IO]
+      *   //no database writes happened yet, since the future did
+      *   //not do its annoying running of side-effects immediately!
+      *
+      *   //when we want side-effects:
+      *   io.unsafeGetSync()
+      * }}}
+      *
+      * This is almost useless unless you are certain that ??? is a pure computation
+      * {{{
+      *   val f: Future[Int] = Future.apply(???)
+      *   f.suspendIn[IO]
+      * }}}
+      *
+      */
+    def suspendIn[F[_]: LiftIO]: F[A] = IO.fromFuture(IO(f)).to[F]
+  }
+
 }
