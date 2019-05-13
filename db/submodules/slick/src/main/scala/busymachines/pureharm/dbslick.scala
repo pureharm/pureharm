@@ -14,6 +14,5 @@ object dbslick extends definitions.PureharmDBSlickTypeDefinitions {
   type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
   type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
 
-
   object implicits extends definitions.PureharmDBSlickImplicits
 }
