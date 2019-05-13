@@ -36,9 +36,6 @@ object db {
   final object TableName extends PhantomType[String]
   final type TableName = TableName.Type
 
-  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
-  final type ConnectionIOEC = ConnectionIOEC.Type
-
   final type DAOAlgebra[R[_], E, PK] = phdb.DAOAlgebra[R, E, PK]
 
   final type PureharmDBCoreTypeDefinitions = phdb.PureharmDBCoreTypeDefinitions

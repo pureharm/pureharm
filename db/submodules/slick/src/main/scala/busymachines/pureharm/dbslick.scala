@@ -11,6 +11,7 @@ import busymachines.pureharm.phdbslick.definitions
 object dbslick extends definitions.PureharmDBSlickTypeDefinitions {
   type PureharmDBSlickTypeDefinitions = definitions.PureharmDBSlickTypeDefinitions
   type PureharmDBSlickImplicits       = definitions.PureharmDBSlickImplicits
+  type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
   type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
 
   object implicits extends definitions.PureharmDBSlickImplicits
