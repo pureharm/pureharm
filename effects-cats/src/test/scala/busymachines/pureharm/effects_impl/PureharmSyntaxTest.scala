@@ -110,14 +110,14 @@ final class PureharmSyntaxTest extends FunSpec {
 
       withClue("pure") {
         var state = 1
-        val io: SyncIO[Int] = pure.onError(SyncIO { state = value })
+        val io: SyncIO[Int] = pure.onErrorF(SyncIO { state = value })
         assert(io.unsafeRunSync() == value)
         assert(state == 1, "state should not change")
       }
 
       withClue("fail") {
         var state = 2
-        val io: SyncIO[Int] = fail.onError(SyncIO { state = value })
+        val io: SyncIO[Int] = fail.onErrorF(SyncIO { state = value })
         assert(io.attempt.unsafeRunSync() == fail)
         assert(state == value, "state should change")
       }
@@ -201,14 +201,14 @@ final class PureharmSyntaxTest extends FunSpec {
 
       withClue("... pure") {
         var state = 1
-        val io    = pure.onError(IO { state = value })
+        val io    = pure.onErrorF(IO { state = value })
         assert(io.unsafeRunSync() == value)
         assert(state == 1, "state should not change")
       }
 
       withClue("... fail") {
         var state = 1
-        val io    = fail.onError(IO { state = value })
+        val io    = fail.onErrorF(IO { state = value })
         assert(io.attempt.unsafeRunSync() == Attempt.raiseError(failure))
         assert(state == value, "state should change")
       }

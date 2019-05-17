@@ -148,7 +148,7 @@ object PureharmSyntax {
       *  The original failure, or value, if the given effect also
       *  fails that failure is ignored
       */
-    def onError[F[_]](fu: F[_])(implicit F: cats.MonadError[F, Throwable]): F[A] = fa match {
+    def onErrorF[F[_]](fu: F[_])(implicit F: cats.MonadError[F, Throwable]): F[A] = fa match {
       case Left(thr) => fu.attempt.flatMap(_ => F.raiseError[A](thr))
       case Right(v)  => F.pure(v)
     }
@@ -230,7 +230,7 @@ object PureharmSyntax {
       * We want to be able to run arbitrary effects of the same type
       * if a Sync fails.
       */
-    def onError(fu: F[_])(implicit F: Sync[F]): F[A] = fa.onError {
+    def onErrorF(fu: F[_])(implicit F: Sync[F]): F[A] = fa.onError {
       case _ => fu.void
     }
   }
