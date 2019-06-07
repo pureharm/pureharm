@@ -68,7 +68,7 @@ trait Transactor[F[_]] {
 object Transactor {
   import busymachines.pureharm.effects._
 
-  def pgSQLHikari[F[_]: Async](
+  def pgSQLHikari[F[_]: Async: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
@@ -91,7 +91,7 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async](
+  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
