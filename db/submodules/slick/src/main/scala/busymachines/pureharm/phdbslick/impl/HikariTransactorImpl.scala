@@ -34,11 +34,20 @@ private[phdbslick] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(
-  implicit private val F: Async[F],
+  implicit
+  private val F:  Async[F],
+  private val cs: ContextShift[F],
 ) extends Transactor[F] {
 
-  override def run[T](cio: ConnectionIO[T]): F[T] =
-    IO.fromFuture(IO(slickDB.run(cio))).to[F]
+  /**
+    * See:
+    * https://github.com/typelevel/cats-effect/pull/546
+    *
+    * On why we need to always shift when converting from Future
+    */
+  override def run[T](cio: ConnectionIO[T]): F[T] = {
+    IO.fromFuture(IO(slickDB.run(cio))).to[F].bracket(F.pure)(_ => cs.shift)
+  }
 
   override def shutdown: F[Unit] = F.delay(slickDB.close())
 
@@ -54,7 +63,7 @@ private[phdbslick] object HikariTransactorImpl {
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
-  def resource[F[_]: Async](
+  def resource[F[_]: Async: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
@@ -68,7 +77,7 @@ private[phdbslick] object HikariTransactorImpl {
   /**
     * Prefer using [[resource]] unless you know what you are doing.
     */
-  def unsafeCreate[F[_]: Async](
+  def unsafeCreate[F[_]: Async: ContextShift](
     slickProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
