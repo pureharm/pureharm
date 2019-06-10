@@ -63,7 +63,7 @@ object PureharmSyntax {
   final class FOptionOps[F[_], A] private[PureharmSyntax] (val foa: F[Option[A]]) extends AnyVal {
     import cats.implicits._
 
-    def flatten(ifNone: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[A] =
+    def flattenOption(ifNone: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[A] =
       foa.flatMap(_.liftTo[F](ifNone))
 
     def ifSomeRaise(ifSome: A => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =

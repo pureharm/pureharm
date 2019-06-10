@@ -27,8 +27,8 @@ final class PureharmSyntaxTest extends AnyFunSpec {
     val ifEmpty = new RuntimeException("for empty option")
 
     test("flatten") {
-      assert(pure.flatten(ifEmpty) == F.pure(value))
-      assert(fail.flatten(ifEmpty) == F.raiseError(ifEmpty))
+      assert(pure.flattenOption(ifEmpty) == F.pure(value))
+      assert(fail.flattenOption(ifEmpty) == F.raiseError(ifEmpty))
     }
 
     test("ifSomeRaise") {
