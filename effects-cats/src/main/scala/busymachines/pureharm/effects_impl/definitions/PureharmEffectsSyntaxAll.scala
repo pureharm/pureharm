@@ -25,4 +25,5 @@ import busymachines.pureharm.effects_impl
   * @since 25 Apr 2019
   *
   */
-trait PureharmEffectsSyntaxAll extends effects_impl.PureharmSyntax.Implicits
+trait PureharmEffectsSyntaxAll
+    extends effects_impl.PureharmSyntax.Implicits with effects_impl.PureharmTimedAttemptReattemptSyntaxOps.Implicits
