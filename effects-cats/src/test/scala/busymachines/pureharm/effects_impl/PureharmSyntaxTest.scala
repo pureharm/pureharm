@@ -1,6 +1,6 @@
 package busymachines.pureharm.effects_impl
 
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
@@ -10,7 +10,7 @@ import busymachines.pureharm.effects.implicits._
   * @since 10 May 2019
   *
   */
-final class PureharmSyntaxTest extends FunSpec {
+final class PureharmSyntaxTest extends AnyFunSpec {
   private def test: ItWord = it
 
   describe("F[Option[_]] syntax") {
