@@ -1,6 +1,6 @@
 package busymachines.pureharm
 
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 
 /**
   *
@@ -8,7 +8,7 @@ import org.scalatest.FunSpec
   * @since 02 Apr 2019
   *
   */
-final class PhantomTypeSpec extends FunSpec {
+final class PhantomTypeSpec extends AnyFunSpec {
   import PhantomTypeSpec._
 
   describe("PhantomType") {
