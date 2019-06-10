@@ -165,18 +165,15 @@ lazy val `db-slick` = subModule("db", "slick")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val catsVersion:       String = "1.6.0"
-lazy val catsEffectVersion: String = "1.3.0"
-
-lazy val linebackerVersion: String = "0.2.0"
+lazy val catsVersion:       String = "2.0.0-M2"
+lazy val catsEffectVersion: String = "2.0.0-M2"
 
 lazy val shapelessVersion: String = "2.3.3"
 
-lazy val slickVersion:    String = "3.3.0"
-lazy val slickPgVersion:  String = "0.17.2"
+lazy val slickVersion:    String = "3.3.1"
 lazy val hikariCPVersion: String = "3.3.1"
 
-lazy val scalaTestVersion: String = "3.0.5"
+lazy val scalaTestVersion: String = "3.1.0-SNAP11"
 
 //=============================================================================
 //================================= TYPELEVEL =================================
@@ -203,9 +200,6 @@ lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVer
 //https://github.com/milessabin/shapeless
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
 
-//https://github.com/ChristopherDavenport/linebacker
-lazy val linebacker: ModuleID = "io.chrisdavenport" %% "linebacker" % linebackerVersion withSources ()
-
 //=============================================================================
 //================================= DATABASE ==================================
 //=============================================================================
@@ -224,17 +218,11 @@ lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSour
 //https://github.com/slick/slick
 lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
 
-//https://github.com/tminglei/slick-pg
-//lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPgVersion withSources ()
-
 lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 
 //=============================================================================
 //================================== TESTING ==================================
 //=============================================================================
-
-//https://github.com/etorreborre/specs2
-lazy val specs2: ModuleID = "org.specs2" %% "specs2-core" % "4.3.6" withSources ()
 
 //http://www.scalatest.org/
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion withSources ()
