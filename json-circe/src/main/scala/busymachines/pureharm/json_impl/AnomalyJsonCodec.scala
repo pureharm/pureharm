@@ -29,8 +29,8 @@ import io.circe._
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 26 Dec 2017
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
 object AnomalyJsonCodec extends AnomalyJsonCodec

@@ -21,8 +21,8 @@ import busymachines.pureharm.Anomaly.Parameters
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
 abstract class ConflictAnomaly(

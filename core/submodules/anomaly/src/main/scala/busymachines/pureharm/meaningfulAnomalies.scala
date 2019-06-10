@@ -36,8 +36,9 @@ package busymachines.pureharm
   * - [[busymachines.pureharm.MeaningfulAnomalies.InvalidInput]]
   *   - range: 400-499; e.g. pone_400, ptwo_476, pthree_499
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
+  *
   */
 object MeaningfulAnomalies {
 

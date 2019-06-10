@@ -11,11 +11,11 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Aug 2017
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
-class AnomalyJsonCodecTest extends AnyFlatSpec {
+final class AnomalyJsonCodecTest extends AnyFlatSpec {
 
   import busymachines.pureharm.json_impl._
   import busymachines.pureharm.json.implicits._

@@ -49,14 +49,15 @@ object JsonDecoding {
   }
 }
 
-final case class JsonDecodingFailure(msg: String) extends InvalidInputAnomaly(msg) {
+final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(msg) {
   override def id: AnomalyID = JsonAnomalyIDs.JsonDecodingAnomalyID
 }
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Aug 2017
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
+  *
   */
 object JsonParsing {
 
