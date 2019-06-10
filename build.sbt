@@ -43,6 +43,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .aggregate(
     core,
     `effects-cats`,
+    `json-circe`,
     `db`,
   )
 
@@ -120,6 +121,28 @@ lazy val `effects-cats` = project
   .dependsOn(
     `core-phantom`,
   )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `json-circe` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-json-circe",
+    libraryDependencies ++= cats ++ circe ++ Seq(
+      catsEffect,
+      scalaCollectionCompat,
+      scalaTest % Test,
+    ),
+  )
+  .dependsOn(
+    `core-anomaly`,
+    `core-phantom`,
+    `effects-cats`,
+  )
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -182,6 +205,8 @@ lazy val scalaCollectionCompatVersion: String = "2.0.0"
 lazy val catsVersion:       String = "2.0.0-M2"
 lazy val catsEffectVersion: String = "2.0.0-M2"
 
+lazy val circeVersion: String = "0.12.0-M2"
+
 lazy val shapelessVersion: String = "2.3.3"
 
 lazy val slickVersion:    String = "3.3.1"
@@ -193,7 +218,8 @@ lazy val scalaTestVersion: String = "3.1.0-SNAP11"
 //=================================== SCALA ===================================
 //=============================================================================
 
-lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
+lazy val scalaCollectionCompat
+  : ModuleID = "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
 
 //=============================================================================
 //================================= TYPELEVEL =================================
@@ -216,6 +242,12 @@ lazy val cats: Seq[ModuleID] = Seq(
 
 //https://github.com/typelevel/cats-effect
 lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVersion withSources ()
+
+def circe: Seq[ModuleID] = Seq(circeCore, circeGenericExtras, circeParser)
+
+lazy val circeCore:          ModuleID = "io.circe" %% "circe-core"           % circeVersion withSources ()
+lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion withSources ()
+lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % circeVersion withSources ()
 
 //https://github.com/milessabin/shapeless
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
@@ -245,7 +277,7 @@ lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 //=============================================================================
 
 //http://www.scalatest.org/
-lazy val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion withSources ()
+lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion withSources ()
 
 //=============================================================================
 //================================== HELPERS ==================================
