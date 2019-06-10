@@ -15,21 +15,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines
 
-import busymachines.pureharm.phdbslick.definitions
+import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
 
 /**
   *
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 09 May 2019
+  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
+  * @since 10 Jun 2019
   *
   */
-object dbslick extends definitions.PureharmDBSlickTypeDefinitions {
-  final type PureharmDBSlickTypeDefinitions = definitions.PureharmDBSlickTypeDefinitions
-  final type PureharmDBSlickImplicits       = definitions.PureharmDBSlickImplicits
-  final type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
-  final type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
-
-  final object implicits extends definitions.PureharmDBSlickImplicits
-}
+package object pureharm extends AnomalyParamtersImplicits

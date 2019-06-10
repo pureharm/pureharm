@@ -28,7 +28,7 @@ import busymachines.pureharm.effects._
   * @since 04 Apr 2019
   *
   */
-private[phdbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
+final private[phdbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
     extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 

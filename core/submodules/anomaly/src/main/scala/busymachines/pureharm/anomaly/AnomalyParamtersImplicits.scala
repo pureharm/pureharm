@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2019 BusyMachines
+  * Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -7,7 +7,7 @@
   * you may not use this file except in compliance with the License.
   * You may obtain a copy of the License at
   *
-  * http://www.apache.org/licenses/LICENSE-2.0
+  *     http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
   * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,20 +15,20 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.definitions
+package busymachines.pureharm.anomaly
 
-import busymachines.pureharm.effects.MonadError
-import busymachines.pureharm.dbslick.ConnectionIOEC
-import busymachines.pureharm.phdbslick.slickTypes._
-import busymachines.pureharm.phdbslick.impl.ConnectionIOMonadError
+import busymachines.pureharm.{Anomaly, SeqStringWrapper, StringWrapper}
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 04 Apr 2019
+  * @since 10 Jun 2019
   *
   */
-trait SlickConnectionIOCatsInstances {
-  implicit final def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
-    new ConnectionIOMonadError
+trait AnomalyParamtersImplicits {
+  implicit final def anomalyParamValueStringWrapper(s: String): Anomaly.Parameter =
+    StringWrapper(s)
+
+  implicit final def anomalyParamValueSeqOfStringWrapper(ses: Seq[String]): Anomaly.Parameter =
+    SeqStringWrapper(ses.toVector)
 }

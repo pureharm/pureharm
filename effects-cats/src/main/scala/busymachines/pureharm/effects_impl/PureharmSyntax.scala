@@ -29,10 +29,10 @@ object PureharmSyntax {
 
   trait Implicits {
 
-    implicit def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
-    implicit def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
+    implicit final def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
+    implicit final def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
 
-    implicit def pureharmPureAttemptOps[A](aa: Attempt[A]): PureAttemptOps[A] = new PureAttemptOps[A](aa)
+    implicit final def pureharmPureAttemptOps[A](aa: Attempt[A]): PureAttemptOps[A] = new PureAttemptOps[A](aa)
 
     implicit final def pureharmAttemptPseudoCompanionSyntax(companion: Either.type): AttemptPseudoCompanionSyntax =
       new AttemptPseudoCompanionSyntax(companion)
@@ -140,7 +140,7 @@ object PureharmSyntax {
     }
   }
 
-  private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())
+  final private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())
 
   /**
     * This helps mimick operations on the ``Attempt`` using
@@ -160,7 +160,7 @@ object PureharmSyntax {
 
   //--------------------------- TRY ---------------------------
 
-  private val singletonUnitTry: Try[Unit] = TrySuccess[Unit](())
+  final private val singletonUnitTry: Try[Unit] = TrySuccess[Unit](())
 
   final class TryCompanionSyntax private[PureharmSyntax] (val companion: Try.type) extends AnyVal {
     def pure[A](a: A): Try[A] = TrySuccess(a)

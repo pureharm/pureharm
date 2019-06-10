@@ -30,7 +30,7 @@ import busymachines.pureharm.effects.implicits._
   * @since 02 Apr 2019
   *
   */
-private[phdbslick] class HikariTransactorImpl[F[_]] private (
+final private[phdbslick] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(
