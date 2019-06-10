@@ -57,12 +57,23 @@ lazy val core = project
     name := "pureharm-core",
   )
   .dependsOn(
+    `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
   )
   .aggregate(
+    `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
+  )
+
+lazy val `core-anomaly` = subModule("core", "anomaly")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      scalaTest % Test,
+    ),
   )
 
 lazy val `core-phantom` = subModule("core", "phantom")
