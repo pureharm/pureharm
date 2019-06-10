@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines
-
-import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
+package busymachines.pureharm.json_impl
 
 /**
   *
@@ -25,4 +23,23 @@ import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
   * @since 11 Jun 2019
   *
   */
-package object pureharm extends AnomalyParamtersImplicits
+trait DefaultTypeDiscriminatorConfig {
+
+  /**
+    * This exists to give us the default behavior of deserializing sealed trait
+    * hierarchies by adding and "_type" field to the json, instead of creating
+    * a property for each variant.
+    *
+    * Unfortunately, this uses the name of each variant as the value for the
+    * "_type" field, leaving JSON-value APIs vulnerable to rename refactorings.
+    *
+    */
+  implicit final val defaultDerivationConfiguration: io.circe.generic.extras.Configuration =
+    io.circe.generic.extras.Configuration.default
+      .withDiscriminator(DefaultTypeDiscriminatorConfig.JsonTypeString)
+
+}
+
+object DefaultTypeDiscriminatorConfig {
+  final private val JsonTypeString: String = "_type"
+}

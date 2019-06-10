@@ -15,14 +15,30 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines
+package busymachines.pureharm.json_impl
 
-import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
+import io.circe.{Decoder, Encoder, HCursor, Json}
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 11 Jun 2019
+  * @since 10 Jun 2019
   *
   */
-package object pureharm extends AnomalyParamtersImplicits
+trait Codec[A] extends Encoder[A] with Decoder[A]
+
+object Codec {
+
+  def apply[A](implicit instance: Codec[A]): Codec[A] = instance
+
+  def instance[A](encode: Encoder[A], decode: Decoder[A]): Codec[A] = {
+    new Codec[A] {
+      private val enc = encode
+      private val dec = decode
+
+      override def apply(a: A): Json = enc(a)
+
+      override def apply(c: HCursor): io.circe.Decoder.Result[A] = dec(c)
+    }
+  }
+}

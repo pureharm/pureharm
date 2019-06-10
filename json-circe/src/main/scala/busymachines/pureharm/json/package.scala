@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines
-
-import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
+package busymachines.pureharm
 
 /**
   *
@@ -25,4 +23,12 @@ import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
   * @since 11 Jun 2019
   *
   */
-package object pureharm extends AnomalyParamtersImplicits
+package object json
+    extends busymachines.pureharm.json_impl.PureharmJsonTypeDefinitions
+    with busymachines.pureharm.json_impl.DefaultTypeDiscriminatorConfig {
+
+  type PureharmJsonTypeDefinitions    = busymachines.pureharm.json_impl.PureharmJsonTypeDefinitions
+  type PureharmJsonImplicits          = busymachines.pureharm.json_impl.PureharmJsonImplicits
+  type SemiAutoDerivation             = busymachines.pureharm.json_impl.SemiAutoDerivation
+  type DefaultTypeDiscriminatorConfig = busymachines.pureharm.json_impl.DefaultTypeDiscriminatorConfig
+}

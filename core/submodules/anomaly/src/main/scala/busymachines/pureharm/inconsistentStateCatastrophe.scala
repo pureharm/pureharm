@@ -59,7 +59,7 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
   ): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(a: Anomaly, causedBy: Throwable): InconsistentStateCatastrophe =
+  override def apply(a: AnomalyBase, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(
       id         = a.id,
       message    = a.message,
@@ -88,12 +88,12 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
   override def apply(id: AnomalyID, message: String, parameters: Parameters): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): InconsistentStateCatastrophe =
+  override def apply(a: AnomalyBase): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(
       id         = a.id,
       message    = a.message,
       parameters = a.parameters,
-      causedBy   = Option(a),
+      causedBy   = Option(Anomaly(a)),
     )
 
   override def apply(message: String, causedBy: Throwable): InconsistentStateCatastrophe =

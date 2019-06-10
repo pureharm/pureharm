@@ -21,8 +21,8 @@ import busymachines.pureharm.Anomaly.Parameters
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
 abstract class DeniedAnomaly(
@@ -56,7 +56,7 @@ object DeniedAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): DeniedAnomaly =
     DeniedAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): DeniedAnomaly =
+  override def apply(a: AnomalyBase): DeniedAnomaly =
     DeniedAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 

@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines
+package busymachines.pureharm.json
 
-import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
+import busymachines.pureharm.json_impl
 
 /**
   *
@@ -25,4 +25,4 @@ import busymachines.pureharm.anomaly.AnomalyParamtersImplicits
   * @since 11 Jun 2019
   *
   */
-package object pureharm extends AnomalyParamtersImplicits
+object implicits extends json_impl.PureharmJsonSyntax.Implicits

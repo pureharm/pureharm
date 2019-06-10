@@ -21,8 +21,8 @@ import busymachines.pureharm.Anomaly.Parameters
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
 abstract class ForbiddenAnomaly(
@@ -57,7 +57,7 @@ object ForbiddenAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): ForbiddenAnomaly =
+  override def apply(a: AnomalyBase): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 

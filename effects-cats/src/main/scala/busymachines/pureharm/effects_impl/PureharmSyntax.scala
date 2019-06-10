@@ -138,6 +138,16 @@ object PureharmSyntax {
       case Left(thr) => fu.attempt.flatMap(_ => F.raiseError[A](thr))
       case Right(v)  => F.pure(v)
     }
+
+    /**
+      * !!! Warning !!! Throws exceptions in your face
+      *
+      * @return
+      */
+    def unsafeGet(): A = fa match {
+      case Left(e)  => throw e
+      case Right(v) => v
+    }
   }
 
   final private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())

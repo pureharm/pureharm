@@ -21,11 +21,10 @@ import busymachines.pureharm.Anomaly.Parameters
 
 /**
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
-
 abstract class NotFoundAnomaly(
   override val message:  String,
   override val causedBy: Option[Throwable] = None,
@@ -58,8 +57,7 @@ object NotFoundAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  //we intentionally not pass a causedBy a.asThrowable. Not really meaningful in this case
-  override def apply(a: Anomaly): NotFoundAnomaly =
+  override def apply(a: AnomalyBase): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 

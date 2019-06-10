@@ -22,8 +22,8 @@ import busymachines.pureharm.Anomaly.Parameters
 /**
   * Nothing from this file should ever escape [[busymachines.pureharm]]
   *
-  * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
-  * @since 10 Jun 2019
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
   *
   */
 private[pureharm] trait AnomalyConstructors[Resulting <: AnomalyBase] {
@@ -41,7 +41,7 @@ private[pureharm] trait AnomalyConstructors[Resulting <: AnomalyBase] {
 
   def apply(id: AnomalyID, message: String, parameters: Parameters): Resulting
 
-  def apply(a: Anomaly): Resulting
+  def apply(a: AnomalyBase): Resulting
 }
 
 private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extends AnomalyConstructors[Resulting] {
@@ -58,7 +58,7 @@ private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extend
 
   def apply(id: AnomalyID, message: String, parameters: Parameters, causedBy: Throwable): Resulting
 
-  def apply(a: Anomaly, causedBy: Throwable): Resulting
+  def apply(a: AnomalyBase, causedBy: Throwable): Resulting
 }
 
 private[pureharm] trait SingletonAnomalyProduct extends Product with Serializable {
