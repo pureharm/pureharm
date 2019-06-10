@@ -75,7 +75,7 @@ object PublishingSettings {
     ),
   )
 
-  def noPublishSettings = Seq(
+  def noPublishSettings: Seq[Setting[_]] = Seq(
     publish              := {},
     publishLocal         := {},
     skip in publishLocal := true,
