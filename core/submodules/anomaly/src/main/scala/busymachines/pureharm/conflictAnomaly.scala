@@ -36,31 +36,31 @@ object ConflictAnomaly
     extends ConflictAnomaly(MeaningfulAnomalies.ConflictMsg, None) with SingletonAnomalyProduct
     with AnomalyConstructors[ConflictAnomaly] {
   override def apply(id: AnomalyID): ConflictAnomaly =
-    ConflictFailureImpl(id = id)
+    ConflictAnomalyImpl(id = id)
 
   override def apply(message: String): ConflictAnomaly =
-    ConflictFailureImpl(message = message)
+    ConflictAnomalyImpl(message = message)
 
   override def apply(parameters: Parameters): ConflictAnomaly =
-    ConflictFailureImpl(parameters = parameters)
+    ConflictAnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): ConflictAnomaly =
-    ConflictFailureImpl(id = id, message = message)
+    ConflictAnomalyImpl(id = id, message = message)
 
   override def apply(id: AnomalyID, parameters: Parameters): ConflictAnomaly =
-    ConflictFailureImpl(id = id, parameters = parameters)
+    ConflictAnomalyImpl(id = id, parameters = parameters)
 
   override def apply(message: String, parameters: Parameters): ConflictAnomaly =
-    ConflictFailureImpl(message = message, parameters = parameters)
+    ConflictAnomalyImpl(message = message, parameters = parameters)
 
   override def apply(id: AnomalyID, message: String, parameters: Parameters): ConflictAnomaly =
-    ConflictFailureImpl(id = id, message = message, parameters = parameters)
+    ConflictAnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: Anomaly): ConflictAnomaly =
-    ConflictFailureImpl(id = a.id, message = a.message, parameters = a.parameters)
+    ConflictAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 
-final private[pureharm] case class ConflictFailureImpl(
+final private[pureharm] case class ConflictAnomalyImpl(
   override val id:         AnomalyID         = ConflictAnomalyID,
   override val message:    String            = MeaningfulAnomalies.ConflictMsg,
   override val parameters: Parameters        = Parameters.empty,
