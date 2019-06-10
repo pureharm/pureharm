@@ -44,11 +44,11 @@ trait DAOAlgebra[R[_], E, PK] {
 
   def delete(pk: PK): R[Unit]
 
-  def deleteMany(pks: Traversable[PK]): R[Unit]
+  def deleteMany(pks: Iterable[PK]): R[Unit]
 
   def exists(pk: PK): R[Boolean]
 
-  def existsAtLeastOne(pks: Traversable[PK]): R[Boolean]
+  def existsAtLeastOne(pks: Iterable[PK]): R[Boolean]
 
-  def existAll(pks: Traversable[PK]): R[Boolean]
+  def existAll(pks: Iterable[PK]): R[Boolean]
 }

@@ -111,14 +111,14 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
 
     def delete(pk: PK): ConnectionIO[Unit] = (dao.filter(_.id === pk).delete: ConnectionIO[Int]).void
 
-    def deleteMany(pks: Traversable[PK]): ConnectionIO[Unit] =
+    def deleteMany(pks: Iterable[PK]): ConnectionIO[Unit] =
       (dao.filter(_.id.inSet(pks)).delete: ConnectionIO[Int]).void
 
     def exists(pk: PK): ConnectionIO[Boolean] = dao.filter(_.id === pk).exists.result
 
-    def existsAtLeastOne(pks: Traversable[PK]): ConnectionIO[Boolean] = dao.filter(_.id.inSet(pks)).exists.result
+    def existsAtLeastOne(pks: Iterable[PK]): ConnectionIO[Boolean] = dao.filter(_.id.inSet(pks)).exists.result
 
-    def existAll(pks: Traversable[PK]): ConnectionIO[Boolean] =
+    def existAll(pks: Iterable[PK]): ConnectionIO[Boolean] =
       dao.filter(_.id.inSet(pks)).length.result.map(l => l == pks.size)
 
     private def eid(e: E): PK = identifiable.id(e)
@@ -167,13 +167,13 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
 
     override def delete(pk: PK): F[Unit] = transactor.run(queries.delete(pk))
 
-    override def deleteMany(pks: Traversable[PK]): F[Unit] = transactor.run(queries.deleteMany(pks))
+    override def deleteMany(pks: Iterable[PK]): F[Unit] = transactor.run(queries.deleteMany(pks))
 
     override def exists(pk: PK): F[Boolean] = transactor.run(queries.exists(pk))
 
-    override def existsAtLeastOne(pks: Traversable[PK]): F[Boolean] = transactor.run(queries.existsAtLeastOne(pks))
+    override def existsAtLeastOne(pks: Iterable[PK]): F[Boolean] = transactor.run(queries.existsAtLeastOne(pks))
 
-    override def existAll(pks: Traversable[PK]): F[Boolean] = transactor.run(queries.existAll(pks))
+    override def existAll(pks: Iterable[PK]): F[Boolean] = transactor.run(queries.existAll(pks))
   }
 
   object SlickDBAlgebra {
