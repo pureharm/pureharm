@@ -32,7 +32,7 @@ object JsonDecoding {
 
   def decodeAs[A](json: Json)(implicit decoder: Decoder[A]): Attempt[A] = {
     val r: io.circe.Decoder.Result[A] = decoder.decodeJson(json)
-    r.left.map(df => JsonDecodingFailure(df.getMessage))
+    r.left.map(df => JsonDecodingAnomaly(df.getMessage))
   }
 
   def decodeAs[A](json: String)(implicit decoder: Decoder[A]): Attempt[A] = {
