@@ -20,7 +20,8 @@ package busymachines.pureharm.effects_impl
 import scala.concurrent.duration._
 import busymachines.pureharm.effects._
 
-import scala.collection.generic.CanBuildFrom
+import scala.collection.compat._
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -41,6 +42,18 @@ private[effects_impl] object FutureOps {
   //=============================== Traversals ==============================
   //=========================================================================
 
+//  /**
+//    *
+//    * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+//    * for the combined effects.
+//    *
+//    * @see [[scala.concurrent.Future.traverse]]
+//    */
+//  @inline def traverse_[A, B, M[X] <: IterableOnce[X]](
+//    in: M[A],
+//  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
+//    Future.traverse(in)(fn).map(_ => ())
+
   /**
     *
     * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
@@ -48,11 +61,36 @@ private[effects_impl] object FutureOps {
     *
     * @see [[scala.concurrent.Future.traverse]]
     */
-  @inline def traverse_[A, B, M[X] <: TraversableOnce[X]](in: M[A])(fn: A => Future[B])(
-    implicit
-    cbf: CanBuildFrom[M[A], B, M[B]],
-    ec:  ExecutionContext,
-  ): Future[Unit] = this.void(Future.traverse(in)(fn))
+  @inline def traverse_[A, B](
+    in: Seq[A],
+  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
+    this.void(Future.traverse(in)(fn))
+
+  /**
+    *
+    * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+    * for the combined effects.
+    *
+    * @see [[scala.concurrent.Future.traverse]]
+    */
+  @inline def traverse_[A, B](
+    in: Set[A],
+  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
+    this.void(Future.traverse(in)(fn))
+
+  //the generic version gets: Cannot construct a collection of type M[A] with elements of type A based on a collection of type M[scala.concurrent.Future[A]]
+  //on scala 2.12... so much for compatibility, lol
+//  /**
+//    *
+//    * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+//    * for the combined effects.
+//    *
+//    * @see [[scala.concurrent.Future.sequence]]
+//    */
+//  @inline def sequence_[A, M[X] <: IterableOnce[X], To](
+//    in:          M[Future[A]],
+//  )(implicit bf: BuildFrom[M[Future[A]], A, To], executor: ExecutionContext): Future[Unit] =
+//    this.void(Future.sequence(in))
 
   /**
     *
@@ -61,11 +99,22 @@ private[effects_impl] object FutureOps {
     *
     * @see [[scala.concurrent.Future.sequence]]
     */
-  @inline def sequence_[A, M[X] <: TraversableOnce[X]](in: M[Future[A]])(
-    implicit
-    cbf: CanBuildFrom[M[Future[A]], A, M[A]],
-    ec:  ExecutionContext,
-  ): Future[Unit] = this.void(Future.sequence(in))
+  @inline def sequence_[A, To](
+    in:                Seq[Future[A]],
+  )(implicit executor: ExecutionContext): Future[Unit] =
+    this.void(Future.sequence(in))
+
+  /**
+    *
+    * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+    * for the combined effects.
+    *
+    * @see [[scala.concurrent.Future.sequence]]
+    */
+  @inline def sequence_[A, To](
+    in:                Set[Future[A]],
+  )(implicit executor: ExecutionContext): Future[Unit] =
+    this.void(Future.sequence(in))
 
   /**
     *
@@ -94,27 +143,25 @@ private[effects_impl] object FutureOps {
     *
     *
     */
-  @inline def serialize[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
-    implicit
-    cbf: CanBuildFrom[C[A], B, C[B]],
-    ec:  ExecutionContext,
-  ): Future[C[B]] = {
+  @inline def serialize[A, B, M[X] <: IterableOnce[X]](
+    in: M[A],
+  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] = {
     import scala.collection.mutable
-    if (col.isEmpty) {
-      Future.successful(cbf.apply().result())
+    if (in.iterator.isEmpty) {
+      Future.successful(bf.newBuilder(in).result())
     }
     else {
-      val seq  = col.toSeq
+      val seq  = in.iterator.to(Seq)
       val head = seq.head
       val tail = seq.tail
-      val builder: mutable.Builder[B, C[B]] = cbf.apply()
+      val builder: mutable.Builder[B, M[B]] = bf.newBuilder(in)
       val firstBuilder = fn(head) map { z =>
         builder.+=(z)
       }
-      val eventualBuilder: Future[mutable.Builder[B, C[B]]] = tail.foldLeft(firstBuilder) {
-        (serializedBuilder: Future[mutable.Builder[B, C[B]]], element: A) =>
-          serializedBuilder.flatMap[mutable.Builder[B, C[B]]] { (result: mutable.Builder[B, C[B]]) =>
-            val f: Future[mutable.Builder[B, C[B]]] = fn(element) map { newElement =>
+      val eventualBuilder: Future[mutable.Builder[B, M[B]]] = tail.foldLeft(firstBuilder) {
+        (serializedBuilder: Future[mutable.Builder[B, M[B]]], element: A) =>
+          serializedBuilder.flatMap[mutable.Builder[B, M[B]]] { (result: mutable.Builder[B, M[B]]) =>
+            val f: Future[mutable.Builder[B, M[B]]] = fn(element) map { newElement =>
               result.+=(newElement)
             }
             f
@@ -132,9 +179,8 @@ private[effects_impl] object FutureOps {
     * Similar to [[serialize]], but discards all content. i.e. used only
     * for the combined effects.
     */
-  @inline def serialize_[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
-    implicit
-    cbf: CanBuildFrom[C[A], B, C[B]],
-    ec:  ExecutionContext,
-  ): Future[Unit] = this.void(FutureOps.serialize(col)(fn))
+  @inline def serialize_[A, B, M[X] <: IterableOnce[X]](
+    in: M[A],
+  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
+    this.void(FutureOps.serialize(in)(fn))
 }

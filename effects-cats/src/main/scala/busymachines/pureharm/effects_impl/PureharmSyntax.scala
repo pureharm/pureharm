@@ -19,8 +19,6 @@ package busymachines.pureharm.effects_impl
 
 import busymachines.pureharm.effects._
 
-import scala.collection.generic.CanBuildFrom
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -34,8 +32,7 @@ object PureharmSyntax {
     implicit def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
     implicit def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
 
-    implicit def pureharmFAttemptOps[F[_], A](foa: F[Attempt[A]]): FAttemptOps[F, A] = new FAttemptOps[F, A](foa)
-    implicit def pureharmPureAttemptOps[A](aa:     Attempt[A]):    PureAttemptOps[A] = new PureAttemptOps[A](aa)
+    implicit def pureharmPureAttemptOps[A](aa: Attempt[A]): PureAttemptOps[A] = new PureAttemptOps[A](aa)
 
     implicit final def pureharmAttemptPseudoCompanionSyntax(companion: Either.type): AttemptPseudoCompanionSyntax =
       new AttemptPseudoCompanionSyntax(companion)
@@ -128,17 +125,6 @@ object PureharmSyntax {
   }
 
   //--------------------------- ATTEMPT ---------------------------
-
-  final class FAttemptOps[F[_], A] private[PureharmSyntax] (val faa: F[Attempt[A]]) extends AnyVal {
-    import cats.implicits._
-
-    @scala.deprecated(
-      "Use '.rethrow' from cats.MonadError — you should be able to just replace it right now with no additional effort or imports",
-      "0.0.2",
-    )
-    def flatten(implicit F: cats.MonadError[F, Throwable]): F[A] =
-      faa.flatMap(_.liftTo[F])
-  }
 
   final class PureAttemptOps[A] private[PureharmSyntax] (val fa: Attempt[A]) extends AnyVal {
     import cats.implicits._
@@ -250,6 +236,7 @@ object PureharmSyntax {
     //=========================================================================
     //=============================== Traversals ==============================
     //=========================================================================
+    import scala.collection.compat._
 
     /**
       *
@@ -258,11 +245,18 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.traverse]]
       */
-    @inline def traverse_[A, B, M[X] <: TraversableOnce[X]](in: M[A])(fn: A => Future[B])(
-      implicit
-      cbf: CanBuildFrom[M[A], B, M[B]],
-      ec:  ExecutionContext,
-    ): Future[Unit] = FutureOps.traverse_(in)(fn)
+    @inline def traverse_[A, B](in: Seq[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
+      FutureOps.traverse_(in)(fn)
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.traverse]]
+      */
+    @inline def traverse_[A, B](in: Set[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
+      FutureOps.traverse_(in)(fn)
 
     /**
       *
@@ -271,11 +265,18 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.sequence]]
       */
-    @inline def sequence_[A, M[X] <: TraversableOnce[X]](in: M[Future[A]])(
-      implicit
-      cbf: CanBuildFrom[M[Future[A]], A, M[A]],
-      ec:  ExecutionContext,
-    ): Future[Unit] = FutureOps.sequence_(in)
+    @inline def sequence_[A](in: Seq[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
+      FutureOps.sequence_(in)
+
+    /**
+      *
+      * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+      * for the combined effects.
+      *
+      * @see [[scala.concurrent.Future.sequence]]
+      */
+    @inline def sequence_[A](in: Set[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
+      FutureOps.sequence_(in)
 
     /**
       *
@@ -290,7 +291,7 @@ object PureharmSyntax {
       *
       * Usage:
       * {{{
-      *   import busymachines.effects.async._
+      *   import busymachines.pureharm.effects.implicits._
       *   val patches: Seq[Patch] = //...
       *
       *   //this ensures that no two changes will be applied in parallel.
@@ -304,9 +305,9 @@ object PureharmSyntax {
       *
       *
       */
-    @inline def serialize[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+    @inline def serialize[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn: A => Future[B])(
       implicit
-      cbf: CanBuildFrom[C[A], B, C[B]],
+      cbf: BuildFrom[C[A], B, C[B]],
       ec:  ExecutionContext,
     ): Future[C[B]] = FutureOps.serialize(col)(fn)
 
@@ -316,9 +317,9 @@ object PureharmSyntax {
       * Similar to [[serialize]], but discards all content. i.e. used only
       * for the combined effects.
       */
-    @inline def serialize_[A, B, C[X] <: TraversableOnce[X]](col: C[A])(fn: A => Future[B])(
+    @inline def serialize_[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn: A => Future[B])(
       implicit
-      cbf: CanBuildFrom[C[A], B, C[B]],
+      cbf: BuildFrom[C[A], B, C[B]],
       ec:  ExecutionContext,
     ): Future[Unit] = FutureOps.serialize_(col)(fn)
   }
