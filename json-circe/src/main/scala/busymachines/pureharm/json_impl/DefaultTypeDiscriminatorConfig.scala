@@ -40,6 +40,6 @@ trait DefaultTypeDiscriminatorConfig {
 
 }
 
-object DefaultTypeDiscriminatorConfig extends DefaultTypeDiscriminatorConfig {
+object DefaultTypeDiscriminatorConfig {
   final private val JsonTypeString: String = "_type"
 }
