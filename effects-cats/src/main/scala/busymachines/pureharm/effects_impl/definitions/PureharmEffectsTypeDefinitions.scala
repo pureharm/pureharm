@@ -140,6 +140,15 @@ trait PureharmEffectsTypeDefinitions {
   type NEChain[+A] = cats.data.NonEmptyChain[A]
   val NEChain: cats.data.NonEmptyChain.type = cats.data.NonEmptyChain
 
+  type Kleisli[F[_], A, B] = cats.data.Kleisli[F, A, B]
+  val Kleisli: cats.data.Kleisli.type = cats.data.Kleisli
+
+  type ReaderT[F[_], A, B] = cats.data.ReaderT[F, A, B]
+  val ReaderT: cats.data.ReaderT.type = cats.data.ReaderT
+
+  type Reader[A, B] = cats.data.Reader[A, B]
+  val Reader: cats.data.Reader.type = cats.data.Reader
+
   //---------- cats-misc ---------------------
 
   type Show[T] = cats.Show[T]
@@ -214,11 +223,11 @@ trait PureharmEffectsTypeDefinitions {
   val Ref: ce.concurrent.Ref.type = ce.concurrent.Ref
 
   //----------- handy custom types -----------
-  type Attempt[+R] = Either[Throwable, R]
-  val Attempt: Either.type = Either
+  type Attempt[+R] = effects_impl.types.Attempt[R]
+  val Attempt: Either.type = effects_impl.types.Attempt
 
-  type AttemptT[F[_], R] = cats.data.EitherT[F, Throwable, R]
-  val AttemptT: cats.data.EitherT.type = cats.data.EitherT
+  type AttemptT[F[_], R] = effects_impl.types.AttemptT[F, R]
+  val AttemptT: cats.data.EitherT.type = effects_impl.types.AttemptT
   /**
     * Useful since we don't have partial kind application by default
     * Usage:
@@ -226,7 +235,7 @@ trait PureharmEffectsTypeDefinitions {
     *   def canFail[F[_]: ApplicativeAttempt, T](p1: T) : F[T] = ???
     * }}}
     */
-  type ApplicativeAttempt[F[_]] = cats.ApplicativeError[F, Throwable]
+  type ApplicativeAttempt[F[_]] = effects_impl.types.ApplicativeAttempt[F]
   val ApplicativeAttempt: effects_impl.ApplicativeAttempt.type = effects_impl.ApplicativeAttempt
 
   /**
@@ -236,10 +245,10 @@ trait PureharmEffectsTypeDefinitions {
     *   def canFail[F[_]: MonadAttempt, T](p1: T) : F[T] = ???
     * }}}
     */
-  type MonadAttempt[F[_]] = cats.MonadError[F, Throwable]
+  type MonadAttempt[F[_]] = effects_impl.types.MonadAttempt[F]
   val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
 
-  type BracketAttempt[F[_]] = cats.effect.Bracket[F, Throwable]
+  type BracketAttempt[F[_]] = effects_impl.types.BracketAttempt[F]
   val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
 
   //----------- standard scala types -----------
