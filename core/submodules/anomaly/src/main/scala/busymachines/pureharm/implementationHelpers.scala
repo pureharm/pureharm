@@ -41,7 +41,7 @@ private[pureharm] trait AnomalyConstructors[Resulting <: AnomalyBase] {
 
   def apply(id: AnomalyID, message: String, parameters: Parameters): Resulting
 
-  def apply(a: Anomaly): Resulting
+  def apply(a: AnomalyBase): Resulting
 }
 
 private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extends AnomalyConstructors[Resulting] {
@@ -58,7 +58,7 @@ private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extend
 
   def apply(id: AnomalyID, message: String, parameters: Parameters, causedBy: Throwable): Resulting
 
-  def apply(a: Anomaly, causedBy: Throwable): Resulting
+  def apply(a: AnomalyBase, causedBy: Throwable): Resulting
 }
 
 private[pureharm] trait SingletonAnomalyProduct extends Product with Serializable {

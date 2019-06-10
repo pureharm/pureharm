@@ -56,7 +56,7 @@ object InvalidInputAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): InvalidInputAnomaly =
+  override def apply(a: AnomalyBase): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 

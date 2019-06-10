@@ -56,7 +56,7 @@ object ConflictAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): ConflictAnomaly =
     ConflictAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): ConflictAnomaly =
+  override def apply(a: AnomalyBase): ConflictAnomaly =
     ConflictAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 

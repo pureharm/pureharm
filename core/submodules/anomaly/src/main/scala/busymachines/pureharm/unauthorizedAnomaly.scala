@@ -57,7 +57,7 @@ object UnauthorizedAnomaly
   override def apply(id: AnomalyID, message: String, parameters: Parameters): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): UnauthorizedAnomaly =
+  override def apply(a: AnomalyBase): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 
 }

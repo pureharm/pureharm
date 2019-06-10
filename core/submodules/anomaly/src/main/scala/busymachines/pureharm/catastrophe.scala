@@ -61,7 +61,7 @@ object Catastrophe extends CatastropheConstructors[Catastrophe] {
   override def apply(id: AnomalyID, message: String, parameters: Parameters, causedBy: Throwable): Catastrophe =
     CatastropheImpl(id = id, message = message, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(a: Anomaly, causedBy: Throwable): Catastrophe =
+  override def apply(a: AnomalyBase, causedBy: Throwable): Catastrophe =
     CatastropheImpl(id = a.id, message = a.message, parameters = a.parameters, causedBy = Option(causedBy))
 
   override def apply(id: AnomalyID): Catastrophe =
@@ -85,12 +85,12 @@ object Catastrophe extends CatastropheConstructors[Catastrophe] {
   override def apply(id: AnomalyID, message: String, parameters: Parameters): Catastrophe =
     CatastropheImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: Anomaly): Catastrophe =
+  override def apply(a: AnomalyBase): Catastrophe =
     InconsistentStateCatastropheImpl(
       id         = a.id,
       message    = a.message,
       parameters = a.parameters,
-      causedBy   = Option(a),
+      causedBy   = Option(Anomaly(a)),
     )
 
   override def apply(message: String, causedBy: Throwable): Catastrophe =

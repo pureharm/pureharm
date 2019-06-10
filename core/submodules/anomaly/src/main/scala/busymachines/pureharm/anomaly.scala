@@ -73,7 +73,7 @@ object AnomalyID {
 
 final private[pureharm] case class AnomalyIDUnderlying(override val name: String) extends AnomalyID
 
-object Anomaly {
+object Anomaly extends AnomalyConstructors[Anomaly] {
   private[pureharm] val Anomaly: String = "Anomaly"
 
   type Parameter = StringOrSeqString
@@ -96,6 +96,40 @@ object Anomaly {
   object Parameters {
     def empty: Map[String, StringOrSeqString] = Map.empty[String, Parameter]
   }
+
+  override def apply(id: AnomalyID): Anomaly =
+    AnomalyImpl(id = id)
+
+  override def apply(message: String): Anomaly =
+    AnomalyImpl(message = message)
+
+  override def apply(parameters: Parameters): Anomaly =
+    AnomalyImpl(parameters = parameters)
+
+  override def apply(id: AnomalyID, message: String): Anomaly =
+    AnomalyImpl(id = id, message = message)
+
+  override def apply(id: AnomalyID, parameters: Parameters): Anomaly =
+    AnomalyImpl(id = id, parameters = parameters)
+
+  override def apply(message: String, parameters: Parameters): Anomaly =
+    AnomalyImpl(message = message, parameters = parameters)
+
+  override def apply(id: AnomalyID, message: String, parameters: Parameters): Anomaly =
+    AnomalyImpl(id = id, message = message, parameters = parameters)
+
+  override def apply(a: AnomalyBase): Anomaly =
+    AnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
+}
+
+final private[pureharm] case class AnomalyImpl(
+  override val id:         AnomalyID          = DefaultAnomalyID,
+  override val message:    String             = Anomaly.Anomaly,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+) extends Anomaly(message) {}
+
+private[pureharm] case object DefaultAnomalyID extends AnomalyID {
+  override val name: String = "DA_0"
 }
 
 trait AnomalyBase extends Product with Serializable {
