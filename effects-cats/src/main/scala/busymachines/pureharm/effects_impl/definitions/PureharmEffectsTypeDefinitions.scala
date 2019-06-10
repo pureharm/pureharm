@@ -248,7 +248,7 @@ trait PureharmEffectsTypeDefinitions {
   type MonadAttempt[F[_]] = effects_impl.types.MonadAttempt[F]
   val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
 
-  type BracketAttempt[F[_]] = effects_impl.types.MonadAttempt[F]
+  type BracketAttempt[F[_]] = effects_impl.types.BracketAttempt[F]
   val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
 
   //----------- standard scala types -----------
