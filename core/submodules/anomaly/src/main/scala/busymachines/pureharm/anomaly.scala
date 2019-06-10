@@ -43,13 +43,13 @@ abstract class Anomaly(
   * - [[busymachines.pureharm.MeaningfulAnomalies.NotFound]]
   *   - range: 000-099; e.g. pone_001, ptwo_076, pthree_099
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.UnauthorizedMsg]]
+  * - [[busymachines.pureharm.MeaningfulAnomalies.Unauthorized]]
   *   - range: 100-199; e.g. pone_100, ptwo_176, pthree_199
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.ForbiddenMsg]]
+  * - [[busymachines.pureharm.MeaningfulAnomalies.Forbidden]]
   *   - range: 200-299; e.g. pone_200, ptwo_276, pthree_299
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.DeniedMsg]]
+  * - [[busymachines.pureharm.MeaningfulAnomalies.Denied]]
   *   - range: 300-399; e.g. pone_300, ptwo_376, pthree_399
   *
   * - [[busymachines.pureharm.MeaningfulAnomalies.InvalidInput]]
@@ -77,7 +77,7 @@ object Anomaly {
   private[pureharm] val Anomaly: String = "Anomaly"
 
   type Parameter = StringOrSeqString
-  def Parameter(s:   String):                StringOrSeqString = StringWrapper(s)
+  def Parameter(s:   String):      StringOrSeqString = StringWrapper(s)
   def Parameter(ses: Seq[String]): StringOrSeqString = SeqStringWrapper(ses)
 
   type Parameters = Map[String, Parameter]
