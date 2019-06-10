@@ -24,7 +24,7 @@ trait SafePhantomType[E, A] {
   def check(value: A): Either[E, A]
 
   @inline final def apply(value: A): Either[E, Type] =
-    check(value).right.map(a => unsafe(a))
+    check(value).map(a => unsafe(a))
 
   /**
     * alias for [[apply]]

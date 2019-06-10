@@ -18,7 +18,7 @@ final class SafePhantomTypeSpec extends FunSpec {
 
       assert(spooked === Right(original))
 
-      val despooked: String = SafeSpooked.despook(spooked.right.get)
+      val despooked: String = SafeSpooked.despook(spooked.getOrElse(fail("should be Right")))
 
       assert(original === despooked)
     }
