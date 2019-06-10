@@ -21,6 +21,7 @@ import Keys._
 object Settings {
   lazy val scala2_12:        String = "2.12.8"
   lazy val scala2_13:        String = "2.13.0-RC2"
+  lazy val mainScalaVersion: String = scala2_13
   lazy val organizationName: String = "com.busymachines"
 
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
@@ -29,7 +30,7 @@ object Settings {
     Seq(
       organization in ThisBuild := organizationName,
       homepage                  := Some(url(pureharmHomepage)),
-      scalaVersion              := scala2_13,
+      scalaVersion              := mainScalaVersion,
       crossScalaVersions        := List(scala2_12, scala2_13),
       /*
        * Eliminates useless, unintuitive, and sometimes broken aditions of `withFilter`
@@ -51,14 +52,11 @@ object Settings {
       addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0"),
       //https://github.com/typelevel/kind-projector
       addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.1"),
-      scalacOptions ++= {
-        val scalacFlags = CrossVersion.partialVersion(scalaVersion.value) match {
-          case Some((2, 12)) => scala2_12Flags
-          case Some((2, 13)) => scala2_13Flags
-          case _             => Seq.empty
-        }
-        scalacFlags ++ betterForPluginCompilerFlags
-      },
+      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, 12)) => scala2_12Flags
+        case Some((2, 13)) => scala2_13Flags
+        case _             => Seq.empty
+      }) ++ betterForPluginCompilerFlags,
     )
 
   /**
