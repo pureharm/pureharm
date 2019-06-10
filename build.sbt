@@ -102,6 +102,7 @@ lazy val `effects-cats` = project
     name := "pureharm-effects-cats",
     libraryDependencies ++= cats ++ Seq(
       catsEffect,
+      scalaCollectionCompat,
       scalaTest % Test,
     ),
   )
@@ -165,6 +166,8 @@ lazy val `db-slick` = subModule("db", "slick")
 //*****************************************************************************
 //*****************************************************************************
 
+lazy val scalaCollectionCompatVersion: String = "2.0.0"
+
 lazy val catsVersion:       String = "2.0.0-M2"
 lazy val catsEffectVersion: String = "2.0.0-M2"
 
@@ -174,6 +177,12 @@ lazy val slickVersion:    String = "3.3.1"
 lazy val hikariCPVersion: String = "3.3.1"
 
 lazy val scalaTestVersion: String = "3.1.0-SNAP11"
+
+//=============================================================================
+//=================================== SCALA ===================================
+//=============================================================================
+
+lazy val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
 
 //=============================================================================
 //================================= TYPELEVEL =================================
