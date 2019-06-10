@@ -26,10 +26,10 @@ import busymachines.pureharm.phdbslick.definitions
   *
   */
 object dbslick extends definitions.PureharmDBSlickTypeDefinitions {
-  type PureharmDBSlickTypeDefinitions = definitions.PureharmDBSlickTypeDefinitions
-  type PureharmDBSlickImplicits       = definitions.PureharmDBSlickImplicits
-  type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
-  type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
+  final type PureharmDBSlickTypeDefinitions = definitions.PureharmDBSlickTypeDefinitions
+  final type PureharmDBSlickImplicits       = definitions.PureharmDBSlickImplicits
+  final type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
+  final type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
 
-  object implicits extends definitions.PureharmDBSlickImplicits
+  final object implicits extends definitions.PureharmDBSlickImplicits
 }

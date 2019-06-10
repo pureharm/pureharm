@@ -29,6 +29,6 @@ import busymachines.pureharm.phdbslick.impl.ConnectionIOMonadError
   *
   */
 trait SlickConnectionIOCatsInstances {
-  implicit def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
+  implicit final def connectionIOInstance(implicit ec: ConnectionIOEC): MonadError[ConnectionIO, Throwable] =
     new ConnectionIOMonadError
 }
