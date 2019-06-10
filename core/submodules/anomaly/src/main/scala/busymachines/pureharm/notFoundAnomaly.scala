@@ -27,8 +27,8 @@ import busymachines.pureharm.Anomaly.Parameters
   */
 
 abstract class NotFoundAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.NotFound with Product with Serializable {
   override def id: AnomalyID = NotFoundAnomalyID
 }
@@ -67,5 +67,5 @@ final private[pureharm] case class NotFoundAnomalyImpl(
   override val id:         AnomalyID         = NotFoundAnomalyID,
   override val message:    String            = MeaningfulAnomalies.NotFoundMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends NotFoundAnomaly(message, causedBy) with Product with Serializable

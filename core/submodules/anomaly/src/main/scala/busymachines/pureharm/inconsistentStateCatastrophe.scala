@@ -9,8 +9,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class InconsistentStateCatastrophe(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Catastrophe(message, causedBy) with Product with Serializable {
   override def id: AnomalyID = InconsistentStateCatastropheID
 }
@@ -87,5 +87,5 @@ final private[pureharm] case class InconsistentStateCatastropheImpl(
   override val id:         AnomalyID          = InconsistentStateCatastropheID,
   override val message:    String             = InconsistentStateCatastrophe.InconsistentStateCatastropheMsg,
   override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  causedBy:                Option[Throwable]  = None,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends InconsistentStateCatastrophe(message, causedBy = causedBy)

@@ -32,7 +32,7 @@ import busymachines.pureharm.Anomaly.Parameters
   */
 abstract class Catastrophe(
   override val message: String,
-  causedBy:             Option[Throwable] = None,
+  val causedBy:         Option[Throwable] = None,
 ) extends Error(message, causedBy.orNull) with CatastropheBase with Product with Serializable {
   override def id: AnomalyID = CatastropheID
 }
@@ -101,7 +101,7 @@ final private[pureharm] case class CatastropheImpl(
   override val id:         AnomalyID          = CatastropheID,
   override val message:    String             = Catastrophe.CatastropheMsg,
   override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  causedBy:                Option[Throwable]  = None,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends Catastrophe(message, causedBy = causedBy)
 
 //=============================================================================

@@ -26,8 +26,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class ForbiddenAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.Forbidden with Product with Serializable {
   override def id: AnomalyID = ForbiddenAnomalyID
 }
@@ -65,5 +65,5 @@ final private[pureharm] case class ForbiddenFailureImpl(
   override val id:         AnomalyID         = ForbiddenAnomalyID,
   override val message:    String            = MeaningfulAnomalies.ForbiddenMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends ForbiddenAnomaly(message, causedBy) with Product with Serializable

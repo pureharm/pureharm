@@ -26,8 +26,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class UnauthorizedAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.Unauthorized with Product with Serializable {
   override def id: AnomalyID = UnauthorizedAnomalyID
 }
@@ -66,5 +66,5 @@ final private[pureharm] case class UnauthorizedAnomalyImpl(
   override val id:         AnomalyID         = UnauthorizedAnomalyID,
   override val message:    String            = MeaningfulAnomalies.UnauthorizedMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends UnauthorizedAnomaly(message, causedBy) with Product with Serializable

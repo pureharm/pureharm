@@ -87,5 +87,5 @@ final private[pureharm] case class NotImplementedCatastropheImpl(
   override val id:         AnomalyID          = NotImplementedCatastropheID,
   override val message:    String             = NotImplementedCatastrophe.NotImplementedCatastropheMsg,
   override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  causedBy:                Option[Throwable]  = None,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends NotImplementedCatastrophe(message, causedBy = causedBy)

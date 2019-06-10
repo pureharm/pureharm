@@ -33,7 +33,7 @@ import scala.collection.immutable.Seq
   */
 abstract class Anomaly(
   override val message: String,
-  causedBy:             Option[Throwable] = None,
+  val causedBy:         Option[Throwable] = None,
 ) extends Exception(message, causedBy.orNull) with AnomalyBase
 
 /**

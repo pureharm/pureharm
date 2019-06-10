@@ -26,8 +26,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class InvalidInputAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.InvalidInput with Product with Serializable {
   override def id: AnomalyID = InvalidInputAnomalyID
 }
@@ -64,5 +64,5 @@ final private[pureharm] case class InvalidInputAnomalyImpl(
   override val id:         AnomalyID         = InvalidInputAnomalyID,
   override val message:    String            = MeaningfulAnomalies.InvalidInputMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends InvalidInputAnomaly(message, causedBy) with Product with Serializable

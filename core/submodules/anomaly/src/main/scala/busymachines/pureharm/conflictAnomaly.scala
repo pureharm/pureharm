@@ -26,8 +26,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class ConflictAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.Conflict with Product with Serializable {
   override def id: AnomalyID = ConflictAnomalyID
 }
@@ -64,5 +64,5 @@ final private[pureharm] case class ConflictAnomalyImpl(
   override val id:         AnomalyID         = ConflictAnomalyID,
   override val message:    String            = MeaningfulAnomalies.ConflictMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends ConflictAnomaly(message, causedBy) with Product with Serializable

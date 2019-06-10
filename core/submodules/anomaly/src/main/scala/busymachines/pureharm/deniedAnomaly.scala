@@ -26,8 +26,8 @@ import busymachines.pureharm.Anomaly.Parameters
   *
   */
 abstract class DeniedAnomaly(
-  override val message: String,
-  causedBy:             Option[Throwable] = None,
+  override val message:  String,
+  override val causedBy: Option[Throwable] = None,
 ) extends Anomaly(message, causedBy) with MeaningfulAnomalies.Denied with Product with Serializable {
   override def id: AnomalyID = DeniedAnomalyID
 }
@@ -64,5 +64,5 @@ final private[pureharm] case class DeniedAnomalyImpl(
   override val id:         AnomalyID         = DeniedAnomalyID,
   override val message:    String            = MeaningfulAnomalies.DeniedMsg,
   override val parameters: Parameters        = Parameters.empty,
-  causedBy:                Option[Throwable] = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends DeniedAnomaly(message, causedBy) with Product with Serializable
