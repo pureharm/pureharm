@@ -18,6 +18,7 @@
 package busymachines.pureharm.json_test.derivetest
 
 import busymachines.pureharm.json._
+import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.json_test._
 
 /**

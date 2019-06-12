@@ -6,7 +6,6 @@ package busymachines.pureharm.json_test
   * @since 11 Jun 2019
   *
   */
-
 private[json_test] case class AnarchistMelon(
   noGods:       Boolean,
   noMasters:    Boolean,
@@ -25,6 +24,14 @@ private[json_test] case class WinterMelon(
 private[json_test] case class WaterMelon(
   seeds:  Boolean,
   weight: Int,
+) extends Melon
+
+private[json_test] case class PhantomMelon(
+  weight:     Weight,
+  weights:    Weights,
+  weightsSet: WeigthsSet,
+  duo:        MelonDuo,
+  trio:       MelonTrio,
 ) extends Melon
 
 private[json_test] case object SmallMelon extends Melon {

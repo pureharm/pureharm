@@ -18,7 +18,6 @@
 package busymachines.pureharm.json_impl
 
 import io.circe._
-
 import busymachines.pureharm.effects._
 
 /**

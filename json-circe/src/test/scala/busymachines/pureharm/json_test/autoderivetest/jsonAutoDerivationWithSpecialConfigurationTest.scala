@@ -27,6 +27,7 @@ import busymachines.pureharm.json_test._
   * @since 11 Jun 2019
   *
   */
+
 final class JsonAutoDerivationWithSpecialConfigurationTest1 extends AnyFlatSpec {
 
   /**
