@@ -159,7 +159,89 @@ object PureharmJsonInstances {
 
   trait PhantomTypeScalaDurationInstances {}
 
-  trait PhantomTypeJavaTimeInstances {}
+  trait PhantomTypeJavaTimeInstances {
+    import java.time._
+
+    implicit def jtDurationPhantomTypeEncoder[Tag](implicit enc: Encoder[Duration]): Encoder[Duration @@ Tag] =
+      enc.asInstanceOf[Encoder[Duration @@ Tag]]
+
+    implicit def jtDurationPhantomTypeDecoder[Tag](implicit dec: Decoder[Duration]): Decoder[Duration @@ Tag] =
+      dec.asInstanceOf[Decoder[Duration @@ Tag]]
+
+    implicit def jtInstantPhantomTypeEncoder[Tag](implicit enc: Encoder[Instant]): Encoder[Instant @@ Tag] =
+      enc.asInstanceOf[Encoder[Instant @@ Tag]]
+
+    implicit def jtInstantPhantomTypeDecoder[Tag](implicit dec: Decoder[Instant]): Decoder[Instant @@ Tag] =
+      dec.asInstanceOf[Decoder[Instant @@ Tag]]
+
+    implicit def jtLocalDatePhantomTypeEncoder[Tag](implicit enc: Encoder[LocalDate]): Encoder[LocalDate @@ Tag] =
+      enc.asInstanceOf[Encoder[LocalDate @@ Tag]]
+
+    implicit def jtLocalDatePhantomTypeDecoder[Tag](implicit dec: Decoder[LocalDate]): Decoder[LocalDate @@ Tag] =
+      dec.asInstanceOf[Decoder[LocalDate @@ Tag]]
+
+    implicit def jtLocalDateTimePhantomTypeEncoder[Tag](
+      implicit enc: Encoder[LocalDateTime],
+    ): Encoder[LocalDateTime @@ Tag] =
+      enc.asInstanceOf[Encoder[LocalDateTime @@ Tag]]
+
+    implicit def jtLocalDateTimePhantomTypeDecoder[Tag](
+      implicit dec: Decoder[LocalDateTime],
+    ): Decoder[LocalDateTime @@ Tag] =
+      dec.asInstanceOf[Decoder[LocalDateTime @@ Tag]]
+
+    implicit def jtLocalTimePhantomTypeEncoder[Tag](implicit enc: Encoder[LocalTime]): Encoder[LocalTime @@ Tag] =
+      enc.asInstanceOf[Encoder[LocalTime @@ Tag]]
+
+    implicit def jtLocalTimePhantomTypeDecoder[Tag](implicit dec: Decoder[LocalTime]): Decoder[LocalTime @@ Tag] =
+      dec.asInstanceOf[Decoder[LocalTime @@ Tag]]
+
+    implicit def jtMonthDayPhantomTypeEncoder[Tag](implicit enc: Encoder[MonthDay]): Encoder[MonthDay @@ Tag] =
+      enc.asInstanceOf[Encoder[MonthDay @@ Tag]]
+
+    implicit def jtMonthDayPhantomTypeDecoder[Tag](implicit dec: Decoder[MonthDay]): Decoder[MonthDay @@ Tag] =
+      dec.asInstanceOf[Decoder[MonthDay @@ Tag]]
+
+    implicit def jtOffsetDateTimePhantomTypeEncoder[Tag](
+      implicit enc: Encoder[OffsetDateTime],
+    ): Encoder[OffsetDateTime @@ Tag] =
+      enc.asInstanceOf[Encoder[OffsetDateTime @@ Tag]]
+
+    implicit def jtOffsetDateTimePhantomTypeDecoder[Tag](
+      implicit dec: Decoder[OffsetDateTime],
+    ): Decoder[OffsetDateTime @@ Tag] =
+      dec.asInstanceOf[Decoder[OffsetDateTime @@ Tag]]
+
+    implicit def jtOffsetTimePhantomTypeEncoder[Tag](implicit enc: Encoder[Duration]): Encoder[OffsetTime @@ Tag] =
+      enc.asInstanceOf[Encoder[OffsetTime @@ Tag]]
+
+    implicit def jtOffsetTimePhantomTypeDecoder[Tag](implicit dec: Decoder[Duration]): Decoder[OffsetTime @@ Tag] =
+      dec.asInstanceOf[Decoder[OffsetTime @@ Tag]]
+
+    implicit def jtPeriodPhantomTypeEncoder[Tag](implicit enc: Encoder[Period]): Encoder[Period @@ Tag] =
+      enc.asInstanceOf[Encoder[Period @@ Tag]]
+
+    implicit def jtPeriodPhantomTypeDecoder[Tag](implicit dec: Decoder[Period]): Decoder[Period @@ Tag] =
+      dec.asInstanceOf[Decoder[Period @@ Tag]]
+
+    implicit def jtYearPhantomTypeEncoder[Tag](implicit enc: Encoder[Year]): Encoder[Year @@ Tag] =
+      enc.asInstanceOf[Encoder[Year @@ Tag]]
+
+    implicit def jtYearMonthPhantomTypeDecoder[Tag](implicit dec: Decoder[YearMonth]): Decoder[YearMonth @@ Tag] =
+      dec.asInstanceOf[Decoder[YearMonth @@ Tag]]
+
+    implicit def jtZonedDateTimePhantomTypeEncoder[Tag](
+      implicit enc: Encoder[ZonedDateTime],
+    ): Encoder[ZonedDateTime @@ Tag] =
+      enc.asInstanceOf[Encoder[ZonedDateTime @@ Tag]]
+
+    implicit def jtZoneIdPhantomTypeDecoder[Tag](implicit dec: Decoder[ZoneId]): Decoder[ZoneId @@ Tag] =
+      dec.asInstanceOf[Decoder[ZoneId @@ Tag]]
+
+    implicit def jtZoneOffsetPhantomTypeEncoder[Tag](implicit enc: Encoder[ZoneOffset]): Encoder[ZoneOffset @@ Tag] =
+      enc.asInstanceOf[Encoder[ZoneOffset @@ Tag]]
+
+  }
 
   trait PhantomTypeJavaMiscInstances {}
 
