@@ -18,6 +18,7 @@
 package busymachines.pureharm
 
 import busymachines.pureharm.phdbslick.definitions
+import busymachines.pureharm.phdbslick.impl.SlickConnectionIOCatsInstances
 
 /**
   *
@@ -27,9 +28,7 @@ import busymachines.pureharm.phdbslick.definitions
   */
 object dbslick extends definitions.PureharmDBSlickTypeDefinitions {
   final type PureharmDBSlickTypeDefinitions = definitions.PureharmDBSlickTypeDefinitions
-  final type PureharmDBSlickImplicits       = definitions.PureharmDBSlickImplicits
-  final type SlickQueryAlgebraDefinitions   = phdbslick.SlickQueryAlgebraDefinitions
-  final type SlickQueryAlgebraTypes         = definitions.SlickQueryAlgebraTypes
+  final type PureharmSlickDBProfile         = definitions.PureharmSlickDBProfile
 
-  final object implicits extends definitions.PureharmDBSlickImplicits
+  final object instances extends SlickConnectionIOCatsInstances
 }

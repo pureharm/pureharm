@@ -21,7 +21,7 @@ addCommandAlias("rebuild", ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
-addCommandAlias("doLocal", ";rebuild-update;publishLocal")
+addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
 
 /**
   * Use with care.

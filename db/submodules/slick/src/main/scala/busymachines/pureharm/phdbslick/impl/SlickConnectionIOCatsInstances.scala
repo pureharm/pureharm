@@ -15,12 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.definitions
+package busymachines.pureharm.phdbslick.impl
 
-import busymachines.pureharm.effects.MonadError
 import busymachines.pureharm.dbslick.ConnectionIOEC
+import busymachines.pureharm.effects.MonadError
 import busymachines.pureharm.phdbslick.slickTypes._
-import busymachines.pureharm.phdbslick.impl.ConnectionIOMonadError
 
 /**
   *
