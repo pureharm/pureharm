@@ -157,7 +157,31 @@ object PureharmJsonInstances {
       ls.asInstanceOf[Decoder[NonEmptyMap[K, V] @@ Tag]]
   }
 
-  trait PhantomTypeScalaDurationInstances {}
+  trait PhantomTypeScalaDurationInstances {
+    import scala.concurrent.duration._
+
+    implicit def sdDurationPhantomTypeEncoder[Tag](implicit enc: Encoder[Duration]): Encoder[Duration @@ Tag] =
+      enc.asInstanceOf[Encoder[Duration @@ Tag]]
+
+    implicit def sdDurationPhantomTypeDecoder[Tag](implicit dec: Decoder[Duration]): Decoder[Duration @@ Tag] =
+      dec.asInstanceOf[Decoder[Duration @@ Tag]]
+
+    implicit def sdFiniteDurationPhantomTypeEncoder[Tag](
+      implicit enc: Encoder[FiniteDuration],
+    ): Encoder[FiniteDuration @@ Tag] =
+      enc.asInstanceOf[Encoder[FiniteDuration @@ Tag]]
+
+    implicit def sdFiniteDurationPhantomTypeDecoder[Tag](
+      implicit dec: Decoder[FiniteDuration],
+    ): Decoder[FiniteDuration @@ Tag] =
+      dec.asInstanceOf[Decoder[FiniteDuration @@ Tag]]
+
+    implicit def sdDeadlinePhantomTypeEncoder[Tag](implicit enc: Encoder[Deadline]): Encoder[Deadline @@ Tag] =
+      enc.asInstanceOf[Encoder[Deadline @@ Tag]]
+
+    implicit def sdDeadlinePhantomTypeDecoder[Tag](implicit dec: Decoder[Deadline]): Decoder[Deadline @@ Tag] =
+      dec.asInstanceOf[Decoder[Deadline @@ Tag]]
+  }
 
   trait PhantomTypeJavaTimeInstances {
     import java.time._
