@@ -9,8 +9,9 @@
 
 # parameters #
 CONTAINER_NAME=postgres_pureharm_test # Name of the docker container used to run postgres
-DB_PORT=26016
-DB_NAME=pureharm-test
+INTERNAL_DB_PORT=5432
+LOCAL_BOUND_PORT=20010
+DB_NAME=pureharm_test
 DB_USER=pureharmony
 DB_PASS=pureharmony
 
@@ -26,9 +27,9 @@ else
 	echo "Creating & starting postgres container"
 	docker run -d \
 		--name $CONTAINER_NAME \
-		-p $DB_PORT:$DB_PORT \
+		-p $LOCAL_BOUND_PORT:$INTERNAL_DB_PORT \
 		-e POSTGRES_DB=$DB_NAME \
 		-e POSTGRES_USER=$DB_USER \
 		-e POSTGRES_PASSWORD=$DB_PASS \
-		postgres:11.2
+		postgres:11.3
 fi
