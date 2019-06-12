@@ -26,6 +26,14 @@ private[json_test] case class WaterMelon(
   weight: Int,
 ) extends Melon
 
+private[json_test] case class PhantomMelon(
+  weight:     Weight,
+  weights:    Weights,
+  weightsSet: WeigthsSet,
+  duo:        MelonDuo,
+  trio:       MelonTrio,
+) extends Melon
+
 private[json_test] case object SmallMelon extends Melon {
   override val weight: Int = 0
 }
