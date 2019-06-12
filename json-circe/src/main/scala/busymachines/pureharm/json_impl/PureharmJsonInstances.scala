@@ -267,6 +267,14 @@ object PureharmJsonInstances {
 
   }
 
-  trait PhantomTypeJavaMiscInstances {}
+  trait PhantomTypeJavaMiscInstances {
+    import java.util.UUID
+    implicit def miscUUIDPhantomTypeEncoder[Tag](implicit enc: Encoder[UUID]): Encoder[UUID @@ Tag] =
+      enc.asInstanceOf[Encoder[UUID @@ Tag]]
+
+    implicit def miscUUIDPhantomTypeDecoder[Tag](implicit dec: Decoder[UUID]): Decoder[UUID @@ Tag] =
+      dec.asInstanceOf[Decoder[UUID @@ Tag]]
+
+  }
 
 }
