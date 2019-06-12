@@ -33,7 +33,8 @@ object PureharmJsonInstances {
   trait Implicits extends PhantomTypeInstances
 
   trait PhantomTypeInstances
-      extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeJavaTimeInstances
+      extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
+      with PhantomTypeJavaTimeInstances with PhantomTypeJavaMiscInstances
 
   trait PhantomTypePrimitiveInstances {
 
@@ -105,12 +106,58 @@ object PureharmJsonInstances {
   }
 
   trait PhantomTypeCollectionInstances {
+    import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet}
+
     implicit def phantomTypeListEncoder[Tag, T](implicit ls: Encoder[List[T]]): Encoder[List[T] @@ Tag] =
       ls.asInstanceOf[Encoder[List[T] @@ Tag]]
 
     implicit def phantomTypeListDecoder[Tag, T](implicit ls: Decoder[List[T]]): Decoder[List[T] @@ Tag] =
       ls.asInstanceOf[Decoder[List[T] @@ Tag]]
+
+    implicit def phantomTypeNEListEncoder[Tag, T](
+      implicit ls: Encoder[NonEmptyList[T]],
+    ): Encoder[NonEmptyList[T] @@ Tag] =
+      ls.asInstanceOf[Encoder[NonEmptyList[T] @@ Tag]]
+
+    implicit def phantomTypeNEListDecoder[Tag, T](
+      implicit ls: Decoder[NonEmptyList[T]],
+    ): Decoder[NonEmptyList[T] @@ Tag] =
+      ls.asInstanceOf[Decoder[NonEmptyList[T] @@ Tag]]
+
+    implicit def phantomTypeSetEncoder[Tag, T](implicit ls: Encoder[Set[T]]): Encoder[Set[T] @@ Tag] =
+      ls.asInstanceOf[Encoder[Set[T] @@ Tag]]
+
+    implicit def phantomTypeSetDecoder[Tag, T](implicit ls: Decoder[Set[T]]): Decoder[Set[T] @@ Tag] =
+      ls.asInstanceOf[Decoder[Set[T] @@ Tag]]
+
+    implicit def phantomTypeNESetEncoder[Tag, T](
+      implicit ls: Encoder[NonEmptySet[T]],
+    ): Encoder[NonEmptySet[T] @@ Tag] =
+      ls.asInstanceOf[Encoder[NonEmptySet[T] @@ Tag]]
+
+    implicit def phantomTypeNESetDecoder[Tag, T](
+      implicit ls: Decoder[NonEmptySet[T]],
+    ): Decoder[NonEmptySet[T] @@ Tag] =
+      ls.asInstanceOf[Decoder[NonEmptySet[T] @@ Tag]]
+
+    implicit def phantomTypeMapEncoder[Tag, K, V](implicit ls: Encoder[Map[K, V]]): Encoder[Map[K, V] @@ Tag] =
+      ls.asInstanceOf[Encoder[Map[K, V] @@ Tag]]
+
+    implicit def phantomTypeMapDecoder[Tag, K, V](implicit ls: Decoder[Map[K, V]]): Decoder[Map[K, V] @@ Tag] =
+      ls.asInstanceOf[Decoder[Map[K, V] @@ Tag]]
+
+    implicit def phantomTypeNEMapEncoder[Tag, K, V](
+      implicit ls: Encoder[NonEmptyMap[K, V]],
+    ): Encoder[NonEmptyMap[K, V] @@ Tag] =
+      ls.asInstanceOf[Encoder[NonEmptyMap[K, V] @@ Tag]]
+
+    implicit def phantomTypeNEMapDecoder[Tag, K, V](
+      implicit ls: Decoder[NonEmptyMap[K, V]],
+    ): Decoder[NonEmptyMap[K, V] @@ Tag] =
+      ls.asInstanceOf[Decoder[NonEmptyMap[K, V] @@ Tag]]
   }
+
+  trait PhantomTypeScalaDurationInstances {}
 
   trait PhantomTypeJavaTimeInstances {}
 
