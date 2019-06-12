@@ -22,7 +22,9 @@ import shapeless.tag.@@
   */
 object PureharmSlickInstances {
 
-  trait PhantomTypeInstances extends PhantomTypePrimitiveInstances
+  trait PhantomTypeInstances
+      extends PhantomTypePrimitiveInstances with PhantomTypeScalaDurationInstances with PhantomTypeJavaTimeInstances
+      with PhantomTypeJavaMiscInstances
 
   trait PhantomTypePrimitiveInstances {
     protected val enclosingProfile: slick.jdbc.JdbcProfile
@@ -61,5 +63,99 @@ object PureharmSlickInstances {
 
     implicit final def bigIntPhantomTypeColumnType[Tag](implicit ct: ColumnType[BigInt]): ColumnType[BigInt @@ Tag] =
       ct.asInstanceOf[ColumnType[BigInt @@ Tag]]
+  }
+
+  trait PhantomTypeScalaDurationInstances {
+    protected val enclosingProfile: slick.jdbc.JdbcProfile
+
+    import enclosingProfile._
+    import scala.concurrent.duration._
+
+    implicit final def sdDurationPhantomTypeColumnType[Tag](
+      implicit ct: ColumnType[Duration],
+    ): ColumnType[Duration @@ Tag] =
+      ct.asInstanceOf[ColumnType[Duration @@ Tag]]
+
+    implicit final def sdFiniteDurationPhantomTypeColumnType[Tag](
+      implicit ct: ColumnType[FiniteDuration],
+    ): ColumnType[FiniteDuration @@ Tag] =
+      ct.asInstanceOf[ColumnType[FiniteDuration @@ Tag]]
+
+    implicit final def sdDeadlinePhantomTypeColumnType[Tag](
+      implicit ct: ColumnType[Deadline],
+    ): ColumnType[Deadline @@ Tag] =
+      ct.asInstanceOf[ColumnType[Deadline @@ Tag]]
+  }
+
+  trait PhantomTypeJavaTimeInstances {
+    protected val enclosingProfile: slick.jdbc.JdbcProfile
+
+    import enclosingProfile._
+    import java.time._
+
+    implicit final def jtDurationPhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[Duration],
+    ): ColumnType[Duration @@ Tag] =
+      enc.asInstanceOf[ColumnType[Duration @@ Tag]]
+
+    implicit final def jtInstantPhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[Instant],
+    ): ColumnType[Instant @@ Tag] =
+      enc.asInstanceOf[ColumnType[Instant @@ Tag]]
+
+    implicit final def jtLocalDatePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[LocalDate],
+    ): ColumnType[LocalDate @@ Tag] =
+      enc.asInstanceOf[ColumnType[LocalDate @@ Tag]]
+
+    implicit final def jtLocalDateTimePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[LocalDateTime],
+    ): ColumnType[LocalDateTime @@ Tag] =
+      enc.asInstanceOf[ColumnType[LocalDateTime @@ Tag]]
+
+    implicit final def jtLocalTimePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[LocalTime],
+    ): ColumnType[LocalTime @@ Tag] =
+      enc.asInstanceOf[ColumnType[LocalTime @@ Tag]]
+
+    implicit final def jtMonthDayPhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[MonthDay],
+    ): ColumnType[MonthDay @@ Tag] =
+      enc.asInstanceOf[ColumnType[MonthDay @@ Tag]]
+
+    implicit final def jtOffsetDateTimePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[OffsetDateTime],
+    ): ColumnType[OffsetDateTime @@ Tag] =
+      enc.asInstanceOf[ColumnType[OffsetDateTime @@ Tag]]
+
+    implicit final def jtOffsetTimePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[Duration],
+    ): ColumnType[OffsetTime @@ Tag] =
+      enc.asInstanceOf[ColumnType[OffsetTime @@ Tag]]
+
+    implicit final def jtPeriodPhantomTypeColumnType[Tag](implicit enc: ColumnType[Period]): ColumnType[Period @@ Tag] =
+      enc.asInstanceOf[ColumnType[Period @@ Tag]]
+
+    implicit final def jtYearPhantomTypeColumnType[Tag](implicit enc: ColumnType[Year]): ColumnType[Year @@ Tag] =
+      enc.asInstanceOf[ColumnType[Year @@ Tag]]
+
+    implicit final def jtZonedDateTimePhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[ZonedDateTime],
+    ): ColumnType[ZonedDateTime @@ Tag] =
+      enc.asInstanceOf[ColumnType[ZonedDateTime @@ Tag]]
+
+    implicit final def jtZoneOffsetPhantomTypeColumnType[Tag](
+      implicit enc: ColumnType[ZoneOffset],
+    ): ColumnType[ZoneOffset @@ Tag] =
+      enc.asInstanceOf[ColumnType[ZoneOffset @@ Tag]]
+  }
+
+  trait PhantomTypeJavaMiscInstances {
+    protected val enclosingProfile: slick.jdbc.JdbcProfile
+    import enclosingProfile._
+    import java.util.UUID
+    implicit final def miscUUIDPhantomTypeColumnType[Tag](implicit enc: ColumnType[UUID]): ColumnType[UUID @@ Tag] =
+      enc.asInstanceOf[ColumnType[UUID @@ Tag]]
+
   }
 }
