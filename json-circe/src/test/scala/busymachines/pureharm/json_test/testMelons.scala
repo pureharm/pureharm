@@ -6,7 +6,6 @@ package busymachines.pureharm.json_test
   * @since 11 Jun 2019
   *
   */
-
 private[json_test] case class AnarchistMelon(
   noGods:       Boolean,
   noMasters:    Boolean,

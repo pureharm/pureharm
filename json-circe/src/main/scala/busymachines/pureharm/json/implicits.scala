@@ -25,4 +25,4 @@ import busymachines.pureharm.json_impl
   * @since 11 Jun 2019
   *
   */
-object implicits extends json_impl.PureharmJsonSyntax.Implicits
+object implicits extends json_impl.PureharmJsonImplicits
