@@ -34,7 +34,7 @@ object PureharmJsonInstances {
 
   trait PhantomTypeInstances
       extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
-      with PhantomTypeJavaTimeInstances with PhantomTypeJavaMiscInstances
+      with PhantomTypeJavaTimeInstances with PhantomTypeTupleInstances with PhantomTypeJavaMiscInstances
 
   trait PhantomTypePrimitiveInstances {
 
@@ -265,6 +265,46 @@ object PureharmJsonInstances {
     implicit def jtZoneOffsetPhantomTypeEncoder[Tag](implicit enc: Encoder[ZoneOffset]): Encoder[ZoneOffset @@ Tag] =
       enc.asInstanceOf[Encoder[ZoneOffset @@ Tag]]
 
+  }
+
+  trait PhantomTypeTupleInstances {
+    implicit def tuple1PhantomTypeEncoder[T1, Tag](implicit enc: Encoder[Tuple1[T1]]): Encoder[Tuple1[T1] @@ Tag] =
+      enc.asInstanceOf[Encoder[Tuple1[T1] @@ Tag]]
+
+    implicit def tuple1PhantomTypeDecoder[T1, Tag](implicit dec: Decoder[Tuple1[T1]]): Decoder[Tuple1[T1] @@ Tag] =
+      dec.asInstanceOf[Decoder[Tuple1[T1] @@ Tag]]
+
+    implicit def tuple2PhantomTypeEncoder[T1, T2, Tag](
+      implicit enc: Encoder[(T1, T2)],
+    ): Encoder[(T1, T2) @@ Tag] =
+      enc.asInstanceOf[Encoder[(T1, T2) @@ Tag]]
+
+    implicit def tuple2PhantomTypeDecoder[T1, T2, Tag](
+      implicit dec: Decoder[(T1, T2)],
+    ): Decoder[(T1, T2) @@ Tag] =
+      dec.asInstanceOf[Decoder[(T1, T2) @@ Tag]]
+
+    implicit def tuple3PhantomTypeEncoder[T1, T2, T3, Tag](
+      implicit enc: Encoder[(T1, T2, T3)],
+    ): Encoder[(T1, T2, T3) @@ Tag] =
+      enc.asInstanceOf[Encoder[(T1, T2, T3) @@ Tag]]
+
+    implicit def tuple3PhantomTypeDecoder[T1, T2, T3, Tag](
+      implicit dec: Decoder[(T1, T2, T3)],
+    ): Decoder[(T1, T2, T3) @@ Tag] =
+      dec.asInstanceOf[Decoder[(T1, T2, T3) @@ Tag]]
+
+    implicit def tuple4PhantomTypeEncoder[T1, T2, T3, T4, Tag](
+      implicit enc: Encoder[(T1, T2, T3, T4)],
+    ): Encoder[(T1, T2, T3, T4) @@ Tag] =
+      enc.asInstanceOf[Encoder[(T1, T2, T3, T4) @@ Tag]]
+
+    implicit def tuple4PhantomTypeDecoder[T1, T2, T3, T4, Tag](
+      implicit dec: Decoder[(T1, T2, T3, T4)],
+    ): Decoder[(T1, T2, T3, T4) @@ Tag] =
+      dec.asInstanceOf[Decoder[(T1, T2, T3, T4) @@ Tag]]
+
+    //TODO: all tuples
   }
 
   trait PhantomTypeJavaMiscInstances {
