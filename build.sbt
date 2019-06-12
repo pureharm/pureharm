@@ -164,7 +164,9 @@ lazy val `db-core` = subModule("db", "core")
   .settings(
     libraryDependencies ++= Seq(
       flyway,
-      scalaTest % Test,
+      scalaTest      % Test,
+      log4cats       % Test,
+      logbackClassic % Test,
     ),
   )
   .dependsOn(
@@ -190,7 +192,7 @@ lazy val `db-slick` = subModule("db", "slick")
     ),
   )
   .dependsOn(
-    `db-core`,
+    fullDependency(`db-core`),
     `effects-cats`,
   )
   .aggregate(
@@ -304,6 +306,17 @@ lazy val log4cats = ("io.chrisdavenport" %% "log4cats-slf4j" % "0.3.0").withSour
 
 //it is the backend implementation used by log4cats
 lazy val logbackClassic = ("ch.qos.logback" % "logback-classic" % "1.2.3").withSources()
+
+//============================================================================================
+//=======================================  build utils =======================================
+//============================================================================================
+/**
+  * See SBT docs:
+  * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
+  *
+  * Ensures dependencies between the ``test`` parts of the modules
+  */
+def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))

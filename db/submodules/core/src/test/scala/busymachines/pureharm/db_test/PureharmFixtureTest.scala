@@ -1,10 +1,9 @@
-package busymachines.pureharm.phdbslick_test
+package busymachines.pureharm.db_test
 
 import org.scalatest._
 import org.scalatest.funsuite.FixtureAnyFunSuite
+
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
-import db._
 
 import org.scalactic.source
 /**
@@ -17,16 +16,15 @@ import org.scalactic.source
   *
   */
 abstract class PureharmFixtureTest extends FixtureAnyFunSuite {
+  import io.chrisdavenport.log4cats._
+  private val logger = slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
 
+  import busymachines.pureharm.effects.implicits._
   //for tests if fine if we just dump everything in global EC.
   //But for production this is an absolute nightmare and you should never do this
-  implicit lazy val connectionIOEC: ConnectionIOEC   = ConnectionIOEC(ExecutionContext.global)
-  implicit lazy val contextShift:   ContextShift[IO] = IO.contextShift(connectionIOEC)
-  implicit lazy val timer:          Timer[IO]        = IO.timer(connectionIOEC)
-
-  import io.chrisdavenport.log4cats._
-
-  private val logger = slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
+  implicit lazy val executionContext: ExecutionContext = ExecutionContext.global
+  implicit lazy val contextShift:     ContextShift[IO] = IO.contextShift(executionContext)
+  implicit lazy val timer:            Timer[IO]        = IO.timer(executionContext)
 
   /**
     * Instead of the "before and after shit" simply init, and close

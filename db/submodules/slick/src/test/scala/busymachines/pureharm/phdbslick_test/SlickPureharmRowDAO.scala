@@ -1,6 +1,7 @@
 package busymachines.pureharm.phdbslick_test
 
-import db._
+import busymachines.pureharm.db_test._
+import busymachines.pureharm.phdbslick_test.db._
 
 /**
   *
@@ -8,17 +9,16 @@ import db._
   * @since 12 Jun 2019
   *
   */
-sealed private[phdbslick_test] trait PureharmRowDAO[F[_]] extends DAOAlgebra[F, PureharmRow, PhantomPK]
 
-private[phdbslick_test] object PureharmRowDAO {
+private[phdbslick_test] object SlickPureharmRowDAO {
 
   def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): PureharmRowDAO[F] =
-    new PureharmRowDAOImpl[F]
+    new PureharmRowDAOSlickImpl[F]
 
   //----------------- implementation details -----------------
   import db.implicits._
 
-  private class PureharmTable(tag: Tag) extends TableWithPK[PureharmRow, PhantomPK](tag, schema.PureharmRows) {
+  private class SlickPureharmTable(tag: Tag) extends TableWithPK[PureharmRow, PhantomPK](tag, schema.PureharmRows) {
     val byte       = column[PhantomByte]("byte")
     val int        = column[PhantomInt]("int")
     val long       = column[PhantomLong]("long")
@@ -29,16 +29,16 @@ private[phdbslick_test] object PureharmRowDAO {
       (id, byte, int, long, bigDecimal, string) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
   }
 
-  final private class PureharmRowQuerries(
+  final private class SlickPureharmRowQuerries(
     implicit override val connectionIOEC: ConnectionIOEC,
-  ) extends SlickDAOQueryAlgebra[PureharmRow, PhantomPK, PureharmTable] {
-    override val dao: TableQuery[PureharmTable] = TableQuery[PureharmTable]
+  ) extends SlickDAOQueryAlgebra[PureharmRow, PhantomPK, SlickPureharmTable] {
+    override val dao: TableQuery[SlickPureharmTable] = TableQuery[SlickPureharmTable]
   }
 
-  final private class PureharmRowDAOImpl[F[_]](
+  final private class PureharmRowDAOSlickImpl[F[_]](
     implicit override val connectionIOEC: ConnectionIOEC,
     implicit override val transactor:     Transactor[F],
-  ) extends SlickDAOAlgebra[F, PureharmRow, PhantomPK, PureharmTable] with PureharmRowDAO[F] {
-    override protected val queries: PureharmRowQuerries = new PureharmRowQuerries
+  ) extends SlickDAOAlgebra[F, PureharmRow, PhantomPK, SlickPureharmTable] with PureharmRowDAO[F] {
+    override protected val queries: SlickPureharmRowQuerries = new SlickPureharmRowQuerries
   }
 }

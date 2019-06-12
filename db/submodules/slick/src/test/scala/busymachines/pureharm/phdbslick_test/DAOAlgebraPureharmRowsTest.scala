@@ -3,6 +3,7 @@ package busymachines.pureharm.phdbslick_test
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phdb.Flyway
+import busymachines.pureharm.db_test._
 import db._
 
 /**
@@ -18,8 +19,11 @@ import db._
   */
 final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
+
   override def fixture: Resource[IO, PureharmRowDAO[IO]] =
-    DAOAlgebraPureharmRowsTest.transactorResource.map(implicit t => PureharmRowDAO[IO](t, connectionIOEC))
+    DAOAlgebraPureharmRowsTest.transactorResource.map(
+      implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
+    )
 
   iotest("write single row + read by PK") { implicit dao: PureharmRowDAO[IO] =>
     val row = PureharmRow(

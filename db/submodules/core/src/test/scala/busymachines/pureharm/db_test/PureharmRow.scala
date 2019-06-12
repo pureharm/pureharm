@@ -1,6 +1,4 @@
-package busymachines.pureharm.phdbslick_test
-
-import db._
+package busymachines.pureharm.db_test
 
 /**
   *
@@ -8,7 +6,7 @@ import db._
   * @since 12 Jun 2019
   *
   */
-final private[phdbslick_test] case class PureharmRow(
+final private[pureharm] case class PureharmRow(
   id:         PhantomPK,
   byte:       PhantomByte,
   int:        PhantomInt,

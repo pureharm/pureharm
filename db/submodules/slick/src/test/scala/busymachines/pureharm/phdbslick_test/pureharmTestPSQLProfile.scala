@@ -1,6 +1,5 @@
 package busymachines.pureharm.phdbslick_test
 
-import busymachines.pureharm.PhantomType
 import busymachines.pureharm.dbslick.PureharmSlickDBProfile
 import busymachines.pureharm.phdb.PureharmDBCoreTypeDefinitions
 import com.github.tminglei.slickpg.ExPostgresProfile
@@ -32,25 +31,4 @@ private[phdbslick_test] object db extends PureharmTestPSQLProfile with PureharmD
 
   val implicits: PureharmTestAPI = this.api
 
-  object PhantomByte extends PhantomType[Byte]
-  type PhantomByte = PhantomByte.Type
-
-  object PhantomInt extends PhantomType[Int]
-  type PhantomInt = PhantomInt.Type
-
-  object PhantomLong extends PhantomType[Long]
-  type PhantomLong = PhantomLong.Type
-
-  object PhantomBigDecimal extends PhantomType[BigDecimal]
-  type PhantomBigDecimal = PhantomBigDecimal.Type
-
-  object PhantomString extends PhantomType[String]
-  type PhantomString = PhantomString.Type
-
-  object PhantomPK extends PhantomType[String]
-  type PhantomPK = PhantomPK.Type
-
-  object schema {
-    val PureharmRows: TableName = TableName("pureharm_rows")
-  }
 }
