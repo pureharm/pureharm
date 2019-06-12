@@ -8,9 +8,10 @@
 # Docker is required in order for this script to work !
 
 # parameters #
-CONTAINER_NAME=postgres_pureharm_test # Name of the docker container used to run postgres
-INTERNAL_DB_PORT=5432
-LOCAL_BOUND_PORT=20010
+
+CONTAINER_NAME=postgres_pureharm_test   # Name of the docker container used to run postgres
+EXPOSED_PORT=20010                      #this is the port on the host machine; most likely you want to change this one.
+INTERNAL_PORT=5432                      #this is the default port on which postgresql starts on within the container.
 DB_NAME=pureharm_test
 DB_USER=pureharmony
 DB_PASS=pureharmony
@@ -27,7 +28,7 @@ else
 	echo "Creating & starting postgres container"
 	docker run -d \
 		--name $CONTAINER_NAME \
-		-p $LOCAL_BOUND_PORT:$INTERNAL_DB_PORT \
+		-p $EXPOSED_PORT:$INTERNAL_PORT \
 		-e POSTGRES_DB=$DB_NAME \
 		-e POSTGRES_USER=$DB_USER \
 		-e POSTGRES_PASSWORD=$DB_PASS \
