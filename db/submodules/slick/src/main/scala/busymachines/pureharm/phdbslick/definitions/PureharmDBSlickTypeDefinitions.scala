@@ -43,8 +43,8 @@ trait PureharmDBSlickTypeDefinitions {
   final type ConnectionIO[T] = slickTypes.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickDB  = slickTypes.SlickBackendDB
-  final type SlickAPI = slickTypes.SlickJDBCProfileAPI
+  final type SlickBackendDB  = slickTypes.SlickBackendDB
+  final type SlickJDBCProfileAPI = slickTypes.SlickJDBCProfileAPI
 
   final val JDBCProfileAPI: slickTypes.JDBCProfileAPI.type = slickTypes.JDBCProfileAPI
   final type JDBCProfileAPI = slickTypes.JDBCProfileAPI.Type

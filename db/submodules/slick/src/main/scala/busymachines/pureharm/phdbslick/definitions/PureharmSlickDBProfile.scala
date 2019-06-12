@@ -78,8 +78,16 @@ trait PureharmSlickDBProfile extends PureharmDBSlickTypeDefinitions {
     *
     */
   trait PureharmSlickAPIWithImplicits
-      extends PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
+      extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
       with SlickQueryAlgebraDefinitions {
     final override protected val enclosingProfile: slick.jdbc.JdbcProfile = self
+
+    final type ProvenShape[U] = slick.lifted.ProvenShape[U]
+    final val ProvenShape: slick.lifted.ProvenShape.type = slick.lifted.ProvenShape
   }
+
+  final def slickJDBCProfileAPI: SlickJDBCProfileAPI = this.api
+
+  final def jdbcProfileAPI: JDBCProfileAPI = JDBCProfileAPI(slickJDBCProfileAPI)
+
 }
