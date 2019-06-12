@@ -31,7 +31,7 @@ import io.circe._
   */
 trait SemiAutoDerivation {
 
-  type DerivationHelper[A] = io.circe.generic.extras.semiauto.DerivationHelper[A]
+  final type DerivationHelper[A] = io.circe.generic.extras.semiauto.DerivationHelper[A]
 
   final def decoder[A](implicit decode: Lazy[decoding.ConfiguredDecoder[A]]): Decoder[A] =
     circeSemiAuto.deriveDecoder[A](decode)
