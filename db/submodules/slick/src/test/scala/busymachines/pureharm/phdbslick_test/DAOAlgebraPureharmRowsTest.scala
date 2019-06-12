@@ -6,12 +6,16 @@ import busymachines.pureharm.phdb.Flyway
 import db._
 
 /**
+  * To properly run this test, you probably want to start the
+  * PostgreSQL server inside docker using the following script:
+  * {{{
+  *   ./db/docker-pureharm-postgresql-test.sh
+  * }}}
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   *
   */
-
 final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
   override def fixture: Resource[IO, PureharmRowDAO[IO]] =
