@@ -36,6 +36,9 @@ object db {
   final object TableName extends PhantomType[String]
   final type TableName = TableName.Type
 
+  final object DatabaseName extends PhantomType[String]
+  final type DatabaseName = DatabaseName.Type
+
   final type DAOAlgebra[R[_], E, PK] = phdb.DAOAlgebra[R, E, PK]
 
   final type PureharmDBCoreTypeDefinitions = phdb.PureharmDBCoreTypeDefinitions

@@ -163,6 +163,7 @@ lazy val `db-core` = subModule("db", "core")
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
+      flyway,
       scalaTest % Test,
     ),
   )
@@ -211,6 +212,9 @@ lazy val shapelessVersion: String = "2.3.3"
 
 lazy val slickVersion:    String = "3.3.1"
 lazy val hikariCPVersion: String = "3.3.1"
+lazy val slickPGVersion:  String = "0.17.3"
+
+lazy val flywayVersion: String = "6.0.0-beta2"
 
 lazy val scalaTestVersion: String = "3.1.0-SNAP11"
 
@@ -258,6 +262,12 @@ lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion w
 
 //https://github.com/brettwooldridge/HikariCP
 lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSources ()
+
+//https://github.com/flyway/flyway/releases
+lazy val flyway: ModuleID = "org.flywaydb" % "flyway-core" % flywayVersion withSources ()
+
+//https://github.com/tminglei/slick-pg — USED ONLY FOR TESTING WITH A REAL POSTGRESQL
+lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPGVersion withSources ()
 
 //=============================================================================
 //============================= DATABASE - DOOBIE =============================

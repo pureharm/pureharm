@@ -51,5 +51,8 @@ trait PureharmDBCoreTypeDefinitions {
   final val TableName = db.TableName
   final type TableName = db.TableName.Type
 
+  final val DatabaseName = db.DatabaseName
+  final type DatabaseName = db.DatabaseName.Type
+
   final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
 }
