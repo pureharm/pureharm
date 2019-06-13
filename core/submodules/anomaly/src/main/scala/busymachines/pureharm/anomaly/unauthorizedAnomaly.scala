@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -42,19 +40,19 @@ object UnauthorizedAnomaly
   override def apply(message: String): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(message = message)
 
-  override def apply(parameters: Parameters): UnauthorizedAnomaly =
+  override def apply(parameters: Anomaly.Parameters): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): UnauthorizedAnomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): UnauthorizedAnomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): UnauthorizedAnomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): UnauthorizedAnomaly =
     UnauthorizedAnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): UnauthorizedAnomaly =
@@ -63,8 +61,8 @@ object UnauthorizedAnomaly
 }
 
 final private[pureharm] case class UnauthorizedAnomalyImpl(
-  override val id:         AnomalyID         = UnauthorizedAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.UnauthorizedMsg,
-  override val parameters: Parameters        = Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = UnauthorizedAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.UnauthorizedMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends UnauthorizedAnomaly(message, causedBy) with Product with Serializable

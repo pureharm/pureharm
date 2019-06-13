@@ -15,8 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -53,13 +52,13 @@ object Catastrophe extends CatastropheConstructors[Catastrophe] {
   override def apply(id: AnomalyID, message: String, causedBy: Throwable): Catastrophe =
     CatastropheImpl(id = id, message = message, causedBy = Option(causedBy))
 
-  override def apply(id: AnomalyID, parameters: Parameters, causedBy: Throwable): Catastrophe =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): Catastrophe =
     CatastropheImpl(id = id, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(message: String, parameters: Parameters, causedBy: Throwable): Catastrophe =
+  override def apply(message: String, parameters: Anomaly.Parameters, causedBy: Throwable): Catastrophe =
     CatastropheImpl(message = message, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters, causedBy: Throwable): Catastrophe =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters, causedBy: Throwable): Catastrophe =
     CatastropheImpl(id = id, message = message, parameters = parameters, causedBy = Option(causedBy))
 
   override def apply(a: AnomalyBase, causedBy: Throwable): Catastrophe =
@@ -71,19 +70,19 @@ object Catastrophe extends CatastropheConstructors[Catastrophe] {
   override def apply(message: String): Catastrophe =
     CatastropheImpl(message = message)
 
-  override def apply(parameters: Parameters): Catastrophe =
+  override def apply(parameters: Anomaly.Parameters): Catastrophe =
     CatastropheImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): Catastrophe =
     CatastropheImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): Catastrophe =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): Catastrophe =
     CatastropheImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): Catastrophe =
+  override def apply(message: String, parameters: Anomaly.Parameters): Catastrophe =
     CatastropheImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): Catastrophe =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): Catastrophe =
     CatastropheImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): Catastrophe =

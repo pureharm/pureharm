@@ -15,25 +15,25 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.anomaly
 
 /**
   * Some suggested naming conventions are put here so that they're easily accessible.
   * These can also be found in the scaladoc of [[busymachines.pureharm.AnomalyID]]
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.NotFound]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.NotFound]]
   *   - range: 000-099; e.g. pone_001, ptwo_076, pthree_099
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.UnauthorizedMsg]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.UnauthorizedMsg]]
   *   - range: 100-199; e.g. pone_100, ptwo_176, pthree_199
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.ForbiddenMsg]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.ForbiddenMsg]]
   *   - range: 200-299; e.g. pone_200, ptwo_276, pthree_299
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.DeniedMsg]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.DeniedMsg]]
   *   - range: 300-399; e.g. pone_300, ptwo_376, pthree_399
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.InvalidInput]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.InvalidInput]]
   *   - range: 400-499; e.g. pone_400, ptwo_476, pthree_499
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.internals.dbslick
 
-import busymachines.pureharm.Identifiable
+import busymachines.pureharm.identifiable.Identifiable
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbslick._

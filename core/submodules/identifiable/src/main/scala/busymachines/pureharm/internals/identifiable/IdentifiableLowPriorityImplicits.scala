@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phidentifiable
+package busymachines.pureharm.internals.identifiable
 
-import busymachines.pureharm.{fieldname, Identifiable}
+import busymachines.pureharm.identifiable._
 
 /**
   *
@@ -42,7 +42,6 @@ trait IdentifiableLowPriorityImplicits {
 }
 
 private[pureharm] object IdentifiableLowPriorityImplicits {
-  import fieldname._
   private val IdFieldName: FieldName = FieldName("id")
   private trait IdentifiableByID[T, ID] extends Identifiable[T, ID] {
     override def fieldName: FieldName = IdFieldName

@@ -17,9 +17,12 @@
   */
 package busymachines.pureharm.anomaly
 
-import busymachines.{pureharm => pha}
+import busymachines.pureharm.anomaly
 
 /**
+  *
+  * Mix this into your app's "core" package to get all these nice little
+  * anomalies.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
@@ -27,41 +30,43 @@ import busymachines.{pureharm => pha}
   */
 trait PureharmAnomalyTypeDefinitions {
 
-  final type AnomalyBase = pha.AnomalyBase
+  final type AnomalyBase   = anomaly.AnomalyBase
+  final type AnomaliesBase = anomaly.AnomaliesBase
 
-  final type Anomaly = pha.Anomaly
-  final val Anomaly: pha.Anomaly.type = pha.Anomaly
+  final type Anomaly = anomaly.Anomaly
+  final val Anomaly: anomaly.Anomaly.type = anomaly.Anomaly
 
-  final type Anomalies = pha.Anomalies
-  final val Anomalies: pha.Anomalies.type = pha.Anomalies
+  final type Anomalies = anomaly.Anomalies
+  final val Anomalies: anomaly.Anomalies.type = anomaly.Anomalies
 
-  final type AnomalyID = pha.AnomalyID
-  final val AnomalyID: pha.AnomalyID.type = pha.AnomalyID
+  final type AnomalyID = anomaly.AnomalyID
+  final val AnomalyID: anomaly.AnomalyID.type = anomaly.AnomalyID
 
-  final type NotFoundAnomaly = pha.NotFoundAnomaly
-  final val NotFoundAnomaly: pha.NotFoundAnomaly.type = pha.NotFoundAnomaly
+  final type NotFoundAnomaly = anomaly.NotFoundAnomaly
+  final val NotFoundAnomaly: anomaly.NotFoundAnomaly.type = anomaly.NotFoundAnomaly
 
-  final type UnauthorizedAnomaly = pha.UnauthorizedAnomaly
-  final val UnauthorizedAnomaly: pha.UnauthorizedAnomaly.type = pha.UnauthorizedAnomaly
+  final type UnauthorizedAnomaly = anomaly.UnauthorizedAnomaly
+  final val UnauthorizedAnomaly: anomaly.UnauthorizedAnomaly.type = anomaly.UnauthorizedAnomaly
 
-  final type ForbiddenAnomaly = pha.ForbiddenAnomaly
-  final val ForbiddenAnomaly: pha.ForbiddenAnomaly.type = pha.ForbiddenAnomaly
+  final type ForbiddenAnomaly = anomaly.ForbiddenAnomaly
+  final val ForbiddenAnomaly: anomaly.ForbiddenAnomaly.type = anomaly.ForbiddenAnomaly
 
-  final type DeniedAnomaly = pha.DeniedAnomaly
-  final val DeniedAnomaly: pha.DeniedAnomaly.type = pha.DeniedAnomaly
+  final type DeniedAnomaly = anomaly.DeniedAnomaly
+  final val DeniedAnomaly: anomaly.DeniedAnomaly.type = anomaly.DeniedAnomaly
 
-  final type InvalidInputAnomaly = pha.InvalidInputAnomaly
-  final val InvalidInputAnomaly: pha.InvalidInputAnomaly.type = pha.InvalidInputAnomaly
+  final type InvalidInputAnomaly = anomaly.InvalidInputAnomaly
+  final val InvalidInputAnomaly: anomaly.InvalidInputAnomaly.type = anomaly.InvalidInputAnomaly
 
-  final type ConflictAnomaly = pha.ConflictAnomaly
-  final val ConflictAnomaly: pha.ConflictAnomaly.type = pha.ConflictAnomaly
+  final type ConflictAnomaly = anomaly.ConflictAnomaly
+  final val ConflictAnomaly: anomaly.ConflictAnomaly.type = anomaly.ConflictAnomaly
 
-  final type Catastrophe = pha.Catastrophe
-  final val Catastrophe: pha.Catastrophe.type = pha.Catastrophe
+  final type Catastrophe = anomaly.Catastrophe
+  final val Catastrophe: anomaly.Catastrophe.type = anomaly.Catastrophe
 
-  final type InconsistentStateCatastrophe = pha.InconsistentStateCatastrophe
-  final val InconsistentStateCatastrophe: pha.InconsistentStateCatastrophe.type = pha.InconsistentStateCatastrophe
+  final type InconsistentStateCatastrophe = anomaly.InconsistentStateCatastrophe
+  final val InconsistentStateCatastrophe: anomaly.InconsistentStateCatastrophe.type =
+    anomaly.InconsistentStateCatastrophe
 
-  final type NotImplementedCatastrophe = pha.NotImplementedCatastrophe
-  final val NotImplementedCatastrophe: pha.NotImplementedCatastrophe.type = pha.NotImplementedCatastrophe
+  final type NotImplementedCatastrophe = anomaly.NotImplementedCatastrophe
+  final val NotImplementedCatastrophe: anomaly.NotImplementedCatastrophe.type = anomaly.NotImplementedCatastrophe
 }

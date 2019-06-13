@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -42,19 +40,19 @@ object ForbiddenAnomaly
   override def apply(message: String): ForbiddenAnomaly =
     ForbiddenFailureImpl(message = message)
 
-  override def apply(parameters: Parameters): ForbiddenAnomaly =
+  override def apply(parameters: Anomaly.Parameters): ForbiddenAnomaly =
     ForbiddenFailureImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): ForbiddenAnomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): ForbiddenAnomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): ForbiddenAnomaly =
     ForbiddenFailureImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): ForbiddenAnomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): ForbiddenAnomaly =
@@ -64,6 +62,6 @@ object ForbiddenAnomaly
 final private[pureharm] case class ForbiddenFailureImpl(
   override val id:         AnomalyID         = ForbiddenAnomalyID,
   override val message:    String            = MeaningfulAnomalies.ForbiddenMsg,
-  override val parameters: Parameters        = Parameters.empty,
+  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
   override val causedBy:   Option[Throwable] = None,
 ) extends ForbiddenAnomaly(message, causedBy) with Product with Serializable

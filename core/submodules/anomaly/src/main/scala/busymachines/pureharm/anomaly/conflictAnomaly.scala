@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -41,19 +39,19 @@ object ConflictAnomaly
   override def apply(message: String): ConflictAnomaly =
     ConflictAnomalyImpl(message = message)
 
-  override def apply(parameters: Parameters): ConflictAnomaly =
+  override def apply(parameters: Anomaly.Parameters): ConflictAnomaly =
     ConflictAnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): ConflictAnomaly =
     ConflictAnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): ConflictAnomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): ConflictAnomaly =
     ConflictAnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): ConflictAnomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): ConflictAnomaly =
     ConflictAnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): ConflictAnomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): ConflictAnomaly =
     ConflictAnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): ConflictAnomaly =
@@ -63,6 +61,6 @@ object ConflictAnomaly
 final private[pureharm] case class ConflictAnomalyImpl(
   override val id:         AnomalyID         = ConflictAnomalyID,
   override val message:    String            = MeaningfulAnomalies.ConflictMsg,
-  override val parameters: Parameters        = Parameters.empty,
+  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
   override val causedBy:   Option[Throwable] = None,
 ) extends ConflictAnomaly(message, causedBy) with Product with Serializable

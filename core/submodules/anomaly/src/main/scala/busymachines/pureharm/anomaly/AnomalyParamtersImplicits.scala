@@ -17,8 +17,6 @@
   */
 package busymachines.pureharm.anomaly
 
-import busymachines.pureharm.{Anomaly, SeqStringWrapper, StringWrapper}
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   * Nothing from this file should ever escape [[busymachines.pureharm]]
@@ -31,15 +29,15 @@ private[pureharm] trait AnomalyConstructors[Resulting <: AnomalyBase] {
 
   def apply(message: String): Resulting
 
-  def apply(parameters: Parameters): Resulting
+  def apply(parameters: Anomaly.Parameters): Resulting
 
   def apply(id: AnomalyID, message: String): Resulting
 
-  def apply(id: AnomalyID, parameters: Parameters): Resulting
+  def apply(id: AnomalyID, parameters: Anomaly.Parameters): Resulting
 
-  def apply(message: String, parameters: Parameters): Resulting
+  def apply(message: String, parameters: Anomaly.Parameters): Resulting
 
-  def apply(id: AnomalyID, message: String, parameters: Parameters): Resulting
+  def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): Resulting
 
   def apply(a: AnomalyBase): Resulting
 }
@@ -52,11 +50,11 @@ private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extend
 
   def apply(id: AnomalyID, message: String, causedBy: Throwable): Resulting
 
-  def apply(id: AnomalyID, parameters: Parameters, causedBy: Throwable): Resulting
+  def apply(id: AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): Resulting
 
-  def apply(message: String, parameters: Parameters, causedBy: Throwable): Resulting
+  def apply(message: String, parameters: Anomaly.Parameters, causedBy: Throwable): Resulting
 
-  def apply(id: AnomalyID, message: String, parameters: Parameters, causedBy: Throwable): Resulting
+  def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters, causedBy: Throwable): Resulting
 
   def apply(a: AnomalyBase, causedBy: Throwable): Resulting
 }

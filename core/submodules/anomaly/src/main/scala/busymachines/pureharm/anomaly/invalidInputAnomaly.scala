@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -41,19 +39,19 @@ object InvalidInputAnomaly
   override def apply(message: String): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(message = message)
 
-  override def apply(parameters: Parameters): InvalidInputAnomaly =
+  override def apply(parameters: Anomaly.Parameters): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): InvalidInputAnomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): InvalidInputAnomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): InvalidInputAnomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): InvalidInputAnomaly =
@@ -63,6 +61,6 @@ object InvalidInputAnomaly
 final private[pureharm] case class InvalidInputAnomalyImpl(
   override val id:         AnomalyID         = InvalidInputAnomalyID,
   override val message:    String            = MeaningfulAnomalies.InvalidInputMsg,
-  override val parameters: Parameters        = Parameters.empty,
+  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
   override val causedBy:   Option[Throwable] = None,
 ) extends InvalidInputAnomaly(message, causedBy) with Product with Serializable

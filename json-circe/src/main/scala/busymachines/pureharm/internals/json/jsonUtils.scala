@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.internals.json
 
-import busymachines.pureharm._
+import busymachines.pureharm.anomaly._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import io.circe._

@@ -23,7 +23,7 @@ package busymachines.pureharm.internals.json
   * @since 10 Jun 2019
   *
   */
-import busymachines.pureharm._
+import busymachines.pureharm.anomaly._
 import io.circe.Decoder.Result
 import io.circe._
 

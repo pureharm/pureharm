@@ -1,6 +1,6 @@
 package busymachines.pureharm.db
 
-import busymachines.pureharm.PhantomType
+import busymachines.pureharm.phantom.PhantomType
 
 /**
   *

@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -41,19 +39,19 @@ object DeniedAnomaly
   override def apply(message: String): DeniedAnomaly =
     DeniedAnomalyImpl(message = message)
 
-  override def apply(parameters: Parameters): DeniedAnomaly =
+  override def apply(parameters: Anomaly.Parameters): DeniedAnomaly =
     DeniedAnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): DeniedAnomaly =
     DeniedAnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): DeniedAnomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): DeniedAnomaly =
     DeniedAnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): DeniedAnomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): DeniedAnomaly =
     DeniedAnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): DeniedAnomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): DeniedAnomaly =
     DeniedAnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): DeniedAnomaly =
@@ -63,6 +61,6 @@ object DeniedAnomaly
 final private[pureharm] case class DeniedAnomalyImpl(
   override val id:         AnomalyID         = DeniedAnomalyID,
   override val message:    String            = MeaningfulAnomalies.DeniedMsg,
-  override val parameters: Parameters        = Parameters.empty,
+  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
   override val causedBy:   Option[Throwable] = None,
 ) extends DeniedAnomaly(message, causedBy) with Product with Serializable
