@@ -21,7 +21,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.{EitherValues, Matchers}
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.json._
-import busymachines.pureharm.json_impl.{JsonDecoding, JsonParsing}
+import busymachines.pureharm.internals.json.{JsonDecoding, JsonParsing}
 import busymachines.pureharm.json_test._
 
 /**

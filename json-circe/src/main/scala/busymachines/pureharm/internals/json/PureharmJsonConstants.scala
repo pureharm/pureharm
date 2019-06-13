@@ -15,30 +15,17 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_impl
-
-import io.circe.{Decoder, Encoder, HCursor, Json}
+package busymachines.pureharm.internals.json
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 10 Jun 2019
+  * @since 11 Jun 2019
   *
   */
-trait Codec[A] extends Encoder[A] with Decoder[A]
-
-object Codec {
-
-  def apply[A](implicit instance: Codec[A]): Codec[A] = instance
-
-  def instance[A](encode: Encoder[A], decode: Decoder[A]): Codec[A] = {
-    new Codec[A] {
-      private val enc = encode
-      private val dec = decode
-
-      override def apply(a: A): Json = enc(a)
-
-      override def apply(c: HCursor): io.circe.Decoder.Result[A] = dec(c)
-    }
-  }
+private[internals] object PureharmJsonConstants {
+  private[internals] val id:         String = "id"
+  private[internals] val message:    String = "message"
+  private[internals] val messages:   String = "messages"
+  private[internals] val parameters: String = "parameters"
 }

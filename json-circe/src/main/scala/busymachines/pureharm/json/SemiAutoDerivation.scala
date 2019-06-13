@@ -15,13 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_impl
+package busymachines.pureharm.json
 
-import io.circe.generic.extras.decoding
-import io.circe.generic.extras.encoding
-import io.circe.generic.extras.{semiauto => circeSemiAuto}
+import io.circe.generic.extras.{decoding, encoding, semiauto => circeSemiAuto}
 import shapeless.Lazy
-import io.circe._
 
 /**
   *

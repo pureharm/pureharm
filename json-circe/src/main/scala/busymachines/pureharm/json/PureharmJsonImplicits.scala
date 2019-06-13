@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.json
 
-import busymachines.pureharm.json_impl
+import busymachines.pureharm.internals.json.{PureharmJsonInstances, PureharmJsonSyntax}
 
 /**
   *
@@ -25,4 +25,4 @@ import busymachines.pureharm.json_impl
   * @since 11 Jun 2019
   *
   */
-object implicits extends json_impl.PureharmJsonImplicits
+trait PureharmJsonImplicits extends PureharmJsonSyntax.Implicits with PureharmJsonInstances.Implicits

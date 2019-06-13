@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_impl
+package busymachines.pureharm.internals.json
 
 import busymachines.pureharm._
 import busymachines.pureharm.effects._
@@ -32,7 +32,7 @@ object JsonDecoding {
 
   def decodeAs[A](json: Json)(implicit decoder: Decoder[A]): Attempt[A] = {
     val r: io.circe.Decoder.Result[A] = decoder.decodeJson(json)
-    r.left.map(df => JsonDecodingAnomaly(df.getMessage))
+    r.leftMap(df => JsonDecodingAnomaly(df.getMessage))
   }
 
   def decodeAs[A](json: String)(implicit decoder: Decoder[A]): Attempt[A] = {
@@ -50,7 +50,7 @@ object JsonDecoding {
 }
 
 final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(msg) {
-  override def id: AnomalyID = JsonAnomalyIDs.JsonDecodingAnomalyID
+  override val id: AnomalyID = JsonAnomalyIDs.JsonDecodingAnomalyID
 }
 
 /**
@@ -62,7 +62,7 @@ final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(ms
 object JsonParsing {
 
   def parseString(input: String): Attempt[Json] = {
-    io.circe.parser.parse(input).left.map(pf => JsonParsingAnomaly(pf.message))
+    io.circe.parser.parse(input).leftMap(pf => JsonParsingAnomaly(pf.message))
   }
 
   def unsafeParseString(input: String): Json = {
@@ -83,7 +83,7 @@ object PrettyJson {
 }
 
 final case class JsonParsingAnomaly(msg: String) extends InvalidInputAnomaly(msg) {
-  override def id: AnomalyID = JsonAnomalyIDs.JsonParsingAnomalyID
+  override val id: AnomalyID = JsonAnomalyIDs.JsonParsingAnomalyID
 }
 
 /**
@@ -91,12 +91,15 @@ final case class JsonParsingAnomaly(msg: String) extends InvalidInputAnomaly(msg
   */
 object JsonAnomalyIDs {
 
+  private val ID1 = "json_01"
+  private val ID2 = "json_02"
+
   case object JsonParsingAnomalyID extends AnomalyID {
-    override def name: String = "json_01"
+    override val name: String = ID1
   }
 
   case object JsonDecodingAnomalyID extends AnomalyID {
-    override def name: String = "json_02"
+    override val name: String = ID2
   }
 
 }

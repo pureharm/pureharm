@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_impl
+package busymachines.pureharm.json
 
 /**
   *
@@ -24,16 +24,16 @@ package busymachines.pureharm.json_impl
   *
   */
 trait PureharmJsonTypeDefinitions {
-  final type Codec[A] = busymachines.pureharm.json_impl.Codec[A]
-  final val Codec: busymachines.pureharm.json_impl.Codec.type = busymachines.pureharm.json_impl.Codec
+  final type Codec[A] = busymachines.pureharm.internals.json.Codec[A]
+  final val Codec: busymachines.pureharm.internals.json.Codec.type = busymachines.pureharm.internals.json.Codec
 
-  final type JsonDecodingAnomaly = busymachines.pureharm.json_impl.JsonDecodingAnomaly
-  final val JsonDecodingAnomaly: busymachines.pureharm.json_impl.JsonDecodingAnomaly.type =
-    busymachines.pureharm.json_impl.JsonDecodingAnomaly
+  final type JsonDecodingAnomaly = busymachines.pureharm.internals.json.JsonDecodingAnomaly
+  final val JsonDecodingAnomaly: busymachines.pureharm.internals.json.JsonDecodingAnomaly.type =
+    busymachines.pureharm.internals.json.JsonDecodingAnomaly
 
-  final type JsonParsingAnomaly = busymachines.pureharm.json_impl.JsonParsingAnomaly
-  final val JsonParsingAnomaly: busymachines.pureharm.json_impl.JsonParsingAnomaly.type =
-    busymachines.pureharm.json_impl.JsonParsingAnomaly
+  final type JsonParsingAnomaly = busymachines.pureharm.internals.json.JsonParsingAnomaly
+  final val JsonParsingAnomaly: busymachines.pureharm.internals.json.JsonParsingAnomaly.type =
+    busymachines.pureharm.internals.json.JsonParsingAnomaly
 
   final type Encoder[A] = io.circe.Encoder[A]
 

@@ -17,7 +17,7 @@ import org.scalatest.flatspec.AnyFlatSpec
   */
 final class AnomalyJsonCodecTest extends AnyFlatSpec {
 
-  import busymachines.pureharm.json_impl._
+  import busymachines.pureharm.internals.json._
   import busymachines.pureharm.json.implicits._
   import AnomalyJsonCodec._
 
