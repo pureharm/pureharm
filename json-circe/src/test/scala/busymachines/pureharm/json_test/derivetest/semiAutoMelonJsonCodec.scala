@@ -40,7 +40,7 @@ private[json_test] object melonsDefaultSemiAutoDecoders {
 private[json_test] object melonsDefaultSemiAutoEncoders {
 
   implicit val tasteEncoder:          Encoder[Taste]          = derive.enumerationEncoder[Taste]
-  implicit val melonEncoder:          ObjectEncoder[Melon]    = derive.encoder[Melon]
+  implicit val melonEncoder:          Encoder.AsObject[Melon] = derive.encoder[Melon]
   implicit val anarchistMelonEncoder: Encoder[AnarchistMelon] = derive.encoder[AnarchistMelon]
 }
 

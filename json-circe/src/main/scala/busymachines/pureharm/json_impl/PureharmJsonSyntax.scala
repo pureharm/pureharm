@@ -42,7 +42,7 @@ object PureharmJsonSyntax {
   final class EncoderOps[A](val wrappedEncodeable: A) extends AnyVal {
     def asJson(implicit encoder: Encoder[A]): Json = encoder(wrappedEncodeable)
 
-    def asJsonObject(implicit encoder: ObjectEncoder[A]): JsonObject =
+    def asJsonObject(implicit encoder: Encoder.AsObject[A]): JsonObject =
       encoder.encodeObject(wrappedEncodeable)
   }
 

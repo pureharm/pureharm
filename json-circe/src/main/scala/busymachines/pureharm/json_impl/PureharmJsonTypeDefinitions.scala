@@ -35,17 +35,18 @@ trait PureharmJsonTypeDefinitions {
   final val JsonParsingAnomaly: busymachines.pureharm.json_impl.JsonParsingAnomaly.type =
     busymachines.pureharm.json_impl.JsonParsingAnomaly
 
-  final type Encoder[A]       = io.circe.Encoder[A]
-  final type ObjectEncoder[A] = io.circe.ObjectEncoder[A]
+  final type Encoder[A] = io.circe.Encoder[A]
 
-  final val Encoder:       io.circe.Encoder.type       = io.circe.Encoder
-  final val ObjectEncoder: io.circe.ObjectEncoder.type = io.circe.ObjectEncoder
+  @scala.deprecated("0.0.2-M14", "use Encoder.AsObject instead")
+  final type ObjectEncoder[A] = io.circe.Encoder.AsObject[A]
 
-  final type Decoder[A]       = io.circe.Decoder[A]
-  final type ObjectDecoder[A] = io.circe.ObjectEncoder[A]
+  final val Encoder: io.circe.Encoder.type = io.circe.Encoder
 
-  final val Decoder:       io.circe.Decoder.type       = io.circe.Decoder
-  final val ObjectDecoder: io.circe.ObjectEncoder.type = io.circe.ObjectEncoder
+  @scala.deprecated("0.0.2-M14", "use Encoder.AsObject instead")
+  final val ObjectEncoder: io.circe.Encoder.AsObject.type = io.circe.Encoder.AsObject
+
+  final type Decoder[A] = io.circe.Decoder[A]
+  final val Decoder: io.circe.Decoder.type = io.circe.Decoder
 
   final type Configuration = io.circe.generic.extras.Configuration
   final val Configuration: io.circe.generic.extras.Configuration.type = io.circe.generic.extras.Configuration

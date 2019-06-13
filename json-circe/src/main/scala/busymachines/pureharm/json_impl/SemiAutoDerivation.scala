@@ -36,12 +36,12 @@ trait SemiAutoDerivation {
   final def decoder[A](implicit decode: Lazy[decoding.ConfiguredDecoder[A]]): Decoder[A] =
     circeSemiAuto.deriveDecoder[A](decode)
 
-  final def encoder[A](implicit encode: Lazy[encoding.ConfiguredObjectEncoder[A]]): ObjectEncoder[A] =
+  final def encoder[A](implicit encode: Lazy[encoding.ConfiguredAsObjectEncoder[A]]): Encoder.AsObject[A] =
     circeSemiAuto.deriveEncoder[A](encode)
 
   final def codec[A](
     implicit
-    encode: Lazy[encoding.ConfiguredObjectEncoder[A]],
+    encode: Lazy[encoding.ConfiguredAsObjectEncoder[A]],
     decode: Lazy[decoding.ConfiguredDecoder[A]],
   ): Codec[A] = Codec.instance[A](encode.value, decode.value)
 
