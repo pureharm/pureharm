@@ -1,4 +1,4 @@
-package busymachines.pureharm.db_test
+package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
 

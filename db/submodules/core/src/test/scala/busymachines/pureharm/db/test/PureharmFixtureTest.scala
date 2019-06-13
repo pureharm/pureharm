@@ -1,4 +1,4 @@
-package busymachines.pureharm.db_test
+package busymachines.pureharm.db.test
 
 import org.scalatest._
 import org.scalatest.funsuite.FixtureAnyFunSuite

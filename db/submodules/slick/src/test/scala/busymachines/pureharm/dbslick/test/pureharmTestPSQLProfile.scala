@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick_test
+package busymachines.pureharm.dbslick.test
 
 import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.dbslick.PureharmSlickDBProfile
@@ -38,13 +38,13 @@ import com.github.tminglei.slickpg.ExPostgresProfile
   * @since 12 Jun 2019
   *
   */
-private[phdbslick_test] trait PureharmTestPSQLProfile extends ExPostgresProfile with PureharmSlickDBProfile {
+private[test] trait PureharmTestPSQLProfile extends ExPostgresProfile with PureharmSlickDBProfile {
   override val api: PureharmTestAPI = new PureharmTestAPI {}
 
   trait PureharmTestAPI extends super.API with PureharmSlickAPIWithImplicits
 }
 
-private[phdbslick_test] object db extends PureharmTestPSQLProfile with PureharmDBCoreTypeDefinitions {
+private[test] object testdb extends PureharmTestPSQLProfile with PureharmDBCoreTypeDefinitions {
 
   val implicits: PureharmTestAPI = this.api
 

@@ -1,6 +1,6 @@
-package busymachines.pureharm
+package busymachines.pureharm.db
 
-import busymachines.pureharm.db._
+import busymachines.pureharm.PhantomType
 
 /**
   *
@@ -8,7 +8,7 @@ import busymachines.pureharm.db._
   * @since 13 Jun 2019
   *
   */
-package object db_test {
+package object test {
   object PhantomByte extends PhantomType[Byte]
   type PhantomByte = PhantomByte.Type
 

@@ -15,11 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick_test
+package busymachines.pureharm.dbslick.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.db_test._
+import busymachines.pureharm.db.test._
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbslick._
 
@@ -59,7 +59,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   }
 }
 
-private[phdbslick_test] object DAOAlgebraPureharmRowsTest {
+private[test] object DAOAlgebraPureharmRowsTest {
 
   /**
     * All these values come from this file:
@@ -74,7 +74,7 @@ private[phdbslick_test] object DAOAlgebraPureharmRowsTest {
   private val url          = JDBCUrl.postgresql(LocalPort, LocalHost, TestDBName)
 
   def transactorResource(implicit cs: ContextShift[IO]): Resource[IO, Transactor[IO]] = {
-    val trans = Transactor.pgSQLHikari[IO](db.jdbcProfileAPI)(
+    val trans = Transactor.pgSQLHikari[IO](testdb.jdbcProfileAPI)(
       url      = url,
       username = PureharmUser,
       password = PureharmPwd,

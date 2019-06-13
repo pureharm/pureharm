@@ -15,10 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick_test
+package busymachines.pureharm.dbslick.test
 
-import busymachines.pureharm.db_test._
-import busymachines.pureharm.phdbslick_test.db._
+import busymachines.pureharm.db.test._
+import testdb._
 
 /**
   *
@@ -27,13 +27,13 @@ import busymachines.pureharm.phdbslick_test.db._
   *
   */
 
-private[phdbslick_test] object SlickPureharmRowDAO {
+private[test] object SlickPureharmRowDAO {
 
   def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): PureharmRowDAO[F] =
     new PureharmRowDAOSlickImpl[F]
 
   //----------------- implementation details -----------------
-  import db.implicits._
+  import testdb.implicits._
 
   private class SlickPureharmTable(tag: Tag) extends TableWithPK[PureharmRow, PhantomPK](tag, schema.PureharmRows) {
     val byte       = column[PhantomByte]("byte")
