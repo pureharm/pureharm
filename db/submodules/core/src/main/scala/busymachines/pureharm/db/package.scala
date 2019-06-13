@@ -1,5 +1,7 @@
 package busymachines.pureharm
 
+import busymachines.pureharm.phantom.PhantomType
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

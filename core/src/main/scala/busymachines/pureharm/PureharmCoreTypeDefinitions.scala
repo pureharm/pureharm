@@ -27,17 +27,13 @@ package busymachines.pureharm
   *
   */
 trait PureharmCoreTypeDefinitions {
-  type FieldName = _root_.busymachines.pureharm.fieldname.FieldName.Type
+  final type FieldName = identifiable.FieldName.Type
+  final val FieldName: identifiable.FieldName.type = identifiable.FieldName
 
-  val FieldName: _root_.busymachines.pureharm.fieldname.FieldName.type =
-    _root_.busymachines.pureharm.fieldname.FieldName
+  final type Identifiable[T, ID] = identifiable.Identifiable[T, ID]
+  final val Identifiable: identifiable.Identifiable.type = identifiable.Identifiable
 
-  type Identifiable[T, ID] = _root_.busymachines.pureharm.Identifiable[T, ID]
-
-  val Identifiable: _root_.busymachines.pureharm.Identifiable.type =
-    _root_.busymachines.pureharm.Identifiable
-
-  type PhantomType[T]        = _root_.busymachines.pureharm.PhantomType[T]
-  type SafePhantomType[E, T] = _root_.busymachines.pureharm.SafePhantomType[E, T]
-  type AttemptPhantomType[T] = _root_.busymachines.pureharm.SafePhantomType[Throwable, T]
+  final type PhantomType[T]        = phantom.PhantomType[T]
+  final type SafePhantomType[E, T] = phantom.SafePhantomType[E, T]
+  final type AttemptPhantomType[T] = phantom.SafePhantomType[Throwable, T]
 }

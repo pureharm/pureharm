@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.json
 
-import busymachines.pureharm.PhantomType
+import busymachines.pureharm.phantom.PhantomType
 
 /**
   *
