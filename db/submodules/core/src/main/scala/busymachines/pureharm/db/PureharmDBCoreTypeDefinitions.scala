@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdb
+package busymachines.pureharm.db
 
 import busymachines.pureharm.db
 
@@ -51,5 +51,10 @@ trait PureharmDBCoreTypeDefinitions {
   final val TableName = db.TableName
   final type TableName = db.TableName.Type
 
-  final type DAOAlgebra[R[_], E, PK] = _root_.busymachines.pureharm.phdb.DAOAlgebra[R, E, PK]
+  final val DatabaseName = db.DatabaseName
+  final type DatabaseName = db.DatabaseName.Type
+
+  final type DAOAlgebra[R[_], E, PK] = db.DAOAlgebra[R, E, PK]
+
+  final val Flyway: db.Flyway.type = db.Flyway
 }

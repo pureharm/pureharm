@@ -15,12 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick
+package busymachines.pureharm.dbslick
 
 import busymachines.pureharm.db._
-import busymachines.pureharm.phdbslick.slickTypes._
 
-import busymachines.pureharm.effects.ExecutionContext
+import busymachines.pureharm.effects._
 
 /**
   *
@@ -67,6 +66,7 @@ trait Transactor[F[_]] {
 
 object Transactor {
   import busymachines.pureharm.effects._
+  import busymachines.pureharm.internals
 
   def pgSQLHikari[F[_]: Async: ContextShift](
     dbProfile: JDBCProfileAPI,
@@ -76,7 +76,7 @@ object Transactor {
     password: DBPassword,
     config:   SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] =
-    impl.HikariTransactorImpl.resource[F](
+    internals.dbslick.HikariTransactorImpl.resource[F](
       dbProfile = dbProfile,
     )(
       url      = url,
@@ -99,7 +99,7 @@ object Transactor {
     password: DBPassword,
     config:   SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] =
-    impl.HikariTransactorImpl.unsafeCreate[F](
+    internals.dbslick.HikariTransactorImpl.unsafeCreate[F](
       slickProfile = dbProfile,
     )(
       url      = url,

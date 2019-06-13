@@ -15,28 +15,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.dbslick
+
+import busymachines.pureharm.internals.dbslick.SlickConnectionIOCatsInstances
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 06 May 2019
+  * @since 13 Jun 2019
   *
   */
-object db {
-  final object JDBCUrl extends PhantomType[String]
-  final type JDBCUrl = JDBCUrl.Type
-
-  final object DBUsername extends PhantomType[String]
-  final type DBUsername = DBUsername.Type
-
-  final object DBPassword extends PhantomType[String]
-  final type DBPassword = DBPassword.Type
-
-  final object TableName extends PhantomType[String]
-  final type TableName = TableName.Type
-
-  final type DAOAlgebra[R[_], E, PK] = phdb.DAOAlgebra[R, E, PK]
-
-  final type PureharmDBCoreTypeDefinitions = phdb.PureharmDBCoreTypeDefinitions
-}
+object instances extends SlickConnectionIOCatsInstances

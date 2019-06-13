@@ -15,34 +15,29 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick
+package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.Identifiable
-
 import busymachines.pureharm.effects._
-
 import busymachines.pureharm.db._
-import busymachines.pureharm.phdbslick.slickTypes._
+import busymachines.pureharm.dbslick._
 
 /**
-  *
-  * Mix in into your global slick definition object.
-  * You know which one, every application has one.
-  *
-  * Unfortunately, there is no way to make these definitions directly available
-  * in your "api" object that you then import everywhere slick.
-  *
-  * Copy the definitions from [[definitions.SlickQueryAlgebraTypes]] to achieve
-  * the one import experience.
+  * See [[busymachines.pureharm.dbslick.PureharmSlickDBProfile]]
+  * On how to get to use this. Don't blame me, it's how you usually do stuff
+  * with slick.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   *
   */
-trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
-  import api._
+trait SlickQueryAlgebraDefinitions {
+
+  protected val enclosingProfile: slick.jdbc.JdbcProfile
+
+  import enclosingProfile.api._
   import busymachines.pureharm.effects.implicits._
-  import busymachines.pureharm.dbslick.implicits._
+  import busymachines.pureharm.dbslick.instances._
 
   /**
     * @tparam E
@@ -75,7 +70,7 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     * @tparam TA
     *   Slick Table definition
     */
-  abstract class SlickDBQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
+  abstract class SlickDAOQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC,
@@ -124,7 +119,7 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     private def eid(e: E): PK = identifiable.id(e)
   }
 
-  object SlickDBQueryAlgebra {
+  object SlickDAOQueryAlgebra {
 
     def fromTableQuery[E, PK, TA <: TableWithPK[E, PK]](
       qt: TableQuery[TA],
@@ -133,8 +128,8 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
       connectionIOEC: ConnectionIOEC,
-    ): SlickDBQueryAlgebra[E, PK, TA] = {
-      new SlickDBQueryAlgebra[E, PK, TA]() {
+    ): SlickDAOQueryAlgebra[E, PK, TA] = {
+      new SlickDAOQueryAlgebra[E, PK, TA]() {
         override val dao: TableQuery[TA] = qt
       }
     }
@@ -144,14 +139,14 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
   //===========================================================================
   //===========================================================================
 
-  abstract class SlickDBAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
+  abstract class SlickDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
     implicit val transactor:     Transactor[F],
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC,
   ) extends DAOAlgebra[F, E, PK] {
 
-    protected def queries: SlickDBQueryAlgebra[E, PK, TA]
+    protected def queries: SlickDAOQueryAlgebra[E, PK, TA]
 
     override def find(pk: PK): F[Option[E]] = transactor.run(queries.find(pk))
 
@@ -176,20 +171,20 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
     override def existAll(pks: Iterable[PK]): F[Boolean] = transactor.run(queries.existAll(pks))
   }
 
-  object SlickDBAlgebra {
+  object SlickDAOAlgebra {
 
     def fromQueryAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      q: SlickDBQueryAlgebra[E, PK, TA],
+      q: SlickDAOQueryAlgebra[E, PK, TA],
     )(
       implicit tr: Transactor[F],
-    ): SlickDBAlgebra[F, E, PK, TA] = {
-      new SlickDBAlgebra[F, E, PK, TA]()(
+    ): SlickDAOAlgebra[F, E, PK, TA] = {
+      new SlickDAOAlgebra[F, E, PK, TA]()(
         transactor     = tr,
         columnTypePK   = q.columnTypePK,
         identifiable   = q.identifiable,
         connectionIOEC = q.connectionIOEC,
       ) {
-        override protected val queries: SlickDBQueryAlgebra[E, PK, TA] = q
+        override protected val queries: SlickDAOQueryAlgebra[E, PK, TA] = q
       }
     }
 
@@ -200,8 +195,8 @@ trait SlickQueryAlgebraDefinitions { self: slick.jdbc.JdbcProfile =>
       columnTypePK:        ColumnType[PK],
       identifiable:        Identifiable[E, PK],
       connectionIOEC:      ConnectionIOEC,
-    ): SlickDBAlgebra[F, E, PK, TA] = {
-      fromQueryAlgebra(SlickDBQueryAlgebra.fromTableQuery(qt))
+    ): SlickDAOAlgebra[F, E, PK, TA] = {
+      fromQueryAlgebra(SlickDAOQueryAlgebra.fromTableQuery(qt))
     }
   }
 }

@@ -21,7 +21,7 @@ addCommandAlias("rebuild", ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
-addCommandAlias("doLocal", ";rebuild-update;publishLocal")
+addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
 
 /**
   * Use with care.
@@ -163,7 +163,10 @@ lazy val `db-core` = subModule("db", "core")
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      scalaTest % Test,
+      flyway,
+      scalaTest      % Test,
+      log4cats       % Test,
+      logbackClassic % Test,
     ),
   )
   .dependsOn(
@@ -182,11 +185,14 @@ lazy val `db-slick` = subModule("db", "slick")
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= dbSlick ++ Seq(
-      scalaTest % Test,
+      scalaTest      % Test,
+      slickPG        % Test,
+      log4cats       % Test,
+      logbackClassic % Test,
     ),
   )
   .dependsOn(
-    `db-core`,
+    fullDependency(`db-core`),
     `effects-cats`,
   )
   .aggregate(
@@ -202,17 +208,20 @@ lazy val `db-slick` = subModule("db", "slick")
 
 lazy val scalaCollectionCompatVersion: String = "2.0.0"
 
-lazy val catsVersion:       String = "2.0.0-M2"
-lazy val catsEffectVersion: String = "2.0.0-M2"
+lazy val catsVersion:       String = "2.0.0-M4"
+lazy val catsEffectVersion: String = "2.0.0-M4"
 
-lazy val circeVersion: String = "0.12.0-M2"
+lazy val circeVersion: String = "0.12.0-M3"
 
 lazy val shapelessVersion: String = "2.3.3"
 
 lazy val slickVersion:    String = "3.3.1"
 lazy val hikariCPVersion: String = "3.3.1"
+lazy val slickPGVersion:  String = "0.17.3"
 
-lazy val scalaTestVersion: String = "3.1.0-SNAP11"
+lazy val flywayVersion: String = "6.0.0-beta2"
+
+lazy val scalaTestVersion: String = "3.1.0-SNAP13"
 
 //=============================================================================
 //=================================== SCALA ===================================
@@ -259,6 +268,12 @@ lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion w
 //https://github.com/brettwooldridge/HikariCP
 lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSources ()
 
+//https://github.com/flyway/flyway/releases
+lazy val flyway: ModuleID = "org.flywaydb" % "flyway-core" % flywayVersion withSources ()
+
+//https://github.com/tminglei/slick-pg — USED ONLY FOR TESTING WITH A REAL POSTGRESQL
+lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPGVersion withSources ()
+
 //=============================================================================
 //============================= DATABASE - DOOBIE =============================
 //=============================================================================
@@ -282,6 +297,26 @@ lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 //=============================================================================
 //================================== HELPERS ==================================
 //=============================================================================
+
+//============================================================================================
+//=========================================  logging =========================================
+//============================================================================================
+//https://github.com/ChristopherDavenport/log4cats
+lazy val log4cats = ("io.chrisdavenport" %% "log4cats-slf4j" % "0.3.0").withSources()
+
+//it is the backend implementation used by log4cats
+lazy val logbackClassic = ("ch.qos.logback" % "logback-classic" % "1.2.3").withSources()
+
+//============================================================================================
+//=======================================  build utils =======================================
+//============================================================================================
+/**
+  * See SBT docs:
+  * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
+  *
+  * Ensures dependencies between the ``test`` parts of the modules
+  */
+def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
