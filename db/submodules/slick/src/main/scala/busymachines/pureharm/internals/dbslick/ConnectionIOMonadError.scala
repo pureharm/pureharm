@@ -15,12 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.impl
-
-import busymachines.pureharm.dbslick.ConnectionIOEC
-import busymachines.pureharm.phdbslick.slickTypes._
+package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.effects._
+import busymachines.pureharm.dbslick._
 
 /**
   *
@@ -28,7 +26,7 @@ import busymachines.pureharm.effects._
   * @since 04 Apr 2019
   *
   */
-final private[phdbslick] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
+final private[internals] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
     extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 

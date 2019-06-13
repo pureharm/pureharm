@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.impl
+package busymachines.pureharm.internals.dbslick
 
 import shapeless.tag.@@
 
@@ -86,6 +86,7 @@ object PureharmSlickInstances {
     protected val enclosingProfile: slick.jdbc.JdbcProfile
 
     import enclosingProfile._
+
     import scala.concurrent.duration._
 
     implicit final def sdDurationPhantomTypeColumnType[Tag](
@@ -107,8 +108,9 @@ object PureharmSlickInstances {
   trait PhantomTypeJavaTimeInstances {
     protected val enclosingProfile: slick.jdbc.JdbcProfile
 
-    import enclosingProfile._
     import java.time._
+
+    import enclosingProfile._
 
     implicit final def jtDurationPhantomTypeColumnType[Tag](
       implicit enc: ColumnType[Duration],
@@ -169,8 +171,9 @@ object PureharmSlickInstances {
 
   trait PhantomTypeJavaMiscInstances {
     protected val enclosingProfile: slick.jdbc.JdbcProfile
-    import enclosingProfile._
     import java.util.UUID
+
+    import enclosingProfile._
     implicit final def miscUUIDPhantomTypeColumnType[Tag](implicit enc: ColumnType[UUID]): ColumnType[UUID @@ Tag] =
       enc.asInstanceOf[ColumnType[UUID @@ Tag]]
 

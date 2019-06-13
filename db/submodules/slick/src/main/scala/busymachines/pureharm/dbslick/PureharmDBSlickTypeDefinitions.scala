@@ -15,10 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.definitions
+package busymachines.pureharm.dbslick
 
-import busymachines.pureharm.phdbslick
-import busymachines.pureharm.phdbslick.slickTypes
+import busymachines.pureharm.dbslick
 
 /**
   *
@@ -40,26 +39,26 @@ import busymachines.pureharm.phdbslick.slickTypes
   */
 trait PureharmDBSlickTypeDefinitions {
 
-  final type ConnectionIO[T] = slickTypes.ConnectionIO[T]
+  final type ConnectionIO[T] = dbslick.ConnectionIO[T]
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
-  final type SlickBackendDB  = slickTypes.SlickBackendDB
-  final type SlickJDBCProfileAPI = slickTypes.SlickJDBCProfileAPI
+  final type SlickBackendDB      = dbslick.SlickBackendDB
+  final type SlickJDBCProfileAPI = dbslick.SlickJDBCProfileAPI
 
-  final val JDBCProfileAPI: slickTypes.JDBCProfileAPI.type = slickTypes.JDBCProfileAPI
-  final type JDBCProfileAPI = slickTypes.JDBCProfileAPI.Type
+  final val JDBCProfileAPI: dbslick.JDBCProfileAPI.type = dbslick.JDBCProfileAPI
+  final type JDBCProfileAPI = dbslick.JDBCProfileAPI.Type
 
-  final val DatabaseBackend: slickTypes.DatabaseBackend.type = slickTypes.DatabaseBackend
-  final type DatabaseBackend = slickTypes.DatabaseBackend.Type
+  final val DatabaseBackend: dbslick.DatabaseBackend.type = dbslick.DatabaseBackend
+  final type DatabaseBackend = dbslick.DatabaseBackend.Type
 
-  final type Transactor[F[_]] = phdbslick.Transactor[F]
-  final val Transactor: phdbslick.Transactor.type = phdbslick.Transactor
+  final type Transactor[F[_]] = dbslick.Transactor[F]
+  final val Transactor: dbslick.Transactor.type = dbslick.Transactor
 
-  final type SlickDBIOAsyncExecutorConfig = phdbslick.SlickDBIOAsyncExecutorConfig
-  final val SlickDBIOAsyncExecutorConfig: phdbslick.SlickDBIOAsyncExecutorConfig.type =
-    phdbslick.SlickDBIOAsyncExecutorConfig
+  final type SlickDBIOAsyncExecutorConfig = dbslick.SlickDBIOAsyncExecutorConfig
+  final val SlickDBIOAsyncExecutorConfig: dbslick.SlickDBIOAsyncExecutorConfig.type =
+    dbslick.SlickDBIOAsyncExecutorConfig
 
-  final val ConnectionIOEC: slickTypes.ConnectionIOEC.type = slickTypes.ConnectionIOEC
-  final type ConnectionIOEC = slickTypes.ConnectionIOEC.Type
+  final val ConnectionIOEC: dbslick.ConnectionIOEC.type = dbslick.ConnectionIOEC
+  final type ConnectionIOEC = dbslick.ConnectionIOEC.Type
 
 }

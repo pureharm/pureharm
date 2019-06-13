@@ -15,14 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick.impl
-
-import busymachines.pureharm.db._
-import busymachines.pureharm.phdbslick._
-import busymachines.pureharm.phdbslick.slickTypes._
+package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
+import busymachines.pureharm.dbslick._
 
 /**
   *
@@ -30,7 +27,7 @@ import busymachines.pureharm.effects.implicits._
   * @since 02 Apr 2019
   *
   */
-final private[phdbslick] class HikariTransactorImpl[F[_]] private (
+final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
 )(
@@ -57,8 +54,10 @@ final private[phdbslick] class HikariTransactorImpl[F[_]] private (
   override def ioExecutionContext: ExecutionContext = slickDB.ioExecutionContext
 }
 
-private[phdbslick] object HikariTransactorImpl {
+private[pureharm] object HikariTransactorImpl {
 
+  import busymachines.pureharm.db._
+  import busymachines.pureharm.effects.implicits._
   import slick.util.AsyncExecutor
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}

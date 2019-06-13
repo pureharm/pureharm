@@ -15,15 +15,15 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.phdbslick
+package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.Identifiable
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
-import busymachines.pureharm.phdbslick.slickTypes._
+import busymachines.pureharm.dbslick._
 
 /**
-  * See [[busymachines.pureharm.phdbslick.definitions.PureharmSlickDBProfile]]
+  * See [[busymachines.pureharm.dbslick.PureharmSlickDBProfile]]
   * On how to get to use this. Don't blame me, it's how you usually do stuff
   * with slick.
   *
