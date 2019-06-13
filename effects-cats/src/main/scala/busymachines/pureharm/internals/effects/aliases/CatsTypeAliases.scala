@@ -175,6 +175,9 @@ private[pureharm] trait CatsTypeAliases {
   final type ContextShift[F[_]] = ce.ContextShift[F]
   final val ContextShift: ce.ContextShift.type = ce.ContextShift
 
+  final type Blocker = ce.Blocker
+  final val Blocker: ce.Blocker.type = ce.Blocker
+
   final type CancelToken[F[_]] = ce.CancelToken[F]
   final type Fiber[F[_], A]    = ce.Fiber[F, A]
   final val Fiber: ce.Fiber.type = ce.Fiber

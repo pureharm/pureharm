@@ -62,4 +62,32 @@ trait PureharmTypeDefinitions {
   final type FutureLift[F[_]] = _root_.busymachines.pureharm.internals.effects.FutureLift[F]
   final val FutureLift: _root_.busymachines.pureharm.internals.effects.FutureLift.type =
     _root_.busymachines.pureharm.internals.effects.FutureLift
+
+  /**
+    *
+    * Used to block on an F[A], and ensure that all recovery and
+    * shifting back is always done.
+    *
+    * For instance, always ensure that any F[A] that
+    * talks to, say, amazon S3, is wrapped in such
+    * a
+    * {{{
+    *   blockingShifter.blockOn(S3Util.putSomething(...))
+    * }}}
+    *
+    * Libraries in the typelevel eco-system tend to already do
+    * this, so you don't need to be careful. For instance,
+    * doobie will always ensure that this is done to and
+    * from the EC that you provide specifically for accessing the
+    * DB. But you always need to double check, and be careful
+    * that you NEVER execute blocking IO on the same thread pool
+    * as the CPU bound one dedicated to your ContextShift[A]
+    *
+    * @author Lorand Szakacs, https://github.com/lorandszakacs
+    * @since 13 Jun 2019
+    *
+    */
+  final type BlockingShifter[F[_]] = _root_.busymachines.pureharm.internals.effects.BlockingShifter[F]
+  final val BlockingShifter: _root_.busymachines.pureharm.internals.effects.BlockingShifter.type =
+    _root_.busymachines.pureharm.internals.effects.BlockingShifter
 }
