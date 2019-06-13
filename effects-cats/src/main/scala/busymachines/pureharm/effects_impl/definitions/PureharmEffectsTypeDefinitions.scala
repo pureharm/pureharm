@@ -174,7 +174,7 @@ trait PureharmEffectsTypeDefinitions {
   final val Timer: ce.Timer.type = ce.Timer
 
   final type ContextShift[F[_]] = ce.ContextShift[F]
-  final val contextShift: ce.ContextShift.type = ce.ContextShift
+  final val ContextShift: ce.ContextShift.type = ce.ContextShift
 
   final type CancelToken[F[_]] = ce.CancelToken[F]
   final type Fiber[F[_], A]    = ce.Fiber[F, A]
