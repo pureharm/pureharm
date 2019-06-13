@@ -33,7 +33,10 @@ trait Transactor[F[_]] {
   def shutdown: F[Unit]
 
   /**
-    * The execution context used to run all blocking database input/output
+    * The execution context used to run all blocking database input/output.
+    *
+    * This is the execution context that slick manages internally. Do not
+    * use this unless you know what you are doing.
     */
   def ioExecutionContext: ExecutionContext
 
@@ -68,7 +71,7 @@ object Transactor {
   import busymachines.pureharm.effects._
   import busymachines.pureharm.internals
 
-  def pgSQLHikari[F[_]: Async: ContextShift](
+  def pgSQLHikari[F[_]: Async: FutureLift](
     dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
@@ -91,7 +94,7 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
+  def pgSQLHikariUnsafe[F[_]: Async: FutureLift](
     dbProfile: JDBCProfileAPI,
   )(
     url:      JDBCUrl,
