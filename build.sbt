@@ -208,10 +208,10 @@ lazy val `db-slick` = subModule("db", "slick")
 
 lazy val scalaCollectionCompatVersion: String = "2.0.0"
 
-lazy val catsVersion:       String = "2.0.0-M2"
-lazy val catsEffectVersion: String = "2.0.0-M2"
+lazy val catsVersion:       String = "2.0.0-M4"
+lazy val catsEffectVersion: String = "2.0.0-M4"
 
-lazy val circeVersion: String = "0.12.0-M2"
+lazy val circeVersion: String = "0.12.0-M3"
 
 lazy val shapelessVersion: String = "2.3.3"
 
@@ -221,7 +221,7 @@ lazy val slickPGVersion:  String = "0.17.3"
 
 lazy val flywayVersion: String = "6.0.0-beta2"
 
-lazy val scalaTestVersion: String = "3.1.0-SNAP11"
+lazy val scalaTestVersion: String = "3.1.0-SNAP13"
 
 //=============================================================================
 //=================================== SCALA ===================================
