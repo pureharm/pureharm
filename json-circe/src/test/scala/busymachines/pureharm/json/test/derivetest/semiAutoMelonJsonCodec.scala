@@ -15,11 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_test.derivetest
+package busymachines.pureharm.json.test.derivetest
 
 import busymachines.pureharm.json._
 import busymachines.pureharm.json.implicits._
-import busymachines.pureharm.json_test._
+import busymachines.pureharm.json.test._
 
 /**
   *
@@ -27,7 +27,7 @@ import busymachines.pureharm.json_test._
   * @since 11 Jun 2019
   *
   */
-private[json_test] object melonsDefaultSemiAutoDecoders {
+private[test] object melonsDefaultSemiAutoDecoders {
 
   implicit val tasteDecoder:          Decoder[Taste]          = derive.enumerationDecoder[Taste]
   implicit val melonDecoder:          Decoder[Melon]          = derive.decoder[Melon]
@@ -37,7 +37,7 @@ private[json_test] object melonsDefaultSemiAutoDecoders {
 /**
   *
   */
-private[json_test] object melonsDefaultSemiAutoEncoders {
+private[test] object melonsDefaultSemiAutoEncoders {
 
   implicit val tasteEncoder:          Encoder[Taste]          = derive.enumerationEncoder[Taste]
   implicit val melonEncoder:          Encoder.AsObject[Melon] = derive.encoder[Melon]
@@ -47,7 +47,7 @@ private[json_test] object melonsDefaultSemiAutoEncoders {
 /**
   *
   */
-private[json_test] object melonsDefaultSemiAutoCodecs {
+private[test] object melonsDefaultSemiAutoCodecs {
 
   implicit val tasteCodec:          Codec[Taste]          = derive.enumerationCodec[Taste]
   implicit val melonCodec:          Codec[Melon]          = derive.codec[Melon]

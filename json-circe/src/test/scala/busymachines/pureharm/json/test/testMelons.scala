@@ -1,4 +1,4 @@
-package busymachines.pureharm.json_test
+package busymachines.pureharm.json.test
 
 /**
   *
@@ -6,27 +6,27 @@ package busymachines.pureharm.json_test
   * @since 11 Jun 2019
   *
   */
-private[json_test] case class AnarchistMelon(
+private[test] case class AnarchistMelon(
   noGods:       Boolean,
   noMasters:    Boolean,
   noSuperTypes: Boolean,
 )
 
-sealed private[json_test] trait Melon {
+sealed private[test] trait Melon {
   def weight: Int
 }
 
-private[json_test] case class WinterMelon(
+private[test] case class WinterMelon(
   fuzzy:  Boolean,
   weight: Int,
 ) extends Melon
 
-private[json_test] case class WaterMelon(
+private[test] case class WaterMelon(
   seeds:  Boolean,
   weight: Int,
 ) extends Melon
 
-private[json_test] case class PhantomMelon(
+private[test] case class PhantomMelon(
   weight:     Weight,
   weights:    Weights,
   weightsSet: WeigthsSet,
@@ -34,22 +34,22 @@ private[json_test] case class PhantomMelon(
   trio:       MelonTrio,
 ) extends Melon
 
-private[json_test] case object SmallMelon extends Melon {
+private[test] case object SmallMelon extends Melon {
   override val weight: Int = 0
 }
 
-sealed private[json_test] trait Taste
+sealed private[test] trait Taste
 
-private[json_test] case object SweetTaste extends Taste
+private[test] case object SweetTaste extends Taste
 
 //I ran out of ideas, ok? I'll think of better test data.
-private[json_test] case object SourTaste extends Taste
+private[test] case object SourTaste extends Taste
 
-sealed private[json_test] trait TastyMelon extends Melon {
+sealed private[test] trait TastyMelon extends Melon {
   def tastes: Seq[Taste]
 }
 
-private[json_test] case class SquareMelon(
+private[test] case class SquareMelon(
   weight: Int,
   tastes: Seq[Taste],
 ) extends TastyMelon

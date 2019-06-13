@@ -1,4 +1,4 @@
-package busymachines.pureharm.json_test
+package busymachines.pureharm.json.test
 
 /**
   *

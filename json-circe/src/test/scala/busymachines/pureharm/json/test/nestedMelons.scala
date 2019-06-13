@@ -1,4 +1,4 @@
-package busymachines.pureharm.json_test
+package busymachines.pureharm.json.test
 
 /**
   *
@@ -6,9 +6,9 @@ package busymachines.pureharm.json_test
   * @since 11 Jun 2019
   *
   */
-sealed private[json_test] trait OutdoorMelon
+sealed private[test] trait OutdoorMelon
 
-private[json_test] object OutdoorMelons {
+private[test] object OutdoorMelons {
 
   sealed trait Color
 

@@ -15,11 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_test.derivetest
+package busymachines.pureharm.json.test.derivetest
 
 import org.scalatest.flatspec.AnyFlatSpec
 import busymachines.pureharm.json.implicits._
-import busymachines.pureharm.json_test._
+import busymachines.pureharm.json.test._
 
 /**
   * Here we test [[busymachines.pureharm.json.Decoder]] derivation

@@ -15,14 +15,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.json_test.derivetest
+package busymachines.pureharm.json.test.derivetest
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.{EitherValues, Matchers}
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.json._
 import busymachines.pureharm.internals.json.{JsonDecoding, JsonParsing}
-import busymachines.pureharm.json_test._
+import busymachines.pureharm.json.test._
 
 /**
   *

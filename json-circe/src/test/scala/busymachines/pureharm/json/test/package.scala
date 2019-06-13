@@ -1,4 +1,6 @@
-package busymachines.pureharm
+package busymachines.pureharm.json
+
+import busymachines.pureharm.PhantomType
 
 /**
   *
@@ -6,7 +8,7 @@ package busymachines.pureharm
   * @since 12 Jun 2019
   *
   */
-package object json_test {
+package object test {
 
   object Weight extends PhantomType[Int]
   type Weight = Weight.Type
