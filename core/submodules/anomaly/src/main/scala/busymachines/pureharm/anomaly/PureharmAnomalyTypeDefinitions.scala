@@ -30,7 +30,8 @@ import busymachines.pureharm.anomaly
   */
 trait PureharmAnomalyTypeDefinitions {
 
-  final type AnomalyBase = anomaly.AnomalyBase
+  final type AnomalyBase   = anomaly.AnomalyBase
+  final type AnomaliesBase = anomaly.AnomaliesBase
 
   final type Anomaly = anomaly.Anomaly
   final val Anomaly: anomaly.Anomaly.type = anomaly.Anomaly
