@@ -251,6 +251,9 @@ trait PureharmEffectsTypeDefinitions {
   final type BracketAttempt[F[_]] = effects_impl.types.BracketAttempt[F]
   final val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
 
+  final type FutureLift[F[_]] = effects_impl.FutureLift[F]
+  final val FutureLift: effects_impl.FutureLift.type = effects_impl.FutureLift
+
   //----------- standard scala types -----------
 
   //brought in for easy pattern matching. Failure, and Success are used way too often

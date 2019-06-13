@@ -370,7 +370,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
       }
     }
 
-    describe("suspendIn[...]") {
+    describe("purifyIn[...]") {
       implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
       test("... IO") {
@@ -378,7 +378,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
         val io: IO[Int] = Future[Int] {
           sideEffect = 42
           sideEffect
-        }.suspendIn[IO]
+        }.purifyIn[IO]
         // we wait because in case this doesn't work,
         // the Future is already running and doing all its side-effects
         Thread.sleep(100)
@@ -394,7 +394,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
           val f: F[Int] = Future[Int] {
             sideEffect = 42
             sideEffect
-          }.suspendIn[F]
+          }.purifyIn[F]
           // we wait because in case this doesn't work,
           // the Future is already running and doing all its side-effects
           Thread.sleep(100)
