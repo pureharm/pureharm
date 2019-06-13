@@ -46,7 +46,7 @@ final private[phdbslick] class HikariTransactorImpl[F[_]] private (
     * On why we need to always shift when converting from Future
     */
   override def run[T](cio: ConnectionIO[T]): F[T] = {
-    IO.fromFuture(IO(slickDB.run(cio))).to[F].bracket(F.pure)(_ => cs.shift)
+    slickDB.run(cio).suspendIn[F]
   }
 
   override def shutdown: F[Unit] = F.delay(slickDB.close())

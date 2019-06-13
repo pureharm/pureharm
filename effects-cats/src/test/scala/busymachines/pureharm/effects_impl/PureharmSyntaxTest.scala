@@ -371,6 +371,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
     }
 
     describe("suspendIn[...]") {
+      implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
       test("... IO") {
         var sideEffect: Int = 0
@@ -389,7 +390,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
       test("... final tagless F") {
         var sideEffect: Int = 0
 
-        def testPureSuspension[F[_]: Async]: F[Int] = {
+        def testPureSuspension[F[_]: Async: ContextShift]: F[Int] = {
           val f: F[Int] = Future[Int] {
             sideEffect = 42
             sideEffect

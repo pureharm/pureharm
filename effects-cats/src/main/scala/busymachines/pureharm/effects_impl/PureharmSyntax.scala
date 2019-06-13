@@ -340,6 +340,7 @@ object PureharmSyntax {
   }
 
   final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
+
     /**
       *
       * Suspend the side-effects of this [[Future]] into an [[F]] which can be converted from
@@ -366,7 +367,16 @@ object PureharmSyntax {
       * }}}
       *
       */
-    def suspendIn[F[_]: LiftIO]: F[A] = IO.fromFuture(IO(f)).to[F]
+    def suspendIn[F[_]: LiftIO: ContextShift]: F[A] = {
+      val uglyHack = ContextShift[F] match {
+        case value: ContextShift[IO] => value
+        case _ =>
+          throw new RuntimeException(
+            "This is what you get for using Future, lol. You supplied a ContextShift that was not created from IO.contextShift...",
+          )
+      }
+      IO.fromFuture(IO(f))(uglyHack).to[F]
+    }
   }
 
 }
