@@ -15,9 +15,8 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl.definitions
+package busymachines.pureharm.internals.effects.aliases
 
-import busymachines.pureharm.effects_impl
 import cats.{effect => ce}
 
 import scala.{concurrent => sc}
@@ -35,7 +34,7 @@ import scala.{concurrent => sc}
   * @since 24 Apr 2019
   *
   */
-trait PureharmEffectsTypeDefinitions {
+private[pureharm] trait CatsTypeAliases {
 
   final type Functor[F[_]] = cats.Functor[F]
   final val Functor: cats.Functor.type = cats.Functor
@@ -221,38 +220,6 @@ trait PureharmEffectsTypeDefinitions {
 
   final type Ref[F[_], A] = ce.concurrent.Ref[F, A]
   final val Ref: ce.concurrent.Ref.type = ce.concurrent.Ref
-
-  //----------- handy custom types -----------
-  final type Attempt[+R] = effects_impl.types.Attempt[R]
-  final val Attempt: Either.type = effects_impl.types.Attempt
-
-  final type AttemptT[F[_], R] = effects_impl.types.AttemptT[F, R]
-  final val AttemptT: cats.data.EitherT.type = effects_impl.types.AttemptT
-  /**
-    * Useful since we don't have partial kind application by default
-    * Usage:
-    * {{{
-    *   def canFail[F[_]: ApplicativeAttempt, T](p1: T) : F[T] = ???
-    * }}}
-    */
-  final type ApplicativeAttempt[F[_]] = effects_impl.types.ApplicativeAttempt[F]
-  final val ApplicativeAttempt: effects_impl.ApplicativeAttempt.type = effects_impl.ApplicativeAttempt
-
-  /**
-    * Useful since we don't have partial kind application by default
-    * Usage:
-    * {{{
-    *   def canFail[F[_]: MonadAttempt, T](p1: T) : F[T] = ???
-    * }}}
-    */
-  final type MonadAttempt[F[_]] = effects_impl.types.MonadAttempt[F]
-  final val MonadAttempt: effects_impl.MonadAttempt.type = effects_impl.MonadAttempt
-
-  final type BracketAttempt[F[_]] = effects_impl.types.BracketAttempt[F]
-  final val BracketAttempt: effects_impl.BracketAttempt.type = effects_impl.BracketAttempt
-
-  final type FutureLift[F[_]] = effects_impl.FutureLift[F]
-  final val FutureLift: effects_impl.FutureLift.type = effects_impl.FutureLift
 
   //----------- standard scala types -----------
 

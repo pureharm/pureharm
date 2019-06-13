@@ -15,9 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl.definitions
+package busymachines.pureharm.internals.effects.aliases
 
-import busymachines.pureharm.effects_impl.{CatsAliasesCore, CatsAliasesEffect}
+import cats.effect.syntax.AllCatsEffectSyntax
+import cats.{instances, syntax}
 
 /**
   *
@@ -28,4 +29,12 @@ import busymachines.pureharm.effects_impl.{CatsAliasesCore, CatsAliasesEffect}
   * @since 06 May 2019
   *
   */
-trait PureharmEffectsAndCatsImplicits extends PureharmEffectsSyntaxAll with CatsAliasesCore with CatsAliasesEffect
+private[pureharm] trait CatsImplicitsAll extends CatsSyntaxAliasesCore with CatsSyntaxAliasesEffect
+
+private[pureharm] trait CatsSyntaxAliasesCore
+    extends syntax.AllSyntax with syntax.AllSyntaxBinCompat0 with syntax.AllSyntaxBinCompat1
+    with syntax.AllSyntaxBinCompat2 with syntax.AllSyntaxBinCompat3 with syntax.AllSyntaxBinCompat4
+    with instances.AllInstances with instances.AllInstancesBinCompat0 with instances.AllInstancesBinCompat1
+    with instances.AllInstancesBinCompat2 with instances.AllInstancesBinCompat3
+
+private[pureharm] trait CatsSyntaxAliasesEffect extends AllCatsEffectSyntax

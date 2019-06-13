@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl.definitions
+package busymachines.pureharm.internals.effects.aliases
 
-import busymachines.pureharm.effects_impl
+import busymachines.pureharm.internals.effects
 
 /**
   *
@@ -25,5 +25,5 @@ import busymachines.pureharm.effects_impl
   * @since 25 Apr 2019
   *
   */
-trait PureharmEffectsSyntaxAll
-    extends effects_impl.PureharmSyntax.Implicits with effects_impl.PureharmTimedAttemptReattemptSyntaxOps.Implicits
+private[pureharm] trait PureharmEffectsSyntaxAll
+    extends effects.PureharmSyntax.Implicits with effects.PureharmTimedAttemptReattemptSyntaxOps.Implicits
