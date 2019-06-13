@@ -18,9 +18,7 @@
 package busymachines.pureharm.phdbslick
 
 import busymachines.pureharm.Identifiable
-
 import busymachines.pureharm.effects._
-
 import busymachines.pureharm.db._
 import busymachines.pureharm.phdbslick.slickTypes._
 
