@@ -341,18 +341,34 @@ object PureharmSyntax {
 
   final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
 
+    @scala.deprecated("0.0.2-M14", "Use purifyIn[F] instead")
+    def suspendIn[F[_]: FutureLift]: F[A] = {
+      FutureLift[F].fromFuture[A](f)
+    }
+
     /**
       *
-      * Suspend the side-effects of this [[Future]] into an [[F]] which can be converted from
-      * and [[IO]]. This is the important operation when it comes to inter-op between
+      * Delay the side-effects of this [[Future]] into an [[F]] which can have implementations for
+      * [[FutureLift]]. The current status quo provides such an instance for every [[F]] that
+      * has a [[LiftIO]] instances
+      *
+      * This is the important operation when it comes to inter-op between
       * standard Scala and typelevel.
       *
       * Usage. N.B. that this only makes sense if the creation of the Future itself
-      * is also suspended in the [[F]].
+      * is was always delayed s.t. it didn't get to start running. i.e. always returned
+      * from a ``def`` and always passed as a by-name-parameter.
+      *
+      * YOU HAVE TO BE VERY CAREFUL, since this method cannot guarantee referential
+      * transparency unless Future was built properly. Therefore try minimizing the
+      * usage of Future as much as possible that you have only a few polymorphic,
+      * and reusable components at the boundaries of your app (e.g. http, or db interaction)
+      * which immediately delay the Future. See ``pureharm-db-slick`` for an example.
+      *
       * {{{
-      * @inline def  writeToDB(v: Int, s: String): Future[Long] = ???
+      *   def  writeToDB(v: Int, s: String): Future[Long] = ???
       *   //...
-      *   val io = writeToDB(42, "string").suspendIn[IO]
+      *   val io = writeToDB(42, "string").purifyIn[IO]
       *   //no database writes happened yet, since the future did
       *   //not do its annoying running of side-effects immediately!
       *
@@ -363,13 +379,12 @@ object PureharmSyntax {
       * This is almost useless unless you are certain that ??? is a pure computation
       * {{{
       *   val f: Future[Int] = Future.apply(???)
-      *   f.suspendIn[IO]
+      *   f.purifyIn[IO]
       * }}}
       *
       */
-    def suspendIn[F[_]: LiftIO: ContextShift]: F[A] = {
-      val uglyHack = ContextShift[F].asInstanceOf[ContextShift[IO]]
-      IO.fromFuture(IO(f))(uglyHack).to[F]
+    def purifyIn[F[_]: FutureLift]: F[A] = {
+      FutureLift[F].fromFuture[A](f)
     }
   }
 
