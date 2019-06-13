@@ -24,8 +24,8 @@ package busymachines.pureharm.json
   *
   */
 trait PureharmJsonTypeDefinitions {
-  final type Codec[A] = busymachines.pureharm.internals.json.Codec[A]
-  final val Codec: busymachines.pureharm.internals.json.Codec.type = busymachines.pureharm.internals.json.Codec
+  final type Codec[A] = io.circe.Codec[A]
+  final val Codec: io.circe.Codec.type = io.circe.Codec
 
   final type JsonDecodingAnomaly = busymachines.pureharm.internals.json.JsonDecodingAnomaly
   final val JsonDecodingAnomaly: busymachines.pureharm.internals.json.JsonDecodingAnomaly.type =

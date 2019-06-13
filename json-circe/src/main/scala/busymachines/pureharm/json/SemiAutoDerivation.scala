@@ -17,10 +17,16 @@
   */
 package busymachines.pureharm.json
 
+import io.circe.generic.extras.codec.ConfiguredAsObjectCodec
 import io.circe.generic.extras.{decoding, encoding, semiauto => circeSemiAuto}
 import shapeless.Lazy
 
 /**
+  *
+  * Code mostly gotten from:
+  * [[io.circe.generic.extras.semiauto.DerivationHelper]],
+  * these are just aliases + some extra to help along the pureharm-style
+  * of doing work.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
@@ -36,11 +42,7 @@ trait SemiAutoDerivation {
   final def encoder[A](implicit encode: Lazy[encoding.ConfiguredAsObjectEncoder[A]]): Encoder.AsObject[A] =
     circeSemiAuto.deriveEncoder[A](encode)
 
-  final def codec[A](
-    implicit
-    encode: Lazy[encoding.ConfiguredAsObjectEncoder[A]],
-    decode: Lazy[decoding.ConfiguredDecoder[A]],
-  ): Codec[A] = Codec.instance[A](encode.value, decode.value)
+  final def codec[A](implicit codec: Lazy[ConfiguredAsObjectCodec[A]]): Codec.AsObject[A] = codec.value
 
   final def deriveFor[A]: DerivationHelper[A] =
     circeSemiAuto.deriveFor[A]
@@ -55,5 +57,5 @@ trait SemiAutoDerivation {
     implicit
     encode: Lazy[encoding.EnumerationEncoder[A]],
     decode: Lazy[decoding.EnumerationDecoder[A]],
-  ): Codec[A] = Codec.instance[A](encode.value, decode.value)
+  ): Codec[A] = Codec.from[A](decode.value, encode.value)
 }
