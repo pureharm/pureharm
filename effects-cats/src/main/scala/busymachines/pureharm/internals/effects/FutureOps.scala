@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl
+package busymachines.pureharm.internals.effects
 
 import scala.concurrent.duration._
 import busymachines.pureharm.effects._
@@ -28,7 +28,7 @@ import scala.collection.compat._
   * @since 10 May 2019
   *
   */
-private[effects_impl] object FutureOps {
+private[internals] object FutureOps {
   private val unitFunction: Any => Unit = _ => ()
 
   @inline def void(f: Future[_])(implicit ec: ExecutionContext): Future[Unit] = f.map(unitFunction)

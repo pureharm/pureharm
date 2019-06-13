@@ -15,14 +15,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects_impl
+package busymachines.pureharm.internals.effects
 
 import cats._
 import cats.effect._
 import cats.implicits._
 
 import scala.concurrent.duration._
-import busymachines.pureharm.effects_impl.types.{Attempt, MonadAttempt}
+import busymachines.pureharm.internals.effects.types.{Attempt, MonadAttempt}
 
 import scala.language.postfixOps
 /**
