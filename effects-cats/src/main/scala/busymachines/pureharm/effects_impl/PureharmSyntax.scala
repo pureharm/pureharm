@@ -368,13 +368,7 @@ object PureharmSyntax {
       *
       */
     def suspendIn[F[_]: LiftIO: ContextShift]: F[A] = {
-      val uglyHack = ContextShift[F] match {
-        case value: ContextShift[IO] => value
-        case _ =>
-          throw new RuntimeException(
-            "This is what you get for using Future, lol. You supplied a ContextShift that was not created from IO.contextShift...",
-          )
-      }
+      val uglyHack = ContextShift[F].asInstanceOf[ContextShift[IO]]
       IO.fromFuture(IO(f))(uglyHack).to[F]
     }
   }
