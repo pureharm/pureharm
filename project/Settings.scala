@@ -51,7 +51,7 @@ object Settings {
        */
       addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0"),
       //https://github.com/typelevel/kind-projector
-      addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.1"),
+      addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => scala2_12Flags
         case Some((2, 13)) => scala2_13Flags
