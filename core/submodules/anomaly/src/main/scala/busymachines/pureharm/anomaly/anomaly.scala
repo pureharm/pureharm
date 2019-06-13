@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.anomaly
 
 import scala.collection.immutable.Seq
 
@@ -39,21 +39,21 @@ abstract class Anomaly(
 
 /**
   * Some suggested naming conventions are put here so that they're easily accessible.
-  * These can also be found in the scaladoc of [[busymachines.pureharm.MeaningfulAnomalies]]
+  * These can also be found in the scaladoc of [[busymachines.pureharm.anomaly.MeaningfulAnomalies]]
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.NotFound]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.NotFound]]
   *   - range: 000-099; e.g. pone_001, ptwo_076, pthree_099
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.Unauthorized]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.Unauthorized]]
   *   - range: 100-199; e.g. pone_100, ptwo_176, pthree_199
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.Forbidden]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.Forbidden]]
   *   - range: 200-299; e.g. pone_200, ptwo_276, pthree_299
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.Denied]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.Denied]]
   *   - range: 300-399; e.g. pone_300, ptwo_376, pthree_399
   *
-  * - [[busymachines.pureharm.MeaningfulAnomalies.InvalidInput]]
+  * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.InvalidInput]]
   *   - range: 400-499; e.g. pone_400, ptwo_476, pthree_499
   */
 trait AnomalyID extends Product with Serializable with Equals {
@@ -75,7 +75,7 @@ object AnomalyID {
 final private[pureharm] case class AnomalyIDUnderlying(override val name: String) extends AnomalyID
 
 object Anomaly extends AnomalyConstructors[Anomaly] {
-  private[pureharm] val Anomaly: String = "Anomaly"
+  private[pureharm] val AnomalyString: String = "Anomaly"
 
   type Parameter = StringOrSeqString
   def Parameter(s:   String):      StringOrSeqString = StringWrapper(s)
@@ -104,19 +104,19 @@ object Anomaly extends AnomalyConstructors[Anomaly] {
   override def apply(message: String): Anomaly =
     AnomalyImpl(message = message)
 
-  override def apply(parameters: Parameters): Anomaly =
+  override def apply(parameters: Anomaly.Parameters): Anomaly =
     AnomalyImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): Anomaly =
     AnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): Anomaly =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): Anomaly =
     AnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): Anomaly =
+  override def apply(message: String, parameters: Anomaly.Parameters): Anomaly =
     AnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): Anomaly =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): Anomaly =
     AnomalyImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): Anomaly =
@@ -125,7 +125,7 @@ object Anomaly extends AnomalyConstructors[Anomaly] {
 
 final private[pureharm] case class AnomalyImpl(
   override val id:         AnomalyID          = DefaultAnomalyID,
-  override val message:    String             = Anomaly.Anomaly,
+  override val message:    String             = Anomaly.AnomalyString,
   override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
 ) extends Anomaly(message) {}
 

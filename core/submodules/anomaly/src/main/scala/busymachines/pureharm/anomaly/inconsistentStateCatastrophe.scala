@@ -15,9 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
-
-import busymachines.pureharm.Anomaly.Parameters
+package busymachines.pureharm.anomaly
 
 /**
   *
@@ -45,16 +43,16 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
   override def apply(id: AnomalyID, message: String, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message, causedBy = Option(causedBy))
 
-  override def apply(id: AnomalyID, parameters: Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(message: String, parameters: Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
+  override def apply(message: String, parameters: Anomaly.Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(message = message, parameters = parameters, causedBy = Option(causedBy))
 
   override def apply(
     id:         AnomalyID,
     message:    String,
-    parameters: Parameters,
+    parameters: Anomaly.Parameters,
     causedBy:   Throwable,
   ): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters, causedBy = Option(causedBy))
@@ -73,19 +71,19 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
   override def apply(message: String): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(message = message)
 
-  override def apply(parameters: Parameters): InconsistentStateCatastrophe =
+  override def apply(parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(parameters = parameters)
 
   override def apply(id: AnomalyID, message: String): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Parameters): InconsistentStateCatastrophe =
+  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Parameters): InconsistentStateCatastrophe =
+  override def apply(message: String, parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Parameters): InconsistentStateCatastrophe =
+  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters)
 
   override def apply(a: AnomalyBase): InconsistentStateCatastrophe =
