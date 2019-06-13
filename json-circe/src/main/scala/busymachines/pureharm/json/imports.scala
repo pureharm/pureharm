@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.json
 
 /**
   *
@@ -23,4 +23,21 @@ package busymachines.pureharm
   * @since 11 Jun 2019
   *
   */
-package object json extends PureharmJsonTypeDefinitions with DefaultTypeDiscriminatorConfig
+object derive extends SemiAutoDerivation
+
+/**
+  *
+  * !!!! WARNING !!!!
+  *
+  * Import is mutually exclusive with:
+  * {{{
+  *   import busymachines.pureharm.json.derive._
+  * }}}
+  *
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 11 Jun 2019
+  *
+  */
+object autoderive extends io.circe.generic.extras.AutoDerivation
+
+object implicits extends PureharmJsonImplicits

@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.internals.json
 
 /**
   *
@@ -23,4 +23,9 @@ package busymachines.pureharm
   * @since 11 Jun 2019
   *
   */
-package object json extends PureharmJsonTypeDefinitions with DefaultTypeDiscriminatorConfig
+private[internals] object PureharmJsonConstants {
+  private[internals] val id:         String = "id"
+  private[internals] val message:    String = "message"
+  private[internals] val messages:   String = "messages"
+  private[internals] val parameters: String = "parameters"
+}

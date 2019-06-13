@@ -15,7 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm
+package busymachines.pureharm.json
+
+import busymachines.pureharm.internals.json.{PureharmJsonInstances, PureharmJsonSyntax}
 
 /**
   *
@@ -23,4 +25,4 @@ package busymachines.pureharm
   * @since 11 Jun 2019
   *
   */
-package object json extends PureharmJsonTypeDefinitions with DefaultTypeDiscriminatorConfig
+trait PureharmJsonImplicits extends PureharmJsonSyntax.Implicits with PureharmJsonInstances.Implicits
