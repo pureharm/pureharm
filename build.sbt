@@ -217,9 +217,10 @@ lazy val log4catsVersion: String = "0.4.0-M1"
 
 lazy val shapelessVersion: String = "2.3.3"
 
-lazy val slickVersion:    String = "3.3.1"
+lazy val slickVersion: String = "3.3.2"
+
 lazy val hikariCPVersion: String = "3.3.1"
-lazy val slickPGVersion:  String = "0.17.3"
+lazy val slickPGVersion:  String = "0.17.3" //used only to test db-slick
 
 lazy val flywayVersion: String = "6.0.0-beta2"
 
