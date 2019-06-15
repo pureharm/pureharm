@@ -70,7 +70,7 @@ object UnsafePools {
   /**
     *
     * !!! WARNING !!!
-    * Prefer [[Pools.cached]], unless you know what you are doing.
+    * Prefer [[Pools.fixed]], unless you know what you are doing.
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)
     * -----
@@ -92,8 +92,7 @@ object UnsafePools {
     * @param threadNamePrefix
     *   prefixes this name to the ThreadID. This is the name
     *   that usually shows up in the logs. It also prefixes
-    *   the total number of threads in the thread pool in the
-    *   name.
+    *   ``-ft${maxThreads}`` after the given string.
     * @param maxThreads
     *   The maximum number of threads in the pool. Always defaults to 1 thread,
     *   if you accidentally give it a value < 1.
@@ -132,6 +131,14 @@ object UnsafePools {
   def cached(threadNamePrefix: String, daemons: Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
+  /**
+    * !!! WARNING !!!
+    * Prefer [[Pools.singleThreaded]], unless you know what you are doing.
+    * The behavior the the Execution context itself is the same
+    * for both, but the former is actually safer to use :)
+    * -----
+    * A simple thread pool with one single thread. Be careful how you use it.
+    */
   def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextST =
     ExecutionContextST(PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons))
 
