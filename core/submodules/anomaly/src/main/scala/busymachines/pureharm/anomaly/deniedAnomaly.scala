@@ -59,8 +59,8 @@ object DeniedAnomaly
 }
 
 final private[pureharm] case class DeniedAnomalyImpl(
-  override val id:         AnomalyID         = DeniedAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.DeniedMsg,
-  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = DeniedAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.DeniedMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends DeniedAnomaly(message, causedBy) with Product with Serializable

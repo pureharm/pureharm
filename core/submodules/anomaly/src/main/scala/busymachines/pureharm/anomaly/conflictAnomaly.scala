@@ -59,8 +59,8 @@ object ConflictAnomaly
 }
 
 final private[pureharm] case class ConflictAnomalyImpl(
-  override val id:         AnomalyID         = ConflictAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.ConflictMsg,
-  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = ConflictAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.ConflictMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends ConflictAnomaly(message, causedBy) with Product with Serializable

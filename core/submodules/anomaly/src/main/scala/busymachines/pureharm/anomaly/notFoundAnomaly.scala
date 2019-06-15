@@ -60,8 +60,8 @@ object NotFoundAnomaly
 }
 
 final private[pureharm] case class NotFoundAnomalyImpl(
-  override val id:         AnomalyID         = NotFoundAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.NotFoundMsg,
-  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = NotFoundAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.NotFoundMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends NotFoundAnomaly(message, causedBy) with Product with Serializable
