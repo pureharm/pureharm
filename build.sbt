@@ -213,7 +213,8 @@ lazy val catsEffectVersion: String = "2.0.0-M4"
 
 lazy val circeVersion: String = "0.12.0-M3"
 
-lazy val log4catsVersion: String = "0.4.0-M1"
+lazy val log4catsVersion:       String = "0.4.0-M1"
+lazy val logbackClassicVersion: String = "1.2.3"
 
 lazy val shapelessVersion: String = "2.3.3"
 
@@ -305,10 +306,10 @@ lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 //=========================================  logging =========================================
 //============================================================================================
 //https://github.com/ChristopherDavenport/log4cats
-lazy val log4cats = ("io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion).withSources()
+lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion withSources ()
 
-//it is the backend implementation used by log4cats
-lazy val logbackClassic = ("ch.qos.logback" % "logback-classic" % "1.2.3").withSources()
+//it is the backend implementation used by log4cats-slf4j
+lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackClassicVersion withSources ()
 
 //============================================================================================
 //=======================================  build utils =======================================
