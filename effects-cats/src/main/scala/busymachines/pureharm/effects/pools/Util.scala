@@ -18,7 +18,8 @@
  */
 package busymachines.pureharm.effects.pools
 
-import java.util.concurrent.ThreadFactory
+import java.util.concurrent.{ExecutorService, ThreadFactory}
+
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
@@ -30,8 +31,8 @@ import scala.util.control.NonFatal
   */
 private[pools] object Util {
 
-  private[pools] def exitOnFatal(ec: ExecutionContext): ExecutionContext = new ExecutionContext {
-    private val underlying: ExecutionContext = ec
+  private[pools] def exitOnFatal(ec: ExecutorService): ExecutionContext = new ExecutionContext {
+    private val underlying: ExecutionContext = ExecutionContext.fromExecutorService(ec)
 
     override def execute(r: Runnable): Unit = {
       underlying.execute(new Runnable {
@@ -52,7 +53,7 @@ private[pools] object Util {
     }
 
     override def reportFailure(t: Throwable): Unit =
-      ec.reportFailure(t)
+      underlying.reportFailure(t)
   }
 
   /**

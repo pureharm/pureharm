@@ -18,46 +18,15 @@
 package busymachines.pureharm.effects.pools
 
 /**
-  * This is a reasonable default to back up your application's
-  * ContextShift. Make sure that you NEVER do blocking I/O on this
-  * thread pool. NEVER! — it's not that hard as long as you respect
-  * referential transparency, and are careful with using 3rd party
-  * libraries (especially Java ones).
-  *
-  *
-  * Additionally, we can't really instantiate one of these in a resource
-  * "safe" manner, because we need it for the [[cats.effect.IOApp]].
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 15 Jun 2019
   */
-object PoolMainCPU {
+private[pools] object PoolMainCPU {
 
-  /**
-    *
-    * Instantiates a fixed thread pool with the maximum threads
-    * being equal to the number of available processors available
-    * to the JVM (N.B., this number can be less than what your
-    * hardware offers), and a minimum of two threads in order to,
-    * quoting cats-effect:
-    *
-    * "lower-bound of 2 to prevent pathological deadlocks on virtual machines"
-    *
-    * See: https://github.com/typelevel/cats-effect/pull/547
-    *
-    * @param threadNamePrefix
-    *   prefixes this name to the ThreadID. This is the name
-    *   that usually shows up in the logs. It also prefixes
-    *   the total number of threads in the thread pool in the
-    *   name.
-    * @return
-    *   A fixed thread pool with at least two fixed threads,
-    *   or the number of available processors.
-    */
   def default(threadNamePrefix: String): ExecutionContextMainFT = {
     minTwoUnsafe(threadNamePrefix, Runtime.getRuntime().availableProcessors())
   }
 
-  /**
-    * Like [[default]], but with any number of threads between [2..n].
-    */
   def main(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT = {
     minTwoUnsafe(threadNamePrefix, maxThreads)
   }

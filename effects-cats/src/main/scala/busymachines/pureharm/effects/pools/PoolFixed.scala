@@ -19,59 +19,22 @@
 package busymachines.pureharm.effects.pools
 
 import cats.effect._
-import scala.concurrent._
 import java.util.concurrent._
 
 /**
-  *
-  * The difference between this one and [[PoolMainCPU]] is that
-  * this one allows to us to have a fixed thread pool with 1 thread.
-  *
-  * N.B.: places where it is advisable to have a fixed thread pool:
-  * - the pool that handles incoming HTTP requests (thus providing
-  * some back-pressure by slowing down client requests)
-  *
-  * - the pool that handles the connections to your DB, thus
-  * back-pressuring your DB server.
-  *
-  * As a side-note, you probably want your HTTP pool to be
-  * smaller than your DB pool (since you might be doing multiple
-  * DB calls per request).
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
-object PoolFixed {
+private[pools] object PoolFixed {
 
-  /**
-    *
-    * @param threadNamePrefix
-    *   prefixes this name to the ThreadID. This is the name
-    *   that usually shows up in the logs. It also prefixes
-    *   the total number of threads in the thread pool in the
-    *   name.
-    * @param maxThreads
-    *   The maximum number of threads in the pool. Always defaults to 1 thread,
-    *   if you accidentally give it a value < 1.
-    * @param daemons
-    *   whether or not the threads in the pool should be daemons or not.
-    *   see [[java.lang.Thread#setDaemon(boolean)]] for the meaning
-    *   for daemon threads.
-    * @return
-    *   A fixed thread pool
-    */
   def fixed[F[_]: Sync](
     threadNamePrefix: String,
     maxThreads:       Int,
     daemons:          Boolean,
   ): Resource[F, ExecutionContextFT] = {
-    val bound  = math.max(1, maxThreads)
-    val prefix = s"$threadNamePrefix-$bound"
-
-    val alloc = Sync[F].delay(unsafeExecutorService(prefix, bound, daemons))
+    val alloc = Sync[F].delay(unsafeExecutorService(threadNamePrefix, maxThreads, daemons))
     val free: ExecutorService => F[Unit] = (es: ExecutorService) => Sync[F].delay(es.shutdown())
-    Resource.make(alloc)(free).map(es => ExecutionContextFT(Util.exitOnFatal(ExecutionContext.fromExecutorService(es))))
+    Resource.make(alloc)(free).map(es => ExecutionContextFT(Util.exitOnFatal(es)))
   }
 
   /**
@@ -84,17 +47,12 @@ object PoolFixed {
     maxThreads:       Int,
     daemons:          Boolean,
   ): ExecutionContextFT = {
-    val bound  = math.max(1, maxThreads)
-    val prefix = s"$threadNamePrefix-$bound"
-    ExecutionContextFT(
-      Util.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, bound, daemons))),
-    )
+    ExecutionContextFT(Util.exitOnFatal(unsafeExecutorService(threadNamePrefix, maxThreads, daemons)))
   }
 
-  private def unsafeExecutorService(prefix: String, maxThreads: Int, daemons: Boolean): ExecutorService = {
-    Executors.newFixedThreadPool(
-      maxThreads,
-      Util.namedThreadPoolFactory(prefix, daemons),
-    )
+  private def unsafeExecutorService(threadNamePrefix: String, maxThreads: Int, daemons: Boolean): ExecutorService = {
+    val bound  = math.max(1, maxThreads)
+    val prefix = s"$threadNamePrefix-$maxThreads"
+    Executors.newFixedThreadPool(bound, Util.namedThreadPoolFactory(prefix, daemons))
   }
 }
