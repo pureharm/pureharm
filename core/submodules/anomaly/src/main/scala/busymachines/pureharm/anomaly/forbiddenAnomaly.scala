@@ -60,8 +60,8 @@ object ForbiddenAnomaly
 }
 
 final private[pureharm] case class ForbiddenFailureImpl(
-  override val id:         AnomalyID         = ForbiddenAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.ForbiddenMsg,
-  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = ForbiddenAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.ForbiddenMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends ForbiddenAnomaly(message, causedBy) with Product with Serializable

@@ -59,8 +59,8 @@ object InvalidInputAnomaly
 }
 
 final private[pureharm] case class InvalidInputAnomalyImpl(
-  override val id:         AnomalyID         = InvalidInputAnomalyID,
-  override val message:    String            = MeaningfulAnomalies.InvalidInputMsg,
-  override val parameters: Anomaly.Parameters        = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
+  override val id:         AnomalyID          = InvalidInputAnomalyID,
+  override val message:    String             = MeaningfulAnomalies.InvalidInputMsg,
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy:   Option[Throwable]  = None,
 ) extends InvalidInputAnomaly(message, causedBy) with Product with Serializable

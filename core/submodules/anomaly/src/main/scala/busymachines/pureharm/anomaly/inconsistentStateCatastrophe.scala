@@ -46,7 +46,11 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
   override def apply(id: AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, parameters = parameters, causedBy = Option(causedBy))
 
-  override def apply(message: String, parameters: Anomaly.Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
+  override def apply(
+    message:    String,
+    parameters: Anomaly.Parameters,
+    causedBy:   Throwable,
+  ): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(message = message, parameters = parameters, causedBy = Option(causedBy))
 
   override def apply(
