@@ -18,7 +18,6 @@
 package busymachines.pureharm.effects.pools
 
 import cats.effect._
-import scala.concurrent.ExecutionContext
 
 /**
   *
@@ -31,23 +30,26 @@ object Pools {
   def mainIOContextShift[F[_]: Sync](threadNamePrefix: String = "main-cpu-fixed"): Resource[F, ContextShift[IO]] =
     mainContextShiftPool(threadNamePrefix).map(ec => IO.contextShift(ec))
 
-  def mainContextShiftPool[F[_]: Sync](threadNamePrefix: String = "main-cpu-fixed"): Resource[F, ExecutionContext] =
+  def mainContextShiftPool[F[_]: Sync](threadNamePrefix: String = "main-cpu-fixed"): Resource[F, ExecutionContextFT] =
     PoolMainCPU.default(threadNamePrefix)
+
+  def cached[F[_]: Sync](
+    threadNamePrefix: String  = "cached",
+    daemons:          Boolean = false,
+  ): Resource[F, ExecutionContextCT] =
+    PoolCached.cached(threadNamePrefix, daemons)
 
   def fixed[F[_]: Sync](
     threadNamePrefix: String = "fixed",
     maxThreads:       Int,
     daemons:          Boolean = false,
-  ): Resource[F, ExecutionContext] =
+  ): Resource[F, ExecutionContextFT] =
     PoolFixed.fixed(threadNamePrefix, maxThreads, daemons)
-
-  def cached[F[_]: Sync](threadNamePrefix: String = "cached", daemons: Boolean = false): Resource[F, ExecutionContext] =
-    PoolCached.cached(threadNamePrefix, daemons)
 
   def singleThreaded[F[_]: Sync](
     threadNamePrefix: String  = "single-thread",
     daemons:          Boolean = false,
-  ): Resource[F, ExecutionContext] =
+  ): Resource[F, ExecutionContextFT] =
     PoolFixed.fixed(threadNamePrefix, 1, daemons)
 
 }

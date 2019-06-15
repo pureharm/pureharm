@@ -19,8 +19,6 @@ package busymachines.pureharm.effects.pools
 
 import cats.effect.{ContextShift, IO}
 
-import scala.concurrent.ExecutionContext
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -32,15 +30,15 @@ object UnsafePools {
   def mainIOContextShift(threadNamePrefix: String = "main-cpu-fixed"): ContextShift[IO] =
     IO.contextShift(mainContextShiftPool(threadNamePrefix))
 
-  def mainContextShiftPool(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContext =
+  def mainContextShiftPool(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextFT =
     PoolMainCPU.unsafeDefault(threadNamePrefix)
 
-  def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContext =
+  def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, maxThreads, daemons)
 
-  def cached(threadNamePrefix: String = "cached", daemons: Boolean = false): ExecutionContext =
+  def cached(threadNamePrefix: String = "cached", daemons: Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
-  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContext =
+  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons)
 }

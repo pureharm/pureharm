@@ -17,7 +17,6 @@
   */
 package busymachines.pureharm.effects.pools
 
-import scala.concurrent._
 import cats.effect._
 
 /**
@@ -34,7 +33,12 @@ object PoolMainCPU {
     * Instantiates a fixed thread pool with the maximum threads
     * being equal to the number of available processors available
     * to the JVM (N.B., this number can be less than what your
-    * hardware offers)
+    * hardware offers), and a minimum of two threads in order to,
+    * quoting cats-effect:
+    *
+    * "lower-bound of 2 to prevent pathological deadlocks on virtual machines"
+    *
+    * See: https://github.com/typelevel/cats-effect/pull/547
     *
     * @param threadNamePrefix
     *   prefixes this name to the ThreadID. This is the name
@@ -45,8 +49,8 @@ object PoolMainCPU {
     *   A fixed thread pool with at least two fixed threads,
     *   or the number of available processors.
     */
-  def default[F[_]: Sync](threadNamePrefix: String): Resource[F, ExecutionContext] = {
-    minTwoSafe(threadNamePrefix, Runtime.getRuntime().availableProcessors())
+  def default[F[_]: Sync](threadNamePrefix: String): Resource[F, ExecutionContextFT] = {
+    minTwo(threadNamePrefix, Runtime.getRuntime().availableProcessors())
   }
 
   /**
@@ -54,20 +58,18 @@ object PoolMainCPU {
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)
     */
-  def unsafeDefault(threadNamePrefix: String): ExecutionContext = {
-    minTwo(threadNamePrefix, Runtime.getRuntime().availableProcessors())
+  def unsafeDefault(threadNamePrefix: String): ExecutionContextFT = {
+    minTwoUnsafe(threadNamePrefix, Runtime.getRuntime().availableProcessors())
   }
 
-  private def minTwo(threadNamePrefix: String, maxThreads: Int): ExecutionContext = {
-    // lower-bound of 2 to prevent pathological deadlocks on virtual machines
-    val bound = Math.max(2, maxThreads)
-    PoolFixed.unsafeFixed(threadNamePrefix, bound, daemons = true)
-  }
-
-  private def minTwoSafe[F[_]: Sync](threadNamePrefix: String, maxThreads: Int): Resource[F, ExecutionContext] = {
-    // lower-bound of 2 to prevent pathological deadlocks on virtual machines
+  private def minTwo[F[_]: Sync](threadNamePrefix: String, maxThreads: Int): Resource[F, ExecutionContextFT] = {
     val bound = Math.max(2, maxThreads)
     PoolFixed.fixed(threadNamePrefix, bound, daemons = true)
+  }
+
+  private def minTwoUnsafe(threadNamePrefix: String, maxThreads: Int): ExecutionContextFT = {
+    val bound = Math.max(2, maxThreads)
+    PoolFixed.unsafeFixed(threadNamePrefix, bound, daemons = true)
   }
 
 }

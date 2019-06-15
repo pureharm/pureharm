@@ -46,11 +46,11 @@ object PoolCached {
     *   for daemon threads.
     * @return
     */
-  def cached[F[_]: Sync](threadPrefixName: String, daemons: Boolean = false): Resource[F, ExecutionContext] = {
+  def cached[F[_]: Sync](threadPrefixName: String, daemons: Boolean = false): Resource[F, ExecutionContextCT] = {
     val prefix = s"$threadPrefixName-$Cached"
     val alloc  = Sync[F].delay(unsafeExecutorService(prefix, daemons))
     val free   = (es: ExecutorService) => Sync[F].delay(es.shutdown())
-    Resource.make(alloc)(free).map(es => Util.exitOnFatal(ExecutionContext.fromExecutorService(es)))
+    Resource.make(alloc)(free).map(es => ExecutionContextCT(Util.exitOnFatal(ExecutionContext.fromExecutorService(es))))
   }
 
   /**
@@ -58,9 +58,9 @@ object PoolCached {
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)
     */
-  def unsafeCached(threadPrefixName: String, daemons: Boolean = false): ExecutionContext = {
+  def unsafeCached(threadPrefixName: String, daemons: Boolean = false): ExecutionContextCT = {
     val prefix = s"$threadPrefixName-$Cached"
-    Util.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, daemons)))
+    ExecutionContextCT(Util.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, daemons))))
   }
 
   private def unsafeExecutorService(prefix: String, daemons: Boolean): ExecutorService = {
