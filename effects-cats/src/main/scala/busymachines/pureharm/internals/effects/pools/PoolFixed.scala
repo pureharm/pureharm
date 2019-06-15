@@ -54,7 +54,7 @@ private[pureharm] object PoolFixed {
 
   private def unsafeExecutorService(threadNamePrefix: String, maxThreads: Int, daemons: Boolean): ExecutorService = {
     val bound  = math.max(1, maxThreads)
-    val prefix = s"$threadNamePrefix-$maxThreads"
+    val prefix = s"$threadNamePrefix-tc$maxThreads"
     Executors.newFixedThreadPool(bound, Util.namedThreadPoolFactory(prefix, daemons))
   }
 }

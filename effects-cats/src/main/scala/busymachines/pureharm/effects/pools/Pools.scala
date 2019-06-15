@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.effects.pools
 
-import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed}
+import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, Util}
 import cats.effect._
 
 /**
@@ -27,6 +27,8 @@ import cats.effect._
   *
   */
 object Pools {
+
+  def availableCPUs[F[_]: Sync]: Resource[F, Int] = Resource.liftF(Sync[F].delay(Util.unsafeAvailableCPUs))
 
   def cached[F[_]: Sync](
     threadNamePrefix: String  = "cached",

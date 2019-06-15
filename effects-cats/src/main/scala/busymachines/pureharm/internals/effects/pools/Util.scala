@@ -29,7 +29,9 @@ import scala.util.control.NonFatal
   * @since 15 Jun 2019
   *
   */
-private[pools] object Util {
+private[pureharm] object Util {
+
+  def unsafeAvailableCPUs: Int = Runtime.getRuntime.availableProcessors()
 
   private[pools] def exitOnFatal(ec: ExecutorService): ExecutionContext = new ExecutionContext {
     private val underlying: ExecutionContext = ExecutionContext.fromExecutorService(ec)

@@ -17,15 +17,11 @@
   */
 package busymachines.pureharm.effects.pools
 
-import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, PoolMainCPU}
+import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, PoolMainCPU, Util}
 
 /**
-  *
-  *
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jun 2019
-  *
   */
 object UnsafePools {
 
@@ -139,4 +135,5 @@ object UnsafePools {
   def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextST =
     ExecutionContextST(PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons))
 
+  def availableCPUs: Int = Util.unsafeAvailableCPUs
 }
