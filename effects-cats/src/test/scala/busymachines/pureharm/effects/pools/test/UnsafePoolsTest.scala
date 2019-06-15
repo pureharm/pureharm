@@ -34,7 +34,7 @@ import busymachines.pureharm.effects.implicits._
   */
 final class UnsafePoolsTest extends AnyFunSuite {
 
-  private val scalaTestTP = "ScalaTest-run-running"
+  private val scalaTestTP = "ScalaTest"
   private val mainTP      = "ph-unsafe-main"
   private val dbBlocTP    = "ph-unsafe-db-block"
   private val dbConnTP    = "ph-unsafe-db-conn"

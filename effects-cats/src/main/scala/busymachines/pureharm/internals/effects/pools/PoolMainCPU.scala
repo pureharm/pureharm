@@ -25,8 +25,6 @@ import busymachines.pureharm.effects.pools.ExecutionContextMainFT
   */
 private[pureharm] object PoolMainCPU {
 
-
-
   def default(threadNamePrefix: String): ExecutionContextMainFT = {
     minTwoUnsafe(threadNamePrefix, Util.unsafeAvailableCPUs)
   }

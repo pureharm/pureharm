@@ -34,7 +34,7 @@ import busymachines.pureharm.effects.implicits._
   */
 final class PoolsResourceTest extends AnyFunSuite {
 
-  private val scalaTestTP = "ScalaTest-run-running"
+  private val scalaTestTP = "ScalaTest"
   private val mainTP      = "ph-main"
   private val dbBlocTP    = "ph-db-block"
   private val dbConnTP    = "ph-db-conn"
