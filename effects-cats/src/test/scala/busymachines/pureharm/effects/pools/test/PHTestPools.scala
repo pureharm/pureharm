@@ -32,3 +32,26 @@ final private[test] class PHTestPools[F[_]](
   val single:          ExecutionContextST,
   val blockingShifter: BlockingShifter[F],
 )
+
+private[test] object PHTestPools {
+  import busymachines.pureharm.effects.implicits._
+  import org.scalactic.source.Position
+  import org.scalatest.Assertions.assert
+  /**
+    * @param expectContains
+    *   checks to see if the Thread Name executing this function
+    *   contains the given string
+    * @return
+    *   the thread name
+    */
+  private[test] def assertOnTP(expectContains: String)(implicit pos: Position): IO[String] =
+    tn >>= compareThreadName(expectContains)
+
+  private[test] def compareThreadName(expected: String)(tn: String)(implicit pos: Position): IO[String] =
+    p(s"should be on '$expected', and we are on: $tn") >> IO(assert(tn.contains(expected))(implicitly, pos)) >> IO(tn)
+
+  private[test] val tn: IO[String] = IO(Thread.currentThread().getName)
+
+  private[test] def p(s: String): IO[Unit] = IO(println(s))
+
+}

@@ -32,22 +32,24 @@ import busymachines.pureharm.effects.implicits._
   * @since 15 Jun 2019
   *
   */
-final class PoolsResourceTest extends AnyFunSuite {
+final class UnsafePoolsTest extends AnyFunSuite {
 
   private val scalaTestTP = "ScalaTest-run-running"
-  private val mainTP      = "ph-main"
-  private val dbBlocTP    = "ph-db-block"
-  private val dbConnTP    = "ph-db-conn"
-  private val httpTP      = "ph-http"
-  private val blockingTP  = "ph-blocking"
-  private val singleTP    = "ph-single"
+  private val mainTP      = "ph-unsafe-main"
+  private val dbBlocTP    = "ph-unsafe-db-block"
+  private val dbConnTP    = "ph-unsafe-db-conn"
+  private val httpTP      = "ph-unsafe-http"
+  private val blockingTP  = "ph-unsafe-blocking"
+  private val singleTP    = "ph-unsafe-single"
 
-  implicit val (contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntime(mainTP)
+  implicit val (_, contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntimeWithEC(mainTP)
 
   test("thread pool allocation and proper thread naming") {
     import PHTestPools._
 
-    val io: IO[String] = testPools[IO].use { res =>
+    val res = testPools[IO]
+
+    val io: IO[String] = {
       val r = for {
         _ <- assertOnTP(scalaTestTP)
         _ <- contextShift.shift
@@ -70,34 +72,32 @@ final class PoolsResourceTest extends AnyFunSuite {
         _ <- res.blockingShifter.blockOn(assertOnTP(blockingTP))
 
         mt <- assertOnTP(mainTP)
+
       } yield mt
 
-      p(s"Acquired resource") *> r <* p(s"Releasing resource")
+      p(s"Acquired resource, and starting test") *> r <* p(s"Ended test")
     }
-
     withClue(s"after resource is de-allocated we should be on $mainTP") {
       (io >>= compareThreadName(mainTP)).unsafeRunSync()
     }
 
   }
 
-  private def testPools[F[_]: Sync: ContextShift]: Resource[F, PHTestPools[F]] =
-    for {
-      nrOfCPUs <- Pools.availableCPUs[F]
-      _        <- println(s"starting test w/ #of CPUs: $nrOfCPUs").pure[Resource[F, ?]]
-
-      dbBlockingCT    <- Pools.cached[F](dbBlocTP)
-      dbConnectFT     <- Pools.fixed[F](dbConnTP, nrOfCPUs * 2)
-      httpFT          <- Pools.fixed[F](httpTP, nrOfCPUs)
-      blockingCT      <- Pools.cached[F](blockingTP)
-      singleST        <- Pools.singleThreaded[F](singleTP)
-      blockingShifter <- BlockingShifter.fromExecutionContext[F](blockingCT).pure[Resource[F, ?]]
-    } yield new PHTestPools[F](
+  private def testPools[F[_]: Sync: ContextShift]: PHTestPools[F] = {
+    val nrOfCPUs        = UnsafePools.availableCPUs
+    val dbBlockingCT    = UnsafePools.cached(dbBlocTP)
+    val dbConnectFT     = UnsafePools.fixed(dbConnTP, nrOfCPUs * 2)
+    val httpFT          = UnsafePools.fixed(httpTP, nrOfCPUs)
+    val blockingCT      = UnsafePools.cached(blockingTP)
+    val singleST        = UnsafePools.singleThreaded(singleTP)
+    val blockingShifter = BlockingShifter.fromExecutionContext[F](blockingCT)
+    new PHTestPools[F](
       dbBlocking      = dbBlockingCT,
       dbConnection    = dbConnectFT,
       httpEC          = httpFT,
       single          = singleST,
       blockingShifter = blockingShifter,
     )
+  }
 
 }
