@@ -22,13 +22,6 @@ addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
-
-/**
-  * Use with care.
-  *
-  * All instructions for publishing to sonatype can be found in
-  * ``z-publishing-artifcats/README.md``.
-  */
 addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
 
 //*****************************************************************************
@@ -223,15 +216,15 @@ lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/sc
 //=================================== SCALA ===================================
 //=============================================================================
 
-//https://github.com/scala/scala-collection-compat
-lazy val scalaCollectionCompat
-  : ModuleID = "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollCompatVersion
+//https://github.com/scala/scala-collection-compat/releases
+lazy val scalaCollectionCompat: ModuleID =
+  "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollCompatVersion withSources ()
 
 //=============================================================================
 //================================= TYPELEVEL =================================
 //=============================================================================
 
-//https://github.com/typelevel/cats
+//https://github.com/typelevel/cats/releases
 lazy val catsCore:    ModuleID = "org.typelevel" %% "cats-core"    % catsVersion withSources ()
 lazy val catsMacros:  ModuleID = "org.typelevel" %% "cats-macros"  % catsVersion withSources ()
 lazy val catsKernel:  ModuleID = "org.typelevel" %% "cats-kernel"  % catsVersion withSources ()
@@ -246,7 +239,7 @@ lazy val cats: Seq[ModuleID] = Seq(
   catsTestkit % Test,
 )
 
-//https://github.com/typelevel/cats-effect
+//https://github.com/typelevel/cats-effect/releases
 lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVersion withSources ()
 
 def circe: Seq[ModuleID] = Seq(circeCore, circeGenericExtras, circeParser)
@@ -255,7 +248,7 @@ lazy val circeCore:          ModuleID = "io.circe" %% "circe-core"           % c
 lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion withSources ()
 lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % circeVersion withSources ()
 
-//https://github.com/milessabin/shapeless
+//https://github.com/milessabin/shapeless/releases
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
 
 //=============================================================================

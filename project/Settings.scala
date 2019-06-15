@@ -46,8 +46,9 @@ object Settings {
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
   def scala2_12Flags: Seq[String] = Seq(
-    "-deprecation", // Emit warning and location for usages of deprecated APIs.
-    "-encoding",
+    //"-Xfatal-warnings",               // Fail the compilation if there are any warnings.
+    "-deprecation",                     // Emit warning and location for usages of deprecated APIs.
+    "-encoding",                        // yeah, it's part of the "utf-8" thing, two flags
     "utf-8",                            // Specify character encoding used by source files.
     "-explaintypes",                    // Explain type errors in more detail.
     "-feature",                         // Emit warning and location for usages of features that should be imported explicitly.
@@ -89,8 +90,6 @@ object Settings {
     "-Ywarn-unused:privates",           // Warn if a private member is unused.
     "-Ywarn-value-discard",             // Warn when non-Unit expression results are unused.
     "-Ypartial-unification",            // Enable partial unification in type constructor inference
-
-    //"-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
   )
 
   /**
@@ -98,8 +97,9 @@ object Settings {
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
   def scala2_13Flags: Seq[String] = Seq(
-    "-deprecation", // Emit warning and location for usages of deprecated APIs.
-    "-encoding",
+    //"-Xfatal-warnings",            // Fail the compilation if there are any warnings.
+    "-deprecation",                  // Emit warning and location for usages of deprecated APIs.
+    "-encoding",                     // yeah, it's part of the "utf-8" thing, two flags
     "utf-8",                         // Specify character encoding used by source files.
     "-explaintypes",                 // Explain type errors in more detail.
     "-feature",                      // Emit warning and location for usages of features that should be imported explicitly.
@@ -132,8 +132,6 @@ object Settings {
     "-Ywarn-unused:patvars",         // Warn if a variable bound in a pattern is unused.
     "-Ywarn-unused:privates",        // Warn if a private member is unused.
     "-Ywarn-value-discard",          // Warn when non-Unit expression results are unused.
-
-    //"-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
   )
 
   /**
