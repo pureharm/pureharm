@@ -86,4 +86,6 @@ trait PureharmTypeDefinitions {
     */
   final type BlockingShifter[F[_]] = effects.BlockingShifter[F]
   final val BlockingShifter: effects.BlockingShifter.type = effects.BlockingShifter
+
+  final type PureharmIOApp = effects.PureharmIOApp
 }
