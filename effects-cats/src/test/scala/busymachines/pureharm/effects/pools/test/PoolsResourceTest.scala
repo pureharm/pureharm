@@ -42,7 +42,7 @@ final class PoolsResourceTest extends AnyFunSuite {
   private val blockingTP  = "ph-blocking"
   private val singleTP    = "ph-single"
 
-  implicit val (contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntime(mainTP)
+  implicit val (contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntime(mainTP).value
 
   test("thread pool allocation and proper thread naming") {
     import PHTestPools._

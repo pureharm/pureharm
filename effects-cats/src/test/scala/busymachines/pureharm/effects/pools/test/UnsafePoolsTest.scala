@@ -42,7 +42,7 @@ final class UnsafePoolsTest extends AnyFunSuite {
   private val blockingTP  = "ph-unsafe-blocking"
   private val singleTP    = "ph-unsafe-single"
 
-  implicit val (_, contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntimeWithEC(mainTP)
+  implicit val (_, contextShift: ContextShift[IO], timer: Timer[IO]) = IORuntime.defaultMainRuntimeWithEC(mainTP).value
 
   test("thread pool allocation and proper thread naming") {
     import PHTestPools._

@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.effects.pools
 
+import cats.Later
 import cats.effect.{ContextShift, IO, Timer}
 
 /**
@@ -28,10 +29,13 @@ object IORuntime {
   /**
     * Useful to create all needed machinery to properly work with
     * the cats-effect runtime.
+    *
+    * You really should instantiate this once per app, therefore also
+    * the [[Later]] return type, to properly hammer the point home.
     */
   def defaultMainRuntime(
     threadNamePrefix: String = "main-cpu-fixed",
-  ): (ContextShift[IO], Timer[IO]) = {
+  ): Later[(ContextShift[IO], Timer[IO])] = Later {
     val ec = UnsafePools.defaultMainExecutionContext(threadNamePrefix)
     (mainIOContextShift(ec), mainIOTimer(ec))
   }
@@ -59,7 +63,7 @@ object IORuntime {
     */
   def defaultMainRuntimeWithEC(
     threadNamePrefix: String = "main-cpu-fixed",
-  ): (ExecutionContextMainFT, ContextShift[IO], Timer[IO]) = {
+  ): Later[(ExecutionContextMainFT, ContextShift[IO], Timer[IO])] = Later {
     val ec = UnsafePools.defaultMainExecutionContext(threadNamePrefix)
     (ec, mainIOContextShift(ec), mainIOTimer(ec))
   }
