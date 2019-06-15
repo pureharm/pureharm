@@ -27,12 +27,6 @@ import cats.effect._
   */
 object Pools {
 
-  def mainIOContextShift[F[_]: Sync](threadNamePrefix: String = "main-cpu-fixed"): Resource[F, ContextShift[IO]] =
-    mainContextShiftPool(threadNamePrefix).map(ec => IO.contextShift(ec))
-
-  def mainContextShiftPool[F[_]: Sync](threadNamePrefix: String = "main-cpu-fixed"): Resource[F, ExecutionContextFT] =
-    PoolMainCPU.default(threadNamePrefix)
-
   def cached[F[_]: Sync](
     threadNamePrefix: String  = "cached",
     daemons:          Boolean = false,

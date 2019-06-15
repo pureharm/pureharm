@@ -17,14 +17,16 @@
   */
 package busymachines.pureharm.effects.pools
 
-import cats.effect._
-
 /**
   * This is a reasonable default to back up your application's
   * ContextShift. Make sure that you NEVER do blocking I/O on this
   * thread pool. NEVER! — it's not that hard as long as you respect
   * referential transparency, and are careful with using 3rd party
   * libraries (especially Java ones).
+  *
+  *
+  * Additionally, we can't really instantiate one of these in a resource
+  * "safe" manner, because we need it for the [[cats.effect.IOApp]].
   */
 object PoolMainCPU {
 
@@ -49,27 +51,20 @@ object PoolMainCPU {
     *   A fixed thread pool with at least two fixed threads,
     *   or the number of available processors.
     */
-  def default[F[_]: Sync](threadNamePrefix: String): Resource[F, ExecutionContextFT] = {
-    minTwo(threadNamePrefix, Runtime.getRuntime().availableProcessors())
-  }
-
-  /**
-    * Prefer [[default]], unless you know what you are doing.
-    * The behavior the the Execution context itself is the same
-    * for both, but the former is actually safer to use :)
-    */
-  def unsafeDefault(threadNamePrefix: String): ExecutionContextFT = {
+  def default(threadNamePrefix: String): ExecutionContextMainFT = {
     minTwoUnsafe(threadNamePrefix, Runtime.getRuntime().availableProcessors())
   }
 
-  private def minTwo[F[_]: Sync](threadNamePrefix: String, maxThreads: Int): Resource[F, ExecutionContextFT] = {
-    val bound = Math.max(2, maxThreads)
-    PoolFixed.fixed(threadNamePrefix, bound, daemons = true)
+  /**
+    * Like [[default]], but with any number of threads between [2..n].
+    */
+  def main(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT = {
+    minTwoUnsafe(threadNamePrefix, maxThreads)
   }
 
-  private def minTwoUnsafe(threadNamePrefix: String, maxThreads: Int): ExecutionContextFT = {
+  private def minTwoUnsafe(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT = {
     val bound = Math.max(2, maxThreads)
-    PoolFixed.unsafeFixed(threadNamePrefix, bound, daemons = true)
+    ExecutionContextMainFT(PoolFixed.unsafeFixed(threadNamePrefix, bound, daemons = true))
   }
 
 }

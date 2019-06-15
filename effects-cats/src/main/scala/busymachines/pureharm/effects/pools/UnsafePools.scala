@@ -17,9 +17,11 @@
   */
 package busymachines.pureharm.effects.pools
 
-import cats.effect.{ContextShift, IO}
+import cats.effect.{ContextShift, IO, Timer}
 
 /**
+  *
+  *
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jun 2019
@@ -27,11 +29,8 @@ import cats.effect.{ContextShift, IO}
   */
 object UnsafePools {
 
-  def mainIOContextShift(threadNamePrefix: String = "main-cpu-fixed"): ContextShift[IO] =
-    IO.contextShift(mainContextShiftPool(threadNamePrefix))
-
-  def mainContextShiftPool(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextFT =
-    PoolMainCPU.unsafeDefault(threadNamePrefix)
+  def mainContextShiftPool(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextMainFT =
+    PoolMainCPU.default(threadNamePrefix)
 
   def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, maxThreads, daemons)
@@ -41,4 +40,9 @@ object UnsafePools {
 
   def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons)
+
+  def mainIOTimerFromEC(ec: ExecutionContextMainFT): Timer[IO] = IO.timer(ec)
+
+  def mainIOContextShiftFromEC(ec: ExecutionContextMainFT): ContextShift[IO] = IO.contextShift(ec)
+
 }

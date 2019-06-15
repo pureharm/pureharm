@@ -22,4 +22,7 @@ package object pools {
     * Denotes executions contexts backed by a cached thread pool
     */
   type ExecutionContextCT = ExecutionContextCT.Type
+
+  private[pools] object ExecutionContextMainFT extends PhantomType[ExecutionContext]
+  type ExecutionContextMainFT = ExecutionContextMainFT.Type
 }
