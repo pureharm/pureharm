@@ -50,7 +50,7 @@ object PoolCached {
     val prefix = s"$threadPrefixName-$Cached"
     val alloc  = Sync[F].delay(unsafeExecutorService(prefix, daemons))
     val free   = (es: ExecutorService) => Sync[F].delay(es.shutdown())
-    Resource.make(alloc)(free).map(es => Impl.exitOnFatal(ExecutionContext.fromExecutorService(es)))
+    Resource.make(alloc)(free).map(es => Util.exitOnFatal(ExecutionContext.fromExecutorService(es)))
   }
 
   /**
@@ -60,12 +60,12 @@ object PoolCached {
     */
   def unsafeCached(threadPrefixName: String, daemons: Boolean = false): ExecutionContext = {
     val prefix = s"$threadPrefixName-$Cached"
-    Impl.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, daemons)))
+    Util.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, daemons)))
   }
 
   private def unsafeExecutorService(prefix: String, daemons: Boolean): ExecutorService = {
     java.util.concurrent.Executors.newCachedThreadPool(
-      Impl.namedThreadPoolFactory(prefix, daemons),
+      Util.namedThreadPoolFactory(prefix, daemons),
     )
   }
 

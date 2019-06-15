@@ -71,7 +71,7 @@ object PoolFixed {
 
     val alloc = Sync[F].delay(unsafeExecutorService(prefix, bound, daemons))
     val free: ExecutorService => F[Unit] = (es: ExecutorService) => Sync[F].delay(es.shutdown())
-    Resource.make(alloc)(free).map(es => Impl.exitOnFatal(ExecutionContext.fromExecutorService(es)))
+    Resource.make(alloc)(free).map(es => Util.exitOnFatal(ExecutionContext.fromExecutorService(es)))
   }
 
   /**
@@ -86,13 +86,13 @@ object PoolFixed {
   ): ExecutionContext = {
     val bound  = math.max(1, maxThreads)
     val prefix = s"$threadNamePrefix-$bound"
-    Impl.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, bound, daemons)))
+    Util.exitOnFatal(ExecutionContext.fromExecutorService(unsafeExecutorService(prefix, bound, daemons)))
   }
 
   private def unsafeExecutorService(prefix: String, maxThreads: Int, daemons: Boolean): ExecutorService = {
     Executors.newFixedThreadPool(
       maxThreads,
-      Impl.namedThreadPoolFactory(prefix, daemons),
+      Util.namedThreadPoolFactory(prefix, daemons),
     )
   }
 }

@@ -28,7 +28,7 @@ import scala.util.control.NonFatal
   * @since 15 Jun 2019
   *
   */
-private[pools] object Impl {
+private[pools] object Util {
 
   private[pools] def exitOnFatal(ec: ExecutionContext): ExecutionContext = new ExecutionContext {
     private val underlying: ExecutionContext = ec
