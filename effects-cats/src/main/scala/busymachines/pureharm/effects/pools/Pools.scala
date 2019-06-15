@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.effects.pools
 
+import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed}
 import cats.effect._
 
 /**
@@ -43,7 +44,7 @@ object Pools {
   def singleThreaded[F[_]: Sync](
     threadNamePrefix: String  = "single-thread",
     daemons:          Boolean = false,
-  ): Resource[F, ExecutionContextFT] =
-    PoolFixed.fixed(threadNamePrefix, 1, daemons)
+  ): Resource[F, ExecutionContextST] =
+    PoolFixed.fixed(threadNamePrefix, 1, daemons).map(ExecutionContextST.apply)
 
 }

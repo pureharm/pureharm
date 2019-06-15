@@ -1,6 +1,6 @@
 package busymachines.pureharm.effects
 
-import busymachines.pureharm.effects.pools.PoolAliases
+import busymachines.pureharm.effects.pools.aliases.PureharmPoolAliases
 import busymachines.pureharm.internals.effects.aliases
 
 /**
@@ -10,4 +10,4 @@ import busymachines.pureharm.internals.effects.aliases
   *
   */
 trait PureharmEffectsAllTypes
-    extends aliases.PureharmTypeDefinitions with PoolAliases with aliases.CatsTypeAliases
+    extends aliases.PureharmTypeDefinitions with PureharmPoolAliases with aliases.CatsTypeAliases

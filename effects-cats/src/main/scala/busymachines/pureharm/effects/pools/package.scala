@@ -26,19 +26,25 @@ import busymachines.pureharm.phantom.PhantomType
   *
   */
 package object pools {
-  private[pools] object ExecutionContextFT extends PhantomType[scala.concurrent.ExecutionContext]
+  private[pureharm] object ExecutionContextFT extends PhantomType[scala.concurrent.ExecutionContext]
   /**
-    * Denotes executions contexts backed by a fixed thread pool
+    * Denotes execution contexts backed by a fixed thread pool
     */
   type ExecutionContextFT = ExecutionContextFT.Type
 
-  private[pools] object ExecutionContextCT extends PhantomType[scala.concurrent.ExecutionContext]
+  private[pureharm] object ExecutionContextST extends PhantomType[scala.concurrent.ExecutionContext]
   /**
-    * Denotes executions contexts backed by a cached thread pool
+    * Denotes execution contexts with one single thread
+    */
+  type ExecutionContextST = ExecutionContextST.Type
+
+  private[pureharm] object ExecutionContextCT extends PhantomType[scala.concurrent.ExecutionContext]
+  /**
+    * Denotes execution contexts backed by a cached thread pool
     */
   type ExecutionContextCT = ExecutionContextCT.Type
 
-  private[pools] object ExecutionContextMainFT extends PhantomType[scala.concurrent.ExecutionContext]
+  private[pureharm] object ExecutionContextMainFT extends PhantomType[scala.concurrent.ExecutionContext]
   /**
     * Similar to [[ExecutionContextFT]], except that it guarantees
     * that we have two threads, and it's specially designated

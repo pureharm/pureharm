@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.effects.pools
 
+import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, PoolMainCPU}
 import cats.effect.{ContextShift, IO, Timer}
 
 /**
@@ -60,18 +61,26 @@ object UnsafePools {
     *   A fixed thread pool with at least two fixed threads,
     *   or the number of available processors.
     */
-  def mainContextShiftPool(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextMainFT =
+  def defaultMainExecutionContext(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextMainFT =
     PoolMainCPU.default(threadNamePrefix)
 
   /**
-    * Use [[mainContextShiftPool]], then pass it here, or use
-    * [[main]] to instantiate all basic machinery.
+    * Like [[defaultMainExecutionContext]], but with a custom upper bound for threads,
+    * instead one based on the number of available processors
+    */
+  def mainExecutionContext(threadNamePrefix: String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT = {
+    PoolMainCPU.main(threadNamePrefix, maxThreads)
+  }
+
+  /**
+    * Use [[defaultMainExecutionContext]], then pass it here, or use
+    * [[defaultMainRuntime]] to instantiate all basic machinery.
     */
   def mainIOTimerFromEC(ec: ExecutionContextMainFT): Timer[IO] = IO.timer(ec)
 
   /**
-    * Use [[mainContextShiftPool]], then pass it here, or use
-    * [[main]] to instantiate all basic machinery.
+    * Use [[defaultMainExecutionContext]], then pass it here, or use
+    * [[defaultMainRuntime]] to instantiate all basic machinery.
     */
   def mainIOContextShiftFromEC(ec: ExecutionContextMainFT): ContextShift[IO] = IO.contextShift(ec)
 
@@ -79,8 +88,10 @@ object UnsafePools {
     * Useful to create all needed machinery to properly work with
     * the cats-effect runtime.
     */
-  def main(threadNamePrefix: String = "main-cpu-fixed"): (ExecutionContextMainFT, ContextShift[IO], Timer[IO]) = {
-    val ec = mainContextShiftPool(threadNamePrefix)
+  def defaultMainRuntime(
+    threadNamePrefix: String = "main-cpu-fixed",
+  ): (ExecutionContextMainFT, ContextShift[IO], Timer[IO]) = {
+    val ec = defaultMainExecutionContext(threadNamePrefix)
     (ec, mainIOContextShiftFromEC(ec), mainIOTimerFromEC(ec))
   }
 
@@ -149,7 +160,7 @@ object UnsafePools {
   def cached(threadNamePrefix: String, daemons: Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
-  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextFT =
-    PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons)
+  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextST =
+    ExecutionContextST(PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons))
 
 }

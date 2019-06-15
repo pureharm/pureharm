@@ -16,16 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package busymachines.pureharm.effects.pools
+package busymachines.pureharm.internals.effects.pools
 
-import cats.effect._
 import java.util.concurrent._
+
+import busymachines.pureharm.effects.pools.ExecutionContextFT
+import cats.effect._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
-private[pools] object PoolFixed {
+private[pureharm] object PoolFixed {
 
   def fixed[F[_]: Sync](
     threadNamePrefix: String,
