@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.internals.effects
+package busymachines.pureharm.effects.test
 
 import org.scalatest.funspec.AnyFunSpec
 import busymachines.pureharm.effects._
