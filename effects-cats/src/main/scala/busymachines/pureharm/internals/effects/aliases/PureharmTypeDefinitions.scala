@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.internals.effects.aliases
 
+import busymachines.pureharm.internals.effects
 import busymachines.pureharm.internals.effects.types
 
 /**
@@ -41,8 +42,7 @@ trait PureharmTypeDefinitions {
     * }}}
     */
   final type ApplicativeAttempt[F[_]] = types.ApplicativeAttempt[F]
-  final val ApplicativeAttempt: _root_.busymachines.pureharm.internals.effects.ApplicativeAttempt.type =
-    _root_.busymachines.pureharm.internals.effects.ApplicativeAttempt
+  final val ApplicativeAttempt: effects.ApplicativeAttempt.type = effects.ApplicativeAttempt
 
   /**
     * Useful since we don't have partial kind application by default
@@ -52,16 +52,13 @@ trait PureharmTypeDefinitions {
     * }}}
     */
   final type MonadAttempt[F[_]] = types.MonadAttempt[F]
-  final val MonadAttempt: _root_.busymachines.pureharm.internals.effects.MonadAttempt.type =
-    _root_.busymachines.pureharm.internals.effects.MonadAttempt
+  final val MonadAttempt: effects.MonadAttempt.type = effects.MonadAttempt
 
   final type BracketAttempt[F[_]] = types.BracketAttempt[F]
-  final val BracketAttempt: _root_.busymachines.pureharm.internals.effects.BracketAttempt.type =
-    _root_.busymachines.pureharm.internals.effects.BracketAttempt
+  final val BracketAttempt: effects.BracketAttempt.type = effects.BracketAttempt
 
-  final type FutureLift[F[_]] = _root_.busymachines.pureharm.internals.effects.FutureLift[F]
-  final val FutureLift: _root_.busymachines.pureharm.internals.effects.FutureLift.type =
-    _root_.busymachines.pureharm.internals.effects.FutureLift
+  final type FutureLift[F[_]] = effects.FutureLift[F]
+  final val FutureLift: effects.FutureLift.type = effects.FutureLift
 
   /**
     *
@@ -87,7 +84,8 @@ trait PureharmTypeDefinitions {
     * @since 13 Jun 2019
     *
     */
-  final type BlockingShifter[F[_]] = _root_.busymachines.pureharm.internals.effects.BlockingShifter[F]
-  final val BlockingShifter: _root_.busymachines.pureharm.internals.effects.BlockingShifter.type =
-    _root_.busymachines.pureharm.internals.effects.BlockingShifter
+  final type BlockingShifter[F[_]] = effects.BlockingShifter[F]
+  final val BlockingShifter: effects.BlockingShifter.type = effects.BlockingShifter
+
+  final type PureharmIOApp = effects.PureharmIOApp
 }

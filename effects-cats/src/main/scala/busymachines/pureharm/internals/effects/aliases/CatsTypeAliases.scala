@@ -75,6 +75,12 @@ private[pureharm] trait CatsTypeAliases {
   final type Bitraverse[F[_, _]] = cats.Bitraverse[F]
   final val Bitraverse: cats.Bitraverse.type = cats.Bitraverse
 
+  final type Parallel[F[_], COL[_]] = cats.Parallel[F, COL]
+  final val Parallel: cats.Parallel.type = cats.Parallel
+
+  final type NonEmptyParallel[F[_], COL[_]] = cats.NonEmptyParallel[F, COL]
+  final val NonEmptyParallel: cats.NonEmptyParallel.type = cats.NonEmptyParallel
+
   final type Semigroupal[F[_]] = cats.Semigroupal[F]
   final val Semigroupal: cats.Semigroupal.type = cats.Semigroupal
 
@@ -101,6 +107,18 @@ private[pureharm] trait CatsTypeAliases {
 
   final type Group[A] = cats.Group[A]
   final val Group: cats.Group.type = cats.Group
+
+  final type Eval[+A] = cats.Eval[A]
+  final val Eval: cats.Eval.type = cats.Eval
+
+  final type Now[A] = cats.Now[A]
+  final val Now: cats.Now.type = cats.Now
+
+  final type Later[A] = cats.Later[A]
+  final val Later: cats.Later.type = cats.Later
+
+  final type Always[A] = cats.Always[A]
+  final val Always: cats.Always.type = cats.Always
 
   //---------- monad transformers ----------------
 

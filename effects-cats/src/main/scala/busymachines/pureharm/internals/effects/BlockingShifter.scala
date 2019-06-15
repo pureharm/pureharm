@@ -40,10 +40,25 @@ sealed trait BlockingShifter[F[_]] {
 
 object BlockingShifter {
 
-  def fromExecutionContext[F[_]: ContextShift](ec: ExecutionContext): BlockingShifter[F] =
+  /**
+    * See [[Pools.cached]] on where to get a proper thread pool
+    */
+  def fromExecutionContext[F[_]: ContextShift](ec: ExecutionContextCT): BlockingShifter[F] =
     new BlockingShifterImpl(ContextShift[F], Blocker.liftExecutionContext(ec))
 
-  def blocker[F[_]: ContextShift](blocker: Blocker): BlockingShifter[F] =
+  /**
+    * Unsafe because you should really instantiate this using a cached thread pool.
+    *
+    * Use this unless you really know what you are doing. Otherwise prefer [[fromExecutionContext]]
+    */
+  def unsafeFromExecutionContext[F[_]: ContextShift](ec: ExecutionContext): BlockingShifter[F] =
+    new BlockingShifterImpl(ContextShift[F], Blocker.liftExecutionContext(ec))
+
+  /**
+    * Prefer [[fromExecutionContext]], unless you know for certain that this
+    * blocker was instantiated with the proper underlying execution context.
+    */
+  def unsafeFromBlocker[F[_]: ContextShift](blocker: Blocker): BlockingShifter[F] =
     new BlockingShifterImpl(ContextShift[F], blocker)
 
   final private class BlockingShifterImpl[F[_]](
