@@ -43,5 +43,6 @@ trait PureharmPoolAliases {
 
   final val Pools:       pools.Pools.type       = pools.Pools
   final val UnsafePools: pools.UnsafePools.type = pools.UnsafePools
+  final val IORuntime:   pools.IORuntime.type   = pools.IORuntime
 
 }

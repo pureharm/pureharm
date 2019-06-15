@@ -18,7 +18,6 @@
 package busymachines.pureharm.effects.pools
 
 import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, PoolMainCPU}
-import cats.effect.{ContextShift, IO, Timer}
 
 /**
   *
@@ -70,45 +69,6 @@ object UnsafePools {
     */
   def mainExecutionContext(threadNamePrefix: String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT = {
     PoolMainCPU.main(threadNamePrefix, maxThreads)
-  }
-
-  /**
-    * Use [[defaultMainExecutionContext]], then pass it here, or use
-    * [[defaultMainRuntime]] to instantiate all basic machinery.
-    */
-  def mainIOTimerFromEC(ec: ExecutionContextMainFT): Timer[IO] = IO.timer(ec)
-
-  /**
-    * Use [[defaultMainExecutionContext]], then pass it here, or use
-    * [[defaultMainRuntime]] to instantiate all basic machinery.
-    */
-  def mainIOContextShiftFromEC(ec: ExecutionContextMainFT): ContextShift[IO] = IO.contextShift(ec)
-
-  /**
-    * Useful to create all needed machinery to properly work with
-    * the cats-effect runtime.
-    */
-  def defaultMainRuntime(
-    threadNamePrefix: String = "main-cpu-fixed",
-  ): (ContextShift[IO], Timer[IO]) = {
-    val ec = defaultMainExecutionContext(threadNamePrefix)
-    (mainIOContextShiftFromEC(ec), mainIOTimerFromEC(ec))
-  }
-
-  /**
-    * Most likely you need only [[defaultMainRuntime]], because
-    * there's little reason to expose the EC underlying your
-    * [[ContextShift]] and [[Timer]].
-    *
-    * But in the cases you need that, this method behaves like
-    * [[defaultMainRuntime]], but it also gives you the
-    * underlying main thread pool
-    */
-  def defaultMainRuntimeWithEC(
-    threadNamePrefix: String = "main-cpu-fixed",
-  ): (ExecutionContextMainFT, ContextShift[IO], Timer[IO]) = {
-    val ec = defaultMainExecutionContext(threadNamePrefix)
-    (ec, mainIOContextShiftFromEC(ec), mainIOTimerFromEC(ec))
   }
 
   /**
