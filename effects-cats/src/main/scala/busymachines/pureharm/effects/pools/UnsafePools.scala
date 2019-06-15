@@ -90,6 +90,22 @@ object UnsafePools {
     */
   def defaultMainRuntime(
     threadNamePrefix: String = "main-cpu-fixed",
+  ): (ContextShift[IO], Timer[IO]) = {
+    val ec = defaultMainExecutionContext(threadNamePrefix)
+    (mainIOContextShiftFromEC(ec), mainIOTimerFromEC(ec))
+  }
+
+  /**
+    * Most likely you need only [[defaultMainRuntime]], because
+    * there's little reason to expose the EC underlying your
+    * [[ContextShift]] and [[Timer]].
+    *
+    * But in the cases you need that, this method behaves like
+    * [[defaultMainRuntime]], but it also gives you the
+    * underlying main thread pool
+    */
+  def defaultMainRuntimeWithEC(
+    threadNamePrefix: String = "main-cpu-fixed",
   ): (ExecutionContextMainFT, ContextShift[IO], Timer[IO]) = {
     val ec = defaultMainExecutionContext(threadNamePrefix)
     (ec, mainIOContextShiftFromEC(ec), mainIOTimerFromEC(ec))
