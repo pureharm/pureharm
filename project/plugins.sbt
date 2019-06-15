@@ -21,9 +21,9 @@
   * up as described in:
   * http://busymachines.github.io/busymachines-commons/docs/publishing-artifacts.html
   *
-  * https://github.com/xerial/sbt-sonatype
+  * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.4")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.5") //https://github.com/xerial/sbt-sonatype/releases
 
 /**
   *
@@ -32,29 +32,29 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.4")
   * Do not forget to include this in your global plugins as described in:
   * http://busymachines.github.io/busymachines-commons/docs/publishing-artifacts.html
   *
-  * https://github.com/sbt/sbt-pgp
+  * https://github.com/sbt/sbt-pgp/releases
   */
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0-M2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0-M2") //https://github.com/sbt/sbt-pgp/releases
 
 /**
   * build configured in ``project/ReleaseProcess``
   *
-  * https://github.com/sbt/sbt-release
+  * https://github.com/sbt/sbt-release/releases
   */
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.com/sbt/sbt-release/releases
 
 /**
   * The best thing since sliced bread.
   *
-  * https://github.com/scalameta/sbt-scalafmt
-  * 
+  * https://github.com/scalameta/sbt-scalafmt/releases
+  *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.0")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.1") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
   *
-  * https://github.com/scalacenter/scalafix
+  * https://github.com/scalacenter/scalafix/releases
   * https://scalacenter.github.io/scalafix/
   *
   * From docs:
@@ -71,24 +71,31 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.0")
   *
   * }}}
   */
-//addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.4")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.5") //https://github.com/scalacenter/scalafix/releases
 
 /**
+  * TODO: actually use:
+  *
   * Used to build the documentation.
   *
-  * https://github.com/47deg/sbt-microsites
+  * https://github.com/47deg/sbt-microsites/releases
   */
-addSbtPlugin("com.47deg" % "sbt-microsites" % "0.7.18")
+//addSbtPlugin("com.47deg" % "sbt-microsites" % "0.9.1") //https://github.com/47deg/sbt-microsites/releases
 
 /**
+  * TODO: actually use
   *
   * Used by sbt-microsites
   *
-  * https://github.com/sbt/sbt-ghpages
+  * https://github.com/sbt/sbt-ghpages/releases
   */
-addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
+//addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.3") //https://github.com/sbt/sbt-ghpages/releases
 
 /**
-  * https://github.com/scoverage/sbt-scoverage
+  * TODO: actually use:
+  *
+  * Tool for measuring test coverage
+  *
+  * https://github.com/scoverage/sbt-scoverage/releases
   */
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
+//addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.0") //https://github.com/scoverage/sbt-scoverage/releases

@@ -22,13 +22,6 @@ addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
-
-/**
-  * Use with care.
-  *
-  * All instructions for publishing to sonatype can be found in
-  * ``z-publishing-artifcats/README.md``.
-  */
 addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
 
 //*****************************************************************************
@@ -206,39 +199,32 @@ lazy val `db-slick` = subModule("db", "slick")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollectionCompatVersion: String = "2.0.0"
-
-lazy val catsVersion:       String = "2.0.0-M4"
-lazy val catsEffectVersion: String = "2.0.0-M4"
-
-lazy val circeVersion: String = "0.12.0-M3"
-
-lazy val log4catsVersion:       String = "0.4.0-M1"
-lazy val logbackClassicVersion: String = "1.2.3"
-
-lazy val shapelessVersion: String = "2.3.3"
-
-lazy val slickVersion: String = "3.3.2"
-
-lazy val hikariCPVersion: String = "3.3.1"
-lazy val slickPGVersion:  String = "0.17.3" //used only to test db-slick
-
-lazy val flywayVersion: String = "6.0.0-beta2"
-
-lazy val scalaTestVersion: String = "3.1.0-SNAP13"
+lazy val scalaCollCompatVersion: String = "2.0.0"        //https://github.com/scala/scala-collection-compat/releases
+lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/milessabin/shapeless/releases
+lazy val catsVersion:            String = "2.0.0-M4"     //https://github.com/typelevel/cats/releases
+lazy val catsEffectVersion:      String = "2.0.0-M4"     //https://github.com/typelevel/cats-effect/releases
+lazy val circeVersion:           String = "0.12.0-M3"    //https://github.com/circe/circe/releases
+lazy val log4catsVersion:        String = "0.4.0-M1"     //https://github.com/ChristopherDavenport/log4cats/releases
+lazy val logbackClassicVersion:  String = "1.2.3"        //https://github.com/qos-ch/logback/releases
+lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
+lazy val hikariCPVersion:        String = "3.3.1"        //https://github.com/brettwooldridge/HikariCP/releases
+lazy val slickPGVersion:         String = "0.17.3"       //https://github.com/tminglei/slick-pg/releases
+lazy val flywayVersion:          String = "6.0.0-beta2"  //https://github.com/flyway/flyway/releases
+lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================
 //=============================================================================
 
-lazy val scalaCollectionCompat
-  : ModuleID = "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
+//https://github.com/scala/scala-collection-compat/releases
+lazy val scalaCollectionCompat: ModuleID =
+  "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollCompatVersion withSources ()
 
 //=============================================================================
 //================================= TYPELEVEL =================================
 //=============================================================================
 
-//https://github.com/typelevel/cats
+//https://github.com/typelevel/cats/releases
 lazy val catsCore:    ModuleID = "org.typelevel" %% "cats-core"    % catsVersion withSources ()
 lazy val catsMacros:  ModuleID = "org.typelevel" %% "cats-macros"  % catsVersion withSources ()
 lazy val catsKernel:  ModuleID = "org.typelevel" %% "cats-kernel"  % catsVersion withSources ()
@@ -253,7 +239,7 @@ lazy val cats: Seq[ModuleID] = Seq(
   catsTestkit % Test,
 )
 
-//https://github.com/typelevel/cats-effect
+//https://github.com/typelevel/cats-effect/releases
 lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVersion withSources ()
 
 def circe: Seq[ModuleID] = Seq(circeCore, circeGenericExtras, circeParser)
@@ -262,20 +248,20 @@ lazy val circeCore:          ModuleID = "io.circe" %% "circe-core"           % c
 lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion withSources ()
 lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % circeVersion withSources ()
 
-//https://github.com/milessabin/shapeless
+//https://github.com/milessabin/shapeless/releases
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
 
 //=============================================================================
 //================================= DATABASE ==================================
 //=============================================================================
 
-//https://github.com/brettwooldridge/HikariCP
+//https://github.com/brettwooldridge/HikariCP/releases
 lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSources ()
 
 //https://github.com/flyway/flyway/releases
 lazy val flyway: ModuleID = "org.flywaydb" % "flyway-core" % flywayVersion withSources ()
 
-//https://github.com/tminglei/slick-pg — USED ONLY FOR TESTING WITH A REAL POSTGRESQL
+//https://github.com/tminglei/slick-pg/releases
 lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPGVersion withSources ()
 
 //=============================================================================
@@ -286,7 +272,7 @@ lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPGVersio
 //============================= DATABASE - SLICK ==============================
 //=============================================================================
 
-//https://github.com/slick/slick
+//https://github.com/slick/slick/releases
 lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
 
 lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
@@ -295,25 +281,25 @@ lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 //================================== TESTING ==================================
 //=============================================================================
 
-//http://www.scalatest.org/
+//https://github.com/scalatest/scalatest/releases
 lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion withSources ()
 
 //=============================================================================
 //================================== HELPERS ==================================
 //=============================================================================
 
-//============================================================================================
-//=========================================  logging =========================================
-//============================================================================================
-//https://github.com/ChristopherDavenport/log4cats
+//=============================================================================
+//=================================  logging ==================================
+//=============================================================================
+//https://github.com/ChristopherDavenport/log4cats/releases
 lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion withSources ()
 
-//it is the backend implementation used by log4cats-slf4j
+//https://github.com/qos-ch/logback/releases — it is the backend implementation used by log4cats-slf4j
 lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackClassicVersion withSources ()
 
-//============================================================================================
-//=======================================  build utils =======================================
-//============================================================================================
+//=============================================================================
+//================================  build utils ===============================
+//=============================================================================
 /**
   * See SBT docs:
   * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
