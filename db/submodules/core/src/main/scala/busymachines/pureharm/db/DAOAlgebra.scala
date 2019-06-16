@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.db
 
-import busymachines.pureharm.effects.Traverse
+import busymachines.pureharm.effects.{Show, Traverse}
 
 /**
   *
@@ -32,7 +32,7 @@ import busymachines.pureharm.effects.Traverse
 trait DAOAlgebra[R[_], E, PK] {
   def find(pk: PK): R[Option[E]]
 
-  def retrieve(pk: PK): R[E]
+  def retrieve(pk: PK)(implicit show: Show[PK]): R[E]
 
   def insert(e: E): R[PK]
 
