@@ -109,6 +109,7 @@ lazy val `effects-cats` = project
   .settings(
     name := "pureharm-effects-cats",
     libraryDependencies ++= cats ++ Seq(
+      shapeless,
       catsEffect,
       scalaCollectionCompat,
       scalaTest % Test,
@@ -128,6 +129,7 @@ lazy val `json-circe` = project
   .settings(
     name := "pureharm-json-circe",
     libraryDependencies ++= cats ++ circe ++ Seq(
+      shapeless,
       catsEffect,
       scalaCollectionCompat,
       scalaTest % Test,
@@ -181,7 +183,9 @@ lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      catsEffect,
       flyway,
       scalaTest      % Test,
       log4cats       % Test,
@@ -203,7 +207,10 @@ lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= dbSlick ++ Seq(
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      shapeless,
+      catsEffect,
+      flyway,
       scalaTest      % Test,
       slickPG        % Test,
       log4cats       % Test,
