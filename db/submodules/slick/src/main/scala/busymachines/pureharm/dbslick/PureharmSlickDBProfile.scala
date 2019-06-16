@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.dbslick
 
+import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.internals.dbslick._
 
 /**
@@ -25,7 +26,7 @@ import busymachines.pureharm.internals.dbslick._
   * @since 12 Jun 2019
   *
   */
-trait PureharmSlickDBProfile extends PureharmDBSlickTypeDefinitions {
+trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions {
   self: slick.jdbc.JdbcProfile =>
 
   /**
@@ -37,17 +38,17 @@ trait PureharmSlickDBProfile extends PureharmDBSlickTypeDefinitions {
     *
     * {{{
     *  //you need to depend on a specific support. For Postgres:
-    *  //"com.github.tminglei" %% "slick-pg" % $slickPgV
-    *  //https://github.com/tminglei/slick-pg
-    *  import com.github.tminglei.slickpg._
+    *  //there is the ``pureharm-db-slick-psql` module
+    *  import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
     *
     * trait MyAppSlickProfile
-    *   extends ExPostgresProfile
-    *   with PureharmDBProfileMixin
+    *   extends PureharmSlickPostgresProfile
     *   /* and all those other imports */ { self =>
     *
-    * trait MyAppAPI extends super.API with PureharmAPIImplicits
+    *    override val api: MyAppSlickProfileAPI = new MyAppSlickProfileAPI {}
     *
+    *    trait MyAppSlickProfileAPI extends super.API with PureharmSlickPostgresAPIWithImplicits
+    * }
     *
     * object MyAppSlickProfile extends MyAppSlickProfile
     * }}}
@@ -68,8 +69,8 @@ trait PureharmSlickDBProfile extends PureharmDBSlickTypeDefinitions {
     * {{{
     *   package myapp
     *
-    *   package object myapp extends PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions {
-    *     val implicits: MyAppSlickProfile.MyAppAPI = MyAppSlickProfile.api
+    *   object db extends MyAppSlickProfile {
+    *     val implicits: MyAppSlickProfile.MyAppAPI = this.api
     *   }
     * }}}
     *
