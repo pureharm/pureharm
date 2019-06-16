@@ -83,12 +83,12 @@ private[test] object DAOAlgebraPureharmRowsTest {
     * db/docker-pureharm-postgresql-test.sh
     *
     */
-  private val LocalPort    = 20010
-  private val LocalHost    = "localhost"
+  private val LocalHost    = DBHost("localhost")
+  private val LocalPort    = DBPort(20010)
   private val TestDBName   = DatabaseName("pureharm_test")
   private val PureharmUser = DBUsername("pureharmony")
   private val PureharmPwd  = DBPassword("pureharmony")
-  private val url          = JDBCUrl.postgresql(LocalPort, LocalHost, TestDBName)
+  private val url          = JDBCUrl.postgresql(LocalHost, LocalPort, TestDBName)
 
   def transactorResource(implicit cs: ContextShift[IO]): Resource[IO, Transactor[IO]] = {
     val trans = Transactor.pgSQLHikari[IO](testdb.jdbcProfileAPI)(
