@@ -17,9 +17,7 @@
   */
 package busymachines.pureharm.dbslick.psql.test
 
-import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
-import slick.jdbc.PostgresProfile
 
 /**
   *
@@ -38,16 +36,12 @@ import slick.jdbc.PostgresProfile
   * @since 12 Jun 2019
   *
   */
-private[test] trait PureharmTestPSQLProfile extends PostgresProfile with PureharmSlickPostgresProfile {
+private[test] trait PureharmTestPSQLProfile extends PureharmSlickPostgresProfile {
   override val api: PureharmTestAPI = new PureharmTestAPI {}
 
-  trait PureharmTestAPI extends super.API with PureharmSlickPostgresAPIWithImplicits {
-    //if you need to use old "json" column type instead of the default "jsonb"
-    //override protected def jsonPostgresType = busymachines.pureharm.dbslick.psql.PostgresqlJSON.json
-  }
+  trait PureharmTestAPI extends super.API with PureharmSlickPostgresAPIWithImplicits
 }
 
-private[test] object testdb extends PureharmTestPSQLProfile with PureharmDBCoreTypeDefinitions {
+private[test] object testdb extends PureharmTestPSQLProfile {
   val implicits: PureharmTestAPI = this.api
-
 }
