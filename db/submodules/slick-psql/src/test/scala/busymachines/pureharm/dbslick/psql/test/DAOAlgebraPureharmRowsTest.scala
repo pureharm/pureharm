@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.test
+package busymachines.pureharm.dbslick.psql.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
@@ -50,6 +50,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
       long       = PhantomLong(0.toLong),
       bigDecimal = PhantomBigDecimal(BigDecimal("1390749832749238")),
       string     = PhantomString("first_test_in_a_while"),
+      jsonbCol   = PureharmJSONCol(42, "json_column"),
     )
 
     for {

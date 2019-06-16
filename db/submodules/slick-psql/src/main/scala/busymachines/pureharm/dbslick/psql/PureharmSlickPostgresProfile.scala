@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2017-2019 BusyMachines
+  * Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -15,19 +15,26 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick
+package busymachines.pureharm.dbslick.psql
 
 import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
+import busymachines.pureharm.dbslick._
 import busymachines.pureharm.internals.dbslick._
+import busymachines.pureharm.internals.dbslick.psql
 
 /**
+  *
+  * If by any chance you are not using Postgres, then
+  * you should be using [[PureharmSlickDBProfile]] as a
+  * starting point and mixing in whatever you have specific
+  * for your database.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   *
   */
-trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions {
-  self: slick.jdbc.JdbcProfile =>
+trait PureharmSlickPostgresProfile
+    extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
 
   /**
     * We use this trick to propagate the profile from the top level object to the
@@ -37,9 +44,6 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     * Thus, in your app you should probably have something like the following:
     *
     * {{{
-    *  //you need to depend on a specific support. For Postgres:
-    *  //there is the ``pureharm-db-slick-psql` module
-    *  import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
     *
     * trait MyAppSlickProfile
     *   extends PureharmSlickPostgresProfile
@@ -49,8 +53,6 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     *
     *    trait MyAppSlickProfileAPI extends super.API with PureharmSlickPostgresAPIWithImplicits
     * }
-    *
-    * object MyAppSlickProfile extends MyAppSlickProfile
     * }}}
     *
     * And when you do the following imports:
@@ -94,10 +96,14 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     * actually implement things.
     *
     */
-  trait PureharmSlickAPIWithImplicits
-      extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-      with SlickQueryAlgebraDefinitions with SlickAliases {
-    final override protected val enclosingProfile: slick.jdbc.JdbcProfile = self
+  trait PureharmSlickPostgresAPIWithImplicits
+      extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
+      with SlickQueryAlgebraDefinitions with SlickAliases with psql.SlickPostgresCirceSupportAPI {
+    final override protected val enclosingProfile:         slick.jdbc.JdbcProfile     = self
+    final override protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile = self
+
+    final type PostgresqlJSON = psql.PostgresqlJSON
+    final val PostgresqlJSON: psql.PostgresqlJSON.type = psql.PostgresqlJSON
   }
 
   final def slickJDBCProfileAPI: SlickJDBCProfileAPI = this.api

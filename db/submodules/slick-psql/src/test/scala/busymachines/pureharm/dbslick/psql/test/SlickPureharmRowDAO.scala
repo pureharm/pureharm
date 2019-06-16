@@ -15,10 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.test
+package busymachines.pureharm.dbslick.psql.test
 
 import busymachines.pureharm.db.test._
-import testdb._
+import busymachines.pureharm.dbslick.psql.test.testdb._
 
 /**
   *
@@ -35,15 +35,22 @@ private[test] object SlickPureharmRowDAO {
   //----------------- implementation details -----------------
   import testdb.implicits._
 
+  //---------------- json stuff ---------------
+  import busymachines.pureharm.json._
+
+  implicit private val pureharmJSONCol: Codec[PureharmJSONCol]      = derive.codec[PureharmJSONCol]
+  implicit private val jsonColumnType:  ColumnType[PureharmJSONCol] = createJsonbColumnType[PureharmJSONCol]
+
   private class SlickPureharmTable(tag: Tag) extends TableWithPK[PureharmRow, PhantomPK](tag, schema.PureharmRows) {
     val byte       = column[PhantomByte]("byte")
     val int        = column[PhantomInt]("int")
     val long       = column[PhantomLong]("long")
     val bigDecimal = column[PhantomBigDecimal]("big_decimal")
     val string     = column[PhantomString]("string")
+    val jsonCol    = column[PureharmJSONCol]("jsonb_col")
 
     override def * : ProvenShape[PureharmRow] =
-      (id, byte, int, long, bigDecimal, string) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
+      (id, byte, int, long, bigDecimal, string, jsonCol) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
   }
 
   final private class SlickPureharmRowQuerries(

@@ -7,7 +7,7 @@
   * you may not use this file except in compliance with the License.
   * You may obtain a copy of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
   * distributed under the License is distributed on an "AS IS" BASIS,
@@ -177,6 +177,7 @@ lazy val `db` = project
   .aggregate(
     `db-core`,
     `db-slick`,
+    `db-slick-psql`,
   )
 
 lazy val `db-core` = subModule("db", "core")
@@ -211,10 +212,6 @@ lazy val `db-slick` = subModule("db", "slick")
       shapeless,
       catsEffect,
       flyway,
-      scalaTest      % Test,
-      slickPG        % Test,
-      log4cats       % Test,
-      logbackClassic % Test,
     ),
   )
   .dependsOn(
@@ -224,6 +221,33 @@ lazy val `db-slick` = subModule("db", "slick")
   .aggregate(
     `db-core`,
     `effects-cats`,
+  )
+
+lazy val `db-slick-psql` = subModule("db", "slick-psql")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      shapeless,
+      catsEffect,
+      flyway,
+      postgresql,
+      scalaTest      % Test,
+      log4cats       % Test,
+      logbackClassic % Test,
+    ),
+  )
+  .dependsOn(
+    fullDependency(`db-core`),
+    `db-slick`,
+    `effects-cats`,
+    `json-circe`,
+  )
+  .aggregate(
+    `db-core`,
+    `db-slick`,
+    `effects-cats`,
+    `json-circe`,
   )
 
 //*****************************************************************************
@@ -241,9 +265,9 @@ lazy val log4catsVersion:        String = "0.4.0-M1"     //https://github.com/Ch
 lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
 lazy val pureconfigVersion:      String = "0.11.1"       //https://github.com/pureconfig/pureconfig/releases
 lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
-lazy val hikariCPVersion:        String = "3.3.1"        //https://github.com/brettwooldridge/HikariCP/releases
-lazy val slickPGVersion:         String = "0.17.3"       //https://github.com/tminglei/slick-pg/releases
-lazy val flywayVersion:          String = "6.0.0-beta2"  //https://github.com/flyway/flyway/releases
+lazy val postgresqlVersion:      String = "42.2.5"       //java — https://github.com/pgjdbc/pgjdbc/releases
+lazy val hikariCPVersion:        String = "3.3.1"        //java — https://github.com/brettwooldridge/HikariCP/releases
+lazy val flywayVersion:          String = "6.0.0-beta2"  //java — https://github.com/flyway/flyway/releases
 lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
@@ -295,8 +319,8 @@ lazy val hikari: ModuleID = "com.zaxxer" % "HikariCP" % hikariCPVersion withSour
 //https://github.com/flyway/flyway/releases
 lazy val flyway: ModuleID = "org.flywaydb" % "flyway-core" % flywayVersion withSources ()
 
-//https://github.com/tminglei/slick-pg/releases
-lazy val slickPG: ModuleID = "com.github.tminglei" %% "slick-pg" % slickPGVersion withSources ()
+//https://github.com/pgjdbc/pgjdbc/releases
+lazy val postgresql: ModuleID = "org.postgresql" % "postgresql" % postgresqlVersion withSources ()
 
 //=============================================================================
 //============================= DATABASE - DOOBIE =============================
