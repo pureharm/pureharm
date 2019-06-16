@@ -93,7 +93,7 @@ trait SlickQueryAlgebraDefinitions {
 
     def retrieve(pk: PK)(implicit show: Show[PK]): ConnectionIO[E] =
       (dao.filter(_.id === pk).result.head: ConnectionIO[E]).adaptError {
-        case NonFatal(e) => DBEntryNotFoundAnomaly(pk.show, Option(e))
+        case NonFatal(e) => SlickDBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
     def insert(e: E): ConnectionIO[PK] = (dao.+=(e): ConnectionIO[Int]).map(_ => eid(e))
