@@ -52,14 +52,14 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
     jsonbCol   = PureharmJSONCol(42, "json_column"),
   )
 
-  iotest("write single row + read by PK") { implicit dao: PureharmRowDAO[IO] =>
+  iotest("insert + find") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.find(row.id).flattenOption(fail(s"PK=${row.id} row was not in database"))
     } yield assert(row === fetchedRow)
   }
 
-  iotest("write single row + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  iotest("insert + retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.retrieve(row.id)
