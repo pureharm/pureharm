@@ -24,6 +24,8 @@ addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
 addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
 
+addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
+
 //*****************************************************************************
 //*****************************************************************************
 //********************************* PROJECTS **********************************
