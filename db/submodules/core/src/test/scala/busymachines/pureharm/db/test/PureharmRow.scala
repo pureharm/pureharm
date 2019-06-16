@@ -13,4 +13,10 @@ final private[pureharm] case class PureharmRow(
   long:       PhantomLong,
   bigDecimal: PhantomBigDecimal,
   string:     PhantomString,
+  jsonbCol:   PureharmJSONCol,
+)
+
+final private[pureharm] case class PureharmJSONCol(
+  jsonInt:    Int,
+  jsonString: String,
 )

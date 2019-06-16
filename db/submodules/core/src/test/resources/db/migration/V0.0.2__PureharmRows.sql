@@ -4,5 +4,6 @@ CREATE TABLE "pureharm_rows"(
     "int" INT NOT NULL,
     "long" BIGINT NOT NULL,
     "big_decimal" DOUBLE PRECISION NOT NULL,
-    "string" VARCHAR NOT NULL
+    "string" VARCHAR NOT NULL,
+    "jsonb_col" JSONB NOT NULL
 );
