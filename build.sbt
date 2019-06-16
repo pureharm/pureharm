@@ -177,6 +177,7 @@ lazy val `db` = project
   .aggregate(
     `db-core`,
     `db-slick`,
+    `db-slick-psql`,
   )
 
 lazy val `db-core` = subModule("db", "core")
@@ -211,10 +212,6 @@ lazy val `db-slick` = subModule("db", "slick")
       shapeless,
       catsEffect,
       flyway,
-      postgresql     % Test,
-      scalaTest      % Test,
-      log4cats       % Test,
-      logbackClassic % Test,
     ),
   )
   .dependsOn(
@@ -224,6 +221,33 @@ lazy val `db-slick` = subModule("db", "slick")
   .aggregate(
     `db-core`,
     `effects-cats`,
+  )
+
+lazy val `db-slick-psql` = subModule("db", "slick-psql")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      shapeless,
+      catsEffect,
+      flyway,
+      postgresql,
+      scalaTest      % Test,
+      log4cats       % Test,
+      logbackClassic % Test,
+    ),
+  )
+  .dependsOn(
+    fullDependency(`db-core`),
+    `db-slick`,
+    `effects-cats`,
+    `json-circe`,
+  )
+  .aggregate(
+    `db-core`,
+    `db-slick`,
+    `effects-cats`,
+    `json-circe`,
   )
 
 //*****************************************************************************
