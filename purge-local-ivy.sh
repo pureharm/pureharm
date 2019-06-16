@@ -14,8 +14,8 @@
 
 #!/usr/bin/env bash
 
-CACHE=~/.ivy2/local/com.busymachines
-LOCAL=~/.ivy2/cache/com.busymachines
+CACHE=~/.ivy2/local/com.busymachines/pureharm-*
+LOCAL=~/.ivy2/cache/com.busymachines/pureharm-*
 
 echo "purging local ivy cache of com.busymachines artifacts"
 echo "@ $LOCAL"
