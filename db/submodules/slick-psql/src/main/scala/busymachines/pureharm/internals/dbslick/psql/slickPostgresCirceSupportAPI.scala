@@ -1,4 +1,4 @@
-package busymachines.pureharm.dbslick.psql
+package busymachines.pureharm.internals.dbslick.psql
 
 import busymachines.pureharm.json._
 

@@ -20,6 +20,7 @@ package busymachines.pureharm.dbslick.psql
 import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.dbslick._
 import busymachines.pureharm.internals.dbslick._
+import busymachines.pureharm.internals.dbslick.psql
 
 /**
   *
@@ -97,9 +98,12 @@ trait PureharmSlickPostgresProfile extends PureharmDBCoreTypeDefinitions with Pu
     */
   trait PureharmSlickPostgresAPIWithImplicits
       extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-      with SlickQueryAlgebraDefinitions with SlickAliases with SlickPostgresCirceSupportAPI {
+      with SlickQueryAlgebraDefinitions with SlickAliases with psql.SlickPostgresCirceSupportAPI {
     final override protected val enclosingProfile:         slick.jdbc.JdbcProfile     = self
     final override protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile = self
+
+    final type PostgresqlJSON = psql.PostgresqlJSON
+    final val PostgresqlJSON: psql.PostgresqlJSON.type = psql.PostgresqlJSON
   }
 
   final def slickJDBCProfileAPI: SlickJDBCProfileAPI = this.api
