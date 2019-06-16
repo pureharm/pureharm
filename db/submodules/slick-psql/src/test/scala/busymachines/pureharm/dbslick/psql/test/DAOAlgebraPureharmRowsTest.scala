@@ -42,21 +42,37 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
       implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
     )
 
-  iotest("write single row + read by PK") { implicit dao: PureharmRowDAO[IO] =>
-    val row = PureharmRow(
-      id         = PhantomPK("test1"),
-      byte       = PhantomByte(245.toByte),
-      int        = PhantomInt(41),
-      long       = PhantomLong(0.toLong),
-      bigDecimal = PhantomBigDecimal(BigDecimal("1390749832749238")),
-      string     = PhantomString("first_test_in_a_while"),
-      jsonbCol   = PureharmJSONCol(42, "json_column"),
-    )
+  private val row = PureharmRow(
+    id         = PhantomPK("test1"),
+    byte       = PhantomByte(245.toByte),
+    int        = PhantomInt(41),
+    long       = PhantomLong(0.toLong),
+    bigDecimal = PhantomBigDecimal(BigDecimal("1390749832749238")),
+    string     = PhantomString("first_test_in_a_while"),
+    jsonbCol   = PureharmJSONCol(42, "json_column"),
+  )
 
+  iotest("write single row + read by PK") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.find(row.id).flattenOption(fail(s"PK=${row.id} row was not in database"))
     } yield assert(row === fetchedRow)
+  }
+
+  iotest("write single row + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+    for {
+      _          <- dao.insert(row)
+      fetchedRow <- dao.retrieve(row.id)
+    } yield assert(row === fetchedRow)
+  }
+
+  iotest("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
+    for {
+      att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
+    } yield att match {
+      case Left(err) => err shouldBe a[DBEntryNotFoundAnomaly]
+      case Right(v)  => fail(s"should have failed, but got: $v")
+    }
   }
 }
 

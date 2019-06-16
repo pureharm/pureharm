@@ -91,9 +91,9 @@ trait SlickQueryAlgebraDefinitions {
 
     def find(pk: PK): ConnectionIO[Option[E]] = dao.filter(_.id === pk).result.headOption
 
-    def retrieve(pk: PK): ConnectionIO[E] =
+    def retrieve(pk: PK)(implicit show: Show[PK]): ConnectionIO[E] =
       (dao.filter(_.id === pk).result.head: ConnectionIO[E]).adaptError {
-        case NonFatal(e) => new RuntimeException("TODO: replace with anomalies or something", e)
+        case NonFatal(e) => SlickDBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
     def insert(e: E): ConnectionIO[PK] = (dao.+=(e): ConnectionIO[Int]).map(_ => eid(e))
@@ -150,7 +150,7 @@ trait SlickQueryAlgebraDefinitions {
 
     override def find(pk: PK): F[Option[E]] = transactor.run(queries.find(pk))
 
-    override def retrieve(pk: PK): F[E] = transactor.run(queries.retrieve(pk))
+    override def retrieve(pk: PK)(implicit show: Show[PK]): F[E] = transactor.run(queries.retrieve(pk))
 
     override def insert(e: E): F[PK] = transactor.run(queries.insert(e))
 

@@ -15,7 +15,7 @@ import org.scalactic.source
   * @since 13 Jun 2019
   *
   */
-abstract class PureharmFixtureTest extends FixtureAnyFunSuite {
+abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   import io.chrisdavenport.log4cats._
   private val logger = slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
 

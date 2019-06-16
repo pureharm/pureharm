@@ -194,13 +194,11 @@ lazy val `db-core` = subModule("db", "core")
     ),
   )
   .dependsOn(
-    `core-phantom`,
-    `core-identifiable`,
+    `core`,
     `effects-cats`,
   )
   .aggregate(
-    `core-phantom`,
-    `core-identifiable`,
+    `core`,
     `effects-cats`,
   )
 
@@ -215,10 +213,12 @@ lazy val `db-slick` = subModule("db", "slick")
     ),
   )
   .dependsOn(
+    `core`,
     fullDependency(`db-core`),
     `effects-cats`,
   )
   .aggregate(
+    `core`,
     `db-core`,
     `effects-cats`,
   )
@@ -238,12 +238,14 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     ),
   )
   .dependsOn(
+    `core`,
     fullDependency(`db-core`),
     `db-slick`,
     `effects-cats`,
     `json-circe`,
   )
   .aggregate(
+    `core`,
     `db-core`,
     `db-slick`,
     `effects-cats`,

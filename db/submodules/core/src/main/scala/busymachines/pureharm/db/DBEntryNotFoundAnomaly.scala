@@ -15,16 +15,25 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.internals.effects.aliases
+package busymachines.pureharm.db
 
-import busymachines.pureharm.internals.effects
+import busymachines.pureharm.anomaly._
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 25 Apr 2019
+  * @since 16 Jun 2019
   *
   */
-private[pureharm] trait PureharmEffectsSyntaxAll
-    extends effects.PureharmSyntax.Implicits with effects.PureharmTimedAttemptReattemptSyntaxOps.Implicits
-    with effects.PureharmPhantomShowInstances.Implicits
+abstract class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
+    extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
+  override val id: AnomalyID = DBEntryNotFoundAnomaly.DBEntryNotFoundAnomalyID
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters(
+    DBEntryNotFoundAnomaly.PK -> pk,
+  )
+}
+
+object DBEntryNotFoundAnomaly {
+  private val PK = "pk"
+  case object DBEntryNotFoundAnomalyID extends AnomalyID { override val name: String = "ph_db_001" }
+}
