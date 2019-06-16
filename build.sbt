@@ -16,6 +16,22 @@
   * limitations under the License.
   */
 
+//#############################################################################
+//################################## README ##################################
+//#############################################################################
+//
+// The reason all modules gather their dependencies up top, is so that
+// downstream modules declare ALL their transitive dependencies explicitly
+// because otherwise fetching source code for all is kinda bugged :(
+// plus, this way it should be always clear that a module only puts its
+// UNIQUE dependencies out in the clear. Everything else gets brought on
+// transitively anyway. So whatever change you make, please respect the
+// pattern that you see here. Maybe even borrow it for other projects.
+//
+//#############################################################################
+//#############################################################################
+//#############################################################################
+
 addCommandAlias("build", ";compile;Test/compile")
 addCommandAlias("rebuild", ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
@@ -47,11 +63,14 @@ lazy val root = Project(id = "pureharm", base = file("."))
 //+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+lazy val `core-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `core-identifiable-deps`
+
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-core",
+    libraryDependencies ++= `core-deps`.distinct,
   )
   .dependsOn(
     `core-anomaly`,
@@ -64,33 +83,45 @@ lazy val core = project
     `core-identifiable`,
   )
 
+//#############################################################################
+
+lazy val `core-anomaly-deps` = Seq(
+  scalaTest % Test,
+)
+
 lazy val `core-anomaly` = subModule("core", "anomaly")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
-      scalaTest % Test,
-    ),
+    libraryDependencies ++= `core-anomaly-deps`.distinct,
   )
+
+//#############################################################################
+
+lazy val `core-phantom-deps` = Seq(
+  shapeless,
+  scalaTest % Test,
+)
 
 lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
-      shapeless,
-      scalaTest % Test,
-    ),
+    libraryDependencies ++= `core-phantom-deps`.distinct,
   )
+
+//#############################################################################
+
+lazy val `core-identifiable-deps` = `core-phantom-deps` ++ Seq(
+  shapeless,
+  scalaTest % Test,
+)
 
 lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
-      shapeless,
-      scalaTest % Test,
-    ),
+    libraryDependencies ++= `core-identifiable-deps`.distinct,
   )
   .dependsOn(
     `core-phantom`,
@@ -103,17 +134,19 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
 //++++++++++++++++++++++++++++++++++ EFFECTS ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+lazy val `effects-cats-deps` = `core-phantom-deps` ++ Seq(
+  shapeless,
+  catsEffect,
+  scalaCollectionCompat,
+  scalaTest % Test,
+) ++ cats
+
 lazy val `effects-cats` = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-effects-cats",
-    libraryDependencies ++= cats ++ Seq(
-      shapeless,
-      catsEffect,
-      scalaCollectionCompat,
-      scalaTest % Test,
-    ),
+    libraryDependencies ++= `effects-cats-deps`.distinct,
   )
   .dependsOn(
     `core-phantom`,
@@ -123,17 +156,17 @@ lazy val `effects-cats` = project
 //++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+lazy val `json-circe-deps` = `effects-cats-deps` ++ Seq(
+  shapeless,
+  scalaTest % Test,
+) ++ circe
+
 lazy val `json-circe` = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-json-circe",
-    libraryDependencies ++= cats ++ circe ++ Seq(
-      shapeless,
-      catsEffect,
-      scalaCollectionCompat,
-      scalaTest % Test,
-    ),
+    libraryDependencies ++= `json-circe-deps`.distinct,
   )
   .dependsOn(
     `core-anomaly`,
@@ -145,18 +178,18 @@ lazy val `json-circe` = project
 //++++++++++++++++++++++++++++++++++ CONFIG +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+lazy val `config-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `effects-cats-deps` ++ Seq(
+  shapeless,
+  pureConfig,
+  scalaTest % Test,
+)
+
 lazy val `config` = project
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-config",
-    libraryDependencies ++= cats ++ Seq(
-      shapeless,
-      catsEffect,
-      scalaCollectionCompat,
-      scalaTest % Test,
-      pureConfig,
-    ),
+    libraryDependencies ++= `config-deps`.distinct,
   )
   .dependsOn(
     `core-anomaly`,
@@ -168,11 +201,17 @@ lazy val `config` = project
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+lazy val `db-deps` =
+  `db-core-deps` ++
+    `db-slick-deps` ++
+    `db-slick-psql-deps`
+
 lazy val `db` = project
   .settings(PublishingSettings.noPublishSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-db",
+    libraryDependencies ++= `db-deps`.distinct,
   )
   .aggregate(
     `db-core`,
@@ -180,18 +219,19 @@ lazy val `db` = project
     `db-slick-psql`,
   )
 
+//#############################################################################
+
+lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ Seq(
+  flyway,
+  log4cats  % Test,
+  scalaTest % Test,
+)
+
 lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= cats ++ Seq(
-      shapeless,
-      catsEffect,
-      flyway,
-      scalaTest      % Test,
-      log4cats       % Test,
-      logbackClassic % Test,
-    ),
+    libraryDependencies ++= `db-core-deps`.distinct,
   )
   .dependsOn(
     `core`,
@@ -202,54 +242,62 @@ lazy val `db-core` = subModule("db", "core")
     `effects-cats`,
   )
 
+//#############################################################################
+
+lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `db-core-deps` ++ Seq(
+  scalaTest % Test,
+) ++ dbSlick
+
 lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= cats ++ dbSlick ++ Seq(
-      shapeless,
-      catsEffect,
-      flyway,
-    ),
+    libraryDependencies ++= `db-slick-deps`.distinct,
   )
   .dependsOn(
     `core`,
-    fullDependency(`db-core`),
     `effects-cats`,
+    fullDependency(`db-core`),
   )
   .aggregate(
     `core`,
-    `db-core`,
     `effects-cats`,
+    `db-core`,
+  )
+
+//#############################################################################
+
+lazy val `db-slick-psql-deps` =
+  `core-deps` ++
+    `effects-cats-deps` ++
+    `json-circe-deps` ++
+    `db-core-deps` ++
+    `db-slick-deps` ++ Seq(
+    postgresql,
+    log4cats       % Test,
+    logbackClassic % Test,
+    scalaTest      % Test,
   )
 
 lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= cats ++ dbSlick ++ Seq(
-      shapeless,
-      catsEffect,
-      flyway,
-      postgresql,
-      scalaTest      % Test,
-      log4cats       % Test,
-      logbackClassic % Test,
-    ),
+    libraryDependencies ++= `db-slick-psql-deps`.distinct,
   )
   .dependsOn(
     `core`,
-    fullDependency(`db-core`),
-    `db-slick`,
     `effects-cats`,
     `json-circe`,
+    fullDependency(`db-core`),
+    `db-slick`,
   )
   .aggregate(
     `core`,
-    `db-core`,
-    `db-slick`,
     `effects-cats`,
     `json-circe`,
+    `db-core`,
+    `db-slick`,
   )
 
 //*****************************************************************************
