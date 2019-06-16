@@ -26,9 +26,15 @@ import busymachines.pureharm.phantom.PhantomType
   *
   */
 package object db {
+  final object DBPort extends PhantomType[Int]
+  final type DBPort = DBPort.Type
+
+  final object DBHost extends PhantomType[String]
+  final type DBHost = DBHost.Type
+
   final object JDBCUrl extends PhantomType[String] {
 
-    def postgresql(port: Int, host: String, db: DatabaseName): this.Type =
+    def postgresql(host: DBHost, port: DBPort, db: DatabaseName): this.Type =
       this.apply(s"jdbc:postgresql://$host:$port/$db")
   }
 
