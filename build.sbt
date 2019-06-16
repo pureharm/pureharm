@@ -24,6 +24,8 @@ addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
 addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
 
+addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
+
 //*****************************************************************************
 //*****************************************************************************
 //********************************* PROJECTS **********************************
@@ -36,6 +38,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .aggregate(
     core,
     `effects-cats`,
+    `config`,
     `json-circe`,
     `db`,
   )
@@ -106,6 +109,7 @@ lazy val `effects-cats` = project
   .settings(
     name := "pureharm-effects-cats",
     libraryDependencies ++= cats ++ Seq(
+      shapeless,
       catsEffect,
       scalaCollectionCompat,
       scalaTest % Test,
@@ -125,9 +129,33 @@ lazy val `json-circe` = project
   .settings(
     name := "pureharm-json-circe",
     libraryDependencies ++= cats ++ circe ++ Seq(
+      shapeless,
       catsEffect,
       scalaCollectionCompat,
       scalaTest % Test,
+    ),
+  )
+  .dependsOn(
+    `core-anomaly`,
+    `core-phantom`,
+    `effects-cats`,
+  )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++ CONFIG +++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `config` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    name := "pureharm-config",
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      catsEffect,
+      scalaCollectionCompat,
+      scalaTest % Test,
+      pureConfig,
     ),
   )
   .dependsOn(
@@ -155,7 +183,9 @@ lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
+    libraryDependencies ++= cats ++ Seq(
+      shapeless,
+      catsEffect,
       flyway,
       scalaTest      % Test,
       log4cats       % Test,
@@ -177,7 +207,10 @@ lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
-    libraryDependencies ++= dbSlick ++ Seq(
+    libraryDependencies ++= cats ++ dbSlick ++ Seq(
+      shapeless,
+      catsEffect,
+      flyway,
       scalaTest      % Test,
       slickPG        % Test,
       log4cats       % Test,
@@ -205,7 +238,8 @@ lazy val catsVersion:            String = "2.0.0-M4"     //https://github.com/ty
 lazy val catsEffectVersion:      String = "2.0.0-M4"     //https://github.com/typelevel/cats-effect/releases
 lazy val circeVersion:           String = "0.12.0-M3"    //https://github.com/circe/circe/releases
 lazy val log4catsVersion:        String = "0.4.0-M1"     //https://github.com/ChristopherDavenport/log4cats/releases
-lazy val logbackClassicVersion:  String = "1.2.3"        //https://github.com/qos-ch/logback/releases
+lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
+lazy val pureconfigVersion:      String = "0.11.1"       //https://github.com/pureconfig/pureconfig/releases
 lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
 lazy val hikariCPVersion:        String = "3.3.1"        //https://github.com/brettwooldridge/HikariCP/releases
 lazy val slickPGVersion:         String = "0.17.3"       //https://github.com/tminglei/slick-pg/releases
@@ -288,17 +322,19 @@ lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 //================================== HELPERS ==================================
 //=============================================================================
 
+lazy val pureConfig: ModuleID = "com.github.pureconfig" %% "pureconfig" % pureconfigVersion withSources ()
+
 //=============================================================================
-//=================================  logging ==================================
+//=================================  LOGGING ==================================
 //=============================================================================
 //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion withSources ()
 
 //https://github.com/qos-ch/logback/releases — it is the backend implementation used by log4cats-slf4j
-lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackClassicVersion withSources ()
+lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion withSources ()
 
 //=============================================================================
-//================================  build utils ===============================
+//================================  BUILD UTILS ===============================
 //=============================================================================
 /**
   * See SBT docs:
