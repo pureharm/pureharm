@@ -83,19 +83,19 @@ private[test] object DAOAlgebraPureharmRowsTest {
     * db/docker-pureharm-postgresql-test.sh
     *
     */
-  private val LocalHost    = DBHost("localhost")
-  private val LocalPort    = DBPort(20010)
-  private val TestDBName   = DatabaseName("pureharm_test")
-  private val PureharmUser = DBUsername("pureharmony")
-  private val PureharmPwd  = DBPassword("pureharmony")
-  private val url          = JDBCUrl.postgresql(LocalHost, LocalPort, TestDBName)
+  private val dbConfig = DBConnectionConfig(
+    host     = DBHost("localhost"),
+    port     = DBPort(20010),
+    dbName   = DatabaseName("pureharm_test"),
+    username = DBUsername("pureharmony"),
+    password = DBPassword("pureharmony"),
+  )
 
   def transactorResource(implicit cs: ContextShift[IO]): Resource[IO, Transactor[IO]] = {
-    val trans = Transactor.pgSQLHikari[IO](testdb.jdbcProfileAPI)(
-      url      = url,
-      username = PureharmUser,
-      password = PureharmPwd,
-      config   = SlickDBIOAsyncExecutorConfig.default,
+    val trans = Transactor.pgSQLHikari[IO](
+      dbProfile    = testdb.jdbcProfileAPI,
+      dbConnection = dbConfig,
+      asyncConfig  = SlickDBIOAsyncExecutorConfig.default,
     )
 
     //no cleanup afterwards because the transactor is shutdown before a next flatMap
@@ -104,22 +104,13 @@ private[test] object DAOAlgebraPureharmRowsTest {
 
   private def initDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
     for {
-      _ <- Flyway.migrate[IO](
-        url                = url,
-        username           = PureharmUser,
-        password           = PureharmPwd,
-        migrationLocations = List.empty,
-      )
+      _ <- Flyway.migrate[IO](dbConfig = dbConfig, migrationLocations = List.empty)
     } yield ()
   }
 
   private def cleanDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
     for {
-      _ <- Flyway.clean[IO](
-        url      = url,
-        username = PureharmUser,
-        password = PureharmPwd,
-      )
+      _ <- Flyway.clean[IO](dbConfig)
     } yield ()
   }
 }

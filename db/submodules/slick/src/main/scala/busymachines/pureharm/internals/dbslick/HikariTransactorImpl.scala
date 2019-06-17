@@ -62,12 +62,12 @@ private[pureharm] object HikariTransactorImpl {
   def resource[F[_]: Async: FutureLift](
     dbProfile: JDBCProfileAPI,
   )(
-    url:      JDBCUrl,
-    username: DBUsername,
-    password: DBPassword,
-    config:   SlickDBIOAsyncExecutorConfig,
+    url:         JDBCUrl,
+    username:    DBUsername,
+    password:    DBPassword,
+    asyncConfig: SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] = {
-    Resource.make(unsafeCreate[F](dbProfile)(url, username, password, config))(_.shutdown)
+    Resource.make(unsafeCreate[F](dbProfile)(url, username, password, asyncConfig))(_.shutdown)
   }
 
   /**
@@ -76,10 +76,10 @@ private[pureharm] object HikariTransactorImpl {
   def unsafeCreate[F[_]: Async: FutureLift](
     slickProfile: JDBCProfileAPI,
   )(
-    url:      JDBCUrl,
-    username: DBUsername,
-    password: DBPassword,
-    config:   SlickDBIOAsyncExecutorConfig,
+    url:         JDBCUrl,
+    username:    DBUsername,
+    password:    DBPassword,
+    asyncConfig: SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] = {
     val F = Async[F]
 
@@ -95,18 +95,18 @@ private[pureharm] object HikariTransactorImpl {
 
       exec <- F.delay(
         AsyncExecutor(
-          name           = config.prefixName:     String,
-          minThreads     = config.maxConnections: Int,
-          maxThreads     = config.maxConnections: Int,
-          queueSize      = config.queueSize:      Int,
-          maxConnections = config.maxConnections: Int,
+          name           = asyncConfig.prefixName:     String,
+          minThreads     = asyncConfig.maxConnections: Int,
+          maxThreads     = asyncConfig.maxConnections: Int,
+          queueSize      = asyncConfig.queueSize:      Int,
+          maxConnections = asyncConfig.maxConnections: Int,
         ),
       )
       slickDB <- F.delay(
         DatabaseBackend(
           slickProfile.Database.forDataSource(
             ds             = hikari,
-            maxConnections = Option(config.maxConnections),
+            maxConnections = Option(asyncConfig.maxConnections),
             executor       = exec,
           ),
         ),
