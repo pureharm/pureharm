@@ -38,7 +38,7 @@ addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
-addCommandAlias("doRelease", ";ci;publishSigned;sonatypeRelease")
+addCommandAlias("doRelease", ";rebuild-update;publishSigned;sonatypeRelease")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 
