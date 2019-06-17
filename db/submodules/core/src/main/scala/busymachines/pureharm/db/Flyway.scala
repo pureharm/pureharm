@@ -30,6 +30,29 @@ object Flyway {
   import busymachines.pureharm.effects.implicits._
 
   /**
+    * See overload
+    *
+    * @param migrationLocations
+    *   give the locations for which Flyway searches for
+    *   migration files. Defaults to:
+    *   ``resource/db/migration`` folder on the classpath
+    * @return
+    *   the number of migrations
+    */
+  def migrate[F[_]](
+    dbConfig:           DBConnectionConfig,
+    migrationLocations: List[String],
+  )(
+    implicit
+    F: Sync[F],
+  ): F[Int] = this.migrate[F](
+    url                = dbConfig.jdbcURL,
+    username           = dbConfig.username,
+    password           = dbConfig.password,
+    migrationLocations = migrationLocations,
+  )
+
+  /**
     *
     * @param url
     *   the URL on which the DB server runs
@@ -44,7 +67,7 @@ object Flyway {
     url:                JDBCUrl,
     username:           DBUsername,
     password:           DBPassword,
-    migrationLocations: List[String] = List.empty,
+    migrationLocations: List[String],
   )(
     implicit
     F: Sync[F],
@@ -53,6 +76,9 @@ object Flyway {
       fw      <- flywayInit[F](url, username, password, migrationLocations)
       applied <- Sync[F].delay(fw.migrate())
     } yield applied
+
+  def clean[F[_]: Sync](dbConfig: DBConnectionConfig): F[Unit] =
+    this.clean[F](url = dbConfig.jdbcURL, username = dbConfig.username, password = dbConfig.password)
 
   def clean[F[_]: Sync](url: JDBCUrl, username: DBUsername, password: DBPassword): F[Unit] = {
     for {

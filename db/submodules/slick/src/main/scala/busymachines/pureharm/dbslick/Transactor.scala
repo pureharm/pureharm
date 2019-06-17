@@ -72,20 +72,34 @@ object Transactor {
   import busymachines.pureharm.internals
 
   def pgSQLHikari[F[_]: Async: FutureLift](
+    dbProfile:    JDBCProfileAPI,
+    dbConnection: DBConnectionConfig,
+    asyncConfig:  SlickDBIOAsyncExecutorConfig,
+  ): Resource[F, Transactor[F]] =
+    this.pgSQLHikari[F](
+      dbProfile = dbProfile,
+    )(
+      url         = dbConnection.jdbcURL,
+      username    = dbConnection.username,
+      password    = dbConnection.password,
+      asyncConfig = asyncConfig,
+    )
+
+  def pgSQLHikari[F[_]: Async: FutureLift](
     dbProfile: JDBCProfileAPI,
   )(
-    url:      JDBCUrl,
-    username: DBUsername,
-    password: DBPassword,
-    config:   SlickDBIOAsyncExecutorConfig,
+    url:         JDBCUrl,
+    username:    DBUsername,
+    password:    DBPassword,
+    asyncConfig: SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] =
     internals.dbslick.HikariTransactorImpl.resource[F](
       dbProfile = dbProfile,
     )(
-      url      = url,
-      username = username,
-      password = password,
-      config   = config,
+      url         = url,
+      username    = username,
+      password    = password,
+      asyncConfig = asyncConfig,
     )
 
   /**
@@ -95,19 +109,39 @@ object Transactor {
     * ensure proper cleanup if using this.
     */
   def pgSQLHikariUnsafe[F[_]: Async: FutureLift](
-    dbProfile: JDBCProfileAPI,
-  )(
-    url:      JDBCUrl,
-    username: DBUsername,
-    password: DBPassword,
-    config:   SlickDBIOAsyncExecutorConfig,
+    dbProfile:    JDBCProfileAPI,
+    dbConnection: DBConnectionConfig,
+    asyncConfig:  SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] =
-    internals.dbslick.HikariTransactorImpl.unsafeCreate[F](
+    this.pgSQLHikariUnsafe[F](
       slickProfile = dbProfile,
     )(
-      url      = url,
-      username = username,
-      password = password,
-      config   = config,
+      url         = dbConnection.jdbcURL,
+      username    = dbConnection.username,
+      password    = dbConnection.password,
+      asyncConfig = asyncConfig,
+    )
+
+  /**
+    * Prefer using [[pgSQLHikari]] instead.
+    *
+    * You really need to know what you are doing and
+    * ensure proper cleanup if using this.
+    */
+  def pgSQLHikariUnsafe[F[_]: Async: FutureLift](
+    slickProfile: JDBCProfileAPI,
+  )(
+    url:         JDBCUrl,
+    username:    DBUsername,
+    password:    DBPassword,
+    asyncConfig: SlickDBIOAsyncExecutorConfig,
+  ): F[Transactor[F]] =
+    internals.dbslick.HikariTransactorImpl.unsafeCreate[F](
+      slickProfile = slickProfile,
+    )(
+      url         = url,
+      username    = username,
+      password    = password,
+      asyncConfig = asyncConfig,
     )
 }

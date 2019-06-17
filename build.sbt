@@ -221,10 +221,11 @@ lazy val `db` = project
 
 //#############################################################################
 
-lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ Seq(
+lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ Seq(
   flyway,
-  log4cats  % Test,
-  scalaTest % Test,
+  log4cats       % Test,
+  logbackClassic % Test,
+  scalaTest      % Test,
 )
 
 lazy val `db-core` = subModule("db", "core")
@@ -236,15 +237,17 @@ lazy val `db-core` = subModule("db", "core")
   .dependsOn(
     `core`,
     `effects-cats`,
+    `config`,
   )
   .aggregate(
     `core`,
     `effects-cats`,
+    `config`,
   )
 
 //#############################################################################
 
-lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `db-core-deps` ++ Seq(
+lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
   scalaTest % Test,
 ) ++ dbSlick
 
@@ -257,11 +260,13 @@ lazy val `db-slick` = subModule("db", "slick")
   .dependsOn(
     `core`,
     `effects-cats`,
+    `config`,
     fullDependency(`db-core`),
   )
   .aggregate(
     `core`,
     `effects-cats`,
+    `config`,
     `db-core`,
   )
 
@@ -270,6 +275,7 @@ lazy val `db-slick` = subModule("db", "slick")
 lazy val `db-slick-psql-deps` =
   `core-deps` ++
     `effects-cats-deps` ++
+    `config-deps` ++
     `json-circe-deps` ++
     `db-core-deps` ++
     `db-slick-deps` ++ Seq(
@@ -288,6 +294,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .dependsOn(
     `core`,
     `effects-cats`,
+    `config`,
     `json-circe`,
     fullDependency(`db-core`),
     `db-slick`,
@@ -295,6 +302,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .aggregate(
     `core`,
     `effects-cats`,
+    `config`,
     `json-circe`,
     `db-core`,
     `db-slick`,
