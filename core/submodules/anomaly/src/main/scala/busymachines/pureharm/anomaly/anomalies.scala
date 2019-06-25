@@ -39,7 +39,7 @@ abstract class Anomalies(
   override val message:         String,
   override val firstAnomaly:    Anomaly,
   override val restOfAnomalies: Seq[Anomaly],
-) extends AnomaliesBase with Product with Serializable {}
+) extends Exception(message) with AnomaliesBase with Product with Serializable {}
 
 object Anomalies {
 
