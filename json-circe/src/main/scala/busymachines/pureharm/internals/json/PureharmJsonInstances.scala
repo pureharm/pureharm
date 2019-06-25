@@ -101,7 +101,7 @@ object PureharmJsonInstances {
       Encoder[Float].asInstanceOf[Encoder[Float @@ Tag]]
 
     implicit final def floatPhantomTypeDecoder[Tag]: Decoder[Float @@ Tag] =
-      Decoder[Double].asInstanceOf[Decoder[Float @@ Tag]]
+      Decoder[Float].asInstanceOf[Decoder[Float @@ Tag]]
 
     implicit final def doublePhantomTypeEncoder[Tag]: Encoder[Double @@ Tag] =
       Encoder[Double].asInstanceOf[Encoder[Double @@ Tag]]
