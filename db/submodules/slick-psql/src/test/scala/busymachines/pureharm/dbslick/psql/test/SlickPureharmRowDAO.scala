@@ -48,9 +48,10 @@ private[test] object SlickPureharmRowDAO {
     val bigDecimal = column[PhantomBigDecimal]("big_decimal")
     val string     = column[PhantomString]("string")
     val jsonCol    = column[PureharmJSONCol]("jsonb_col")
+    val optCol     = column[Option[PhantomString]]("opt_col")
 
     override def * : ProvenShape[PureharmRow] =
-      (id, byte, int, long, bigDecimal, string, jsonCol) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
+      (id, byte, int, long, bigDecimal, string, jsonCol, optCol) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
   }
 
   final private class SlickPureharmRowQuerries(
