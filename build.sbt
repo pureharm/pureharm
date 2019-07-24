@@ -318,7 +318,7 @@ lazy val scalaCollCompatVersion: String = "2.1.1"        //https://github.com/sc
 lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:            String = "2.0.0-M4"     //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.0.0-M4"     //https://github.com/typelevel/cats-effect/releases
-lazy val circeVersion:           String = "0.12.0-M3"    //https://github.com/circe/circe/releases
+lazy val circeVersion:           String = "0.12.0-M4"    //https://github.com/circe/circe/releases
 lazy val log4catsVersion:        String = "0.4.0-M2"     //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
 lazy val pureconfigVersion:      String = "0.11.1"       //https://github.com/pureconfig/pureconfig/releases
@@ -358,6 +358,7 @@ lazy val cats: Seq[ModuleID] = Seq(
 //https://github.com/typelevel/cats-effect/releases
 lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVersion withSources ()
 
+//https://github.com/circe/circe/releases
 def circe: Seq[ModuleID] = Seq(circeCore, circeGenericExtras, circeParser)
 
 lazy val circeCore:          ModuleID = "io.circe" %% "circe-core"           % circeVersion withSources ()
