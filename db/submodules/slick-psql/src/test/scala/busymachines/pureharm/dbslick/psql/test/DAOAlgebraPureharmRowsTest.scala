@@ -43,13 +43,14 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
     )
 
   private val row = PureharmRow(
-    id         = PhantomPK("test1"),
-    byte       = PhantomByte(245.toByte),
-    int        = PhantomInt(41),
-    long       = PhantomLong(0.toLong),
-    bigDecimal = PhantomBigDecimal(BigDecimal("1390749832749238")),
-    string     = PhantomString("first_test_in_a_while"),
-    jsonbCol   = PureharmJSONCol(42, "json_column"),
+    id          = PhantomPK("test1"),
+    byte        = PhantomByte(245.toByte),
+    int         = PhantomInt(41),
+    long        = PhantomLong(0.toLong),
+    bigDecimal  = PhantomBigDecimal(BigDecimal("1390749832749238")),
+    string      = PhantomString("first_test_in_a_while"),
+    jsonbCol    = PureharmJSONCol(42, "json_column"),
+    optionalCol = Option(PhantomString("optional_value")),
   )
 
   iotest("insert + find") { implicit dao: PureharmRowDAO[IO] =>
@@ -64,6 +65,40 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
       _          <- dao.insert(row)
       fetchedRow <- dao.retrieve(row.id)
     } yield assert(row === fetchedRow)
+  }
+
+  iotest("insert + update (defined opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+    for {
+      _ <- dao.insert(row)
+      newRowWithSome = row.copy(
+        byte        = PhantomByte(111.toByte),
+        int         = PhantomInt(42),
+        long        = PhantomLong(6.toLong),
+        bigDecimal  = PhantomBigDecimal(BigDecimal("328572")),
+        string      = PhantomString("updated_string"),
+        jsonbCol    = PureharmJSONCol(79, "new_json_col"),
+        optionalCol = Option(PhantomString("new opt_value")),
+      )
+      _          <- dao.update(newRowWithSome)
+      fetchedRow <- dao.retrieve(row.id)
+    } yield assert(newRowWithSome === fetchedRow)
+  }
+
+  iotest("insert + update (nulled opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+    for {
+      _ <- dao.insert(row)
+      newRowWithNone = row.copy(
+        byte        = PhantomByte(56.toByte),
+        int         = PhantomInt(13),
+        long        = PhantomLong(8.toLong),
+        bigDecimal  = PhantomBigDecimal(BigDecimal("124325671")),
+        string      = PhantomString("second_updated_string"),
+        jsonbCol    = PureharmJSONCol(45, "newest_json_col"),
+        optionalCol = Option.empty,
+      )
+      _          <- dao.update(newRowWithNone)
+      fetchedRow <- dao.retrieve(row.id)
+    } yield assert(newRowWithNone === fetchedRow)
   }
 
   iotest("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
