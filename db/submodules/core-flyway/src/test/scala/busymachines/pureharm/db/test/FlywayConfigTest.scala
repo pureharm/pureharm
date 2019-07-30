@@ -15,12 +15,16 @@ final class FlywayConfigTest extends PureharmFixtureTest {
 
   override type FixtureParam = Unit
 
+  private val `"public"`            = SchemaName("public")
+  private val `"db/migration"`      = MigrationLocation("db/migration")
+  private val `"db/test_migration"` = MigrationLocation("db/test_migration")
+
   iotest("read config with all fields from reference.conf") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration1").map { config =>
       assert(
         config === FlywayConfig
-          .withSchemas("public")
-          .withLocations("db/migration", "db/test_migration")
+          .withSchemas(`"public"`)
+          .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withCleanOnValidationErrors(true)
           .withIgnoreMissingMigrations(true),
       )
@@ -31,7 +35,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration2").map { config =>
       assert(
         config == FlywayConfig
-          .withLocations("db/migration", "db/test_migration")
+          .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withCleanOnValidationErrors(true)
           .withIgnoreMissingMigrations(true),
       )
@@ -42,7 +46,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration3").map { config =>
       assert(
         config == FlywayConfig
-          .withSchemas("public")
+          .withSchemas(`"public"`)
           .withCleanOnValidationErrors(true)
           .withIgnoreMissingMigrations(true),
       )
@@ -53,8 +57,8 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration4").map { config =>
       assert(
         config == FlywayConfig
-          .withSchemas("public")
-          .withLocations("db/migration", "db/test_migration")
+          .withSchemas(`"public"`)
+          .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withCleanOnValidationErrors(true),
       )
     }
@@ -64,8 +68,8 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration5").map { config =>
       assert(
         config == FlywayConfig
-          .withSchemas("public")
-          .withLocations("db/migration", "db/test_migration")
+          .withSchemas(`"public"`)
+          .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withIgnoreMissingMigrations(true),
       )
     }
@@ -83,7 +87,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration7").map { config =>
       assert(
         config == FlywayConfig
-          .withSchemas("public"),
+          .withSchemas(`"public"`),
       )
     }
   }
@@ -92,7 +96,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration8").map { config =>
       assert(
         config == FlywayConfig
-          .withLocations("db/test_migration"),
+          .withLocations(`"db/test_migration"`),
       )
     }
   }

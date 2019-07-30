@@ -1,6 +1,6 @@
 package busymachines.pureharm.db.flyway.internals
 
-import busymachines.pureharm.db.flyway.FlywayConfig
+import busymachines.pureharm.db.flyway._
 
 /**
   *
@@ -9,11 +9,11 @@ import busymachines.pureharm.db.flyway.FlywayConfig
   *
   */
 private[db] trait FlywayConfigFluentApi {
-  def withLocations(locations: String*):      FlywayConfig
-  def withLocations(locations: List[String]): FlywayConfig
+  def withLocations(locations: MigrationLocation*):      FlywayConfig
+  def withLocations(locations: List[MigrationLocation]): FlywayConfig
 
-  def withSchemas(schemas: String*):      FlywayConfig
-  def withSchemas(schemas: List[String]): FlywayConfig
+  def withSchemas(schemas: SchemaName*):      FlywayConfig
+  def withSchemas(schemas: List[SchemaName]): FlywayConfig
 
   def withIgnoreMissingMigrations(ignore: Boolean): FlywayConfig
   def withCleanOnValidationErrors(clean:  Boolean): FlywayConfig

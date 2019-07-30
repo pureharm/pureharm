@@ -18,6 +18,7 @@
 package busymachines.pureharm.db.flyway
 
 import busymachines.pureharm.config._
+import busymachines.pureharm.config.implicits._
 
 /**
   *
@@ -51,16 +52,18 @@ import busymachines.pureharm.config._
   *   See [[org.flywaydb.core.api.configuration.FluentConfiguration#cleanOnValidationError()]]
   */
 final case class FlywayConfig(
-  schemas:                 List[String] = List.empty,
-  migrationLocations:      List[String] = List.empty,
-  ignoreMissingMigrations: Boolean      = false,
-  cleanOnValidationError:  Boolean      = false,
+  schemas:                 List[SchemaName]        = List.empty,
+  migrationLocations:      List[MigrationLocation] = List.empty,
+  ignoreMissingMigrations: Boolean                 = false,
+  cleanOnValidationError:  Boolean                 = false,
 ) extends internals.FlywayConfigFluentApi {
-  override def withLocations(locations: String*):      FlywayConfig = this.withLocations(locations.toList)
-  override def withLocations(locations: List[String]): FlywayConfig = this.copy(migrationLocations = locations)
 
-  override def withSchemas(schemas: String*):      FlywayConfig = this.withSchemas(schemas.toList)
-  override def withSchemas(schemas: List[String]): FlywayConfig = this.copy(schemas = schemas)
+  override def withLocations(locations: MigrationLocation*): FlywayConfig = this.withLocations(locations.toList)
+  override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
+    this.copy(migrationLocations = locations)
+
+  override def withSchemas(schemas: SchemaName*):      FlywayConfig = this.withSchemas(schemas.toList)
+  override def withSchemas(schemas: List[SchemaName]): FlywayConfig = this.copy(schemas = schemas)
 
   override def withIgnoreMissingMigrations(ignore: Boolean): FlywayConfig = this.copy(ignoreMissingMigrations = ignore)
   override def withCleanOnValidationErrors(clean:  Boolean): FlywayConfig = this.copy(cleanOnValidationError  = clean)
@@ -74,11 +77,13 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
 
   override def defaultConfig: FlywayConfig = FlywayConfig()
 
-  override def withLocations(locations: String*):      FlywayConfig = FlywayConfig(migrationLocations = locations.toList)
-  override def withLocations(locations: List[String]): FlywayConfig = FlywayConfig(migrationLocations = locations)
+  override def withLocations(locations: MigrationLocation*): FlywayConfig =
+    FlywayConfig(migrationLocations = locations.toList)
+  override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
+    FlywayConfig(migrationLocations = locations)
 
-  override def withSchemas(schemas: String*):      FlywayConfig = FlywayConfig(schemas = schemas.toList)
-  override def withSchemas(schemas: List[String]): FlywayConfig = FlywayConfig(schemas = schemas)
+  override def withSchemas(schemas: SchemaName*):      FlywayConfig = FlywayConfig(schemas = schemas.toList)
+  override def withSchemas(schemas: List[SchemaName]): FlywayConfig = FlywayConfig(schemas = schemas)
 
   override def withIgnoreMissingMigrations(ignore: Boolean): FlywayConfig =
     FlywayConfig(ignoreMissingMigrations = ignore)
@@ -116,9 +121,9 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
     * it useful outside of these scenarios too.
     */
   private case class SimplifiedRepr(
-    schemas:                 Option[String] = Option.empty,
-    migrationLocations:      Option[String] = Option.empty,
-    ignoreMissingMigrations: Boolean        = false,
-    cleanOnValidationError:  Boolean        = false,
+    schemas:                 Option[SchemaName]        = Option.empty,
+    migrationLocations:      Option[MigrationLocation] = Option.empty,
+    ignoreMissingMigrations: Boolean                   = false,
+    cleanOnValidationError:  Boolean                   = false,
   )
 }
