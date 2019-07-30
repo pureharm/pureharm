@@ -8,12 +8,12 @@ package busymachines.pureharm.db
   */
 final case class DBConnectionConfig(
   host:     DBHost,
-  port:     DBPort,
   dbName:   DatabaseName,
   username: DBUsername,
   password: DBPassword,
 ) {
-  def jdbcURL: JDBCUrl = JDBCUrl.postgresql(host, port, dbName)
+
+  def jdbcURL: JDBCUrl = JDBCUrl.postgresql(host, dbName)
 }
 
 import busymachines.pureharm.config._
