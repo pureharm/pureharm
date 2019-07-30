@@ -59,5 +59,9 @@ trait PureharmDBCoreTypeDefinitions {
 
   final type DAOAlgebra[R[_], E, PK] = db.DAOAlgebra[R, E, PK]
 
+  @scala.deprecated(
+    "Will be removed in M17. Use the object from busymachines.pureharm.db from the db-core-flyway jar. It also comes with more config options. You simply pass 'FlywayConfig.withMigrationLocations(whatever_you_had_previously)' instead of the locations argument. And you get the exact same behavior. Everything else uses the same defaults. Of course you can also configure futher if you wish",
+    "0.0.2-M16",
+  )
   final val Flyway: db.Flyway.type = db.Flyway
 }
