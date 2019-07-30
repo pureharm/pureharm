@@ -56,10 +56,10 @@ final case class FlywayConfig(
   ignoreMissingMigrations: Boolean      = false,
   cleanOnValidationError:  Boolean      = false,
 ) extends internals.FlywayConfigFluentApi {
-  override def withLocations(locations: String*):      FlywayConfig = this.copy(migrationLocations = locations.toList)
+  override def withLocations(locations: String*):      FlywayConfig = this.withLocations(locations.toList)
   override def withLocations(locations: List[String]): FlywayConfig = this.copy(migrationLocations = locations)
 
-  override def withSchemas(schemas: String*):      FlywayConfig = this.copy(schemas = schemas.toList)
+  override def withSchemas(schemas: String*):      FlywayConfig = this.withSchemas(schemas.toList)
   override def withSchemas(schemas: List[String]): FlywayConfig = this.copy(schemas = schemas)
 
   override def withIgnoreMissingMigrations(ignore: Boolean): FlywayConfig = this.copy(ignoreMissingMigrations = ignore)
