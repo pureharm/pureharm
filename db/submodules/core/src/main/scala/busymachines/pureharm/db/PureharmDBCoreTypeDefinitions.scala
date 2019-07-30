@@ -42,9 +42,6 @@ trait PureharmDBCoreTypeDefinitions {
   final val DBHost: db.DBHost.type = db.DBHost
   final type DBHost = db.DBHost
 
-  final val DBPort: db.DBPort.type = db.DBPort
-  final type DBPort = db.DBPort
-
   final val JDBCUrl: db.JDBCUrl.type = db.JDBCUrl
   final type JDBCUrl = db.JDBCUrl.Type
 

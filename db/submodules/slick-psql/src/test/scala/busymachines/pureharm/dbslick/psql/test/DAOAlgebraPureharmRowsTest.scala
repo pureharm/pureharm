@@ -119,8 +119,7 @@ private[test] object DAOAlgebraPureharmRowsTest {
     *
     */
   private val dbConfig = DBConnectionConfig(
-    host     = DBHost("localhost"),
-    port     = DBPort(20010),
+    host     = DBHost("localhost:20010"),
     dbName   = DatabaseName("pureharm_test"),
     username = DBUsername("pureharmony"),
     password = DBPassword("pureharmony"),
