@@ -203,6 +203,7 @@ lazy val `config` = project
 
 lazy val `db-deps` =
   `db-core-deps` ++
+    `db-core-flyway-deps` ++
     `db-slick-deps` ++
     `db-slick-psql-deps`
 
@@ -215,6 +216,7 @@ lazy val `db` = project
   )
   .aggregate(
     `db-core`,
+    `db-core-flyway`,
     `db-slick`,
     `db-slick-psql`,
   )
@@ -222,7 +224,7 @@ lazy val `db` = project
 //#############################################################################
 
 lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ Seq(
-  flyway,
+  flyway, //FIXME: remove in M17 once the deprecation period of Flyway is gone
   log4cats       % Test,
   logbackClassic % Test,
   scalaTest      % Test,
@@ -243,6 +245,34 @@ lazy val `db-core` = subModule("db", "core")
     `core`,
     `effects-cats`,
     `config`,
+  )
+
+//#############################################################################
+
+lazy val `db-core-flyway-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
+  flyway,
+  log4cats       % Test,
+  logbackClassic % Test,
+  scalaTest      % Test,
+)
+
+lazy val `db-core-flyway` = subModule("db", "core-flyway")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(Settings.commonSettings)
+  .settings(
+    libraryDependencies ++= `db-core-flyway-deps`.distinct,
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `config`,
+    fullDependency(`db-core`),
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `db-core`,
   )
 
 //#############################################################################
