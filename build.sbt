@@ -308,7 +308,6 @@ lazy val `db-slick-psql-deps` =
     `config-deps` ++
     `json-circe-deps` ++
     `db-core-deps` ++
-    `db-core-flyway-deps` ++
     `db-slick-deps` ++ Seq(
     postgresql,
     log4cats       % Test,
@@ -328,7 +327,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `config`,
     `json-circe`,
     fullDependency(`db-core`),
-    fullDependency(`db-core-flyway`),
+    asTestingDependency(`db-core-flyway`),
     `db-slick`,
   )
   .aggregate(
@@ -458,6 +457,12 @@ lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion 
   * Ensures dependencies between the ``test`` parts of the modules
   */
 def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
+
+/**
+  * Used only when one module is useful to test another module, but
+  * in production build they don't require to be used together.
+  */
+def asTestingDependency(p: Project): ClasspathDependency = p % "test -> compile"
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
