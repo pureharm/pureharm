@@ -53,7 +53,7 @@ object Flyway {
     } yield ()
   }
 
-  private[db] def flywayInit[F[_]](
+  private def flywayInit[F[_]](
     url:        JDBCUrl,
     username:   DBUsername,
     password:   DBPassword,

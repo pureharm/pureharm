@@ -308,6 +308,7 @@ lazy val `db-slick-psql-deps` =
     `config-deps` ++
     `json-circe-deps` ++
     `db-core-deps` ++
+    `db-core-flyway-deps` ++
     `db-slick-deps` ++ Seq(
     postgresql,
     log4cats       % Test,
@@ -327,6 +328,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `config`,
     `json-circe`,
     fullDependency(`db-core`),
+    fullDependency(`db-core-flyway`),
     `db-slick`,
   )
   .aggregate(
