@@ -25,8 +25,8 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config === FlywayConfig
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withCleanOnValidationErrors(true)
-          .withIgnoreMissingMigrations(true),
+          .withCleanOnValidationErrors(CleanOnValidationError.True)
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
       )
     }
   }
@@ -36,8 +36,8 @@ final class FlywayConfigTest extends PureharmFixtureTest {
       assert(
         config == FlywayConfig
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withCleanOnValidationErrors(true)
-          .withIgnoreMissingMigrations(true),
+          .withCleanOnValidationErrors(CleanOnValidationError.True)
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
       )
     }
   }
@@ -47,8 +47,8 @@ final class FlywayConfigTest extends PureharmFixtureTest {
       assert(
         config == FlywayConfig
           .withSchemas(`"public"`)
-          .withCleanOnValidationErrors(true)
-          .withIgnoreMissingMigrations(true),
+          .withCleanOnValidationErrors(CleanOnValidationError.True)
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
       )
     }
   }
@@ -59,7 +59,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withCleanOnValidationErrors(true),
+          .withCleanOnValidationErrors(CleanOnValidationError.True),
       )
     }
   }
@@ -70,7 +70,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withIgnoreMissingMigrations(true),
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
       )
     }
   }

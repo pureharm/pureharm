@@ -15,4 +15,16 @@ package object flyway {
 
   object SchemaName extends PhantomType[String]
   type SchemaName = SchemaName.Type
+
+  object IgnoreMissingMigrations extends PhantomType[Boolean] {
+    val False: this.Type = this.apply(false)
+    val True:  this.Type = this.apply(true)
+  }
+  type IgnoreMissingMigrations = IgnoreMissingMigrations.Type
+
+  object CleanOnValidationError extends PhantomType[Boolean] {
+    val False: this.Type = this.apply(false)
+    val True:  this.Type = this.apply(true)
+  }
+  type CleanOnValidationError = CleanOnValidationError.Type
 }

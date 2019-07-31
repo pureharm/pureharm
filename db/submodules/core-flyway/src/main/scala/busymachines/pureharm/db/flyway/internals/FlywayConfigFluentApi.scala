@@ -15,8 +15,8 @@ private[db] trait FlywayConfigFluentApi {
   def withSchemas(schemas: SchemaName*):      FlywayConfig
   def withSchemas(schemas: List[SchemaName]): FlywayConfig
 
-  def withIgnoreMissingMigrations(ignore: Boolean): FlywayConfig
-  def withCleanOnValidationErrors(clean:  Boolean): FlywayConfig
+  def withIgnoreMissingMigrations(ignore: IgnoreMissingMigrations): FlywayConfig
+  def withCleanOnValidationErrors(clean:  CleanOnValidationError):  FlywayConfig
 
   def defaultConfig: FlywayConfig
 }
