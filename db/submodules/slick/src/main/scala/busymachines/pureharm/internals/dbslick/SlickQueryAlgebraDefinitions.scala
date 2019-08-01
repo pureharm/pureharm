@@ -96,18 +96,18 @@ trait SlickQueryAlgebraDefinitions {
         case NonFatal(e) => SlickDBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
-    def insert(e: E): ConnectionIO[PK] = (dao.+=(e): ConnectionIO[Int]).map(_ => eid(e))
+    def insert(e: E): ConnectionIO[PK] = dao.+=(e).widenCIO.map(_ => eid(e))
 
-    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = (dao.++=(es): ConnectionIO[Option[Int]]).void
+    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = dao.++=(es).widenCIO.void
 
     def update(e: E): ConnectionIO[E] = (dao.update(e): ConnectionIO[Int]).map(_ => e)
 
     def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] = es.traverse_((e: E) => update(e))
 
-    def delete(pk: PK): ConnectionIO[Unit] = (dao.filter(_.id === pk).delete: ConnectionIO[Int]).void
+    def delete(pk: PK): ConnectionIO[Unit] = dao.filter(_.id === pk).delete.widenCIO.void
 
     def deleteMany(pks: Iterable[PK]): ConnectionIO[Unit] =
-      (dao.filter(_.id.inSet(pks)).delete: ConnectionIO[Int]).void
+      dao.filter(_.id.inSet(pks)).delete.widenCIO.void
 
     def exists(pk: PK): ConnectionIO[Boolean] = dao.filter(_.id === pk).exists.result
 

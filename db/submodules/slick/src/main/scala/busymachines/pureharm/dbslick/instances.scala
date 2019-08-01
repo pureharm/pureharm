@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.dbslick
 
-import busymachines.pureharm.internals.dbslick.SlickConnectionIOCatsInstances
+import busymachines.pureharm.internals.dbslick.{PureharmSlickConnectionIOOps, SlickConnectionIOCatsInstances}
 
 /**
   *
@@ -25,4 +25,4 @@ import busymachines.pureharm.internals.dbslick.SlickConnectionIOCatsInstances
   * @since 13 Jun 2019
   *
   */
-object instances extends SlickConnectionIOCatsInstances
+object instances extends SlickConnectionIOCatsInstances with PureharmSlickConnectionIOOps.Implicits
