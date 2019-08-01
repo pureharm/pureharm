@@ -10,7 +10,12 @@ import busymachines.pureharm.phantom._
   */
 package object flyway {
 
-  object MigrationLocation extends PhantomType[String]
+  object MigrationLocation extends PhantomType[String] {
+    /**
+      * The default location of flyway migrations
+      */
+    def default: this.Type = this.apply("db/migration")
+  }
   type MigrationLocation = MigrationLocation.Type
 
   object SchemaName extends PhantomType[String]

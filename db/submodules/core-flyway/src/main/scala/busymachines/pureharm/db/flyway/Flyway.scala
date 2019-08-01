@@ -32,6 +32,20 @@ object Flyway {
   import busymachines.pureharm.effects.implicits._
 
   def migrate[F[_]](
+    url:          JDBCUrl,
+    username:     DBUsername,
+    password:     DBPassword,
+    flywayConfig: Option[FlywayConfig],
+  )(
+    implicit F: Sync[F],
+  ): F[Int] = {
+    for {
+      fw   <- flywayInit[F](url, username, password, flywayConfig)
+      migs <- F.delay(fw.migrate())
+    } yield migs
+  }
+
+  def migrate[F[_]](
     dbConfig:     DBConnectionConfig,
     flywayConfig: Option[FlywayConfig] = Option.empty,
   )(
