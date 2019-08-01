@@ -138,13 +138,13 @@ private[test] object DAOAlgebraPureharmRowsTest {
 
   private def initDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
     for {
-      _ <- Flyway.migrate[IO](dbConfig = dbConfig, migrationLocations = List.empty)
+      _ <- flyway.Flyway.migrate[IO](dbConfig = dbConfig, Option.empty)
     } yield ()
   }
 
   private def cleanDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
     for {
-      _ <- Flyway.clean[IO](dbConfig)
+      _ <- flyway.Flyway.clean[IO](dbConfig)
     } yield ()
   }
 }
