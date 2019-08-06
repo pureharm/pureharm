@@ -378,7 +378,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
         val io: IO[Int] = Future[Int] {
           sideEffect = 42
           sideEffect
-        }.purifyIn[IO]
+        }.liftTo[IO]
         // we wait because in case this doesn't work,
         // the Future is already running and doing all its side-effects
         Thread.sleep(100)
@@ -394,7 +394,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
           val f: F[Int] = Future[Int] {
             sideEffect = 42
             sideEffect
-          }.purifyIn[F]
+          }.liftTo[F]
           // we wait because in case this doesn't work,
           // the Future is already running and doing all its side-effects
           Thread.sleep(100)

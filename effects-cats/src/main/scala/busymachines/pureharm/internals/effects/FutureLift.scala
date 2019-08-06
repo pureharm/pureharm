@@ -27,25 +27,46 @@ import scala.concurrent.Future
   *
   */
 @implicitAmbiguous(
-  "FutureLift needs a bunch of machinery. Make sure you don't have two implicit scala.concurrent.ExecutionContext, or two cats.effect.ContextShift[F] in scope, or two LiftIO[F]",
+  "There are several cases where this can go wrong:\n\t1) you have two ContextShift[F] and/or two Async[F] instances in scope.\n\t2)You have one ContextShift[F] and one Async[F], AND one FutureLift[F] in scope.",
 )
 @implicitNotFound(
-  "FutureLift can only be instantiated for ContextShift[IO] for F[_]: LiftIO. You should instantiate one of these in your main, and propagate it further",
+  "Future lift can be  instantiated if for any F[_] for which you have an implicit ContextShift[F] AND an implicit Async[F] in scope",
 )
-@scala.deprecated("Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture, prefer using that. FutureLift will be removed in pureharm 0.0.3", "0.0.2-M17")
+@scala.deprecated(
+  "Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture. Prefer using that one instead. FutureLift will be removed in 0.0.3",
+  "0.0.2-M17",
+)
 trait FutureLift[F[_]] {
   def fromFuture[A](fut: => Future[A]): F[A]
 }
 
-@scala.deprecated("Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture, prefer using that. FutureLift will be removed in pureharm 0.0.3", "0.0.2-M17")
 object FutureLift {
 
   def apply[F[_]](implicit fl: FutureLift[F]): FutureLift[F] = fl
 
   import cats.effect._
 
-  implicit def instance[F[_]: LiftIO](implicit cs: ContextShift[IO]): FutureLift[F] = new FutureLiftIO[F]
+  @scala.deprecated(
+    "Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture. And a a FutureLift.polymorphicFutureLift[F] constructor, you can also use that.",
+    "0.0.2-M17",
+  )
+  def instance[F[_]: LiftIO](implicit cs: ContextShift[IO]): FutureLift[F] = new FutureLiftIO[F]
 
+  def polymorphicFutureLift[F[_]: ContextShift](implicit F: Async[F]): FutureLift[F] = new FutureLiftF[F]
+
+  final private[FutureLift] class FutureLiftF[F[_]](
+    implicit
+    private val F:  Async[F],
+    private val cs: ContextShift[F],
+  ) extends FutureLift[F] {
+    override def fromFuture[A](fut: => Future[A]): F[A] = Async.fromFuture(F.delay(fut))
+
+  }
+
+  @scala.deprecated(
+    "Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture. And a a FutureLift.polymorphicFutureLift[F] constructor, you can also use that.",
+    "0.0.2-M17",
+  )
   final private[FutureLift] class FutureLiftIO[F[_]](
     implicit
     private val cs:     ContextShift[IO],
