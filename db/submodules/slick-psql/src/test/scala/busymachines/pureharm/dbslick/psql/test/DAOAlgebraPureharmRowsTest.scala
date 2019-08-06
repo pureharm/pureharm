@@ -38,9 +38,11 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
   override def fixture: Resource[IO, PureharmRowDAO[IO]] =
-    DAOAlgebraPureharmRowsTest.transactorResource[IO].map(
-      implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
-    )
+    DAOAlgebraPureharmRowsTest
+      .transactorResource[IO]
+      .map(
+        implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
+      )
 
   private val row = PureharmRow(
     id          = PhantomPK("test1"),
