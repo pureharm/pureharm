@@ -21,7 +21,7 @@ import Keys._
 object Settings {
   lazy val scala2_12:        String = "2.12.9"
   lazy val scala2_13:        String = "2.13.0"
-  lazy val mainScalaVersion: String = scala2_12
+  lazy val mainScalaVersion: String = scala2_13
   lazy val organizationName: String = "com.busymachines"
 
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
