@@ -126,7 +126,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     implicit
     F:     Sync[F],
     timer: Timer[F],
-  ): F[Attempt[A]] = {
+  ): F[A] = {
     PureharmTimedAttemptReattemptSyntaxOps.reattempt(errorLog)(retries, betweenRetries)(fa)
   }
 
@@ -140,7 +140,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     implicit
     F:     Sync[F],
     timer: Timer[F],
-  ): F[Attempt[A]] = {
+  ): F[A] = {
     PureharmTimedAttemptReattemptSyntaxOps.reattempt(retries, betweenRetries)(fa)
   }
 }
@@ -263,8 +263,8 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     betweenRetries: FiniteDuration,
   )(
     fa: F[A],
-  ): F[Attempt[A]] = {
-    this.timedReattempt(errorLog, NANOSECONDS)(retries, betweenRetries)(fa).map(_._2)
+  ): F[A] = {
+    this.timedReattempt(errorLog, NANOSECONDS)(retries, betweenRetries)(fa).map(_._2).rethrow
   }
 
   /**
@@ -275,8 +275,8 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     betweenRetries: FiniteDuration,
   )(
     fa: F[A],
-  ): F[Attempt[A]] = {
-    this.timedReattempt(noLog(Sync[F]), NANOSECONDS)(retries, betweenRetries)(fa).map(_._2)
+  ): F[A] = {
+    this.timedReattempt(noLog(Sync[F]), NANOSECONDS)(retries, betweenRetries)(fa).map(_._2).rethrow
   }
 
   private def noLog[F[_]: Applicative]: (Throwable, String) => F[Unit] =
