@@ -44,7 +44,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *   a more human friendly measurement as possible
     * @return
     *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both
+    *  times both success and failure case.
     */
   def timedAttempt(
     unit:       TimeUnit = MILLISECONDS,
@@ -68,7 +68,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *   a more human friendly measurement as possible
     * @return
     *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both.
+    *  times all successes and failures, and returns their sum.
     *  N.B.
     *  It only captures the latest failure, if it encounters one.
     */
@@ -112,10 +112,8 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *   N.B. you can also use [[FiniteDuration.toCoarsest]] to then obtain
     *   a more human friendly measurement as possible
     * @return
-    *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both.
-    *  N.B.
-    *  It only captures the latest failure, if it encounters one.
+    *   N.B.
+    *   It only captures the latest failure, if it encounters one.
     */
   def reattempt(
     errorLog: (Throwable, String) => F[Unit],
@@ -166,7 +164,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     *   a more human friendly measurement as possible
     * @return
     *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both
+    *  times both success and failure case.
     */
   def timedAttempt[F[_], A](
     timeUnit: TimeUnit,
@@ -197,7 +195,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     *   a more human friendly measurement as possible
     * @return
     *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both.
+    *  times all successes and failures, and returns their sum.
     *  N.B.
     *  It only captures the latest failure, if it encounters one.
     */
@@ -251,10 +249,8 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     *   N.B. you can also use [[FiniteDuration.toCoarsest]] to then obtain
     *   a more human friendly measurement as possible
     * @return
-    *  Never fails and captures the failure of the ``fa`` within the [[Attempt]],
-    *  times both.
-    *  N.B.
-    *  It only captures the latest failure, if it encounters one.
+    *   N.B.
+    *   It only captures the latest failure, if it encounters one.
     */
   def reattempt[F[_]: Sync: Timer, A](
     errorLog: (Throwable, String) => F[Unit],
