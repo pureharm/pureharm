@@ -18,7 +18,6 @@
 package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.dbslick._
 
 /**
@@ -33,11 +32,11 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
 )(
   implicit
   private val F:  Async[F],
-  private val fl: FutureLift[F],
+  private val fl: ContextShift[F],
 ) extends Transactor[F] {
 
   override def run[T](cio: ConnectionIO[T]): F[T] = {
-    slickDB.run(cio).purifyIn[F]
+    Async.fromFuture(F.delay(slickDB.run(cio)))
   }
 
   override def shutdown: F[Unit] = F.delay(slickDB.close())
@@ -59,7 +58,7 @@ private[pureharm] object HikariTransactorImpl {
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
-  def resource[F[_]: Async: FutureLift](
+  def resource[F[_]: Async: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,
@@ -73,7 +72,7 @@ private[pureharm] object HikariTransactorImpl {
   /**
     * Prefer using [[resource]] unless you know what you are doing.
     */
-  def unsafeCreate[F[_]: Async: FutureLift](
+  def unsafeCreate[F[_]: Async: ContextShift](
     slickProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,

@@ -38,7 +38,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
   override def fixture: Resource[IO, PureharmRowDAO[IO]] =
-    DAOAlgebraPureharmRowsTest.transactorResource.map(
+    DAOAlgebraPureharmRowsTest.transactorResource[IO].map(
       implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
     )
 
@@ -125,8 +125,8 @@ private[test] object DAOAlgebraPureharmRowsTest {
     password = DBPassword("pureharmony"),
   )
 
-  def transactorResource(implicit cs: ContextShift[IO]): Resource[IO, Transactor[IO]] = {
-    val trans = Transactor.pgSQLHikari[IO](
+  def transactorResource[F[_]: Async: ContextShift]: Resource[F, Transactor[F]] = {
+    val trans = Transactor.pgSQLHikari[F](
       dbProfile    = testdb.jdbcProfileAPI,
       dbConnection = dbConfig,
       asyncConfig  = SlickDBIOAsyncExecutorConfig.default,
@@ -136,15 +136,15 @@ private[test] object DAOAlgebraPureharmRowsTest {
     cleanDB >> initDB >> trans
   }
 
-  private def initDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
+  private def initDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.migrate[IO](dbConfig = dbConfig, Option.empty)
+      _ <- flyway.Flyway.migrate[F](dbConfig = dbConfig, Option.empty)
     } yield ()
   }
 
-  private def cleanDB: Resource[IO, Unit] = Resource.liftF[IO, Unit] {
+  private def cleanDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.clean[IO](dbConfig)
+      _ <- flyway.Flyway.clean[F](dbConfig)
     } yield ()
   }
 }
