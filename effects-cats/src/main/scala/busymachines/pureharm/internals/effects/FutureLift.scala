@@ -32,10 +32,12 @@ import scala.concurrent.Future
 @implicitNotFound(
   "FutureLift can only be instantiated for ContextShift[IO] for F[_]: LiftIO. You should instantiate one of these in your main, and propagate it further",
 )
+@scala.deprecated("Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture, prefer using that. FutureLift will be removed in pureharm 0.0.3", "0.0.2-M17")
 trait FutureLift[F[_]] {
   def fromFuture[A](fut: => Future[A]): F[A]
 }
 
+@scala.deprecated("Since cats-effect 2.0.0-M5 there exists Async[F].fromFuture, prefer using that. FutureLift will be removed in pureharm 0.0.3", "0.0.2-M17")
 object FutureLift {
 
   def apply[F[_]](implicit fl: FutureLift[F]): FutureLift[F] = fl
