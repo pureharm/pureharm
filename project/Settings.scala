@@ -32,7 +32,7 @@ object Settings {
       homepage                  := Some(url(pureharmHomepage)),
       scalaVersion              := mainScalaVersion,
       crossScalaVersions        := List(scala2_12, scala2_13),
-      addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.0"),  //https://github.com/oleg-py/better-monadic-for/releases
+      addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),  //https://github.com/oleg-py/better-monadic-for/releases
       addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"), //https://github.com/typelevel/kind-projector/releases
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => scala2_12Flags
