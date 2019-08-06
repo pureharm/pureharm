@@ -26,9 +26,9 @@ import scala.concurrent.Future
   * @since 13 Jun 2019
   *
   */
-@implicitAmbiguous(
-  "There are several cases where this can go wrong:\n\t1) you have two ContextShift[F] and/or two Async[F] instances in scope.\n\t2)You have one ContextShift[F] and one Async[F], AND one FutureLift[F] in scope.",
-)
+@implicitAmbiguous("""There are several cases where this can go wrong:
+	1) you have two ContextShift[F] and/or two Async[F] instances in scope.
+	2)You have one ContextShift[F] and one Async[F], AND one FutureLift[F] in scope.""")
 @implicitNotFound(
   "Future lift can be  instantiated if for any F[_] for which you have an implicit ContextShift[F] AND an implicit Async[F] in scope",
 )
