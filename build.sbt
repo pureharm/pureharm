@@ -347,7 +347,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
 
 lazy val scalaCollCompatVersion: String = "2.1.1"        //https://github.com/scala/scala-collection-compat/releases
 lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:            String = "2.0.0-M4"     //https://github.com/typelevel/cats/releases
+lazy val catsVersion:            String = "2.0.0-RC1"    //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.0.0-M5"     //https://github.com/typelevel/cats-effect/releases
 lazy val circeVersion:           String = "0.12.0-M4"    //https://github.com/circe/circe/releases
 lazy val log4catsVersion:        String = "0.4.0-M2"     //https://github.com/ChristopherDavenport/log4cats/releases
