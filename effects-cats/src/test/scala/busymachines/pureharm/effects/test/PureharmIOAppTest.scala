@@ -69,12 +69,12 @@ object PureharmIOAppTest extends PureharmIOApp {
     implicit val tim: Timer[IO]            = timer
     val res = appResource[IO](ConcurrentEffect[IO], contextShift)
     res
-      .use(runApp[IO, IO.Par])
+      .use(runApp[IO])
       .as(ExitCode.Success)
       .handleErrorWith(e => putStrLn(s"FAILED: $e") >> IO.pure(ExitCode.Error))
   }
 
-  private def runApp[F[_]: Sync: Timer, G[_]](res: AppResource[F])(implicit p: Parallel[F, G]): F[Unit] = {
+  private def runApp[F[_]: Sync: Timer](res: AppResource[F])(implicit p: Parallel[F]): F[Unit] = {
     import scala.concurrent.duration._
     for {
       _ <- (List.range[Int](1, 100): List[Int])
