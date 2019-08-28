@@ -75,10 +75,10 @@ private[pureharm] trait CatsTypeAliases {
   final type Bitraverse[F[_, _]] = cats.Bitraverse[F]
   final val Bitraverse: cats.Bitraverse.type = cats.Bitraverse
 
-  final type Parallel[F[_], COL[_]] = cats.Parallel[F, COL]
+  final type Parallel[F[_]] = cats.Parallel[F]
   final val Parallel: cats.Parallel.type = cats.Parallel
 
-  final type NonEmptyParallel[F[_], COL[_]] = cats.NonEmptyParallel[F, COL]
+  final type NonEmptyParallel[F[_]] = cats.NonEmptyParallel[F]
   final val NonEmptyParallel: cats.NonEmptyParallel.type = cats.NonEmptyParallel
 
   final type Semigroupal[F[_]] = cats.Semigroupal[F]
