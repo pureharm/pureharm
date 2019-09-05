@@ -23,7 +23,7 @@
   *
   * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.5") //https://github.com/xerial/sbt-sonatype/releases
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.0") //https://github.com/xerial/sbt-sonatype/releases
 
 /**
   *
@@ -49,7 +49,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.co
   * https://github.com/scalameta/sbt-scalafmt/releases
   *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.3") //https://github.com/scalameta/sbt-scalafmt/releases
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
@@ -71,7 +71,7 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.3") //https://github.com/sc
   *
   * }}}
   */
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.5") //https://github.com/scalacenter/scalafix/releases
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.6") //https://github.com/scalacenter/scalafix/releases
 
 /**
   * TODO: actually use:
