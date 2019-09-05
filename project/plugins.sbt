@@ -49,7 +49,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.co
   * https://github.com/scalameta/sbt-scalafmt/releases
   *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.3") //https://github.com/scalameta/sbt-scalafmt/releases
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
