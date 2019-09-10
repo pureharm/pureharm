@@ -341,53 +341,6 @@ object PureharmSyntax {
 
   final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
 
-    @scala.deprecated("0.0.2-M14", "Use purifyIn[F] instead")
-    def suspendIn[F[_]: FutureLift]: F[A] = {
-      FutureLift[F].fromFuture[A](f)
-    }
-
-    /**
-      *
-      * Delay the side-effects of this [[Future]] into an [[F]] which can have implementations for
-      * [[FutureLift]]. The current status quo provides such an instance for every [[F]] that
-      * has a [[LiftIO]] instances
-      *
-      * This is the important operation when it comes to inter-op between
-      * standard Scala and typelevel.
-      *
-      * Usage. N.B. that this only makes sense if the creation of the Future itself
-      * is was always delayed s.t. it didn't get to start running. i.e. always returned
-      * from a ``def`` and always passed as a by-name-parameter.
-      *
-      * YOU HAVE TO BE VERY CAREFUL, since this method cannot guarantee referential
-      * transparency unless Future was built properly. Therefore try minimizing the
-      * usage of Future as much as possible that you have only a few polymorphic,
-      * and reusable components at the boundaries of your app (e.g. http, or db interaction)
-      * which immediately delay the Future. See ``pureharm-db-slick`` for an example.
-      *
-      * {{{
-      *   def  writeToDB(v: Int, s: String): Future[Long] = ???
-      *   //...
-      *   val io = writeToDB(42, "string").purifyIn[IO]
-      *   //no database writes happened yet, since the future did
-      *   //not do its annoying running of side-effects immediately!
-      *
-      *   //when we want side-effects:
-      *   io.unsafeGetSync()
-      * }}}
-      *
-      * This is almost useless unless you are certain that ??? is a pure computation
-      * {{{
-      *   val f: Future[Int] = Future.apply(???)
-      *   f.purifyIn[IO]
-      * }}}
-      *
-      */
-    @scala.deprecated("use .liftTo[F] if you have an Async[F] and a ContextShift[F] in scope.", "0.0.2-M17")
-    def purifyIn[F[_]](implicit fl: FutureLift[F]): F[A] = {
-      fl.fromFuture[A](f)
-    }
-
     /**
       *
       * Delay the side-effects of this [[Future]] into an [[F]] which can have implementations for
