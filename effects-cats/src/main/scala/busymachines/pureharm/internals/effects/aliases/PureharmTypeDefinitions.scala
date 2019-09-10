@@ -57,9 +57,6 @@ trait PureharmTypeDefinitions {
   final type BracketAttempt[F[_]] = types.BracketAttempt[F]
   final val BracketAttempt: effects.BracketAttempt.type = effects.BracketAttempt
 
-  final type FutureLift[F[_]] = effects.FutureLift[F]
-  final val FutureLift: effects.FutureLift.type = effects.FutureLift
-
   /**
     *
     * Used to block on an F[A], and ensure that all recovery and
