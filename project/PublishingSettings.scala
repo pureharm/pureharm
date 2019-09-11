@@ -15,72 +15,54 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-import sbt._
-import Keys._
-import com.typesafe.sbt.SbtPgp.autoImportImpl._
-import xerial.sbt.Sonatype.SonatypeKeys._
+  import sbt._
+  import Keys._
+  import com.typesafe.sbt.SbtPgp.autoImportImpl._
+  import bintray.BintrayKeys._
+  
+  /**
+    * Publishing is done to bintray — to this org:
+    * https://bintray.com/busymachines/maven-releases
+    *
+    * To set up bintray, just look at a combination of two docs:
+    * https://github.com/sbt/sbt-bintray and a more user friendly:
+    * http://queirozf.com/entries/publishing-an-sbt-project-onto-bintray-an-example
+    *
+    * TL;DR:
+    * 1. create bintray account: https://bintray.com/
+    * 2. request to be added as a member to busymachines organization : https://bintray.com/busymachines
+    * 3. set your ~/.bintray/.credentials file to contain:
+    * {{{
+    * realm = Bintray API Realm
+    * host = api.bintray.com
+    * user = ${username that has publishing access to busymachines bintray org linked above}
+    * password = ${get password by generating an API Key from the bintray UI}
+    * }}}
+    *
+    * N.B. for historical purposes
+    * For sync-ing to maven central you need to setup bintray to communicate via sonatype with
+    * maven central. Quite complicated honestly. Should already be set-up at this point.
+    * Anyway, the issue that gives you access to sonatype via which you can sync to maven central is here:
+    * The username and password are the same as those to the Sonatype JIRA account.
+    * https://issues.sonatype.org/browse/OSSRH-33718
+    */
+  object PublishingSettings {
+  
+    def bintraySettings: Seq[Setting[_]] = Seq(
+      licenses                := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+      bintrayOrganization     := Some("busymachines"),
+      bintrayRepository       := { if (isSnapshot.value) "maven-snapshots" else "maven-releases" },
+      bintrayReleaseOnPublish := false,
+      bintrayPackageLabels    := Seq("scala", "pureharm-aws", "busymachines"),
+    )
 
-/**
-  * All instructions for publishing to sonatype can be found on the sbt-plugin page:
-  * http://www.scala-sbt.org/release/docs/Using-Sonatype.html
-  *
-  * and some here:
-  *
-  * https://github.com/xerial/sbt-sonatype
-  *
-  * VERY IMPORTANT!!! You need to add credentials as described here:
-  * http://www.scala-sbt.org/release/docs/Using-Sonatype.html#Second+-+Configure+Sonatype+integration
-  *
-  * The username and password are the same as those to the Sonatype JIRA account.
-  * https://issues.sonatype.org/browse/OSSRH-33718
-  *
-  * And then you need to ensure PGP keys to sign the maven artifacts:
-  * http://www.scala-sbt.org/release/docs/Using-Sonatype.html#PGP+Tips%E2%80%99n%E2%80%99tricks
-  * Which means that you need to have PGP installed
-  *
-  * To avoid pushing sensitive information to github you must put all PGP related things in your local configs:
-  * as described here:
-  *
-  * https://github.com/sbt/sbt-pgp/issues/69
-  */
-object PublishingSettings {
+    def noPublishSettings: Seq[Setting[_]] = Seq(
+      publish                := {},
+      publishLocal           := {},
+      skip in publishLocal   := true,
+      skip in publish        := true,
+      skip in bintrayRelease := true,
+      publishArtifact        := false,
+    )
 
-  def sonatypeSettings: Seq[Setting[_]] = Seq(
-    useGpg                     := true,
-    sonatypeProfileName        := Settings.organizationName,
-    publishArtifact in Compile := true,
-    publishArtifact in Test    := false,
-    publishMavenStyle          := true,
-    pomIncludeRepository       := (_ => false),
-    publishTo := Option {
-      if (isSnapshot.value)
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    },
-    licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-    scmInfo := Option(
-      ScmInfo(
-        url("https://github.com/busymachines/pureharm"),
-        "scm:git@github.com:busymachines/pureharm.git",
-      ),
-    ),
-    developers := List(
-      Developer(
-        id    = "lorandszakacs",
-        name  = "Lorand Szakacs",
-        email = "lorand.szakacs@busymachines.com",
-        url   = url("https://github.com/lorandszakacs"),
-      ),
-    ),
-  )
-
-  def noPublishSettings: Seq[Setting[_]] = Seq(
-    publish              := {},
-    publishLocal         := {},
-    skip in publishLocal := true,
-    skip in publish      := true,
-    publishArtifact      := false,
-  )
-
-}
+  }

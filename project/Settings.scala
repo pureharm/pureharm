@@ -39,6 +39,10 @@ object Settings {
         case Some((2, 13)) => scala2_13Flags
         case _             => Seq.empty
       }) ++ betterForPluginCompilerFlags,
+      resolvers ++= Seq(
+        Resolver.bintrayRepo("busymachines", "maven-releases"),
+        Resolver.bintrayRepo("busymachines", "maven-snapshots"),
+      ),
     )
 
   /**

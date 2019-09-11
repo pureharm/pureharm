@@ -84,14 +84,14 @@ final class PoolsResourceTest extends AnyFunSuite {
   private def testPools[F[_]: Sync: ContextShift]: Resource[F, PHTestPools[F]] =
     for {
       nrOfCPUs <- Pools.availableCPUs[F]
-      _        <- println(s"starting test w/ #of CPUs: $nrOfCPUs").pure[Resource[F, ?]]
+      _        <- println(s"starting test w/ #of CPUs: $nrOfCPUs").pure[Resource[F, *]]
 
       dbBlockingCT    <- Pools.cached[F](dbBlocTP)
       dbConnectFT     <- Pools.fixed[F](dbConnTP, nrOfCPUs * 2)
       httpFT          <- Pools.fixed[F](httpTP, nrOfCPUs)
       blockingCT      <- Pools.cached[F](blockingTP)
       singleST        <- Pools.singleThreaded[F](singleTP)
-      blockingShifter <- BlockingShifter.fromExecutionContext[F](blockingCT).pure[Resource[F, ?]]
+      blockingShifter <- BlockingShifter.fromExecutionContext[F](blockingCT).pure[Resource[F, *]]
     } yield new PHTestPools[F](
       dbBlocking      = dbBlockingCT,
       dbConnection    = dbConnectFT,
