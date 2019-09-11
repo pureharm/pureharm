@@ -50,6 +50,7 @@
   
     def bintraySettings: Seq[Setting[_]] = Seq(
       licenses                := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+      bintrayPackage          := "pureharm",
       bintrayOrganization     := Some("busymachines"),
       bintrayRepository       := { if (isSnapshot.value) "maven-snapshots" else "maven-releases" },
       bintrayReleaseOnPublish := false,
