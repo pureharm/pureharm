@@ -32,13 +32,19 @@
 //#############################################################################
 //#############################################################################
 
+addCommandAlias("recompile", ";clean;update;compile")
 addCommandAlias("build", ";compile;Test/compile")
 addCommandAlias("rebuild", ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
 addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
-addCommandAlias("doRelease", ";rebuild-update;publish;bintrayRelease")
+
+addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
+addCommandAlias("do212Release", ";++2.12.10;sonatypeBundleRelease")
+addCommandAlias("do213Release", ";++2.13.0;sonatypeBundleRelease")
+//we do this like this, because sonatypeBundleRelease cannot parallelize 2.12, and 2.13 releases
+addCommandAlias("doRelease", ";+cleanPublishSigned;do212Release;do213Release")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 
@@ -66,7 +72,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
 lazy val `core-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `core-identifiable-deps`
 
 lazy val core = project
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-core",
@@ -90,7 +96,7 @@ lazy val `core-anomaly-deps` = Seq(
 )
 
 lazy val `core-anomaly` = subModule("core", "anomaly")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `core-anomaly-deps`.distinct,
@@ -104,7 +110,7 @@ lazy val `core-phantom-deps` = Seq(
 )
 
 lazy val `core-phantom` = subModule("core", "phantom")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `core-phantom-deps`.distinct,
@@ -118,7 +124,7 @@ lazy val `core-identifiable-deps` = `core-phantom-deps` ++ Seq(
 )
 
 lazy val `core-identifiable` = subModule("core", "identifiable")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `core-identifiable-deps`.distinct,
@@ -142,7 +148,7 @@ lazy val `effects-cats-deps` = `core-phantom-deps` ++ Seq(
 ) ++ cats
 
 lazy val `effects-cats` = project
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-effects-cats",
@@ -162,7 +168,7 @@ lazy val `json-circe-deps` = `effects-cats-deps` ++ Seq(
 ) ++ circe
 
 lazy val `json-circe` = project
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-json-circe",
@@ -185,7 +191,7 @@ lazy val `config-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `effects-
 )
 
 lazy val `config` = project
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     name := "pureharm-config",
@@ -231,7 +237,7 @@ lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++
 )
 
 lazy val `db-core` = subModule("db", "core")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `db-core-deps`.distinct,
@@ -257,7 +263,7 @@ lazy val `db-core-flyway-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-d
 )
 
 lazy val `db-core-flyway` = subModule("db", "core-flyway")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `db-core-flyway-deps`.distinct,
@@ -282,7 +288,7 @@ lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` +
 ) ++ dbSlick
 
 lazy val `db-slick` = subModule("db", "slick")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-deps`.distinct,
@@ -316,7 +322,7 @@ lazy val `db-slick-psql-deps` =
   )
 
 lazy val `db-slick-psql` = subModule("db", "slick-psql")
-  .settings(PublishingSettings.bintraySettings)
+  .settings(PublishingSettings.sonatypeSettings)
   .settings(Settings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-psql-deps`.distinct,

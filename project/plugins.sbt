@@ -16,15 +16,14 @@
   * limitations under the License.
   */
 /**
-  * Helps us publish the artifacts to bintray, which in turn
-  * pushes to maven central.
-  * 
-  * See this guide for help:
-  * http://queirozf.com/entries/publishing-an-sbt-project-onto-bintray-an-example
+  * Helps us publish the artifacts to sonatype, which in turn
+  * pushes to maven central. Please follow instructions of setting
+  * up as described in:
+  * http://busymachines.github.io/busymachines-commons/docs/publishing-artifacts.html
   *
-  * https://github.com/sbt/sbt-bintray/releases
+  * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.5")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.7") //https://github.com/xerial/sbt-sonatype/releases
 
 /**
   *
