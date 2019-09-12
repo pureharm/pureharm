@@ -19,6 +19,7 @@ import sbt._
 import Keys._
 import com.typesafe.sbt.SbtPgp.autoImportImpl._
 import xerial.sbt.Sonatype.SonatypeKeys._
+import xerial.sbt.Sonatype._
 
 /**
   * All instructions for publishing to sonatype can be found on the sbt-plugin page:
@@ -52,12 +53,8 @@ object PublishingSettings {
     publishArtifact in Test    := false,
     publishMavenStyle          := true,
     pomIncludeRepository       := (_ => false),
-    publishTo := Option {
-      if (isSnapshot.value)
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    },
+    //new since sbt-pgp 3.4, see: https://github.com/xerial/sbt-sonatype/#uploading-artifacts-in-parallel
+    publishTo                  := sonatypePublishToBundle.value,
     licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
     scmInfo := Option(
       ScmInfo(
