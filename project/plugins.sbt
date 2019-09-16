@@ -34,7 +34,7 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.7") //https://github.com/xer
   *
   * https://github.com/sbt/sbt-pgp/releases
   */
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0-M2") //https://github.com/sbt/sbt-pgp/releases
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0") //https://github.com/sbt/sbt-pgp/releases
 
 /**
   * build configured in ``project/ReleaseProcess``

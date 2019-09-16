@@ -16,8 +16,7 @@
   * limitations under the License.
   */
 import sbt._
-import Keys._
-import com.typesafe.sbt.SbtPgp.autoImportImpl._
+import sbt.Keys._
 import xerial.sbt.Sonatype.SonatypeKeys._
 import xerial.sbt.Sonatype._
 
@@ -47,7 +46,6 @@ import xerial.sbt.Sonatype._
 object PublishingSettings {
 
   def sonatypeSettings: Seq[Setting[_]] = Seq(
-    useGpg                     := true,
     sonatypeProfileName        := Settings.organizationName,
     publishArtifact in Compile := true,
     publishArtifact in Test    := false,
