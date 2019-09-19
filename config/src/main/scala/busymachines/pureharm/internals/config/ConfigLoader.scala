@@ -79,11 +79,11 @@ trait ConfigLoader[Config] {
     Resource.liftF(fromNamespace(namespace))
 
   protected def load[F[_]: Sync](implicit reader: ConfigReader[Config]): F[Config] = {
-    configToF(pureconfig.loadConfig[Config](Derivation.Successful(reader)))
+    configToF(ConfigSource.default.load[Config](Derivation.Successful(reader)))
   }
 
   protected def load[F[_]: Sync](namespace: String)(implicit reader: ConfigReader[Config]): F[Config] = {
-    configToF(pureconfig.loadConfig[Config](namespace)(Derivation.Successful(reader))).adaptError {
+    configToF(ConfigSource.default.at(namespace).load[Config](Derivation.Successful(reader))).adaptError {
       case f: ConfigAggregateAnomalies => f.withNamespace(namespace)
     }
   }
