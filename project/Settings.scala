@@ -19,11 +19,16 @@ import sbt._
 import Keys._
 
 object Settings {
-  lazy val scala2_12:        String = "2.12.10"
-  lazy val scala2_13:        String = "2.13.0"
+  lazy val scala2_12:        String = "2.12.10" //https://github.com/scala/scala/releases
+  lazy val scala2_13:        String = "2.13.0" //https://github.com/scala/scala/releases
   lazy val mainScalaVersion: String = scala2_13
-  lazy val organizationName: String = "com.busymachines"
 
+  //https://github.com/typelevel/kind-projector/releases
+  lazy val kindProjector = "org.typelevel" %% "kind-projector" % "0.10.3"
+  //https://github.com/oleg-py/better-monadic-for/releases
+  lazy val betterMonadicFor = "com.olegpy" %% "better-monadic-for" % "0.3.1"
+
+  lazy val organizationName: String = "com.busymachines"
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
 
   def commonSettings: Seq[Setting[_]] =
@@ -32,8 +37,8 @@ object Settings {
       homepage                  := Some(url(pureharmHomepage)),
       scalaVersion              := mainScalaVersion,
       crossScalaVersions        := List(scala2_12, scala2_13),
-      addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),  //https://github.com/oleg-py/better-monadic-for/releases
-      addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"), //https://github.com/typelevel/kind-projector/releases
+      addCompilerPlugin(kindProjector),
+      addCompilerPlugin(betterMonadicFor),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => scala2_12Flags
         case Some((2, 13)) => scala2_13Flags
