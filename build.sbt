@@ -32,22 +32,22 @@
 //#############################################################################
 //#############################################################################
 
-addCommandAlias("recompile", ";clean;update;compile")
-addCommandAlias("build", ";compile;Test/compile")
-addCommandAlias("rebuild", ";clean;compile;Test/compile")
+//format: off
+addCommandAlias("recompile",      ";clean;update;compile")
+addCommandAlias("build",          ";compile;Test/compile")
+addCommandAlias("rebuild",        ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
-addCommandAlias("ci", ";scalafmtCheck;rebuild-update;test")
-addCommandAlias("ci-quick", ";scalafmtCheck;build;test")
-addCommandAlias("doLocal", ";clean;update;compile;publishLocal")
+addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
+addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
+addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do212Release", ";++2.12.10;sonatypeBundleRelease")
-addCommandAlias("do213Release", ";++2.13.0;sonatypeBundleRelease")
-//we do this like this, because sonatypeBundleRelease cannot parallelize 2.12, and 2.13 releases
-addCommandAlias("doRelease", ";+cleanPublishSigned;do212Release;do213Release")
+addCommandAlias("do212Release",       ";++2.12.10;sonatypeBundleRelease")
+addCommandAlias("do213Release",       ";++2.13.0;sonatypeBundleRelease")
+addCommandAlias("doRelease",          ";+cleanPublishSigned;do212Release;do213Release")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
-
+//format: on
 //*****************************************************************************
 //*****************************************************************************
 //********************************* PROJECTS **********************************
@@ -356,7 +356,7 @@ lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/mi
 lazy val catsVersion:            String = "2.0.0"        //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.0.0"        //https://github.com/typelevel/cats-effect/releases
 lazy val circeVersion:           String = "0.12.1"       //https://github.com/circe/circe/releases
-lazy val pureconfigVersion:      String = "0.11.1"       //https://github.com/pureconfig/pureconfig/releases
+lazy val pureconfigVersion:      String = "0.12.0"       //https://github.com/pureconfig/pureconfig/releases
 lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
 lazy val postgresqlVersion:      String = "42.2.6"       //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.3.1"        //java — https://github.com/brettwooldridge/HikariCP/releases

@@ -49,7 +49,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.co
   * https://github.com/scalameta/sbt-scalafmt/releases
   *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4") //https://github.com/scalameta/sbt-scalafmt/releases
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.5") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
@@ -72,30 +72,3 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4") //https://github.com/sc
   * }}}
   */
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.7") //https://github.com/scalacenter/scalafix/releases
-
-/**
-  * TODO: actually use:
-  *
-  * Used to build the documentation.
-  *
-  * https://github.com/47deg/sbt-microsites/releases
-  */
-//addSbtPlugin("com.47deg" % "sbt-microsites" % "0.9.1") //https://github.com/47deg/sbt-microsites/releases
-
-/**
-  * TODO: actually use
-  *
-  * Used by sbt-microsites
-  *
-  * https://github.com/sbt/sbt-ghpages/releases
-  */
-//addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.3") //https://github.com/sbt/sbt-ghpages/releases
-
-/**
-  * TODO: actually use:
-  *
-  * Tool for measuring test coverage
-  *
-  * https://github.com/scoverage/sbt-scoverage/releases
-  */
-//addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.0") //https://github.com/scoverage/sbt-scoverage/releases
