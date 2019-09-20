@@ -360,7 +360,7 @@ lazy val pureconfigVersion:      String = "0.12.0"       //https://github.com/pu
 lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
 lazy val postgresqlVersion:      String = "42.2.6"       //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.3.1"        //java — https://github.com/brettwooldridge/HikariCP/releases
-lazy val flywayVersion:          String = "6.0.2"        //java — https://github.com/flyway/flyway/releases
+lazy val flywayVersion:          String = "6.0.3"        //java — https://github.com/flyway/flyway/releases
 lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
 
 lazy val log4catsVersion:        String = "1.0.0"        //https://github.com/ChristopherDavenport/log4cats/releases
