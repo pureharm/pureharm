@@ -46,7 +46,7 @@ import xerial.sbt.Sonatype._
 object PublishingSettings {
 
   def sonatypeSettings: Seq[Setting[_]] = Seq(
-    sonatypeProfileName        := Settings.organizationName,
+    sonatypeProfileName        := CompilerSettings.organizationName,
     publishArtifact in Compile := true,
     publishArtifact in Test    := false,
     publishMavenStyle          := true,

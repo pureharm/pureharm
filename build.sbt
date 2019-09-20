@@ -32,7 +32,7 @@
 //#############################################################################
 //#############################################################################
 
-//format: off
+// format: off
 addCommandAlias("recompile",      ";clean;update;compile")
 addCommandAlias("build",          ";compile;Test/compile")
 addCommandAlias("rebuild",        ";clean;compile;Test/compile")
@@ -42,12 +42,12 @@ addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
 addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do212Release",       ";++2.12.10;sonatypeBundleRelease")
-addCommandAlias("do213Release",       ";++2.13.0;sonatypeBundleRelease")
-addCommandAlias("doRelease",          ";+cleanPublishSigned;do212Release;do213Release")
+addCommandAlias("do212Release",       s";++${CompilerSettings.scala2_12};cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("do213Release",       s";++${CompilerSettings.scala2_13};cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("doRelease",          ";do212Release;do213Release")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
-//format: on
+// format: on
 //*****************************************************************************
 //*****************************************************************************
 //********************************* PROJECTS **********************************
@@ -56,7 +56,7 @@ addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 
 lazy val root = Project(id = "pureharm", base = file("."))
   .settings(PublishingSettings.noPublishSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .aggregate(
     core,
     `effects-cats`,
@@ -73,7 +73,7 @@ lazy val `core-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `core-ident
 
 lazy val core = project
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-core",
     libraryDependencies ++= `core-deps`.distinct,
@@ -97,7 +97,7 @@ lazy val `core-anomaly-deps` = Seq(
 
 lazy val `core-anomaly` = subModule("core", "anomaly")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `core-anomaly-deps`.distinct,
   )
@@ -111,7 +111,7 @@ lazy val `core-phantom-deps` = Seq(
 
 lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `core-phantom-deps`.distinct,
   )
@@ -125,7 +125,7 @@ lazy val `core-identifiable-deps` = `core-phantom-deps` ++ Seq(
 
 lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `core-identifiable-deps`.distinct,
   )
@@ -149,7 +149,7 @@ lazy val `effects-cats-deps` = `core-phantom-deps` ++ Seq(
 
 lazy val `effects-cats` = project
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-effects-cats",
     libraryDependencies ++= `effects-cats-deps`.distinct,
@@ -169,7 +169,7 @@ lazy val `json-circe-deps` = `effects-cats-deps` ++ Seq(
 
 lazy val `json-circe` = project
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-json-circe",
     libraryDependencies ++= `json-circe-deps`.distinct,
@@ -192,7 +192,7 @@ lazy val `config-deps` = `core-anomaly-deps` ++ `core-phantom-deps` ++ `effects-
 
 lazy val `config` = project
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-config",
     libraryDependencies ++= `config-deps`.distinct,
@@ -215,7 +215,7 @@ lazy val `db-deps` =
 
 lazy val `db` = project
   .settings(PublishingSettings.noPublishSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-db",
     libraryDependencies ++= `db-deps`.distinct,
@@ -238,7 +238,7 @@ lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++
 
 lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-core-deps`.distinct,
   )
@@ -264,7 +264,7 @@ lazy val `db-core-flyway-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-d
 
 lazy val `db-core-flyway` = subModule("db", "core-flyway")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-core-flyway-deps`.distinct,
   )
@@ -289,7 +289,7 @@ lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` +
 
 lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-deps`.distinct,
   )
@@ -323,7 +323,7 @@ lazy val `db-slick-psql-deps` =
 
 lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .settings(PublishingSettings.sonatypeSettings)
-  .settings(Settings.commonSettings)
+  .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-psql-deps`.distinct,
   )
@@ -361,10 +361,9 @@ lazy val slickVersion:           String = "3.3.2"        //https://github.com/sl
 lazy val postgresqlVersion:      String = "42.2.8"       //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.4.1"        //java — https://github.com/brettwooldridge/HikariCP/releases
 lazy val flywayVersion:          String = "6.0.3"        //java — https://github.com/flyway/flyway/releases
-lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
-
 lazy val log4catsVersion:        String = "1.0.0"        //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
+lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================
