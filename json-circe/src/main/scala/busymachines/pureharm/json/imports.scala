@@ -23,25 +23,5 @@ package busymachines.pureharm.json
   * @since 11 Jun 2019
   *
   */
-object derive extends SemiAutoDerivation
-
-/**
-  *
-  * !!!! WARNING !!!!
-  *
-  * Import is mutually exclusive with:
-  * {{{
-  *   import busymachines.pureharm.json.derive._
-  * }}}
-  *
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 11 Jun 2019
-  *
-  */
-@scala.deprecated(
-  "Usage of auto derivation is discouraged in anything but toy projects. Use directly from circe if you need it. Will be removed in 0.0.3",
-  "0.0.2-M16",
-)
-object autoderive extends io.circe.generic.extras.AutoDerivation
-
+object derive    extends SemiAutoDerivation
 object implicits extends PureharmJsonImplicits
