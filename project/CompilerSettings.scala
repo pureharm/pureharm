@@ -18,7 +18,7 @@
 import sbt._
 import Keys._
 
-object Settings {
+object CompilerSettings {
   lazy val scala2_12:        String = "2.12.10" //https://github.com/scala/scala/releases
   lazy val scala2_13:        String = "2.13.0" //https://github.com/scala/scala/releases
   lazy val mainScalaVersion: String = scala2_13
