@@ -283,6 +283,45 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
 
 //#############################################################################
 
+lazy val `db-doobie-deps` =
+  `core-deps` ++
+    `effects-cats-deps` ++
+    `config-deps` ++
+    `json-circe-deps` ++
+    `db-core-deps` ++ Seq(
+    doobieCore,
+    doobiePSQL,
+    postgresql,
+    log4cats        % Test,
+    logbackClassic  % Test,
+    scalaTest       % Test,
+    doobieScalatest % Test,
+  )
+
+lazy val `db-doobie` = subModule("db", "db-doobie")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    libraryDependencies ++= `db-doobie-deps`.distinct,
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `json-circe`,
+    fullDependency(`db-core`),
+    asTestingDependency(`db-core-flyway`),
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `json-circe`,
+    `db-core`,
+  )
+
+//#############################################################################
+
 lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
   scalaTest % Test,
 ) ++ dbSlick
@@ -355,11 +394,13 @@ lazy val scalaCollCompatVersion: String = "2.1.2"        //https://github.com/sc
 lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:            String = "2.0.0"        //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.0.0"        //https://github.com/typelevel/cats-effect/releases
+lazy val fs2Version:             String = "2.0.1"        //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val circeVersion:           String = "0.12.1"       //https://github.com/circe/circe/releases
 lazy val pureconfigVersion:      String = "0.12.0"       //https://github.com/pureconfig/pureconfig/releases
 lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
 lazy val postgresqlVersion:      String = "42.2.8"       //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.4.1"        //java — https://github.com/brettwooldridge/HikariCP/releases
+lazy val doobieVersion:          String = "0.8.2"        //https://github.com/tpolecat/doobie/releases
 lazy val flywayVersion:          String = "6.0.3"        //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.0.0"        //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
@@ -405,6 +446,9 @@ lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % c
 //https://github.com/milessabin/shapeless/releases
 lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
 
+//https://github.com/functional-streams-for-scala/fs2/releases
+lazy val fs2: ModuleID = "co.fs2" %% "fs2-core" % fs2Version withSources ()
+
 //=============================================================================
 //================================= DATABASE ==================================
 //=============================================================================
@@ -421,6 +465,11 @@ lazy val postgresql: ModuleID = "org.postgresql" % "postgresql" % postgresqlVers
 //=============================================================================
 //============================= DATABASE - DOOBIE =============================
 //=============================================================================
+
+//https://github.com/tpolecat/doobie/releases
+lazy val doobieCore      = "org.tpolecat" %% "doobie-core"      % doobieVersion withSources ()
+lazy val doobiePSQL      = "org.tpolecat" %% "doobie-postgres"  % doobieVersion withSources ()
+lazy val doobieScalatest = "org.tpolecat" %% "doobie-scalatest" % doobieVersion withSources ()
 
 //=============================================================================
 //============================= DATABASE - SLICK ==============================
