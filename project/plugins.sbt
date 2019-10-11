@@ -23,7 +23,7 @@
   *
   * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.7") //https://github.com/xerial/sbt-sonatype/releases
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.8") //https://github.com/xerial/sbt-sonatype/releases
 
 /**
   *
