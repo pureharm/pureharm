@@ -53,6 +53,9 @@ object PureharmSyntax {
 
     implicit final def pureharmFutureReferenceDelayedOps[A](f: => Future[A]): FutureReferenceDelayedOps[A] =
       new FutureReferenceDelayedOps[A](f)
+
+    implicit final def pureharmIOPseudoCompanionOps(c: IO.type): IOPseudoCompanionOps =
+      new IOPseudoCompanionOps(c)
   }
 
   //--------------------------- OPTION ---------------------------
@@ -380,6 +383,45 @@ object PureharmSyntax {
     def liftTo[F[_]](implicit F: Async[F], cs: ContextShift[F]): F[A] =
       Async.fromFuture(F.delay(f))
 
+  }
+
+  //--------------------------- IO --------------------------
+
+  /**
+    *
+    * Syntax to emulate what exists on the `Future` companion object. Useful when
+    * migrating code from scala std Future to IO <3.
+    */
+  final class IOPseudoCompanionOps private[PureharmSyntax] (val companion: IO.type) extends AnyVal {
+
+    @inline def traverse[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[F[B]] =
+      Traverse[F].traverse(fs)(fn)
+
+    @inline def traverse_[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[Unit] =
+      Traverse[F].traverse_(fs)(fn)
+
+    @inline def sequence[F[_]: Traverse, A](fioa: F[IO[A]]): IO[F[A]] =
+      Traverse[F].sequence(fioa)
+
+    @inline def sequence_[F[_]: Traverse, A](fioa: F[IO[A]]): IO[Unit] =
+      Traverse[F].sequence_(fioa)
+
+    /**
+      * Alias for [[traverse]]. On IO if you want concurrency you use parTraverse. This is not
+      * Future, it actually makes sense... but its useful for transitioning.
+      */
+    @inline def serialize[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[F[B]] =
+      Traverse[F].traverse(fs)(fn)
+
+    /**
+      * Alias for [[traverse_]]. On IO if you want concurrency you use parTraverse. This is not
+      * Future, it actually makes sense... but its useful for transitioning.
+      */
+    @inline def serialize_[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[Unit] =
+      Traverse[F].traverse_(fs)(fn)
+
+    //just to get rid of unused warning...
+    override def toString: String = companion.toString
   }
 
 }
