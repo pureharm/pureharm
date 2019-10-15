@@ -18,7 +18,6 @@
 import sbt._
 import sbt.Keys._
 import xerial.sbt.Sonatype.SonatypeKeys._
-import xerial.sbt.Sonatype._
 
 /**
   * All instructions for publishing to sonatype can be found on the sbt-plugin page:
