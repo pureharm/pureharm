@@ -29,15 +29,13 @@ import busymachines.pureharm.effects.implicits._
   */
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
-  private val session: DatabaseSession,
+  private val session: Ref[F, DatabaseSession],
   override val slickDB:  DatabaseBackend,
 )(
   implicit
   private val F:  Async[F],
   private val fl: ContextShift[F],
 ) extends Transactor[F] {
-
-  private val currentSession: Ref[F, DatabaseSession] = Ref.unsafe[F, DatabaseSession](session)
 
   override def run[T](cio: ConnectionIO[T]): F[T] = {
     Async.fromFuture(F.delay(slickDB.run(cio)))
@@ -47,21 +45,21 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
 
   override def isConnected: F[Boolean] =
     for {
-      session <- currentSession.get
-      isClosed <- F.delay(session.conn.isClosed)
+      s <- session.get
+      isClosed <- F.delay(s.conn.isClosed)
     } yield !isClosed
 
   override def recreateSession: F[Unit] =
     for {
       _ <- closeSession
       newSession <- F.delay(DatabaseSession(slickDB.createSession()))
-      _ <- currentSession.set(newSession)
+      _ <- session.set(newSession)
     } yield ()
 
   override def closeSession: F[Unit] =
     for {
-      session <- currentSession.get
-      _ <- F.delay(session.close())
+      s <- session.get
+      _ <- F.delay(s.close())
     } yield ()
 
   /**
@@ -133,7 +131,7 @@ private[pureharm] object HikariTransactorImpl {
           ),
         ),
       )
-      session <- F.delay(DatabaseSession(slickDB.createSession()))
+      session <- Ref.of(DatabaseSession(slickDB.createSession()))
     } yield new HikariTransactorImpl(slickProfile, session, slickDB)
   }
 }
