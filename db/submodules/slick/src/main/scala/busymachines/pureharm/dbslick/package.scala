@@ -30,6 +30,7 @@ package object dbslick {
   final val ConnectionIO: slick.dbio.DBIO.type = slick.dbio.DBIO
 
   final type SlickBackendDB      = slick.jdbc.JdbcProfile#Backend#Database
+  final type SlickSession        = slick.jdbc.JdbcProfile#Backend#Session
   final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
 
   final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
@@ -37,6 +38,9 @@ package object dbslick {
 
   final object DatabaseBackend extends PhantomType[SlickBackendDB]
   final type DatabaseBackend = DatabaseBackend.Type
+
+  final object DatabaseSession extends PhantomType[SlickSession]
+  final type DatabaseSession = DatabaseSession.Type
 
   final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
   final type ConnectionIOEC = ConnectionIOEC.Type
