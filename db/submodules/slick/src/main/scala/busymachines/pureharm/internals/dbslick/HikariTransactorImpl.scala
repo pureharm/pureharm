@@ -29,8 +29,9 @@ import busymachines.pureharm.effects.implicits._
   */
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
-  private val session: Ref[F, DatabaseSession],
   override val slickDB:  DatabaseBackend,
+  private val session: Ref[F, DatabaseSession],
+  private val sem: Semaphore[F]
 )(
   implicit
   private val F:  Async[F],
@@ -49,12 +50,17 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
       isClosed <- F.delay(s.conn.isClosed)
     } yield !isClosed
 
-  override def recreateSession: F[Unit] =
-    for {
+  override def recreateSession: F[Unit] = {
+    val acquire = sem.acquire
+    val use = for {
       _ <- closeSession
       newSession <- F.delay(DatabaseSession(slickDB.createSession()))
       _ <- session.set(newSession)
     } yield ()
+    val release = sem.release
+
+    F.bracket(acquire)(_ => use)(_ => release)
+  }
 
   override def closeSession: F[Unit] =
     for {
@@ -131,7 +137,9 @@ private[pureharm] object HikariTransactorImpl {
           ),
         ),
       )
-      session <- Ref.of(DatabaseSession(slickDB.createSession()))
-    } yield new HikariTransactorImpl(slickProfile, session, slickDB)
+      session <- F.delay(DatabaseSession(slickDB.createSession()))
+      sessionRef <- Ref.of[F, DatabaseSession](session)
+      semaphore <- Semaphore(1)
+    } yield new HikariTransactorImpl(slickProfile, slickDB, sessionRef, semaphore)
   }
 }
