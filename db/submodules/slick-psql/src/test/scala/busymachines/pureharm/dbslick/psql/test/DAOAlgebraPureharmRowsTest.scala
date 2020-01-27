@@ -127,7 +127,7 @@ private[test] object DAOAlgebraPureharmRowsTest {
     password = DBPassword("pureharmony"),
   )
 
-  def transactorResource[F[_]: Async: ContextShift]: Resource[F, Transactor[F]] = {
+  def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {
     val trans = Transactor.pgSQLHikari[F](
       dbProfile    = testdb.jdbcProfileAPI,
       dbConnection = dbConfig,

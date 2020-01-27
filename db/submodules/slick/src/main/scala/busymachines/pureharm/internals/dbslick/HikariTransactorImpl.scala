@@ -30,8 +30,8 @@ import busymachines.pureharm.effects.implicits._
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
-  private val session: Ref[F, DatabaseSession],
-  private val sem: Semaphore[F]
+  private val session:   Ref[F, DatabaseSession],
+  private val sem:       Semaphore[F],
 )(
   implicit
   private val F:  Async[F],
@@ -46,16 +46,16 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
 
   override def isConnected: F[Boolean] =
     for {
-      s <- session.get
+      s        <- session.get
       isClosed <- F.delay(s.conn.isClosed)
     } yield !isClosed
 
   override def recreateSession: F[Unit] = {
     val acquire = sem.acquire
     val use = for {
-      _ <- closeSession
+      _          <- closeSession
       newSession <- F.delay(DatabaseSession(slickDB.createSession()))
-      _ <- session.set(newSession)
+      _          <- session.set(newSession)
     } yield ()
     val release = sem.release
 
@@ -85,7 +85,7 @@ private[pureharm] object HikariTransactorImpl {
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
-  def resource[F[_]: Async: ContextShift](
+  def resource[F[_]: Concurrent: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,
@@ -99,7 +99,7 @@ private[pureharm] object HikariTransactorImpl {
   /**
     * Prefer using [[resource]] unless you know what you are doing.
     */
-  def unsafeCreate[F[_]: Async: ContextShift](
+  def unsafeCreate[F[_]: Concurrent: ContextShift](
     slickProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,
@@ -137,9 +137,9 @@ private[pureharm] object HikariTransactorImpl {
           ),
         ),
       )
-      session <- F.delay(DatabaseSession(slickDB.createSession()))
+      session    <- F.delay(DatabaseSession(slickDB.createSession()))
       sessionRef <- Ref.of[F, DatabaseSession](session)
-      semaphore <- Semaphore(1)
+      semaphore  <- Semaphore[F](1)
     } yield new HikariTransactorImpl(slickProfile, slickDB, sessionRef, semaphore)
   }
 }
