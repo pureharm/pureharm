@@ -32,6 +32,21 @@ trait Transactor[F[_]] {
 
   def shutdown: F[Unit]
 
+  /*
+   * Checks if the connection to the database is active
+   */
+  def isConnected: F[Boolean]
+
+  /*
+   * Closes the current session connection to the database
+   */
+  def closeSession: F[Unit]
+
+  /*
+   * Recreates the session with the associated connection to the database (equivalent of closing the session and recreating it)
+   */
+  def recreateSession: F[Unit]
+
   /**
     * The execution context used to run all blocking database input/output.
     *

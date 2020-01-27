@@ -19,6 +19,7 @@ package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.effects.implicits._
 
 /**
   *
@@ -29,6 +30,8 @@ import busymachines.pureharm.dbslick._
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
+  private val session: Ref[F, DatabaseSession],
+  private val sem: Semaphore[F]
 )(
   implicit
   private val F:  Async[F],
@@ -41,6 +44,30 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
 
   override def shutdown: F[Unit] = F.delay(slickDB.close())
 
+  override def isConnected: F[Boolean] =
+    for {
+      s <- session.get
+      isClosed <- F.delay(s.conn.isClosed)
+    } yield !isClosed
+
+  override def recreateSession: F[Unit] = {
+    val acquire = sem.acquire
+    val use = for {
+      _ <- closeSession
+      newSession <- F.delay(DatabaseSession(slickDB.createSession()))
+      _ <- session.set(newSession)
+    } yield ()
+    val release = sem.release
+
+    F.bracket(acquire)(_ => use)(_ => release)
+  }
+
+  override def closeSession: F[Unit] =
+    for {
+      s <- session.get
+      _ <- F.delay(s.close())
+    } yield ()
+
   /**
     * The execution context used to run all blocking database input/output.
     *
@@ -48,12 +75,12 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
     * use this unless you know what you are doing.
     */
   override def ioExecutionContext: ExecutionContext = slickDB.ioExecutionContext
+
 }
 
 private[pureharm] object HikariTransactorImpl {
 
   import busymachines.pureharm.db._
-  import busymachines.pureharm.effects.implicits._
   import slick.util.AsyncExecutor
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
@@ -110,7 +137,9 @@ private[pureharm] object HikariTransactorImpl {
           ),
         ),
       )
-      _ <- F.delay(slickDB.createSession())
-    } yield new HikariTransactorImpl(slickProfile, slickDB)
+      session <- F.delay(DatabaseSession(slickDB.createSession()))
+      sessionRef <- Ref.of[F, DatabaseSession](session)
+      semaphore <- Semaphore(1)
+    } yield new HikariTransactorImpl(slickProfile, slickDB, sessionRef, semaphore)
   }
 }
