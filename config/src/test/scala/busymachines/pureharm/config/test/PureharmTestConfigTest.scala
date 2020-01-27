@@ -21,8 +21,9 @@ import busymachines.pureharm.config._
 
 import scala.concurrent.duration._
 import busymachines.pureharm.effects._
-import org.scalatest.Matchers
+
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 /**
   *

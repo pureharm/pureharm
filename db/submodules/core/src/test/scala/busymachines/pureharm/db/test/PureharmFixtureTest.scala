@@ -18,11 +18,12 @@
 package busymachines.pureharm.db.test
 
 import org.scalatest._
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.funsuite.FixtureAnyFunSuite
+import org.scalactic.source
 
 import busymachines.pureharm.effects._
 
-import org.scalactic.source
 /**
   *
   * This is an experimental base class,

@@ -11,8 +11,6 @@ import busymachines.pureharm.effects._
   */
 final class TransactorTest extends PureharmFixtureTest {
 
-  private lazy val dbConfig: IO[DBConnectionConfig] = DBConnectionConfig.default[IO]
-
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 
   /**
@@ -21,50 +19,47 @@ final class TransactorTest extends PureharmFixtureTest {
     */
   override def fixture: Resource[IO, Transactor[IO]] =
     for {
-      dbConfig <- Resource.liftF(dbConfig)
-      transactor <- Transactor.pgSQLHikari[IO](
-        dbProfile = testdb.jdbcProfileAPI,
-        dbConnection = dbConfig,
-        asyncConfig = slickConfig)
+      dbConfig <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
+      transactor <- Transactor
+        .pgSQLHikari[IO](dbProfile = testdb.jdbcProfileAPI, dbConnection = dbConfig, asyncConfig = slickConfig)
     } yield transactor
 
   override type FixtureParam = Transactor[IO]
 
   iotest("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
     for {
-      isConnected          <- trans.isConnected
+      isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
 
   iotest("closes the active connection") { implicit trans: Transactor[IO] =>
     for {
-      isConnected          <- trans.isConnected
+      isConnected <- trans.isConnected
       _ = assert(isConnected === true)
-      _ <- trans.closeSession
-      isConnected          <- trans.isConnected
+      _           <- trans.closeSession
+      isConnected <- trans.isConnected
     } yield assert(isConnected === false)
   }
 
   iotest("recreates the connection when the current connection is open") { implicit trans: Transactor[IO] =>
     for {
-      isConnected          <- trans.isConnected
+      isConnected <- trans.isConnected
       _ = assert(isConnected === true)
-      _ <- trans.recreateSession
-      isConnected          <- trans.isConnected
+      _           <- trans.recreateSession
+      isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
 
   iotest("recreates the connection when the current connection is closed") { implicit trans: Transactor[IO] =>
     for {
-      isConnected          <- trans.isConnected
+      isConnected <- trans.isConnected
       _ = assert(isConnected === true)
-      _ <- trans.closeSession
-      isConnected          <- trans.isConnected
+      _           <- trans.closeSession
+      isConnected <- trans.isConnected
       _ = assert(isConnected === false)
-      _ <- trans.recreateSession
-      isConnected          <- trans.isConnected
+      _           <- trans.recreateSession
+      isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
-
 
 }

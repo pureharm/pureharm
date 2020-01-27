@@ -86,7 +86,7 @@ object Transactor {
   import busymachines.pureharm.effects._
   import busymachines.pureharm.internals
 
-  def pgSQLHikari[F[_]: Async: ContextShift](
+  def pgSQLHikari[F[_]: Concurrent: ContextShift](
     dbProfile:    JDBCProfileAPI,
     dbConnection: DBConnectionConfig,
     asyncConfig:  SlickDBIOAsyncExecutorConfig,
@@ -100,7 +100,7 @@ object Transactor {
       asyncConfig = asyncConfig,
     )
 
-  def pgSQLHikari[F[_]: Async: ContextShift](
+  def pgSQLHikari[F[_]: Concurrent: ContextShift](
     dbProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,
@@ -123,7 +123,7 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
+  def pgSQLHikariUnsafe[F[_]: Concurrent: ContextShift](
     dbProfile:    JDBCProfileAPI,
     dbConnection: DBConnectionConfig,
     asyncConfig:  SlickDBIOAsyncExecutorConfig,
@@ -143,7 +143,7 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
+  def pgSQLHikariUnsafe[F[_]: Concurrent: ContextShift](
     slickProfile: JDBCProfileAPI,
   )(
     url:         JDBCUrl,
