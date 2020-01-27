@@ -115,22 +115,10 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
 
 private[test] object DAOAlgebraPureharmRowsTest {
 
-  /**
-    * All these values come from this file:
-    * db/docker-pureharm-postgresql-test.sh
-    *
-    */
-  private val dbConfig = DBConnectionConfig(
-    host     = DBHost("localhost:20010"),
-    dbName   = DatabaseName("pureharm_test"),
-    username = DBUsername("pureharmony"),
-    password = DBPassword("pureharmony"),
-  )
-
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {
     val trans = Transactor.pgSQLHikari[F](
       dbProfile    = testdb.jdbcProfileAPI,
-      dbConnection = dbConfig,
+      dbConnection = PureharmTestConfig.dbConfig,
       asyncConfig  = SlickDBIOAsyncExecutorConfig.default,
     )
 
@@ -140,13 +128,13 @@ private[test] object DAOAlgebraPureharmRowsTest {
 
   private def initDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.migrate[F](dbConfig = dbConfig, Option.empty)
+      _ <- flyway.Flyway.migrate[F](dbConfig = PureharmTestConfig.dbConfig, Option.empty)
     } yield ()
   }
 
   private def cleanDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.clean[F](dbConfig)
+      _ <- flyway.Flyway.clean[F](PureharmTestConfig.dbConfig)
     } yield ()
   }
 }
