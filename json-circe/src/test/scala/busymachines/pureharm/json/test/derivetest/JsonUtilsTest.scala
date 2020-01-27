@@ -18,7 +18,9 @@
 package busymachines.pureharm.json.test.derivetest
 
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.{EitherValues, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.EitherValues
+
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.json._
 import busymachines.pureharm.internals.json.{JsonDecoding, JsonParsing}
