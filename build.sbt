@@ -326,6 +326,10 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-psql-deps`.distinct,
+    //required because JDBC screws up classloading somehow,
+    //and PSQL driver is not found for certain tests that connect to DB.
+    //no idea why
+    Test / fork := true,
   )
   .dependsOn(
     `core`,
