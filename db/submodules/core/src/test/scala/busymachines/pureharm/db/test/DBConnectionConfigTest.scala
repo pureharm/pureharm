@@ -27,7 +27,7 @@ import busymachines.pureharm.effects._
   */
 final class DBConnectionConfigTest extends PureharmFixtureTest {
 
-  override def fixture: Resource[IO, Unit] = Resource.pure(())
+  override def fixture: Resource[IO, Unit] = Resource.pure[IO, Unit](())
 
   override type FixtureParam = Unit
 
