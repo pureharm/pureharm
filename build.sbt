@@ -367,7 +367,7 @@ lazy val hikariCPVersion:        String = "3.4.2"  //java — https://github.com
 lazy val flywayVersion:          String = "6.2.0"  //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.0.1"  //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"  //https://github.com/qos-ch/logback/releases
-lazy val scalaTestVersion:       String = "3.1.0"  //https://github.com/scalatest/scalatest/releases
+lazy val scalaTestVersion:       String = "3.1.1"  //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================
