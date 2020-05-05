@@ -61,6 +61,7 @@ private[pureharm] trait CatastropheConstructors[Resulting <: Catastrophe] extend
 
 private[pureharm] trait SingletonAnomalyProduct extends Product with Serializable {
   this: Anomaly =>
+
   override def productElement(n: Int): Any = n match {
     case 0 => id
     case 1 => message

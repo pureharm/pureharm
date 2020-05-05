@@ -33,6 +33,7 @@ abstract class ConflictAnomaly(
 object ConflictAnomaly
     extends ConflictAnomaly(MeaningfulAnomalies.ConflictMsg, None) with SingletonAnomalyProduct
     with AnomalyConstructors[ConflictAnomaly] {
+
   override def apply(id: AnomalyID): ConflictAnomaly =
     ConflictAnomalyImpl(id = id)
 

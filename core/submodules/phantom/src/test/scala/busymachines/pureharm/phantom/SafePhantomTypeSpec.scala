@@ -68,7 +68,9 @@ final class SafePhantomTypeSpec extends AnyFunSpec {
 
 private object SafePhantomTypeSpec {
   private val FailureString = "cannot be empty"
+
   private object SafeSpooked extends SafePhantomType[String, String] {
+
     override def check(value: String): Either[String, String] =
       if (value.isEmpty) Left[String, String](FailureString) else Right[String, String](value)
   }

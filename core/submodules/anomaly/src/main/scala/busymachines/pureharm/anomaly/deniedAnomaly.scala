@@ -33,6 +33,7 @@ abstract class DeniedAnomaly(
 object DeniedAnomaly
     extends DeniedAnomaly(MeaningfulAnomalies.DeniedMsg, None) with SingletonAnomalyProduct
     with AnomalyConstructors[DeniedAnomaly] {
+
   override def apply(id: AnomalyID): DeniedAnomaly =
     DeniedAnomalyImpl(id = id)
 

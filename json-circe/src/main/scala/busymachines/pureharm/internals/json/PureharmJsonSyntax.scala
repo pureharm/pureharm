@@ -29,6 +29,7 @@ import busymachines.pureharm.effects._
 object PureharmJsonSyntax {
 
   trait Implicits {
+
     implicit final def bmcJsonEncoderOps[A](wrappedEncodeable: A): EncoderOps[A] =
       new EncoderOps(wrappedEncodeable)
 
