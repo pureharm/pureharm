@@ -29,6 +29,7 @@ import busymachines.pureharm.effects.implicits._
   *
   */
 object PureharmIOAppTest extends PureharmIOApp {
+
   /**
     *
     * We want to ensure that this is evaluated only once, otherwise we introduce

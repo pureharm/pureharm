@@ -63,6 +63,7 @@ private[pureharm] object Util {
     * @return
     */
   private[pools] def namedThreadPoolFactory(prefix: String, daemonThreads: Boolean): ThreadFactory = new ThreadFactory {
+
     override def newThread(r: Runnable): Thread = {
       val thread = new Thread(r)
       if (daemonThreads) {

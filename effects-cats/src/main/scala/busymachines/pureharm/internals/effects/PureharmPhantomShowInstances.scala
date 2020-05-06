@@ -188,6 +188,7 @@ object PureharmPhantomShowInstances {
   }
 
   trait PhantomTypeTupleInstances {
+
     implicit final def tuple1PhantomTypeShow[T1, Tag](
       implicit sh: Show[Tuple1[T1]],
     ): Show[Tuple1[T1] @@ Tag] =
@@ -213,6 +214,7 @@ object PureharmPhantomShowInstances {
 
   trait PhantomTypeJavaMiscInstances {
     import java.util.UUID
+
     implicit final def miscUUIDPhantomTypeShow[Tag](
       implicit sh: Show[UUID],
     ): Show[UUID @@ Tag] =

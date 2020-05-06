@@ -33,6 +33,7 @@ abstract class InvalidInputAnomaly(
 object InvalidInputAnomaly
     extends InvalidInputAnomaly(MeaningfulAnomalies.InvalidInputMsg, None) with SingletonAnomalyProduct
     with AnomalyConstructors[InvalidInputAnomaly] {
+
   override def apply(id: AnomalyID): InvalidInputAnomaly =
     InvalidInputAnomalyImpl(id = id)
 

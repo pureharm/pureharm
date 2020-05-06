@@ -147,6 +147,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
   import scala.concurrent.duration._
 
   trait Implicits {
+
     implicit def pureharmTimedAttemptReattemptSyntaxOPS[F[_], A](
       fa: F[A],
     ): PureharmTimedAttemptReattemptSyntaxOps[F, A] =

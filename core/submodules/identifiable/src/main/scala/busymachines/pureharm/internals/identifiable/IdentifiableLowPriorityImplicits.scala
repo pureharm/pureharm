@@ -43,6 +43,7 @@ trait IdentifiableLowPriorityImplicits {
 
 private[pureharm] object IdentifiableLowPriorityImplicits {
   private val IdFieldName: FieldName = FieldName("id")
+
   private trait IdentifiableByID[T, ID] extends Identifiable[T, ID] {
     override def fieldName: FieldName = IdFieldName
   }

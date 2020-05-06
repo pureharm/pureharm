@@ -55,6 +55,7 @@ trait PureharmDBSlickTypeDefinitions {
   final val Transactor: dbslick.Transactor.type = dbslick.Transactor
 
   final type SlickDBIOAsyncExecutorConfig = dbslick.SlickDBIOAsyncExecutorConfig
+
   final val SlickDBIOAsyncExecutorConfig: dbslick.SlickDBIOAsyncExecutorConfig.type =
     dbslick.SlickDBIOAsyncExecutorConfig
 

@@ -174,6 +174,7 @@ object PureharmSlickInstances {
     import java.util.UUID
 
     import enclosingProfile._
+
     implicit final def miscUUIDPhantomTypeColumnType[Tag](implicit enc: ColumnType[UUID]): ColumnType[UUID @@ Tag] =
       enc.asInstanceOf[ColumnType[UUID @@ Tag]]
 

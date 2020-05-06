@@ -291,6 +291,7 @@ object PureharmJsonInstances {
   }
 
   trait PhantomTypeTupleInstances {
+
     implicit final def tuple1PhantomTypeEncoder[T1, Tag](
       implicit enc: Encoder[Tuple1[T1]],
     ): Encoder[Tuple1[T1] @@ Tag] =
@@ -336,6 +337,7 @@ object PureharmJsonInstances {
 
   trait PhantomTypeJavaMiscInstances {
     import java.util.UUID
+
     implicit final def miscUUIDPhantomTypeEncoder[Tag](implicit enc: Encoder[UUID]): Encoder[UUID @@ Tag] =
       enc.asInstanceOf[Encoder[UUID @@ Tag]]
 

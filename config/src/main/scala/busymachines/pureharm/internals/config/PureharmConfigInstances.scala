@@ -320,6 +320,7 @@ object PureharmConfigInstances {
   }
 
   trait PhantomTypeTupleInstances {
+
     implicit final def tuple1PhantomTypeConfigWriter[T1, Tag](
       implicit enc: ConfigWriter[Tuple1[T1]],
     ): ConfigWriter[Tuple1[T1] @@ Tag] =
@@ -365,6 +366,7 @@ object PureharmConfigInstances {
 
   trait PhantomTypeJavaMiscInstances {
     import java.util.UUID
+
     implicit final def miscUUIDPhantomTypeConfigWriter[Tag](
       implicit enc: ConfigWriter[UUID],
     ): ConfigWriter[UUID @@ Tag] =

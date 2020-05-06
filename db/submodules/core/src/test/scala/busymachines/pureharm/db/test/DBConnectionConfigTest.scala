@@ -19,6 +19,7 @@ package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

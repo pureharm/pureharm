@@ -38,6 +38,7 @@ object AnomalyJsonCodec extends AnomalyJsonCodec
 trait AnomalyJsonCodec {
 
   implicit final private val AnomalyIDCodec: Codec[AnomalyID] = new Codec[AnomalyID] {
+
     override def apply(c: HCursor): Result[AnomalyID] = {
       c.as[String].map(AnomalyID.apply)
     }
@@ -46,6 +47,7 @@ trait AnomalyJsonCodec {
   }
 
   implicit final private val pureharmStringOrSeqCodec: Codec[Anomaly.Parameter] = new Codec[Anomaly.Parameter] {
+
     override def apply(a: Anomaly.Parameter): Json = {
       a match {
         case StringWrapper(s)      => Json.fromString(s)
@@ -66,6 +68,7 @@ trait AnomalyJsonCodec {
 
   implicit final private val pureharmAnomalyBaseParamsCodec: Codec[Anomaly.Parameters] =
     new Codec[Anomaly.Parameters] {
+
       override def apply(c: HCursor): Result[Anomaly.Parameters] = {
         val jsonObj = c.as[JsonObject]
         val m       = jsonObj.map(_.toMap)
@@ -107,6 +110,7 @@ trait AnomalyJsonCodec {
     }
 
   implicit final val pureharmAnomalyBaseCodec: Codec[AnomalyBase] = new Codec[AnomalyBase] {
+
     override def apply(c: HCursor): Result[AnomalyBase] = {
       for {
         id     <- c.get[AnomalyID](PureharmJsonConstants.id)
@@ -136,6 +140,7 @@ trait AnomalyJsonCodec {
   }
 
   implicit final val AnomaliesCodec: Codec[AnomaliesBase] = new Codec[AnomaliesBase] {
+
     override def apply(a: AnomaliesBase): Json = {
       val fm          = (pureharmAnomalyBaseCodec: Encoder[AnomalyBase])(a)
       val arr         = a.messages.map(pureharmAnomalyBaseCodec.apply)

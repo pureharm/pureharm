@@ -59,6 +59,7 @@ final case class FlywayConfig(
 ) extends internals.FlywayConfigFluentApi {
 
   override def withLocations(locations: MigrationLocation*): FlywayConfig = this.withLocations(locations.toList)
+
   override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
     this.copy(migrationLocations = locations)
 
@@ -67,6 +68,7 @@ final case class FlywayConfig(
 
   override def withIgnoreMissingMigrations(ignore: IgnoreMissingMigrations): FlywayConfig =
     this.copy(ignoreMissingMigrations = ignore)
+
   override def withCleanOnValidationErrors(clean: CleanOnValidationError): FlywayConfig =
     this.copy(cleanOnValidationError = clean)
 
@@ -81,6 +83,7 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
 
   override def withLocations(locations: MigrationLocation*): FlywayConfig =
     FlywayConfig(migrationLocations = locations.toList)
+
   override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
     FlywayConfig(migrationLocations = locations)
 
@@ -89,6 +92,7 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
 
   override def withIgnoreMissingMigrations(ignore: IgnoreMissingMigrations): FlywayConfig =
     FlywayConfig(ignoreMissingMigrations = ignore)
+
   override def withCleanOnValidationErrors(clean: CleanOnValidationError): FlywayConfig =
     FlywayConfig(cleanOnValidationError = clean)
 

@@ -64,6 +64,7 @@ trait PureharmAnomalyTypeDefinitions {
   final val Catastrophe: anomaly.Catastrophe.type = anomaly.Catastrophe
 
   final type InconsistentStateCatastrophe = anomaly.InconsistentStateCatastrophe
+
   final val InconsistentStateCatastrophe: anomaly.InconsistentStateCatastrophe.type =
     anomaly.InconsistentStateCatastrophe
 
