@@ -30,7 +30,7 @@ import org.scalatest.flatspec.AnyFlatSpec
   */
 final class JsonDerivationNestedTypesTest1 extends AnyFlatSpec {
 
-  val outdoorMelon: OutdoorMelon = OutdoorMelons.WildMelon(
+  val outdoorMelon:               OutdoorMelon               = OutdoorMelons.WildMelon(
     weight = 42,
     color  = OutdoorMelons.Colors.Green,
   )
@@ -65,7 +65,7 @@ final class JsonDerivationNestedTypesTest1 extends AnyFlatSpec {
 
 final class JsonDerivationNestedTypesTest2 extends AnyFlatSpec {
 
-  val outdoorMelon: OutdoorMelon = OutdoorMelons.WildMelon(
+  val outdoorMelon:               OutdoorMelon               = OutdoorMelons.WildMelon(
     weight = 42,
     color  = OutdoorMelons.Colors.Green,
   )

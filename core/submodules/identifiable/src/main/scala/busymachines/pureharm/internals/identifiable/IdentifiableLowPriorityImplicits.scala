@@ -32,9 +32,9 @@ trait IdentifiableLowPriorityImplicits {
 
   def apply[T, ID](implicit instance: Identifiable[T, ID]): Identifiable[T, ID] = instance
 
-  implicit def mkIdentifiable[T, ID, IHL <: HList](
-    implicit gen: LabelledGeneric.Aux[T, IHL],
-    selector:     Selector.Aux[IHL, Witness.`'id`.T, ID],
+  implicit def mkIdentifiable[T, ID, IHL <: HList](implicit
+    gen:      LabelledGeneric.Aux[T, IHL],
+    selector: Selector.Aux[IHL, Witness.`'id`.T, ID],
   ): Identifiable[T, ID] = new IdentifiableByID[T, ID] {
     override def id(t: T): ID = selector(gen.to(t))
   }

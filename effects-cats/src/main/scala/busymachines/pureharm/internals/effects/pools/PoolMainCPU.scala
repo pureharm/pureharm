@@ -25,13 +25,11 @@ import busymachines.pureharm.effects.pools.ExecutionContextMainFT
   */
 private[pureharm] object PoolMainCPU {
 
-  def default(threadNamePrefix: String): ExecutionContextMainFT = {
+  def default(threadNamePrefix: String): ExecutionContextMainFT =
     minTwoUnsafe(threadNamePrefix, Util.unsafeAvailableCPUs)
-  }
 
-  def main(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT = {
+  def main(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT =
     minTwoUnsafe(threadNamePrefix, maxThreads)
-  }
 
   private def minTwoUnsafe(threadNamePrefix: String, maxThreads: Int): ExecutionContextMainFT = {
     val bound = Math.max(2, maxThreads)

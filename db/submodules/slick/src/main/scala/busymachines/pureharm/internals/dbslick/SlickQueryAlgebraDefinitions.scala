@@ -122,17 +122,15 @@ trait SlickQueryAlgebraDefinitions {
   object SlickDAOQueryAlgebra {
 
     def fromTableQuery[E, PK, TA <: TableWithPK[E, PK]](
-      qt: TableQuery[TA],
-    )(
-      implicit
+      qt:             TableQuery[TA]
+    )(implicit
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
       connectionIOEC: ConnectionIOEC,
-    ): SlickDAOQueryAlgebra[E, PK, TA] = {
+    ): SlickDAOQueryAlgebra[E, PK, TA] =
       new SlickDAOQueryAlgebra[E, PK, TA]() {
         override val dao: TableQuery[TA] = qt
       }
-    }
   }
 
   //===========================================================================
@@ -174,10 +172,10 @@ trait SlickQueryAlgebraDefinitions {
   object SlickDAOAlgebra {
 
     def fromQueryAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      q: SlickDAOQueryAlgebra[E, PK, TA],
-    )(
-      implicit tr: Transactor[F],
-    ): SlickDAOAlgebra[F, E, PK, TA] = {
+      q:  SlickDAOQueryAlgebra[E, PK, TA]
+    )(implicit
+      tr: Transactor[F]
+    ): SlickDAOAlgebra[F, E, PK, TA] =
       new SlickDAOAlgebra[F, E, PK, TA]()(
         transactor     = tr,
         columnTypePK   = q.columnTypePK,
@@ -186,17 +184,15 @@ trait SlickQueryAlgebraDefinitions {
       ) {
         override protected val queries: SlickDAOQueryAlgebra[E, PK, TA] = q
       }
-    }
 
     def fromTableQuery[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      qt: TableQuery[TA],
-    )(
-      implicit transactor: Transactor[F],
-      columnTypePK:        ColumnType[PK],
-      identifiable:        Identifiable[E, PK],
-      connectionIOEC:      ConnectionIOEC,
-    ): SlickDAOAlgebra[F, E, PK, TA] = {
+      qt:             TableQuery[TA]
+    )(implicit
+      transactor:     Transactor[F],
+      columnTypePK:   ColumnType[PK],
+      identifiable:   Identifiable[E, PK],
+      connectionIOEC: ConnectionIOEC,
+    ): SlickDAOAlgebra[F, E, PK, TA] =
       fromQueryAlgebra(SlickDAOQueryAlgebra.fromTableQuery(qt))
-    }
   }
 }

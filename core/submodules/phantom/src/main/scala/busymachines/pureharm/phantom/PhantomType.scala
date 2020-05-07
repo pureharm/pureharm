@@ -42,7 +42,7 @@ trait PhantomType[T] {
     * Override if you want to do pure transformations on your value
     * before tagging.
     */
-  @inline def apply(value: T): Type =
+  @inline def apply(value:       T): Type =
     tag[Tag][T](value)
 
   /**

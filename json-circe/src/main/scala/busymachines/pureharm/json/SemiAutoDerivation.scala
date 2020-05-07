@@ -53,8 +53,7 @@ trait SemiAutoDerivation {
   final def enumerationEncoder[A](implicit encode: Lazy[encoding.EnumerationEncoder[A]]): Encoder[A] =
     circeSemiAuto.deriveEnumerationEncoder[A]
 
-  final def enumerationCodec[A](
-    implicit
+  final def enumerationCodec[A](implicit
     encode: Lazy[encoding.EnumerationEncoder[A]],
     decode: Lazy[decoding.EnumerationDecoder[A]],
   ): Codec[A] = Codec.from[A](decode.value, encode.value)

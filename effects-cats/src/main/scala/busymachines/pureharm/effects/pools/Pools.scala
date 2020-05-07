@@ -48,7 +48,7 @@ object Pools {
     * @return
     */
   def cached[F[_]: Sync](
-    threadNamePrefix: String  = "cached",
+    threadNamePrefix: String = "cached",
     daemons:          Boolean = false,
   ): Resource[F, ExecutionContextCT] =
     PoolCached.cached(threadNamePrefix, daemons)
@@ -93,7 +93,7 @@ object Pools {
     * A simple thread pool with one single thread. Be careful how you use it.
     */
   def singleThreaded[F[_]: Sync](
-    threadNamePrefix: String  = "single-thread",
+    threadNamePrefix: String = "single-thread",
     daemons:          Boolean = false,
   ): Resource[F, ExecutionContextST] =
     PoolFixed.fixed(threadNamePrefix, 1, daemons).map(ExecutionContextST.apply)

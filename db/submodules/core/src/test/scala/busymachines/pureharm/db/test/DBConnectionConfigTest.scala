@@ -40,7 +40,7 @@ final class DBConnectionConfigTest extends PureharmFixtureTest {
           dbName   = DatabaseName("pureharm_test"),
           username = DBUsername("pureharmony"),
           password = DBPassword("pureharmony"),
-        ),
+        )
       )
     }
   }

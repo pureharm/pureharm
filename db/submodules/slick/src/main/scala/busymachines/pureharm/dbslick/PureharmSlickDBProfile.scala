@@ -95,8 +95,8 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     *
     */
   trait PureharmSlickAPIWithImplicits
-      extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-      with PureharmSlickConnectionIOOps.Implicits with SlickQueryAlgebraDefinitions with SlickAliases {
+    extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
+    with PureharmSlickConnectionIOOps.Implicits with SlickQueryAlgebraDefinitions with SlickAliases {
     final override protected val enclosingProfile: slick.jdbc.JdbcProfile = self
   }
 

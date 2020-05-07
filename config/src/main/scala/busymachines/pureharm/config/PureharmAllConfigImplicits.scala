@@ -26,6 +26,6 @@ import busymachines.pureharm.internals.config.PureharmConfigInstances
   *
   */
 trait PureharmAllConfigImplicits
-    extends pureconfig.BasicReaders with pureconfig.CollectionReaders with pureconfig.ProductReaders
-    with pureconfig.BasicWriters with pureconfig.CollectionWriters with pureconfig.ProductWriters
-    with PureharmConfigInstances.Implicits
+  extends pureconfig.BasicReaders with pureconfig.CollectionReaders with pureconfig.ProductReaders
+  with pureconfig.BasicWriters with pureconfig.CollectionWriters with pureconfig.ProductWriters
+  with PureharmConfigInstances.Implicits

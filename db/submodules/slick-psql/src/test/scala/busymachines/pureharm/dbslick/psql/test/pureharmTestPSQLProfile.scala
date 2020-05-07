@@ -42,6 +42,6 @@ private[test] trait PureharmTestPSQLProfile extends PureharmSlickPostgresProfile
   trait PureharmTestAPI extends super.API with PureharmSlickPostgresAPIWithImplicits
 }
 
-private[test] object testdb extends PureharmTestPSQLProfile {
+private[test] object testdb                 extends PureharmTestPSQLProfile {
   val implicits: PureharmTestAPI = this.api
 }

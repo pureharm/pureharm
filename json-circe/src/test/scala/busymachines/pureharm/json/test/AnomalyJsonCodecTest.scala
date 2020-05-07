@@ -63,7 +63,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -95,7 +95,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -127,7 +127,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -159,7 +159,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -191,7 +191,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -223,7 +223,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    ]
           |  }
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
@@ -285,7 +285,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
           |    }
           |  ]
           |}
-          |""".stripMargin.trim,
+          |""".stripMargin.trim
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]

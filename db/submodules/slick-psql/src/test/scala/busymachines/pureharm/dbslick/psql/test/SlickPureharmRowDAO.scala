@@ -54,8 +54,8 @@ private[test] object SlickPureharmRowDAO {
       (id, byte, int, long, bigDecimal, string, jsonCol, optCol) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
   }
 
-  final private class SlickPureharmRowQuerries(
-    implicit override val connectionIOEC: ConnectionIOEC,
+  final private class SlickPureharmRowQuerries(implicit
+    override val connectionIOEC: ConnectionIOEC
   ) extends SlickDAOQueryAlgebra[PureharmRow, PhantomPK, SlickPureharmTable] {
     override val dao: TableQuery[SlickPureharmTable] = TableQuery[SlickPureharmTable]
   }

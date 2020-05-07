@@ -272,7 +272,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
               )
               previouslyProcessed.foreach { previous =>
                 assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
-                  actual = previous,
+                  actual = previous
                 )
               }
               startedFlag         = Some(i)
@@ -317,7 +317,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
               )
               previouslyProcessed.foreach { previous =>
                 assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
-                  actual = previous,
+                  actual = previous
                 )
               }
               startedFlag         = Some(i)
@@ -374,8 +374,8 @@ final class PureharmSyntaxTest extends AnyFunSpec {
       implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
       test("... IO") {
-        var sideEffect: Int = 0
-        val io: IO[Int] = Future[Int] {
+        var sideEffect: Int     = 0
+        val io:         IO[Int] = Future[Int] {
           sideEffect = 42
           sideEffect
         }.liftTo[IO]

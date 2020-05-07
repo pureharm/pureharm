@@ -27,7 +27,7 @@ import busymachines.pureharm.dbslick._
   *
   */
 final private[internals] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
-    extends MonadError[ConnectionIO, Throwable] {
+  extends MonadError[ConnectionIO, Throwable] {
   override def pure[A](x: A): ConnectionIO[A] = ConnectionIO.successful(x)
 
   override def map[A, B](fa: ConnectionIO[A])(f: A => B): ConnectionIO[B] = fa.map(f)

@@ -45,11 +45,10 @@ private[pureharm] object PoolFixed {
     */
   def unsafeFixed(
     threadNamePrefix: String,
-    maxThreads:       Int,
-    daemons:          Boolean,
-  ): ExecutionContextFT = {
+    maxThreads: Int,
+    daemons:    Boolean,
+  ): ExecutionContextFT =
     ExecutionContextFT(Util.exitOnFatal(unsafeExecutorService(threadNamePrefix, maxThreads, daemons)))
-  }
 
   private def unsafeExecutorService(threadNamePrefix: String, maxThreads: Int, daemons: Boolean): ExecutorService = {
     val bound  = math.max(1, maxThreads)
