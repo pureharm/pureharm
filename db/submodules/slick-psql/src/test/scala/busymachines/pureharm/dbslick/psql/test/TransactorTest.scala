@@ -19,9 +19,10 @@ final class TransactorTest extends PureharmFixtureTest {
     */
   override def fixture: Resource[IO, Transactor[IO]] =
     for {
-      dbConfig <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
-      transactor <- Transactor
-        .pgSQLHikari[IO](dbProfile = testdb.jdbcProfileAPI, dbConnection = dbConfig, asyncConfig = slickConfig)
+      dbConfig   <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
+      transactor <-
+        Transactor
+          .pgSQLHikari[IO](dbProfile = testdb.jdbcProfileAPI, dbConnection = dbConfig, asyncConfig = slickConfig)
     } yield transactor
 
   override type FixtureParam = Transactor[IO]

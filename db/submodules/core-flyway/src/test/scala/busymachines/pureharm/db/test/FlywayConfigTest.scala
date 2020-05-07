@@ -43,7 +43,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withCleanOnValidationErrors(CleanOnValidationError.True)
-          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True)
       )
     }
   }
@@ -54,7 +54,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withLocations(`"db/migration"`, `"db/test_migration"`)
           .withCleanOnValidationErrors(CleanOnValidationError.True)
-          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True)
       )
     }
   }
@@ -65,7 +65,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withSchemas(`"public"`)
           .withCleanOnValidationErrors(CleanOnValidationError.True)
-          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True)
       )
     }
   }
@@ -76,7 +76,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withCleanOnValidationErrors(CleanOnValidationError.True),
+          .withCleanOnValidationErrors(CleanOnValidationError.True)
       )
     }
   }
@@ -87,7 +87,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
         config == FlywayConfig
           .withSchemas(`"public"`)
           .withLocations(`"db/migration"`, `"db/test_migration"`)
-          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True),
+          .withIgnoreMissingMigrations(IgnoreMissingMigrations.True)
       )
     }
   }
@@ -95,7 +95,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
   iotest("read config with all missing fields — should just use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration6").map { config =>
       assert(
-        config == FlywayConfig.defaultConfig,
+        config == FlywayConfig.defaultConfig
       )
     }
   }
@@ -104,7 +104,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration7").map { config =>
       assert(
         config == FlywayConfig
-          .withSchemas(`"public"`),
+          .withSchemas(`"public"`)
       )
     }
   }
@@ -113,7 +113,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration8").map { config =>
       assert(
         config == FlywayConfig
-          .withLocations(`"db/test_migration"`),
+          .withLocations(`"db/test_migration"`)
       )
     }
   }

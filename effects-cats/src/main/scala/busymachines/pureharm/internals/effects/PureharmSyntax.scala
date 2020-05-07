@@ -193,13 +193,13 @@ object PureharmSyntax {
     def ifFalseRaise(ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
       fb.ifM(ifTrue = F.unit, ifFalse = F.raiseError(ifFalse))
 
-    def ifTrueRaise(ifFalse: => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
+    def ifTrueRaise(ifFalse:  => Throwable)(implicit F: cats.MonadError[F, Throwable]): F[Unit] =
       fb.ifM(ifTrue = F.raiseError(ifFalse), ifFalse = F.unit)
 
-    def ifFalseRun(fu: F[_])(implicit F: cats.Monad[F]): F[Unit] =
+    def ifFalseRun(fu:        F[_])(implicit F:         cats.Monad[F]):                 F[Unit] =
       fb.ifM(ifTrue = F.unit, ifFalse = fu.void)
 
-    def ifTrueRun(fu: F[_])(implicit F: cats.Monad[F]): F[Unit] =
+    def ifTrueRun(fu:         F[_])(implicit F:         cats.Monad[F]):                 F[Unit] =
       fb.ifM(ifTrue = fu.void, ifFalse = F.unit)
   }
 
@@ -258,7 +258,7 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.traverse]]
       */
-    @inline def traverse_[A, B](in: Seq[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
+    @inline def traverse_[A, B](in:                           Seq[A])(fn:                  A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.traverse_(in)(fn)
 
     /**
@@ -268,7 +268,7 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.traverse]]
       */
-    @inline def traverse_[A, B](in: Set[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
+    @inline def traverse_[A, B](in:                           Set[A])(fn:                  A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.traverse_(in)(fn)
 
     /**
@@ -278,7 +278,7 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.sequence]]
       */
-    @inline def sequence_[A](in: Seq[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
+    @inline def sequence_[A](in:                              Seq[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.sequence_(in)
 
     /**
@@ -288,7 +288,7 @@ object PureharmSyntax {
       *
       * @see [[scala.concurrent.Future.sequence]]
       */
-    @inline def sequence_[A](in: Set[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
+    @inline def sequence_[A](in:                              Set[Future[A]])(implicit ec: ExecutionContext):           Future[Unit]      =
       FutureOps.sequence_(in)
 
     /**
@@ -318,10 +318,9 @@ object PureharmSyntax {
       *
       *
       */
-    @inline def serialize[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn: A => Future[B])(
-      implicit
-      cbf: BuildFrom[C[A], B, C[B]],
-      ec:  ExecutionContext,
+    @inline def serialize[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn:                    A => Future[B])(implicit
+      cbf:                                                    BuildFrom[C[A], B, C[B]],
+      ec:                                                     ExecutionContext,
     ): Future[C[B]] = FutureOps.serialize(col)(fn)
 
     /**
@@ -330,10 +329,9 @@ object PureharmSyntax {
       * Similar to [[serialize]], but discards all content. i.e. used only
       * for the combined effects.
       */
-    @inline def serialize_[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn: A => Future[B])(
-      implicit
-      cbf: BuildFrom[C[A], B, C[B]],
-      ec:  ExecutionContext,
+    @inline def serialize_[A, B, C[X] <: IterableOnce[X]](col: C[A])(fn: A => Future[B])(implicit
+      cbf:                                                     BuildFrom[C[A], B, C[B]],
+      ec:                                                      ExecutionContext,
     ): Future[Unit] = FutureOps.serialize_(col)(fn)
   }
 
@@ -403,14 +401,14 @@ object PureharmSyntax {
     @inline def sequence[F[_]: Traverse, A](fioa: F[IO[A]]): IO[F[A]] =
       Traverse[F].sequence(fioa)
 
-    @inline def sequence_[F[_]: Traverse, A](fioa: F[IO[A]]): IO[Unit] =
+    @inline def sequence_[F[_]:  Traverse, A](fioa:  F[IO[A]]): IO[Unit] =
       Traverse[F].sequence_(fioa)
 
     /**
       * Alias for [[traverse]]. On IO if you want concurrency you use parTraverse. This is not
       * Future, it actually makes sense... but its useful for transitioning.
       */
-    @inline def serialize[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[F[B]] =
+    @inline def serialize[F[_]:  Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[F[B]] =
       Traverse[F].traverse(fs)(fn)
 
     /**

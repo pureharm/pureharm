@@ -44,7 +44,7 @@ final class PureharmTestConfigTest extends AnyFunSuite with Matchers {
         PhantomSet(Set("value1", "value2")),
         PhantomFiniteDuration(10.minutes),
         PhantomDuration(10.minutes),
-      ),
+      )
     )
   }
 

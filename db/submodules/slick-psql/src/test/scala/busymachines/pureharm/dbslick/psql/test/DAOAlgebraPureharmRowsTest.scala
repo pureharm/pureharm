@@ -40,9 +40,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override def fixture: Resource[IO, PureharmRowDAO[IO]] =
     DAOAlgebraPureharmRowsTest
       .transactorResource[IO]
-      .map(
-        implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)),
-      )
+      .map(implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)))
 
   private val row = PureharmRow(
     id          = PhantomPK("test1"),
@@ -81,7 +79,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
         jsonbCol    = PureharmJSONCol(79, "new_json_col"),
         optionalCol = Option(PhantomString("new opt_value")),
       )
-      _          <- dao.update(newRowWithSome)
+      _ <- dao.update(newRowWithSome)
       fetchedRow <- dao.retrieve(row.id)
     } yield assert(newRowWithSome === fetchedRow)
   }
@@ -98,7 +96,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
         jsonbCol    = PureharmJSONCol(45, "newest_json_col"),
         optionalCol = Option.empty,
       )
-      _          <- dao.update(newRowWithNone)
+      _ <- dao.update(newRowWithNone)
       fetchedRow <- dao.retrieve(row.id)
     } yield assert(newRowWithNone === fetchedRow)
   }

@@ -62,8 +62,8 @@ private[internals] object FutureOps {
     * @see [[scala.concurrent.Future.traverse]]
     */
   @inline def traverse_[A, B](
-    in: Seq[A],
-  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
+    in:                Seq[A]
+  )(fn:                A => Future[B])(implicit executor: ExecutionContext):                  Future[Unit]      =
     this.void(Future.traverse(in)(fn))
 
   /**
@@ -74,8 +74,8 @@ private[internals] object FutureOps {
     * @see [[scala.concurrent.Future.traverse]]
     */
   @inline def traverse_[A, B](
-    in: Set[A],
-  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
+    in:                Set[A]
+  )(fn:                A => Future[B])(implicit executor: ExecutionContext):                  Future[Unit]      =
     this.void(Future.traverse(in)(fn))
 
   //the generic version gets: Cannot construct a collection of type M[A] with elements of type A based on a collection of type M[scala.concurrent.Future[A]]
@@ -100,8 +100,8 @@ private[internals] object FutureOps {
     * @see [[scala.concurrent.Future.sequence]]
     */
   @inline def sequence_[A, To](
-    in:                Seq[Future[A]],
-  )(implicit executor: ExecutionContext): Future[Unit] =
+    in:                Seq[Future[A]]
+  )(implicit executor: ExecutionContext):                 Future[Unit]                       =
     this.void(Future.sequence(in))
 
   /**
@@ -112,8 +112,8 @@ private[internals] object FutureOps {
     * @see [[scala.concurrent.Future.sequence]]
     */
   @inline def sequence_[A, To](
-    in:                Set[Future[A]],
-  )(implicit executor: ExecutionContext): Future[Unit] =
+    in:                Set[Future[A]]
+  )(implicit executor: ExecutionContext):                 Future[Unit]                       =
     this.void(Future.sequence(in))
 
   /**
@@ -144,8 +144,8 @@ private[internals] object FutureOps {
     *
     */
   @inline def serialize[A, B, M[X] <: IterableOnce[X]](
-    in: M[A],
-  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] = {
+    in:                M[A]
+  )(fn:                A => Future[B])(implicit bf:       BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] = {
     import scala.collection.mutable
     if (in.iterator.isEmpty) {
       Future.successful(bf.newBuilder(in).result())
@@ -155,21 +155,15 @@ private[internals] object FutureOps {
       val head = seq.head
       val tail = seq.tail
       val builder: mutable.Builder[B, M[B]] = bf.newBuilder(in)
-      val firstBuilder = fn(head).map { z =>
-        builder.+=(z)
-      }
+      val firstBuilder = fn(head).map(z => builder.+=(z))
       val eventualBuilder: Future[mutable.Builder[B, M[B]]] = tail.foldLeft(firstBuilder) {
         (serializedBuilder: Future[mutable.Builder[B, M[B]]], element: A) =>
           serializedBuilder.flatMap[mutable.Builder[B, M[B]]] { (result: mutable.Builder[B, M[B]]) =>
-            val f: Future[mutable.Builder[B, M[B]]] = fn(element).map { newElement =>
-              result.+=(newElement)
-            }
+            val f: Future[mutable.Builder[B, M[B]]] = fn(element).map(newElement => result.+=(newElement))
             f
           }
       }
-      eventualBuilder.map { b =>
-        b.result()
-      }
+      eventualBuilder.map(b => b.result())
     }
   }
 
@@ -180,7 +174,7 @@ private[internals] object FutureOps {
     * for the combined effects.
     */
   @inline def serialize_[A, B, M[X] <: IterableOnce[X]](
-    in: M[A],
-  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
+    in:                M[A]
+  )(fn:                A => Future[B])(implicit bf:       BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
     this.void(FutureOps.serialize(in)(fn))
 }

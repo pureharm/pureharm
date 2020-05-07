@@ -37,7 +37,7 @@ final class JsonDefaultSemiAutoDecoderDerivationTest extends AnyFlatSpec {
 
   it should "... be able to deserialize anarchist melon (i.e. not part of any hierarchy)" in {
     val anarchistMelon = AnarchistMelon(noGods = true, noMasters = true, noSuperTypes = true)
-    val rawJson =
+    val rawJson        =
       """
         |{
         |  "noGods" : true,
@@ -57,7 +57,7 @@ final class JsonDefaultSemiAutoDecoderDerivationTest extends AnyFlatSpec {
       """
         |val rawJson = "{}"
         |rawJson.unsafeDecodeAs[WinterMelon]
-      """.stripMargin,
+      """.stripMargin
     )
   }
 
@@ -88,7 +88,7 @@ final class JsonDefaultSemiAutoDecoderDerivationTest extends AnyFlatSpec {
         |  "_type" : "SmallMelon"
         |}
       """.stripMargin.trim
-    val read = rawJson.unsafeDecodeAs[Melon]
+    val read    = rawJson.unsafeDecodeAs[Melon]
     assertResult(smallMelon)(read)
   }
 

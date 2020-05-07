@@ -78,17 +78,14 @@ trait ConfigLoader[Config] {
   final def fromNamespaceR[F[_]: Sync](namespace: String): Resource[F, Config] =
     Resource.liftF(fromNamespace(namespace))
 
-  protected def load[F[_]: Sync](implicit reader: ConfigReader[Config]): F[Config] = {
+  protected def load[F[_]: Sync](implicit reader: ConfigReader[Config]): F[Config] =
     configToF(ConfigSource.default.load[Config](Derivation.Successful(reader)))
-  }
 
-  protected def load[F[_]: Sync](namespace: String)(implicit reader: ConfigReader[Config]): F[Config] = {
+  protected def load[F[_]: Sync](namespace: String)(implicit reader: ConfigReader[Config]): F[Config] =
     configToF(ConfigSource.default.at(namespace).load[Config](Derivation.Successful(reader))).adaptError {
       case f: ConfigAggregateAnomalies => f.withNamespace(namespace)
     }
-  }
 
-  private def configToF[F[_]](thunk: => Either[ConfigReaderFailures, Config])(implicit F: Sync[F]): F[Config] = {
+  private def configToF[F[_]](thunk: => Either[ConfigReaderFailures, Config])(implicit F: Sync[F]): F[Config] =
     F.delay(thunk.leftMap((err: ConfigReaderFailures) => ConfigAggregateAnomalies(err): Throwable)).rethrow
-  }
 }

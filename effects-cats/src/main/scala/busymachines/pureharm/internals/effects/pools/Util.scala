@@ -32,7 +32,7 @@ private[pureharm] object Util {
 
   def unsafeAvailableCPUs: Int = Runtime.getRuntime.availableProcessors()
 
-  private[pools] def exitOnFatal(ec: ExecutorService): ExecutionContext = new ExecutionContext {
+  private[pools] def exitOnFatal(ec:                ExecutorService): ExecutionContext = new ExecutionContext {
     private val underlying: ExecutionContext = ExecutionContext.fromExecutorService(ec)
 
     override def execute(r: Runnable): Unit = {
@@ -40,7 +40,8 @@ private[pureharm] object Util {
         def run(): Unit = {
           try {
             r.run()
-          } catch {
+          }
+          catch {
             case NonFatal(t) =>
               reportFailure(t)
 

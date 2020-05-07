@@ -36,36 +36,33 @@ object Flyway {
     username:     DBUsername,
     password:     DBPassword,
     flywayConfig: Option[FlywayConfig],
-  )(
-    implicit F: Sync[F],
-  ): F[Int] = {
+  )(implicit
+    F:            Sync[F]
+  ): F[Int] =
     for {
       fw   <- flywayInit[F](url, username, password, flywayConfig)
       migs <- F.delay(fw.migrate())
     } yield migs
-  }
 
   def migrate[F[_]](
     dbConfig:     DBConnectionConfig,
     flywayConfig: Option[FlywayConfig] = Option.empty,
-  )(
-    implicit F: Sync[F],
-  ): F[Int] = {
+  )(implicit
+    F:            Sync[F]
+  ): F[Int] =
     for {
       fw   <- flywayInit[F](dbConfig.jdbcURL, dbConfig.username, dbConfig.password, flywayConfig)
       migs <- F.delay(fw.migrate())
     } yield migs
-  }
 
   def clean[F[_]: Sync](dbConfig: DBConnectionConfig): F[Unit] =
     this.clean[F](url = dbConfig.jdbcURL, username = dbConfig.username, password = dbConfig.password)
 
-  def clean[F[_]: Sync](url: JDBCUrl, username: DBUsername, password: DBPassword): F[Unit] = {
+  def clean[F[_]: Sync](url:      JDBCUrl, username: DBUsername, password: DBPassword): F[Unit] =
     for {
       fw <- flywayInit[F](url, username, password, Option.empty)
       _  <- Sync[F].delay(fw.clean())
     } yield ()
-  }
 
   private def flywayInit[F[_]](
     url:        JDBCUrl,
@@ -78,7 +75,7 @@ object Flyway {
       fwConfig.dataSource(url, username, password)
       fwConfig.mixed(true)
       config match {
-        case None => () //default everything. Do nothing, lol, java
+        case None    => () //default everything. Do nothing, lol, java
         case Some(c) =>
           if (c.migrationLocations.nonEmpty) {
             fwConfig.locations(c.migrationLocations: _*)

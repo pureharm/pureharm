@@ -27,4 +27,4 @@ import busymachines.pureharm.internals.effects.aliases
   *
   */
 trait PureharmEffectsAllTypes
-    extends aliases.PureharmTypeDefinitions with PureharmPoolAliases with aliases.CatsTypeAliases
+  extends aliases.PureharmTypeDefinitions with PureharmPoolAliases with aliases.CatsTypeAliases

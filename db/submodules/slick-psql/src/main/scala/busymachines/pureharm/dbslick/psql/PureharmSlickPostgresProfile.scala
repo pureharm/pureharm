@@ -34,7 +34,7 @@ import busymachines.pureharm.internals.dbslick.psql
   *
   */
 trait PureharmSlickPostgresProfile
-    extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
+  extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
 
   /**
     * We use this trick to propagate the profile from the top level object to the
@@ -97,8 +97,8 @@ trait PureharmSlickPostgresProfile
     *
     */
   trait PureharmSlickPostgresAPIWithImplicits
-      extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-      with SlickQueryAlgebraDefinitions with SlickAliases with psql.SlickPostgresCirceSupportAPI {
+    extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
+    with SlickQueryAlgebraDefinitions with SlickAliases with psql.SlickPostgresCirceSupportAPI {
     final override protected val enclosingProfile:         slick.jdbc.JdbcProfile     = self
     final override protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile = self
 

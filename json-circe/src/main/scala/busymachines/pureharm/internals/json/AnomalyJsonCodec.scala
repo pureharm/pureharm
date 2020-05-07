@@ -39,21 +39,19 @@ trait AnomalyJsonCodec {
 
   implicit final private val AnomalyIDCodec: Codec[AnomalyID] = new Codec[AnomalyID] {
 
-    override def apply(c: HCursor): Result[AnomalyID] = {
+    override def apply(c: HCursor): Result[AnomalyID] =
       c.as[String].map(AnomalyID.apply)
-    }
 
     override def apply(a: AnomalyID): Json = Json.fromString(a.name)
   }
 
   implicit final private val pureharmStringOrSeqCodec: Codec[Anomaly.Parameter] = new Codec[Anomaly.Parameter] {
 
-    override def apply(a: Anomaly.Parameter): Json = {
+    override def apply(a: Anomaly.Parameter): Json =
       a match {
         case StringWrapper(s)      => Json.fromString(s)
         case SeqStringWrapper(ses) => Json.fromValues(ses.map(Json.fromString))
       }
-    }
 
     override def apply(c: HCursor): Result[Anomaly.Parameter] = {
       val sa: Result[String] = c.as[String]
@@ -73,9 +71,7 @@ trait AnomalyJsonCodec {
         val jsonObj = c.as[JsonObject]
         val m       = jsonObj.map(_.toMap)
         val m2: Either[DecodingFailure, Either[DecodingFailure, Anomaly.Parameters]] = m.map { e: Map[String, Json] =>
-          val potentialFailures = e.map { p: (String, Json) =>
-            p._2.as[Anomaly.Parameter].map(s => (p._1, s))
-          }.toList
+          val potentialFailures = e.map { p: (String, Json) => p._2.as[Anomaly.Parameter].map(s => (p._1, s)) }.toList
 
           if (potentialFailures.nonEmpty) {
             val first: Either[DecodingFailure, List[(String, Anomaly.Parameter)]] =
@@ -96,28 +92,24 @@ trait AnomalyJsonCodec {
         m2.flatMap(x => identity(x))
       }
 
-      override def apply(a: Anomaly.Parameters): Json = {
+      override def apply(a: Anomaly.Parameters): Json =
         if (a.isEmpty) {
           Json.fromJsonObject(JsonObject.empty)
         }
         else {
-          val parametersJson = a.map { p: (String, Anomaly.Parameter) =>
-            (p._1, pureharmStringOrSeqCodec(p._2))
-          }
+          val parametersJson = a.map { p: (String, Anomaly.Parameter) => (p._1, pureharmStringOrSeqCodec(p._2)) }
           io.circe.Json.fromFields(parametersJson)
         }
-      }
     }
 
   implicit final val pureharmAnomalyBaseCodec: Codec[AnomalyBase] = new Codec[AnomalyBase] {
 
-    override def apply(c: HCursor): Result[AnomalyBase] = {
+    override def apply(c: HCursor): Result[AnomalyBase] =
       for {
         id     <- c.get[AnomalyID](PureharmJsonConstants.id)
         msg    <- c.get[String](PureharmJsonConstants.message)
         params <- c.getOrElse[Anomaly.Parameters](PureharmJsonConstants.parameters)(Anomaly.Parameters.empty)
       } yield Anomaly(id, msg, params)
-    }
 
     override def apply(a: AnomalyBase): Json = {
       val id      = AnomalyIDCodec(a.id)
@@ -148,15 +140,15 @@ trait AnomalyJsonCodec {
       messagesObj.deepMerge(fm)
     }
 
-    override def apply(c: HCursor): Result[AnomaliesBase] = {
+    override def apply(c: HCursor): Result[AnomaliesBase] =
       for {
         fm   <- c.as[AnomalyBase]
         msgs <- c.get[Seq[AnomalyBase]](PureharmJsonConstants.messages)
-        _ <- if (msgs.isEmpty)
-          Left(DecodingFailure("Anomalies.message needs to be non empty array", c.history))
-        else
-          Right.apply(())
+        _    <-
+          if (msgs.isEmpty)
+            Left(DecodingFailure("Anomalies.message needs to be non empty array", c.history))
+          else
+            Right.apply(())
       } yield Anomalies(fm.id, fm.message, Anomaly(msgs.head), msgs.tail.map(a => Anomaly(a)): _*)
-    }
   }
 }
