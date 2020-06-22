@@ -43,9 +43,8 @@ abstract class Anomalies(
 
 object Anomalies {
 
-  def apply(id: AnomalyID, message: String, msg: Anomaly, msgs: Anomaly*): Anomalies = {
+  def apply(id: AnomalyID, message: String, msg: Anomaly, msgs: Anomaly*): Anomalies =
     AnomaliesImpl(id, message, msg, msgs.toList)
-  }
 }
 
 final private[pureharm] case class AnomaliesImpl(

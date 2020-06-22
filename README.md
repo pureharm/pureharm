@@ -8,7 +8,7 @@ Currently the project is under heavy development, and is mostly driven by compan
 The available modules are:
 
 ```scala
-val pureharmVersion: String = "0.0.2" //https://github.com/busymachines/pureharm/releases
+val pureharmVersion: String = "0.0.5" //https://github.com/busymachines/pureharm/releases
 
 def pureharm(m: String): ModuleID = "com.busymachines" %% s"pureharm-$m" % pureharmVersion
 

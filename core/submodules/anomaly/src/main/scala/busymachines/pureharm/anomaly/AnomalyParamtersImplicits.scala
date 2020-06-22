@@ -24,6 +24,7 @@ package busymachines.pureharm.anomaly
   *
   */
 trait AnomalyParamtersImplicits {
+
   implicit final def anomalyParamValueStringWrapper(s: String): Anomaly.Parameter =
     StringWrapper(s)
 

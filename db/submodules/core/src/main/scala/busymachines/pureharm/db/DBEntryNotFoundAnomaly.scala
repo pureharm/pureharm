@@ -26,10 +26,11 @@ import busymachines.pureharm.anomaly._
   *
   */
 abstract class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
-    extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
+  extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
   override val id: AnomalyID = DBEntryNotFoundAnomaly.DBEntryNotFoundAnomalyID
+
   override val parameters: Anomaly.Parameters = Anomaly.Parameters(
-    DBEntryNotFoundAnomaly.PK -> pk,
+    DBEntryNotFoundAnomaly.PK -> pk
   )
 }
 

@@ -63,9 +63,8 @@ object UnsafePools {
     * Like [[defaultMainExecutionContext]], but with a custom upper bound for threads,
     * instead one based on the number of available processors
     */
-  def mainExecutionContext(threadNamePrefix: String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT = {
+  def mainExecutionContext(threadNamePrefix:        String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT =
     PoolMainCPU.main(threadNamePrefix, maxThreads)
-  }
 
   /**
     *
@@ -103,7 +102,7 @@ object UnsafePools {
     * @return
     *   A fixed thread pool
     */
-  def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContextFT =
+  def fixed(threadNamePrefix:                       String = "fixed", maxThreads:      Int, daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, maxThreads, daemons)
 
   /**
@@ -128,7 +127,7 @@ object UnsafePools {
     *   for daemon threads.
     * @return
     */
-  def cached(threadNamePrefix: String, daemons: Boolean = false): ExecutionContextCT =
+  def cached(threadNamePrefix:                      String, daemons:                   Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
   /**
@@ -139,7 +138,7 @@ object UnsafePools {
     * -----
     * A simple thread pool with one single thread. Be careful how you use it.
     */
-  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextST =
+  def singleThreaded(threadNamePrefix:              String = "single-thread", daemons: Boolean = false): ExecutionContextST =
     ExecutionContextST(PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons))
 
   def availableCPUs: Int = Util.unsafeAvailableCPUs

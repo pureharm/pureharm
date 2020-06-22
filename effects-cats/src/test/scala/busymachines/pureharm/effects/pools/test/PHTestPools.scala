@@ -37,6 +37,7 @@ private[test] object PHTestPools {
   import busymachines.pureharm.effects.implicits._
   import org.scalactic.source.Position
   import org.scalatest.Assertions.assert
+
   /**
     * @param expectContains
     *   checks to see if the Thread Name executing this function

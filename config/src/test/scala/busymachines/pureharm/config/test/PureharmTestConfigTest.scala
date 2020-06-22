@@ -21,8 +21,9 @@ import busymachines.pureharm.config._
 
 import scala.concurrent.duration._
 import busymachines.pureharm.effects._
-import org.scalatest.Matchers
+
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 /**
   *
@@ -43,7 +44,7 @@ final class PureharmTestConfigTest extends AnyFunSuite with Matchers {
         PhantomSet(Set("value1", "value2")),
         PhantomFiniteDuration(10.minutes),
         PhantomDuration(10.minutes),
-      ),
+      )
     )
   }
 

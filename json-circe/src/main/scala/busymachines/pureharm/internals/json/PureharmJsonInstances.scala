@@ -50,8 +50,8 @@ object PureharmJsonInstances {
   trait Implicits extends PhantomTypeInstances
 
   trait PhantomTypeInstances
-      extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
-      with PhantomTypeJavaTimeInstances with PhantomTypeTupleInstances with PhantomTypeJavaMiscInstances
+    extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
+    with PhantomTypeJavaTimeInstances with PhantomTypeTupleInstances with PhantomTypeJavaMiscInstances
 
   trait PhantomTypePrimitiveInstances {
 
@@ -131,13 +131,13 @@ object PureharmJsonInstances {
     implicit final def phantomTypeListDecoder[Tag, T](implicit ls: Decoder[List[T]]): Decoder[List[T] @@ Tag] =
       ls.asInstanceOf[Decoder[List[T] @@ Tag]]
 
-    implicit final def phantomTypeNEListEncoder[Tag, T](
-      implicit ls: Encoder[NonEmptyList[T]],
+    implicit final def phantomTypeNEListEncoder[Tag, T](implicit
+      ls: Encoder[NonEmptyList[T]]
     ): Encoder[NonEmptyList[T] @@ Tag] =
       ls.asInstanceOf[Encoder[NonEmptyList[T] @@ Tag]]
 
-    implicit final def phantomTypeNEListDecoder[Tag, T](
-      implicit ls: Decoder[NonEmptyList[T]],
+    implicit final def phantomTypeNEListDecoder[Tag, T](implicit
+      ls: Decoder[NonEmptyList[T]]
     ): Decoder[NonEmptyList[T] @@ Tag] =
       ls.asInstanceOf[Decoder[NonEmptyList[T] @@ Tag]]
 
@@ -147,13 +147,13 @@ object PureharmJsonInstances {
     implicit final def phantomTypeSetDecoder[Tag, T](implicit ls: Decoder[Set[T]]): Decoder[Set[T] @@ Tag] =
       ls.asInstanceOf[Decoder[Set[T] @@ Tag]]
 
-    implicit final def phantomTypeNESetEncoder[Tag, T](
-      implicit ls: Encoder[NonEmptySet[T]],
+    implicit final def phantomTypeNESetEncoder[Tag, T](implicit
+      ls: Encoder[NonEmptySet[T]]
     ): Encoder[NonEmptySet[T] @@ Tag] =
       ls.asInstanceOf[Encoder[NonEmptySet[T] @@ Tag]]
 
-    implicit final def phantomTypeNESetDecoder[Tag, T](
-      implicit ls: Decoder[NonEmptySet[T]],
+    implicit final def phantomTypeNESetDecoder[Tag, T](implicit
+      ls: Decoder[NonEmptySet[T]]
     ): Decoder[NonEmptySet[T] @@ Tag] =
       ls.asInstanceOf[Decoder[NonEmptySet[T] @@ Tag]]
 
@@ -163,13 +163,13 @@ object PureharmJsonInstances {
     implicit final def phantomTypeMapDecoder[Tag, K, V](implicit ls: Decoder[Map[K, V]]): Decoder[Map[K, V] @@ Tag] =
       ls.asInstanceOf[Decoder[Map[K, V] @@ Tag]]
 
-    implicit final def phantomTypeNEMapEncoder[Tag, K, V](
-      implicit ls: Encoder[NonEmptyMap[K, V]],
+    implicit final def phantomTypeNEMapEncoder[Tag, K, V](implicit
+      ls: Encoder[NonEmptyMap[K, V]]
     ): Encoder[NonEmptyMap[K, V] @@ Tag] =
       ls.asInstanceOf[Encoder[NonEmptyMap[K, V] @@ Tag]]
 
-    implicit final def phantomTypeNEMapDecoder[Tag, K, V](
-      implicit ls: Decoder[NonEmptyMap[K, V]],
+    implicit final def phantomTypeNEMapDecoder[Tag, K, V](implicit
+      ls: Decoder[NonEmptyMap[K, V]]
     ): Decoder[NonEmptyMap[K, V] @@ Tag] =
       ls.asInstanceOf[Decoder[NonEmptyMap[K, V] @@ Tag]]
   }
@@ -183,13 +183,13 @@ object PureharmJsonInstances {
     implicit final def sdDurationPhantomTypeDecoder[Tag](implicit dec: Decoder[Duration]): Decoder[Duration @@ Tag] =
       dec.asInstanceOf[Decoder[Duration @@ Tag]]
 
-    implicit final def sdFiniteDurationPhantomTypeEncoder[Tag](
-      implicit enc: Encoder[FiniteDuration],
+    implicit final def sdFiniteDurationPhantomTypeEncoder[Tag](implicit
+      enc: Encoder[FiniteDuration]
     ): Encoder[FiniteDuration @@ Tag] =
       enc.asInstanceOf[Encoder[FiniteDuration @@ Tag]]
 
-    implicit final def sdFiniteDurationPhantomTypeDecoder[Tag](
-      implicit dec: Decoder[FiniteDuration],
+    implicit final def sdFiniteDurationPhantomTypeDecoder[Tag](implicit
+      dec: Decoder[FiniteDuration]
     ): Decoder[FiniteDuration @@ Tag] =
       dec.asInstanceOf[Decoder[FiniteDuration @@ Tag]]
 
@@ -221,13 +221,13 @@ object PureharmJsonInstances {
     implicit final def jtLocalDatePhantomTypeDecoder[Tag](implicit dec: Decoder[LocalDate]): Decoder[LocalDate @@ Tag] =
       dec.asInstanceOf[Decoder[LocalDate @@ Tag]]
 
-    implicit final def jtLocalDateTimePhantomTypeEncoder[Tag](
-      implicit enc: Encoder[LocalDateTime],
+    implicit final def jtLocalDateTimePhantomTypeEncoder[Tag](implicit
+      enc: Encoder[LocalDateTime]
     ): Encoder[LocalDateTime @@ Tag] =
       enc.asInstanceOf[Encoder[LocalDateTime @@ Tag]]
 
-    implicit final def jtLocalDateTimePhantomTypeDecoder[Tag](
-      implicit dec: Decoder[LocalDateTime],
+    implicit final def jtLocalDateTimePhantomTypeDecoder[Tag](implicit
+      dec: Decoder[LocalDateTime]
     ): Decoder[LocalDateTime @@ Tag] =
       dec.asInstanceOf[Decoder[LocalDateTime @@ Tag]]
 
@@ -243,23 +243,23 @@ object PureharmJsonInstances {
     implicit final def jtMonthDayPhantomTypeDecoder[Tag](implicit dec: Decoder[MonthDay]): Decoder[MonthDay @@ Tag] =
       dec.asInstanceOf[Decoder[MonthDay @@ Tag]]
 
-    implicit final def jtOffsetDateTimePhantomTypeEncoder[Tag](
-      implicit enc: Encoder[OffsetDateTime],
+    implicit final def jtOffsetDateTimePhantomTypeEncoder[Tag](implicit
+      enc: Encoder[OffsetDateTime]
     ): Encoder[OffsetDateTime @@ Tag] =
       enc.asInstanceOf[Encoder[OffsetDateTime @@ Tag]]
 
-    implicit final def jtOffsetDateTimePhantomTypeDecoder[Tag](
-      implicit dec: Decoder[OffsetDateTime],
+    implicit final def jtOffsetDateTimePhantomTypeDecoder[Tag](implicit
+      dec: Decoder[OffsetDateTime]
     ): Decoder[OffsetDateTime @@ Tag] =
       dec.asInstanceOf[Decoder[OffsetDateTime @@ Tag]]
 
-    implicit final def jtOffsetTimePhantomTypeEncoder[Tag](
-      implicit enc: Encoder[Duration],
+    implicit final def jtOffsetTimePhantomTypeEncoder[Tag](implicit
+      enc: Encoder[Duration]
     ): Encoder[OffsetTime @@ Tag] =
       enc.asInstanceOf[Encoder[OffsetTime @@ Tag]]
 
-    implicit final def jtOffsetTimePhantomTypeDecoder[Tag](
-      implicit dec: Decoder[Duration],
+    implicit final def jtOffsetTimePhantomTypeDecoder[Tag](implicit
+      dec: Decoder[Duration]
     ): Decoder[OffsetTime @@ Tag] =
       dec.asInstanceOf[Decoder[OffsetTime @@ Tag]]
 
@@ -275,59 +275,60 @@ object PureharmJsonInstances {
     implicit final def jtYearMonthPhantomTypeDecoder[Tag](implicit dec: Decoder[YearMonth]): Decoder[YearMonth @@ Tag] =
       dec.asInstanceOf[Decoder[YearMonth @@ Tag]]
 
-    implicit final def jtZonedDateTimePhantomTypeEncoder[Tag](
-      implicit enc: Encoder[ZonedDateTime],
+    implicit final def jtZonedDateTimePhantomTypeEncoder[Tag](implicit
+      enc: Encoder[ZonedDateTime]
     ): Encoder[ZonedDateTime @@ Tag] =
       enc.asInstanceOf[Encoder[ZonedDateTime @@ Tag]]
 
     implicit final def jtZoneIdPhantomTypeDecoder[Tag](implicit dec: Decoder[ZoneId]): Decoder[ZoneId @@ Tag] =
       dec.asInstanceOf[Decoder[ZoneId @@ Tag]]
 
-    implicit final def jtZoneOffsetPhantomTypeEncoder[Tag](
-      implicit enc: Encoder[ZoneOffset],
+    implicit final def jtZoneOffsetPhantomTypeEncoder[Tag](implicit
+      enc: Encoder[ZoneOffset]
     ): Encoder[ZoneOffset @@ Tag] =
       enc.asInstanceOf[Encoder[ZoneOffset @@ Tag]]
 
   }
 
   trait PhantomTypeTupleInstances {
-    implicit final def tuple1PhantomTypeEncoder[T1, Tag](
-      implicit enc: Encoder[Tuple1[T1]],
+
+    implicit final def tuple1PhantomTypeEncoder[T1, Tag](implicit
+      enc: Encoder[Tuple1[T1]]
     ): Encoder[Tuple1[T1] @@ Tag] =
       enc.asInstanceOf[Encoder[Tuple1[T1] @@ Tag]]
 
-    implicit final def tuple1PhantomTypeDecoder[T1, Tag](
-      implicit dec: Decoder[Tuple1[T1]],
+    implicit final def tuple1PhantomTypeDecoder[T1, Tag](implicit
+      dec: Decoder[Tuple1[T1]]
     ): Decoder[Tuple1[T1] @@ Tag] =
       dec.asInstanceOf[Decoder[Tuple1[T1] @@ Tag]]
 
-    implicit final def tuple2PhantomTypeEncoder[T1, T2, Tag](
-      implicit enc: Encoder[(T1, T2)],
+    implicit final def tuple2PhantomTypeEncoder[T1, T2, Tag](implicit
+      enc: Encoder[(T1, T2)]
     ): Encoder[(T1, T2) @@ Tag] =
       enc.asInstanceOf[Encoder[(T1, T2) @@ Tag]]
 
-    implicit final def tuple2PhantomTypeDecoder[T1, T2, Tag](
-      implicit dec: Decoder[(T1, T2)],
+    implicit final def tuple2PhantomTypeDecoder[T1, T2, Tag](implicit
+      dec: Decoder[(T1, T2)]
     ): Decoder[(T1, T2) @@ Tag] =
       dec.asInstanceOf[Decoder[(T1, T2) @@ Tag]]
 
-    implicit final def tuple3PhantomTypeEncoder[T1, T2, T3, Tag](
-      implicit enc: Encoder[(T1, T2, T3)],
+    implicit final def tuple3PhantomTypeEncoder[T1, T2, T3, Tag](implicit
+      enc: Encoder[(T1, T2, T3)]
     ): Encoder[(T1, T2, T3) @@ Tag] =
       enc.asInstanceOf[Encoder[(T1, T2, T3) @@ Tag]]
 
-    implicit final def tuple3PhantomTypeDecoder[T1, T2, T3, Tag](
-      implicit dec: Decoder[(T1, T2, T3)],
+    implicit final def tuple3PhantomTypeDecoder[T1, T2, T3, Tag](implicit
+      dec: Decoder[(T1, T2, T3)]
     ): Decoder[(T1, T2, T3) @@ Tag] =
       dec.asInstanceOf[Decoder[(T1, T2, T3) @@ Tag]]
 
-    implicit final def tuple4PhantomTypeEncoder[T1, T2, T3, T4, Tag](
-      implicit enc: Encoder[(T1, T2, T3, T4)],
+    implicit final def tuple4PhantomTypeEncoder[T1, T2, T3, T4, Tag](implicit
+      enc: Encoder[(T1, T2, T3, T4)]
     ): Encoder[(T1, T2, T3, T4) @@ Tag] =
       enc.asInstanceOf[Encoder[(T1, T2, T3, T4) @@ Tag]]
 
-    implicit final def tuple4PhantomTypeDecoder[T1, T2, T3, T4, Tag](
-      implicit dec: Decoder[(T1, T2, T3, T4)],
+    implicit final def tuple4PhantomTypeDecoder[T1, T2, T3, T4, Tag](implicit
+      dec: Decoder[(T1, T2, T3, T4)]
     ): Decoder[(T1, T2, T3, T4) @@ Tag] =
       dec.asInstanceOf[Decoder[(T1, T2, T3, T4) @@ Tag]]
 
@@ -336,6 +337,7 @@ object PureharmJsonInstances {
 
   trait PhantomTypeJavaMiscInstances {
     import java.util.UUID
+
     implicit final def miscUUIDPhantomTypeEncoder[Tag](implicit enc: Encoder[UUID]): Encoder[UUID @@ Tag] =
       enc.asInstanceOf[Encoder[UUID @@ Tag]]
 

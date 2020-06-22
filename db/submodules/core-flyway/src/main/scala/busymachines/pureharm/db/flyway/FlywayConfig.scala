@@ -52,22 +52,24 @@ import busymachines.pureharm.config.implicits._
   *   See [[org.flywaydb.core.api.configuration.FluentConfiguration#cleanOnValidationError()]]
   */
 final case class FlywayConfig(
-  schemas:                 List[SchemaName]        = List.empty,
+  schemas:                 List[SchemaName] = List.empty,
   migrationLocations:      List[MigrationLocation] = List.empty,
   ignoreMissingMigrations: IgnoreMissingMigrations = IgnoreMissingMigrations.False,
-  cleanOnValidationError:  CleanOnValidationError  = CleanOnValidationError.False,
+  cleanOnValidationError:  CleanOnValidationError = CleanOnValidationError.False,
 ) extends internals.FlywayConfigFluentApi {
 
   override def withLocations(locations: MigrationLocation*): FlywayConfig = this.withLocations(locations.toList)
+
   override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
     this.copy(migrationLocations = locations)
 
-  override def withSchemas(schemas: SchemaName*):      FlywayConfig = this.withSchemas(schemas.toList)
-  override def withSchemas(schemas: List[SchemaName]): FlywayConfig = this.copy(schemas = schemas)
+  override def withSchemas(schemas:     SchemaName*):             FlywayConfig = this.withSchemas(schemas.toList)
+  override def withSchemas(schemas:     List[SchemaName]):        FlywayConfig = this.copy(schemas = schemas)
 
   override def withIgnoreMissingMigrations(ignore: IgnoreMissingMigrations): FlywayConfig =
     this.copy(ignoreMissingMigrations = ignore)
-  override def withCleanOnValidationErrors(clean: CleanOnValidationError): FlywayConfig =
+
+  override def withCleanOnValidationErrors(clean:  CleanOnValidationError):  FlywayConfig =
     this.copy(cleanOnValidationError = clean)
 
   override def defaultConfig: FlywayConfig = FlywayConfig()
@@ -79,29 +81,30 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
 
   override def defaultConfig: FlywayConfig = FlywayConfig()
 
-  override def withLocations(locations: MigrationLocation*): FlywayConfig =
+  override def withLocations(locations: MigrationLocation*):      FlywayConfig =
     FlywayConfig(migrationLocations = locations.toList)
+
   override def withLocations(locations: List[MigrationLocation]): FlywayConfig =
     FlywayConfig(migrationLocations = locations)
 
-  override def withSchemas(schemas: SchemaName*):      FlywayConfig = FlywayConfig(schemas = schemas.toList)
-  override def withSchemas(schemas: List[SchemaName]): FlywayConfig = FlywayConfig(schemas = schemas)
+  override def withSchemas(schemas:     SchemaName*):             FlywayConfig = FlywayConfig(schemas = schemas.toList)
+  override def withSchemas(schemas:     List[SchemaName]):        FlywayConfig = FlywayConfig(schemas = schemas)
 
   override def withIgnoreMissingMigrations(ignore: IgnoreMissingMigrations): FlywayConfig =
     FlywayConfig(ignoreMissingMigrations = ignore)
-  override def withCleanOnValidationErrors(clean: CleanOnValidationError): FlywayConfig =
+
+  override def withCleanOnValidationErrors(clean:  CleanOnValidationError):  FlywayConfig =
     FlywayConfig(cleanOnValidationError = clean)
 
   private val alternateRepresentationReader: ConfigReader[FlywayConfig] = semiauto
     .deriveReader[SimplifiedRepr]
-    .map(
-      alt =>
-        FlywayConfig(
-          schemas                 = alt.schemas.toList,
-          migrationLocations      = alt.migrationLocations.toList,
-          ignoreMissingMigrations = alt.ignoreMissingMigrations,
-          cleanOnValidationError  = alt.cleanOnValidationError,
-        ),
+    .map(alt =>
+      FlywayConfig(
+        schemas                 = alt.schemas.toList,
+        migrationLocations      = alt.migrationLocations.toList,
+        ignoreMissingMigrations = alt.ignoreMissingMigrations,
+        cleanOnValidationError  = alt.cleanOnValidationError,
+      )
     )
 
   implicit override val configReader: ConfigReader[FlywayConfig] =
@@ -123,9 +126,9 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
     * it useful outside of these scenarios too.
     */
   private case class SimplifiedRepr(
-    schemas:                 Option[SchemaName]        = Option.empty,
+    schemas:                 Option[SchemaName] = Option.empty,
     migrationLocations:      Option[MigrationLocation] = Option.empty,
-    ignoreMissingMigrations: IgnoreMissingMigrations   = IgnoreMissingMigrations.False,
-    cleanOnValidationError:  CleanOnValidationError    = CleanOnValidationError.False,
+    ignoreMissingMigrations: IgnoreMissingMigrations = IgnoreMissingMigrations.False,
+    cleanOnValidationError:  CleanOnValidationError = CleanOnValidationError.False,
   )
 }

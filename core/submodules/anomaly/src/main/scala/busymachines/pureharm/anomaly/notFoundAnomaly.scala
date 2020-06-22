@@ -31,37 +31,37 @@ abstract class NotFoundAnomaly(
 }
 
 object NotFoundAnomaly
-    extends NotFoundAnomaly(MeaningfulAnomalies.NotFoundMsg, None) with SingletonAnomalyProduct
-    with AnomalyConstructors[NotFoundAnomaly] {
+  extends NotFoundAnomaly(MeaningfulAnomalies.NotFoundMsg, None) with SingletonAnomalyProduct
+  with AnomalyConstructors[NotFoundAnomaly] {
 
-  override def apply(id: AnomalyID): NotFoundAnomaly =
+  override def apply(id:         AnomalyID):            NotFoundAnomaly     =
     NotFoundAnomalyImpl(id = id)
 
-  override def apply(message: String): NotFoundAnomaly =
+  override def apply(message:    String):               NotFoundAnomaly     =
     NotFoundAnomalyImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): NotFoundAnomaly =
     NotFoundAnomalyImpl(parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String): NotFoundAnomaly =
+  override def apply(id:         AnomalyID, message: String): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = id, message = message)
 
-  override def apply(id: AnomalyID, parameters: Anomaly.Parameters): NotFoundAnomaly =
+  override def apply(id:         AnomalyID, parameters: Anomaly.Parameters): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = id, parameters = parameters)
 
-  override def apply(message: String, parameters: Anomaly.Parameters): NotFoundAnomaly =
+  override def apply(message:    String, parameters:    Anomaly.Parameters): NotFoundAnomaly =
     NotFoundAnomalyImpl(message = message, parameters = parameters)
 
-  override def apply(id: AnomalyID, message: String, parameters: Anomaly.Parameters): NotFoundAnomaly =
+  override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = id, message = message, parameters = parameters)
 
-  override def apply(a: AnomalyBase): NotFoundAnomaly =
+  override def apply(a:          AnomalyBase): NotFoundAnomaly =
     NotFoundAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
 }
 
 final private[pureharm] case class NotFoundAnomalyImpl(
-  override val id:         AnomalyID          = NotFoundAnomalyID,
-  override val message:    String             = MeaningfulAnomalies.NotFoundMsg,
+  override val id:         AnomalyID = NotFoundAnomalyID,
+  override val message:    String = MeaningfulAnomalies.NotFoundMsg,
   override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable]  = None,
+  override val causedBy:   Option[Throwable] = None,
 ) extends NotFoundAnomaly(message, causedBy) with Product with Serializable

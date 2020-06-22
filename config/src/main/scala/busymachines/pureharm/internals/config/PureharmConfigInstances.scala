@@ -31,8 +31,8 @@ object PureharmConfigInstances {
   trait Implicits extends PhantomTypeInstances
 
   trait PhantomTypeInstances
-      extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
-      with PhantomTypeJavaTimeInstances with PhantomTypeTupleInstances with PhantomTypeJavaMiscInstances
+    extends PhantomTypePrimitiveInstances with PhantomTypeCollectionInstances with PhantomTypeScalaDurationInstances
+    with PhantomTypeJavaTimeInstances with PhantomTypeTupleInstances with PhantomTypeJavaMiscInstances
 
   trait PhantomTypePrimitiveInstances {
 
@@ -106,63 +106,63 @@ object PureharmConfigInstances {
   trait PhantomTypeCollectionInstances {
     import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet}
 
-    implicit final def phantomTypeListConfigWriter[Tag, T](
-      implicit ls: ConfigWriter[List[T]],
+    implicit final def phantomTypeListConfigWriter[Tag, T](implicit
+      ls: ConfigWriter[List[T]]
     ): ConfigWriter[List[T] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[List[T] @@ Tag]]
 
-    implicit final def phantomTypeListConfigReader[Tag, T](
-      implicit ls: ConfigReader[List[T]],
+    implicit final def phantomTypeListConfigReader[Tag, T](implicit
+      ls: ConfigReader[List[T]]
     ): ConfigReader[List[T] @@ Tag] =
       ls.asInstanceOf[ConfigReader[List[T] @@ Tag]]
 
-    implicit final def phantomTypeNEListConfigWriter[Tag, T](
-      implicit ls: ConfigWriter[NonEmptyList[T]],
+    implicit final def phantomTypeNEListConfigWriter[Tag, T](implicit
+      ls: ConfigWriter[NonEmptyList[T]]
     ): ConfigWriter[NonEmptyList[T] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[NonEmptyList[T] @@ Tag]]
 
-    implicit final def phantomTypeNEListConfigReader[Tag, T](
-      implicit ls: ConfigReader[NonEmptyList[T]],
+    implicit final def phantomTypeNEListConfigReader[Tag, T](implicit
+      ls: ConfigReader[NonEmptyList[T]]
     ): ConfigReader[NonEmptyList[T] @@ Tag] =
       ls.asInstanceOf[ConfigReader[NonEmptyList[T] @@ Tag]]
 
-    implicit final def phantomTypeSetConfigWriter[Tag, T](
-      implicit ls: ConfigWriter[Set[T]],
+    implicit final def phantomTypeSetConfigWriter[Tag, T](implicit
+      ls: ConfigWriter[Set[T]]
     ): ConfigWriter[Set[T] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[Set[T] @@ Tag]]
 
-    implicit final def phantomTypeSetConfigReader[Tag, T](
-      implicit ls: ConfigReader[Set[T]],
+    implicit final def phantomTypeSetConfigReader[Tag, T](implicit
+      ls: ConfigReader[Set[T]]
     ): ConfigReader[Set[T] @@ Tag] =
       ls.asInstanceOf[ConfigReader[Set[T] @@ Tag]]
 
-    implicit final def phantomTypeNESetConfigWriter[Tag, T](
-      implicit ls: ConfigWriter[NonEmptySet[T]],
+    implicit final def phantomTypeNESetConfigWriter[Tag, T](implicit
+      ls: ConfigWriter[NonEmptySet[T]]
     ): ConfigWriter[NonEmptySet[T] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[NonEmptySet[T] @@ Tag]]
 
-    implicit final def phantomTypeNESetConfigReader[Tag, T](
-      implicit ls: ConfigReader[NonEmptySet[T]],
+    implicit final def phantomTypeNESetConfigReader[Tag, T](implicit
+      ls: ConfigReader[NonEmptySet[T]]
     ): ConfigReader[NonEmptySet[T] @@ Tag] =
       ls.asInstanceOf[ConfigReader[NonEmptySet[T] @@ Tag]]
 
-    implicit final def phantomTypeMapConfigWriter[Tag, K, V](
-      implicit ls: ConfigWriter[Map[K, V]],
+    implicit final def phantomTypeMapConfigWriter[Tag, K, V](implicit
+      ls: ConfigWriter[Map[K, V]]
     ): ConfigWriter[Map[K, V] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[Map[K, V] @@ Tag]]
 
-    implicit final def phantomTypeMapConfigReader[Tag, K, V](
-      implicit ls: ConfigReader[Map[K, V]],
+    implicit final def phantomTypeMapConfigReader[Tag, K, V](implicit
+      ls: ConfigReader[Map[K, V]]
     ): ConfigReader[Map[K, V] @@ Tag] =
       ls.asInstanceOf[ConfigReader[Map[K, V] @@ Tag]]
 
-    implicit final def phantomTypeNEMapConfigWriter[Tag, K, V](
-      implicit ls: ConfigWriter[NonEmptyMap[K, V]],
+    implicit final def phantomTypeNEMapConfigWriter[Tag, K, V](implicit
+      ls: ConfigWriter[NonEmptyMap[K, V]]
     ): ConfigWriter[NonEmptyMap[K, V] @@ Tag] =
       ls.asInstanceOf[ConfigWriter[NonEmptyMap[K, V] @@ Tag]]
 
-    implicit final def phantomTypeNEMapConfigReader[Tag, K, V](
-      implicit ls: ConfigReader[NonEmptyMap[K, V]],
+    implicit final def phantomTypeNEMapConfigReader[Tag, K, V](implicit
+      ls: ConfigReader[NonEmptyMap[K, V]]
     ): ConfigReader[NonEmptyMap[K, V] @@ Tag] =
       ls.asInstanceOf[ConfigReader[NonEmptyMap[K, V] @@ Tag]]
   }
@@ -170,33 +170,33 @@ object PureharmConfigInstances {
   trait PhantomTypeScalaDurationInstances {
     import scala.concurrent.duration._
 
-    implicit final def sdDurationPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Duration],
+    implicit final def sdDurationPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Duration]
     ): ConfigWriter[Duration @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Duration @@ Tag]]
 
-    implicit final def sdDurationPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Duration],
+    implicit final def sdDurationPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Duration]
     ): ConfigReader[Duration @@ Tag] =
       dec.asInstanceOf[ConfigReader[Duration @@ Tag]]
 
-    implicit final def sdFiniteDurationPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[FiniteDuration],
+    implicit final def sdFiniteDurationPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[FiniteDuration]
     ): ConfigWriter[FiniteDuration @@ Tag] =
       enc.asInstanceOf[ConfigWriter[FiniteDuration @@ Tag]]
 
-    implicit final def sdFiniteDurationPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[FiniteDuration],
+    implicit final def sdFiniteDurationPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[FiniteDuration]
     ): ConfigReader[FiniteDuration @@ Tag] =
       dec.asInstanceOf[ConfigReader[FiniteDuration @@ Tag]]
 
-    implicit final def sdDeadlinePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Deadline],
+    implicit final def sdDeadlinePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Deadline]
     ): ConfigWriter[Deadline @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Deadline @@ Tag]]
 
-    implicit final def sdDeadlinePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Deadline],
+    implicit final def sdDeadlinePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Deadline]
     ): ConfigReader[Deadline @@ Tag] =
       dec.asInstanceOf[ConfigReader[Deadline @@ Tag]]
   }
@@ -204,159 +204,160 @@ object PureharmConfigInstances {
   trait PhantomTypeJavaTimeInstances {
     import java.time._
 
-    implicit final def jtDurationPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Duration],
+    implicit final def jtDurationPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Duration]
     ): ConfigWriter[Duration @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Duration @@ Tag]]
 
-    implicit final def jtDurationPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Duration],
+    implicit final def jtDurationPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Duration]
     ): ConfigReader[Duration @@ Tag] =
       dec.asInstanceOf[ConfigReader[Duration @@ Tag]]
 
-    implicit final def jtInstantPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Instant],
+    implicit final def jtInstantPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Instant]
     ): ConfigWriter[Instant @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Instant @@ Tag]]
 
-    implicit final def jtInstantPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Instant],
+    implicit final def jtInstantPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Instant]
     ): ConfigReader[Instant @@ Tag] =
       dec.asInstanceOf[ConfigReader[Instant @@ Tag]]
 
-    implicit final def jtLocalDatePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[LocalDate],
+    implicit final def jtLocalDatePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[LocalDate]
     ): ConfigWriter[LocalDate @@ Tag] =
       enc.asInstanceOf[ConfigWriter[LocalDate @@ Tag]]
 
-    implicit final def jtLocalDatePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[LocalDate],
+    implicit final def jtLocalDatePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[LocalDate]
     ): ConfigReader[LocalDate @@ Tag] =
       dec.asInstanceOf[ConfigReader[LocalDate @@ Tag]]
 
-    implicit final def jtLocalDateTimePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[LocalDateTime],
+    implicit final def jtLocalDateTimePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[LocalDateTime]
     ): ConfigWriter[LocalDateTime @@ Tag] =
       enc.asInstanceOf[ConfigWriter[LocalDateTime @@ Tag]]
 
-    implicit final def jtLocalDateTimePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[LocalDateTime],
+    implicit final def jtLocalDateTimePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[LocalDateTime]
     ): ConfigReader[LocalDateTime @@ Tag] =
       dec.asInstanceOf[ConfigReader[LocalDateTime @@ Tag]]
 
-    implicit final def jtLocalTimePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[LocalTime],
+    implicit final def jtLocalTimePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[LocalTime]
     ): ConfigWriter[LocalTime @@ Tag] =
       enc.asInstanceOf[ConfigWriter[LocalTime @@ Tag]]
 
-    implicit final def jtLocalTimePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[LocalTime],
+    implicit final def jtLocalTimePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[LocalTime]
     ): ConfigReader[LocalTime @@ Tag] =
       dec.asInstanceOf[ConfigReader[LocalTime @@ Tag]]
 
-    implicit final def jtMonthDayPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[MonthDay],
+    implicit final def jtMonthDayPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[MonthDay]
     ): ConfigWriter[MonthDay @@ Tag] =
       enc.asInstanceOf[ConfigWriter[MonthDay @@ Tag]]
 
-    implicit final def jtMonthDayPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[MonthDay],
+    implicit final def jtMonthDayPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[MonthDay]
     ): ConfigReader[MonthDay @@ Tag] =
       dec.asInstanceOf[ConfigReader[MonthDay @@ Tag]]
 
-    implicit final def jtOffsetDateTimePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[OffsetDateTime],
+    implicit final def jtOffsetDateTimePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[OffsetDateTime]
     ): ConfigWriter[OffsetDateTime @@ Tag] =
       enc.asInstanceOf[ConfigWriter[OffsetDateTime @@ Tag]]
 
-    implicit final def jtOffsetDateTimePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[OffsetDateTime],
+    implicit final def jtOffsetDateTimePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[OffsetDateTime]
     ): ConfigReader[OffsetDateTime @@ Tag] =
       dec.asInstanceOf[ConfigReader[OffsetDateTime @@ Tag]]
 
-    implicit final def jtOffsetTimePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Duration],
+    implicit final def jtOffsetTimePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Duration]
     ): ConfigWriter[OffsetTime @@ Tag] =
       enc.asInstanceOf[ConfigWriter[OffsetTime @@ Tag]]
 
-    implicit final def jtOffsetTimePhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Duration],
+    implicit final def jtOffsetTimePhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Duration]
     ): ConfigReader[OffsetTime @@ Tag] =
       dec.asInstanceOf[ConfigReader[OffsetTime @@ Tag]]
 
-    implicit final def jtPeriodPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[Period],
+    implicit final def jtPeriodPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[Period]
     ): ConfigWriter[Period @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Period @@ Tag]]
 
-    implicit final def jtPeriodPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[Period],
+    implicit final def jtPeriodPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[Period]
     ): ConfigReader[Period @@ Tag] =
       dec.asInstanceOf[ConfigReader[Period @@ Tag]]
 
     implicit final def jtYearPhantomTypeConfigWriter[Tag](implicit enc: ConfigWriter[Year]): ConfigWriter[Year @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Year @@ Tag]]
 
-    implicit final def jtYearMonthPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[YearMonth],
+    implicit final def jtYearMonthPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[YearMonth]
     ): ConfigReader[YearMonth @@ Tag] =
       dec.asInstanceOf[ConfigReader[YearMonth @@ Tag]]
 
-    implicit final def jtZonedDateTimePhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[ZonedDateTime],
+    implicit final def jtZonedDateTimePhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[ZonedDateTime]
     ): ConfigWriter[ZonedDateTime @@ Tag] =
       enc.asInstanceOf[ConfigWriter[ZonedDateTime @@ Tag]]
 
-    implicit final def jtZoneIdPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[ZoneId],
+    implicit final def jtZoneIdPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[ZoneId]
     ): ConfigReader[ZoneId @@ Tag] =
       dec.asInstanceOf[ConfigReader[ZoneId @@ Tag]]
 
-    implicit final def jtZoneOffsetPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[ZoneOffset],
+    implicit final def jtZoneOffsetPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[ZoneOffset]
     ): ConfigWriter[ZoneOffset @@ Tag] =
       enc.asInstanceOf[ConfigWriter[ZoneOffset @@ Tag]]
 
   }
 
   trait PhantomTypeTupleInstances {
-    implicit final def tuple1PhantomTypeConfigWriter[T1, Tag](
-      implicit enc: ConfigWriter[Tuple1[T1]],
+
+    implicit final def tuple1PhantomTypeConfigWriter[T1, Tag](implicit
+      enc: ConfigWriter[Tuple1[T1]]
     ): ConfigWriter[Tuple1[T1] @@ Tag] =
       enc.asInstanceOf[ConfigWriter[Tuple1[T1] @@ Tag]]
 
-    implicit final def tuple1PhantomTypeConfigReader[T1, Tag](
-      implicit dec: ConfigReader[Tuple1[T1]],
+    implicit final def tuple1PhantomTypeConfigReader[T1, Tag](implicit
+      dec: ConfigReader[Tuple1[T1]]
     ): ConfigReader[Tuple1[T1] @@ Tag] =
       dec.asInstanceOf[ConfigReader[Tuple1[T1] @@ Tag]]
 
-    implicit final def tuple2PhantomTypeConfigWriter[T1, T2, Tag](
-      implicit enc: ConfigWriter[(T1, T2)],
+    implicit final def tuple2PhantomTypeConfigWriter[T1, T2, Tag](implicit
+      enc: ConfigWriter[(T1, T2)]
     ): ConfigWriter[(T1, T2) @@ Tag] =
       enc.asInstanceOf[ConfigWriter[(T1, T2) @@ Tag]]
 
-    implicit final def tuple2PhantomTypeConfigReader[T1, T2, Tag](
-      implicit dec: ConfigReader[(T1, T2)],
+    implicit final def tuple2PhantomTypeConfigReader[T1, T2, Tag](implicit
+      dec: ConfigReader[(T1, T2)]
     ): ConfigReader[(T1, T2) @@ Tag] =
       dec.asInstanceOf[ConfigReader[(T1, T2) @@ Tag]]
 
-    implicit final def tuple3PhantomTypeConfigWriter[T1, T2, T3, Tag](
-      implicit enc: ConfigWriter[(T1, T2, T3)],
+    implicit final def tuple3PhantomTypeConfigWriter[T1, T2, T3, Tag](implicit
+      enc: ConfigWriter[(T1, T2, T3)]
     ): ConfigWriter[(T1, T2, T3) @@ Tag] =
       enc.asInstanceOf[ConfigWriter[(T1, T2, T3) @@ Tag]]
 
-    implicit final def tuple3PhantomTypeConfigReader[T1, T2, T3, Tag](
-      implicit dec: ConfigReader[(T1, T2, T3)],
+    implicit final def tuple3PhantomTypeConfigReader[T1, T2, T3, Tag](implicit
+      dec: ConfigReader[(T1, T2, T3)]
     ): ConfigReader[(T1, T2, T3) @@ Tag] =
       dec.asInstanceOf[ConfigReader[(T1, T2, T3) @@ Tag]]
 
-    implicit final def tuple4PhantomTypeConfigWriter[T1, T2, T3, T4, Tag](
-      implicit enc: ConfigWriter[(T1, T2, T3, T4)],
+    implicit final def tuple4PhantomTypeConfigWriter[T1, T2, T3, T4, Tag](implicit
+      enc: ConfigWriter[(T1, T2, T3, T4)]
     ): ConfigWriter[(T1, T2, T3, T4) @@ Tag] =
       enc.asInstanceOf[ConfigWriter[(T1, T2, T3, T4) @@ Tag]]
 
-    implicit final def tuple4PhantomTypeConfigReader[T1, T2, T3, T4, Tag](
-      implicit dec: ConfigReader[(T1, T2, T3, T4)],
+    implicit final def tuple4PhantomTypeConfigReader[T1, T2, T3, T4, Tag](implicit
+      dec: ConfigReader[(T1, T2, T3, T4)]
     ): ConfigReader[(T1, T2, T3, T4) @@ Tag] =
       dec.asInstanceOf[ConfigReader[(T1, T2, T3, T4) @@ Tag]]
 
@@ -365,13 +366,14 @@ object PureharmConfigInstances {
 
   trait PhantomTypeJavaMiscInstances {
     import java.util.UUID
-    implicit final def miscUUIDPhantomTypeConfigWriter[Tag](
-      implicit enc: ConfigWriter[UUID],
+
+    implicit final def miscUUIDPhantomTypeConfigWriter[Tag](implicit
+      enc: ConfigWriter[UUID]
     ): ConfigWriter[UUID @@ Tag] =
       enc.asInstanceOf[ConfigWriter[UUID @@ Tag]]
 
-    implicit final def miscUUIDPhantomTypeConfigReader[Tag](
-      implicit dec: ConfigReader[UUID],
+    implicit final def miscUUIDPhantomTypeConfigReader[Tag](implicit
+      dec: ConfigReader[UUID]
     ): ConfigReader[UUID @@ Tag] =
       dec.asInstanceOf[ConfigReader[UUID @@ Tag]]
 

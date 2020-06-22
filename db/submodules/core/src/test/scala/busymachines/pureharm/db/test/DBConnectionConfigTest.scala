@@ -19,6 +19,7 @@ package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -27,7 +28,7 @@ import busymachines.pureharm.effects._
   */
 final class DBConnectionConfigTest extends PureharmFixtureTest {
 
-  override def fixture: Resource[IO, Unit] = Resource.pure(())
+  override def fixture: Resource[IO, Unit] = Resource.pure[IO, Unit](())
 
   override type FixtureParam = Unit
 
@@ -39,7 +40,7 @@ final class DBConnectionConfigTest extends PureharmFixtureTest {
           dbName   = DatabaseName("pureharm_test"),
           username = DBUsername("pureharmony"),
           password = DBPassword("pureharmony"),
-        ),
+        )
       )
     }
   }

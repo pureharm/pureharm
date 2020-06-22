@@ -40,13 +40,11 @@ object JsonDecoding {
     je.flatMap(json => this.decodeAs(json))
   }
 
-  def unsafeDecodeAs[A](json: Json)(implicit decoder: Decoder[A]): A = {
+  def unsafeDecodeAs[A](json: Json)(implicit decoder: Decoder[A]): A =
     this.decodeAs[A](json)(decoder).unsafeGet()
-  }
 
-  def unsafeDecodeAs[A](json: String)(implicit decoder: Decoder[A]): A = {
+  def unsafeDecodeAs[A](json: String)(implicit decoder: Decoder[A]): A =
     JsonDecoding.decodeAs(json).unsafeGet()
-  }
 }
 
 final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(msg) {
@@ -61,20 +59,18 @@ final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(ms
   */
 object JsonParsing {
 
-  def parseString(input: String): Attempt[Json] = {
+  def parseString(input: String): Attempt[Json] =
     io.circe.parser.parse(input).leftMap(pf => JsonParsingAnomaly(pf.message))
-  }
 
-  def unsafeParseString(input: String): Json = {
+  def unsafeParseString(input: String): Json =
     JsonParsing.parseString(input).unsafeGet()
-  }
 
 }
 
 object PrettyJson {
   val noSpacesNoNulls: Printer = Printer.noSpaces.copy(dropNullValues = true)
-  val spaces2NoNulls:  Printer = Printer.spaces2.copy(dropNullValues  = true)
-  val spaces4NoNulls:  Printer = Printer.spaces4.copy(dropNullValues  = true)
+  val spaces2NoNulls:  Printer = Printer.spaces2.copy(dropNullValues = true)
+  val spaces4NoNulls:  Printer = Printer.spaces4.copy(dropNullValues = true)
 
   val noSpaces: Printer = Printer.noSpaces
   val spaces2:  Printer = Printer.spaces2

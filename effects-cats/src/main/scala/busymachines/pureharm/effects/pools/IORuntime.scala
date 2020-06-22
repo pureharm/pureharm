@@ -34,7 +34,7 @@ object IORuntime {
     * the [[Later]] return type, to properly hammer the point home.
     */
   def defaultMainRuntime(
-    threadNamePrefix: String = "main-cpu-fixed",
+    threadNamePrefix: String = "main-cpu-fixed"
   ): Later[(ContextShift[IO], Timer[IO])] = Later {
     val ec = UnsafePools.defaultMainExecutionContext(threadNamePrefix)
     (mainIOContextShift(ec), mainIOTimer(ec))
@@ -62,7 +62,7 @@ object IORuntime {
     * underlying main thread pool
     */
   def defaultMainRuntimeWithEC(
-    threadNamePrefix: String = "main-cpu-fixed",
+    threadNamePrefix: String = "main-cpu-fixed"
   ): Later[(ExecutionContextMainFT, ContextShift[IO], Timer[IO])] = Later {
     val ec = UnsafePools.defaultMainExecutionContext(threadNamePrefix)
     (ec, mainIOContextShift(ec), mainIOTimer(ec))

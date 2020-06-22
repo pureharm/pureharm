@@ -48,7 +48,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
         |  "noMasters" : true,
         |  "noSuperTypes" : true
         |}
-      """.stripMargin.trim,
+      """.stripMargin.trim
     )(rawJson)
   }
 
@@ -59,7 +59,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
       """
         |val winterMelon: WinterMelon = WinterMelon(fuzzy = true, weight = 45)
         |winterMelon.asJson
-      """.stripMargin,
+      """.stripMargin
     )
   }
 
@@ -76,7 +76,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
         |  "weight" : 45,
         |  "_type" : "WinterMelon"
         |}
-      """.stripMargin.trim,
+      """.stripMargin.trim
     )(rawJson)
   }
 
@@ -90,7 +90,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
         |{
         |  "_type" : "SmallMelon"
         |}
-      """.stripMargin.trim,
+      """.stripMargin.trim
     )(rawJson)
   }
 
@@ -106,7 +106,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
         |  "SweetTaste",
         |  "SourTaste"
         |]
-      """.stripMargin.trim,
+      """.stripMargin.trim
     )(rawJson)
   }
 
@@ -147,7 +147,7 @@ final class JsonDefaultSemiAutoEncoderDerivationTest extends AnyFlatSpec {
         |  }
         |]
         |
-      """.stripMargin.trim,
+      """.stripMargin.trim
     )(rawJson)
   }
   //-----------------------------------------------------------------------------------------------

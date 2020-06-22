@@ -34,9 +34,8 @@ private[pureharm] object PoolCached {
     Resource.make(alloc)(free).map(es => ExecutionContextCT(Util.exitOnFatal(es)))
   }
 
-  def unsafeCached(threadPrefixName: String, daemons: Boolean = false): ExecutionContextCT = {
+  def unsafeCached(threadPrefixName: String, daemons: Boolean = false): ExecutionContextCT =
     ExecutionContextCT(Util.exitOnFatal(unsafeExecutorService(threadPrefixName, daemons)))
-  }
 
   private def unsafeExecutorService(threadPrefixName: String, daemons: Boolean): ExecutorService = {
     val prefix = s"$threadPrefixName-$Cached"

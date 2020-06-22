@@ -19,6 +19,7 @@ package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.effects.implicits._
 
 /**
   *
@@ -29,17 +30,41 @@ import busymachines.pureharm.dbslick._
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
   override val slickDB:  DatabaseBackend,
-)(
-  implicit
-  private val F:  Async[F],
-  private val fl: ContextShift[F],
+  private val session:   Ref[F, DatabaseSession],
+  private val sem:       Semaphore[F],
+)(implicit
+  private val F:         Async[F],
+  private val fl:        ContextShift[F],
 ) extends Transactor[F] {
 
-  override def run[T](cio: ConnectionIO[T]): F[T] = {
+  override def run[T](cio: ConnectionIO[T]): F[T] =
     Async.fromFuture(F.delay(slickDB.run(cio)))
-  }
 
   override def shutdown: F[Unit] = F.delay(slickDB.close())
+
+  override def isConnected: F[Boolean] =
+    for {
+      s        <- session.get
+      isClosed <- F.delay(s.conn.isClosed)
+    } yield !isClosed
+
+  override def recreateSession: F[Unit] = {
+    val acquire = sem.acquire
+    val use     = for {
+      _          <- closeSession
+      newSession <- F.delay(DatabaseSession(slickDB.createSession()))
+      _          <- session.set(newSession)
+    } yield ()
+    val release = sem.release
+
+    F.bracket(acquire)(_ => use)(_ => release)
+  }
+
+  override def closeSession:       F[Unit]          =
+    for {
+      s <- session.get
+      _ <- F.delay(s.close())
+    } yield ()
 
   /**
     * The execution context used to run all blocking database input/output.
@@ -48,42 +73,41 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
     * use this unless you know what you are doing.
     */
   override def ioExecutionContext: ExecutionContext = slickDB.ioExecutionContext
+
 }
 
 private[pureharm] object HikariTransactorImpl {
 
   import busymachines.pureharm.db._
-  import busymachines.pureharm.effects.implicits._
   import slick.util.AsyncExecutor
 
   import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
-  def resource[F[_]: Async: ContextShift](
-    dbProfile: JDBCProfileAPI,
+  def resource[F[_]: Concurrent: ContextShift](
+    dbProfile:   JDBCProfileAPI
   )(
     url:         JDBCUrl,
     username:    DBUsername,
     password:    DBPassword,
     asyncConfig: SlickDBIOAsyncExecutorConfig,
-  ): Resource[F, Transactor[F]] = {
+  ): Resource[F, Transactor[F]] =
     Resource.make(unsafeCreate[F](dbProfile)(url, username, password, asyncConfig))(_.shutdown)
-  }
 
   /**
     * Prefer using [[resource]] unless you know what you are doing.
     */
-  def unsafeCreate[F[_]: Async: ContextShift](
-    slickProfile: JDBCProfileAPI,
+  def unsafeCreate[F[_]: Concurrent: ContextShift](
+    slickProfile: JDBCProfileAPI
   )(
-    url:         JDBCUrl,
-    username:    DBUsername,
-    password:    DBPassword,
-    asyncConfig: SlickDBIOAsyncExecutorConfig,
+    url:          JDBCUrl,
+    username:     DBUsername,
+    password:     DBPassword,
+    asyncConfig:  SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] = {
     val F = Async[F]
 
     for {
-      hikari <- F.delay {
+      hikari     <- F.delay {
         val hikariConfig = new HikariConfig()
         hikariConfig.setJdbcUrl(url)
         hikariConfig.setUsername(username)
@@ -92,25 +116,27 @@ private[pureharm] object HikariTransactorImpl {
         new HikariDataSource(hikariConfig)
       }
 
-      exec <- F.delay(
+      exec       <- F.delay(
         AsyncExecutor(
-          name           = asyncConfig.prefixName:     String,
+          name           = asyncConfig.prefixName: String,
           minThreads     = asyncConfig.maxConnections: Int,
           maxThreads     = asyncConfig.maxConnections: Int,
-          queueSize      = asyncConfig.queueSize:      Int,
+          queueSize      = asyncConfig.queueSize: Int,
           maxConnections = asyncConfig.maxConnections: Int,
-        ),
+        )
       )
-      slickDB <- F.delay(
+      slickDB    <- F.delay(
         DatabaseBackend(
           slickProfile.Database.forDataSource(
             ds             = hikari,
             maxConnections = Option(asyncConfig.maxConnections),
             executor       = exec,
-          ),
-        ),
+          )
+        )
       )
-      _ <- F.delay(slickDB.createSession())
-    } yield new HikariTransactorImpl(slickProfile, slickDB)
+      session    <- F.delay(DatabaseSession(slickDB.createSession()))
+      sessionRef <- Ref.of[F, DatabaseSession](session)
+      semaphore  <- Semaphore[F](1)
+    } yield new HikariTransactorImpl(slickProfile, slickDB, sessionRef, semaphore)
   }
 }

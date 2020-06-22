@@ -18,11 +18,12 @@
 package busymachines.pureharm.db.test
 
 import org.scalatest._
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.funsuite.FixtureAnyFunSuite
+import org.scalactic.source
 
 import busymachines.pureharm.effects._
 
-import org.scalactic.source
 /**
   *
   * This is an experimental base class,
@@ -50,14 +51,14 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   def fixture: Resource[IO, FixtureParam]
 
   protected def iotest(
-    testName: String,
-    testTags: Tag*,
+    testName:                                    String,
+    testTags:                                    Tag*
   )(
-    fun:          FixtureParam => IO[_],
-  )(implicit pos: source.Position): Unit =
+    fun:                                         FixtureParam => IO[_]
+  )(implicit pos:                                source.Position): Unit    =
     test(testName, testTags: _*)(fp => fun(fp).unsafeRunSync())
 
-  final override protected def withFixture(test: OneArgTest): Outcome = {
+  final override protected def withFixture(test: OneArgTest):      Outcome = {
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {
         _       <- logger.info(Map("test" -> s"'${test.name}'"))(s"INITIALIZED'")

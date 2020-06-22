@@ -62,12 +62,11 @@ trait SlickPostgresCirceSupportAPI {
 
   implicit lazy val circeJsonbType: DriverJdbcType[Json] = CirceJsonJDBCDriverType
 
-  def createJsonbColumnType[T: ClassTag](implicit e: Encoder[T], d: Decoder[T]): ColumnType[T] = {
+  def createJsonbColumnType[T: ClassTag](implicit e: Encoder[T], d: Decoder[T]): ColumnType[T] =
     MappedColumnType.base[T, Json](
       tmap   = t => e(t),
       tcomap = json => json.unsafeDecodeAs[T],
     )
-  }
 
 }
 

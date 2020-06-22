@@ -29,8 +29,9 @@ import slick.dbio.{DBIOAction, Effect, NoStream}
 object PureharmSlickConnectionIOOps {
 
   trait Implicits {
+
     implicit def pureharmSlickWidenCIO[R, S <: NoStream, Eff <: Effect](
-      cio: DBIOAction[R, S, Eff],
+      cio: DBIOAction[R, S, Eff]
     ): PureharmSlickWidenCIO[R, S, Eff] = new PureharmSlickWidenCIO(cio)
   }
 

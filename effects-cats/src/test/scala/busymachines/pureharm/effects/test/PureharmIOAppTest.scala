@@ -29,6 +29,7 @@ import busymachines.pureharm.effects.implicits._
   *
   */
 object PureharmIOAppTest extends PureharmIOApp {
+
   /**
     *
     * We want to ensure that this is evaluated only once, otherwise we introduce
@@ -80,7 +81,7 @@ object PureharmIOAppTest extends PureharmIOApp {
       _ <- (List.range[Int](1, 100): List[Int])
         .parTraverse_ { i: Int =>
           val toWait = 400.millis
-          val fa = getThreadName[F] >>= { tn =>
+          val fa     = getThreadName[F] >>= { tn =>
             putStrLn[F](s"$i going to sleep on thread: $tn") >>
               Timer[F].sleep(toWait) >>
               putStrLn[F](s"$i waking up on thread: $tn")
@@ -96,19 +97,18 @@ object PureharmIOAppTest extends PureharmIOApp {
     } yield ()
   }
 
-  private def appResource[F[_]](
-    implicit
+  private def appResource[F[_]](implicit
     F:  Sync[F],
     cs: ContextShift[F],
   ): Resource[F, AppResource[F]] =
     for {
       blockingCT <- Pools.cached[F]("pureharm-blocking")
     } yield new AppResource[F](
-      blockingShifter = BlockingShifter.fromExecutionContext[F](blockingCT),
+      blockingShifter = BlockingShifter.fromExecutionContext[F](blockingCT)
     )
 
   final private class AppResource[F[_]](
-    val blockingShifter: BlockingShifter[F],
+    val blockingShifter: BlockingShifter[F]
   )
 
   private def putStrLn[F[_]: Sync](s: String): F[Unit] = Sync[F].delay(println(s))

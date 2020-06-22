@@ -272,7 +272,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
               )
               previouslyProcessed.foreach { previous =>
                 assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
-                  actual = previous,
+                  actual = previous
                 )
               }
               startedFlag         = Some(i)
@@ -317,7 +317,7 @@ final class PureharmSyntaxTest extends AnyFunSpec {
               )
               previouslyProcessed.foreach { previous =>
                 assertResult(expected = i - 1, "... the futures were not executed in the correct order.")(
-                  actual = previous,
+                  actual = previous
                 )
               }
               startedFlag         = Some(i)
@@ -370,12 +370,12 @@ final class PureharmSyntaxTest extends AnyFunSpec {
       }
     }
 
-    describe("purifyIn[...]") {
+    describe("liftTo[...]") {
       implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
       test("... IO") {
-        var sideEffect: Int = 0
-        val io: IO[Int] = Future[Int] {
+        var sideEffect: Int     = 0
+        val io:         IO[Int] = Future[Int] {
           sideEffect = 42
           sideEffect
         }.liftTo[IO]
@@ -407,6 +407,124 @@ final class PureharmSyntaxTest extends AnyFunSpec {
         assert(io.unsafeRunSync() == 42, "value of suspended future")
         assert(sideEffect == 42, "after unsafeRunSync side effect should be applied")
       }
+    }
+  }
+
+  describe("IO syntax") {
+    describe("traversals") {
+
+      describe("IO.serialize") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[List[Unit]] = IO.serialize(input) { _ =>
+            IO {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("IO.serialize_") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[Unit] = IO.serialize_(input) { _ =>
+            IO {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("IO.traverse") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[List[Unit]] = IO.traverse(input) { _ =>
+            IO {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("IO.traverse_") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[Unit] = IO.traverse_(input) { _ =>
+            IO {
+              sideEffect = 42
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("IO.sequence") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[List[Unit]] = IO.sequence {
+            input.map { _ =>
+              IO {
+                sideEffect = 42
+              }
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
+      describe("IO.sequence_") {
+
+        test("empty list") {
+          val input: List[Int] = List()
+
+          var sideEffect: Int = 0
+
+          val eventualResult: IO[Unit] = IO.sequence_ {
+            input.map { _ =>
+              IO {
+                sideEffect = 42
+              }
+            }
+          }
+
+          eventualResult.unsafeRunSync()
+          assert(sideEffect == 0, "nothing should have happened")
+        }
+      }
+
     }
   }
 }

@@ -92,14 +92,14 @@ lazy val core = project
 //#############################################################################
 
 lazy val `core-anomaly-deps` = Seq(
-  scalaTest % Test,
+  scalaTest % Test
 )
 
 lazy val `core-anomaly` = subModule("core", "anomaly")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `core-anomaly-deps`.distinct,
+    libraryDependencies ++= `core-anomaly-deps`.distinct
   )
 
 //#############################################################################
@@ -113,7 +113,7 @@ lazy val `core-phantom` = subModule("core", "phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `core-phantom-deps`.distinct,
+    libraryDependencies ++= `core-phantom-deps`.distinct
   )
 
 //#############################################################################
@@ -127,13 +127,13 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `core-identifiable-deps`.distinct,
+    libraryDependencies ++= `core-identifiable-deps`.distinct
   )
   .dependsOn(
-    `core-phantom`,
+    `core-phantom`
   )
   .aggregate(
-    `core-phantom`,
+    `core-phantom`
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -155,7 +155,7 @@ lazy val `effects-cats` = project
     libraryDependencies ++= `effects-cats-deps`.distinct,
   )
   .dependsOn(
-    `core-phantom`,
+    `core-phantom`
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -240,7 +240,7 @@ lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-core-deps`.distinct,
+    libraryDependencies ++= `db-core-deps`.distinct
   )
   .dependsOn(
     `core`,
@@ -266,7 +266,7 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-core-flyway-deps`.distinct,
+    libraryDependencies ++= `db-core-flyway-deps`.distinct
   )
   .dependsOn(
     `core`,
@@ -302,7 +302,7 @@ lazy val `db-doobie` = subModule("db", "db-doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-doobie-deps`.distinct,
+    libraryDependencies ++= `db-doobie-deps`.distinct
   )
   .dependsOn(
     `core`,
@@ -323,14 +323,14 @@ lazy val `db-doobie` = subModule("db", "db-doobie")
 //#############################################################################
 
 lazy val `db-slick-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
-  scalaTest % Test,
+  scalaTest % Test
 ) ++ dbSlick
 
 lazy val `db-slick` = subModule("db", "slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-slick-deps`.distinct,
+    libraryDependencies ++= `db-slick-deps`.distinct
   )
   .dependsOn(
     `core`,
@@ -365,6 +365,10 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-slick-psql-deps`.distinct,
+    //required because JDBC screws up classloading somehow,
+    //and PSQL driver is not found for certain tests that connect to DB.
+    //no idea why
+    Test / fork := true,
   )
   .dependsOn(
     `core`,
@@ -390,21 +394,21 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollCompatVersion: String = "2.1.2"        //https://github.com/scala/scala-collection-compat/releases
-lazy val shapelessVersion:       String = "2.3.3"        //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:            String = "2.0.0"        //https://github.com/typelevel/cats/releases
-lazy val catsEffectVersion:      String = "2.0.0"        //https://github.com/typelevel/cats-effect/releases
-lazy val fs2Version:             String = "2.0.1"        //https://github.com/functional-streams-for-scala/fs2/releases
-lazy val circeVersion:           String = "0.12.1"       //https://github.com/circe/circe/releases
-lazy val pureconfigVersion:      String = "0.12.0"       //https://github.com/pureconfig/pureconfig/releases
-lazy val slickVersion:           String = "3.3.2"        //https://github.com/slick/slick/releases
-lazy val postgresqlVersion:      String = "42.2.8"       //java — https://github.com/pgjdbc/pgjdbc/releases
-lazy val hikariCPVersion:        String = "3.4.1"        //java — https://github.com/brettwooldridge/HikariCP/releases
-lazy val doobieVersion:          String = "0.8.2"        //https://github.com/tpolecat/doobie/releases
-lazy val flywayVersion:          String = "6.0.3"        //java — https://github.com/flyway/flyway/releases
-lazy val log4catsVersion:        String = "1.0.0"        //https://github.com/ChristopherDavenport/log4cats/releases
-lazy val logbackVersion:         String = "1.2.3"        //https://github.com/qos-ch/logback/releases
-lazy val scalaTestVersion:       String = "3.1.0-SNAP13" //https://github.com/scalatest/scalatest/releases
+lazy val scalaCollCompatVersion: String = "2.1.6"   //https://github.com/scala/scala-collection-compat/releases
+lazy val shapelessVersion:       String = "2.3.3"   //https://github.com/milessabin/shapeless/releases
+lazy val catsVersion:            String = "2.1.1"   //https://github.com/typelevel/cats/releases
+lazy val catsEffectVersion:      String = "2.1.3"   //https://github.com/typelevel/cats-effect/releases
+lazy val fs2Version:             String = "2.0.1"   //https://github.com/functional-streams-for-scala/fs2/releases
+lazy val circeVersion:           String = "0.13.0"  //https://github.com/circe/circe/releases
+lazy val pureconfigVersion:      String = "0.12.3"  //https://github.com/pureconfig/pureconfig/releases
+lazy val slickVersion:           String = "3.3.2"   //https://github.com/slick/slick/releases
+lazy val postgresqlVersion:      String = "42.2.12" //java — https://github.com/pgjdbc/pgjdbc/releases
+lazy val hikariCPVersion:        String = "3.4.3"   //java — https://github.com/brettwooldridge/HikariCP/releases
+lazy val doobieVersion:          String = "0.8.2"   //https://github.com/tpolecat/doobie/releases
+lazy val flywayVersion:          String = "6.4.1"   //java — https://github.com/flyway/flyway/releases
+lazy val log4catsVersion:        String = "1.0.1"   //https://github.com/ChristopherDavenport/log4cats/releases
+lazy val logbackVersion:         String = "1.2.3"   //https://github.com/qos-ch/logback/releases
+lazy val scalaTestVersion:       String = "3.1.1"   //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================

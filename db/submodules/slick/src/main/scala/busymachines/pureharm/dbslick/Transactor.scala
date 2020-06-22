@@ -32,6 +32,21 @@ trait Transactor[F[_]] {
 
   def shutdown: F[Unit]
 
+  /*
+   * Checks if the connection to the database is active
+   */
+  def isConnected: F[Boolean]
+
+  /*
+   * Closes the current session connection to the database
+   */
+  def closeSession: F[Unit]
+
+  /*
+   * Recreates the session with the associated connection to the database (equivalent of closing the session and recreating it)
+   */
+  def recreateSession: F[Unit]
+
   /**
     * The execution context used to run all blocking database input/output.
     *
@@ -71,13 +86,13 @@ object Transactor {
   import busymachines.pureharm.effects._
   import busymachines.pureharm.internals
 
-  def pgSQLHikari[F[_]: Async: ContextShift](
+  def pgSQLHikari[F[_]: Concurrent: ContextShift](
     dbProfile:    JDBCProfileAPI,
     dbConnection: DBConnectionConfig,
     asyncConfig:  SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] =
     this.pgSQLHikari[F](
-      dbProfile = dbProfile,
+      dbProfile = dbProfile
     )(
       url         = dbConnection.jdbcURL,
       username    = dbConnection.username,
@@ -85,8 +100,8 @@ object Transactor {
       asyncConfig = asyncConfig,
     )
 
-  def pgSQLHikari[F[_]: Async: ContextShift](
-    dbProfile: JDBCProfileAPI,
+  def pgSQLHikari[F[_]: Concurrent: ContextShift](
+    dbProfile:   JDBCProfileAPI
   )(
     url:         JDBCUrl,
     username:    DBUsername,
@@ -94,7 +109,7 @@ object Transactor {
     asyncConfig: SlickDBIOAsyncExecutorConfig,
   ): Resource[F, Transactor[F]] =
     internals.dbslick.HikariTransactorImpl.resource[F](
-      dbProfile = dbProfile,
+      dbProfile = dbProfile
     )(
       url         = url,
       username    = username,
@@ -108,13 +123,13 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
+  def pgSQLHikariUnsafe[F[_]: Concurrent: ContextShift](
     dbProfile:    JDBCProfileAPI,
     dbConnection: DBConnectionConfig,
     asyncConfig:  SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] =
     this.pgSQLHikariUnsafe[F](
-      slickProfile = dbProfile,
+      slickProfile = dbProfile
     )(
       url         = dbConnection.jdbcURL,
       username    = dbConnection.username,
@@ -128,16 +143,16 @@ object Transactor {
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
     */
-  def pgSQLHikariUnsafe[F[_]: Async: ContextShift](
-    slickProfile: JDBCProfileAPI,
+  def pgSQLHikariUnsafe[F[_]: Concurrent: ContextShift](
+    slickProfile: JDBCProfileAPI
   )(
-    url:         JDBCUrl,
-    username:    DBUsername,
-    password:    DBPassword,
-    asyncConfig: SlickDBIOAsyncExecutorConfig,
+    url:          JDBCUrl,
+    username:     DBUsername,
+    password:     DBPassword,
+    asyncConfig:  SlickDBIOAsyncExecutorConfig,
   ): F[Transactor[F]] =
     internals.dbslick.HikariTransactorImpl.unsafeCreate[F](
-      slickProfile = slickProfile,
+      slickProfile = slickProfile
     )(
       url         = url,
       username    = username,

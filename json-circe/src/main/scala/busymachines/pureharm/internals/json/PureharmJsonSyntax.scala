@@ -29,6 +29,7 @@ import busymachines.pureharm.effects._
 object PureharmJsonSyntax {
 
   trait Implicits {
+
     implicit final def bmcJsonEncoderOps[A](wrappedEncodeable: A): EncoderOps[A] =
       new EncoderOps(wrappedEncodeable)
 
@@ -52,9 +53,8 @@ object PureharmJsonSyntax {
     def unsafeDecodeAs[A](implicit decoder: Decoder[A]): A =
       JsonDecoding.unsafeDecodeAs[A](rawJson)
 
-    def decodeAs[A](implicit decoder: Decoder[A]): Attempt[A] = {
+    def decodeAs[A](implicit decoder: Decoder[A]): Attempt[A] =
       JsonDecoding.decodeAs[A](rawJson)
-    }
   }
 
   final class DecoderOpsJson(val js: Json) extends AnyVal {
@@ -62,9 +62,8 @@ object PureharmJsonSyntax {
     def unsafeDecodeAs[A](implicit decoder: Decoder[A]): A =
       JsonDecoding.unsafeDecodeAs[A](js)
 
-    def decodeAs[A](implicit decoder: Decoder[A]): Attempt[A] = {
+    def decodeAs[A](implicit decoder: Decoder[A]): Attempt[A] =
       JsonDecoding.decodeAs[A](js)
-    }
 
     def noSpacesNoNulls: String = js.printWith(PrettyJson.noSpacesNoNulls)
 

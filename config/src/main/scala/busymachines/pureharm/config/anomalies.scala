@@ -27,13 +27,13 @@ import pureconfig.error.{ConfigReaderFailure, ConfigReaderFailures}
   *
   */
 final case class ConfigReadingAnomaly(c: ConfigReaderFailure)
-    extends InvalidInputAnomaly(s"Failed to read config because: ${c.description}") {
+  extends InvalidInputAnomaly(s"Failed to read config because: ${c.description}") {
 
   override val id: AnomalyID = ConfigReadingAnomalyID
 
   override val parameters: Anomaly.Parameters = {
     val orig: Anomaly.Parameters = Anomaly.Parameters(
-      "reason" -> c.description,
+      "reason" -> c.description
     )
     val loc = c.location.map(l => "location" -> l.description: (String, Anomaly.Parameter))
     orig.++(loc.toMap: Anomaly.Parameters)
@@ -41,10 +41,10 @@ final case class ConfigReadingAnomaly(c: ConfigReaderFailure)
 }
 
 final case class ConfigAggregateAnomalies(cs: ConfigReaderFailures, namespace: Option[String] = None)
-    extends Anomaly(
-      message =
-        s"Failed to read config file. ${cs.toList.map(_.description).mkString(",")} >>> namespace: ${namespace.getOrElse("unknown")}",
-    ) with AnomaliesBase {
+  extends Anomaly(
+    message =
+      s"Failed to read config file. ${cs.toList.map(_.description).mkString(",")} >>> namespace: ${namespace.getOrElse("unknown")}"
+  ) with AnomaliesBase {
   override val id: AnomalyID = ConfigAggregateAnomaliesID
 
   override val firstAnomaly:    ConfigReadingAnomaly       = ConfigReadingAnomaly(cs.head)
