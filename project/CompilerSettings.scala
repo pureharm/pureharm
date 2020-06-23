@@ -128,6 +128,7 @@ object CompilerSettings {
     "-Xlint:private-shadow",         // A private field (or class parameter) shadows a superclass field.
     "-Xlint:stars-align",            // Pattern sequence wildcard must align with sequence component.
     "-Xlint:type-parameter-shadow",  // A local type parameter shadows a type already in scope.
+    "-Wdead-code",                   // Warn when we have dead code
     "-Ywarn-extra-implicit",         // Warn when more than one implicit parameter section is defined.
     "-Ywarn-numeric-widen",          // Warn when numerics are widened.
     "-Ywarn-unused:implicits",       // Warn if an implicit parameter is unused.
@@ -137,6 +138,7 @@ object CompilerSettings {
     "-Ywarn-unused:patvars",         // Warn if a variable bound in a pattern is unused.
     "-Ywarn-unused:privates",        // Warn if a private member is unused.
     "-Ywarn-value-discard",          // Warn when non-Unit expression results are unused.
+    "-Wconf:any:warning-verbose",    // Gives extra information about warning
   )
 
   /**
@@ -147,6 +149,6 @@ object CompilerSettings {
     "-P:bm4:no-filtering:y",     // see https://github.com/oleg-py/better-monadic-for#desugaring-for-patterns-without-withfilters--pbm4no-filteringy
     "-P:bm4:no-map-id:y",        // see https://github.com/oleg-py/better-monadic-for#final-map-optimization--pbm4no-map-idy
     "-P:bm4:no-tupling:y",       // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
-    "-P:bm4:implicit-patterns:y",//see https://github.com/oleg-py/better-monadic-for#define-implicits-in-for-comprehensions-or-matches
+    "-P:bm4:implicit-patterns:y",// see https://github.com/oleg-py/better-monadic-for#define-implicits-in-for-comprehensions-or-matches
   )
 }
