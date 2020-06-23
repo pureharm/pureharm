@@ -61,8 +61,8 @@ private[test] object DoobiePureharmRowDAO {
     override val getPK: Get[PhantomPK] = Get[PhantomPK]
     override val putPK: Put[PhantomPK] = Put[PhantomPK]
 
-    override val getE: Read[PureharmRow]  = Read[PureharmRow]
-    override val putE: Write[PureharmRow] = Write[PureharmRow]
+    override val readE: Read[PureharmRow]  = Read[PureharmRow]
+    override val writeE: Write[PureharmRow] = Write[PureharmRow]
 
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
 

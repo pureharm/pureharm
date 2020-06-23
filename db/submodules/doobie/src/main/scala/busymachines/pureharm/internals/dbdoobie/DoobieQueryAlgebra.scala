@@ -32,27 +32,11 @@ import busymachines.pureharm.dbdoobie.implicits._
 abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DAOAlgebra[ConnectionIO, E, PK] {
   def table: Table
 
-  implicit def getPK: Get[PK]
-  implicit def putPK: Put[PK]
-
-  /**
-    * Should be overriden as non implicit since doobie doesn't
-    * provide semiauto-derivation so you want to write in your subclasses:
-    * {{{
-    *   override def getE: Read[MyCaseClass] = Read[MyCaseClass]
-    * }}}
-    *
-    * Otherwise the implicit picks itself up.
-    * But in this definition here it is implicit.
-    *
-    * Alternatively you can create a superclass that takes
-    * these as implicit parameters and they are passed to the class from
-    * outside
-    */
-  implicit def getE: Read[E]
-  implicit def putE: Write[E]
-
-  implicit def showPK: Show[PK]
+  implicit protected def getPK:  Get[PK]
+  implicit protected def putPK:  Put[PK]
+  implicit protected def readE:  Read[E]
+  implicit protected def writeE: Write[E]
+  implicit protected def showPK: Show[PK]
 
   protected def tableName: TableName  = table.tableName
   protected def pkColumn:  ColumnName = table.pkColumn
