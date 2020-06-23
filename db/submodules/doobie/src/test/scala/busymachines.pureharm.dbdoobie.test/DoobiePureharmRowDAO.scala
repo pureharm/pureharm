@@ -70,11 +70,10 @@ private[test] object DoobiePureharmRowDAO {
     implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
       jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
 
-    override val get:    Get[PhantomPK]     = Get[PhantomPK]
-    override val put:    Put[PhantomPK]     = Put[PhantomPK]
-    override val read:   Read[PureharmRow]  = Read[PureharmRow]
-    override val write:  Write[PureharmRow] = Write[PureharmRow]
     override val showPK: Show[PhantomPK]    = Show[PhantomPK]
+    override val metaPK: Meta[PhantomPK]    = Meta[PhantomPK]
+    override val readE:  Read[PureharmRow]  = Read[PureharmRow]
+    override val writeE: Write[PureharmRow] = Write[PureharmRow]
   }
 
   final private object DoobiePureharmRowQueries

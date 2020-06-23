@@ -34,11 +34,11 @@ import busymachines.pureharm.dbdoobie._
   * @since 24 Sept 2019
   *
   */
-final class DoobieDAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
+final class DoobiePureharmRowDAOTest extends PureharmFixtureTest {
   override type FixtureParam = DoobiePureharmRowDAO[IO]
 
   override def fixture: Resource[IO, FixtureParam] =
-    DoobieDAOAlgebraPureharmRowsTest
+    DoobiePureharmRowDAOTest
       .transactorResource[IO]
       .map(implicit t => DoobiePureharmRowDAO[IO])
 
@@ -229,7 +229,7 @@ final class DoobieDAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   }
 }
 
-private[test] object DoobieDAOAlgebraPureharmRowsTest {
+private[test] object DoobiePureharmRowDAOTest {
 
   /**
     * All these values come from this file:

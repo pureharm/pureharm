@@ -42,11 +42,10 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
     * These are then aliased as implicits in the [[DoobieQueryAlgebra]]
     * for seamless use 99% of the cases
     */
-  def get:    Get[PK]
-  def put:    Put[PK]
-  def read:   Read[E]
-  def write:  Write[E]
   def showPK: Show[PK]
+  def metaPK: Meta[PK]
+  def readE:  Read[E]
+  def writeE: Write[E]
 
   final def pkColumn: ColumnName = ColumnName(iden.fieldName)
   final def columns:  Row        = Row(NEList(pkColumn, tailColumns))
