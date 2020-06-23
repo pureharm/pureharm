@@ -32,4 +32,6 @@ trait PureharmDBDoobieTypeDefinitions
   type ColumnName = FieldName
   val ColumnName: FieldName.type = FieldName
   type Row = busymachines.pureharm.internals.dbdoobie.Row.Type
+
+  val ConnectionIO: doobie.implicits.AsyncConnectionIO.type = doobie.implicits.AsyncConnectionIO
 }
