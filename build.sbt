@@ -408,7 +408,7 @@ lazy val doobieVersion:          String = "0.8.8"   //https://github.com/tpoleca
 lazy val flywayVersion:          String = "6.4.4"   //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.1.1"   //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"   //https://github.com/qos-ch/logback/releases
-lazy val scalaTestVersion:       String = "3.1.1"   //https://github.com/scalatest/scalatest/releases
+lazy val scalaTestVersion:       String = "3.2.0"   //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================
