@@ -36,16 +36,17 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
     * Should be overriden as non implicit since doobie doesn't
     * provide semiauto-derivation so you want to write in your subclasses:
     * {{{
-    *   override def getE: Read[MyCaseClass] = Read[MyCaseClass]
+    *   override def readE: Read[MyCaseClass] = Read[MyCaseClass]
     * }}}
     *
-    * Otherwise the implicit picks itself up.
-    * But in this definition here it is implicit.
-    *
-    * Alternatively you can create a superclass that takes
-    * these as implicit parameters and they are passed to the class from
-    * outside
+    * These are then aliased as implicits in the [[DoobieQueryAlgebra]]
+    * for seamless use 99% of the cases
     */
+  def get:    Get[PK]
+  def put:    Put[PK]
+  def read:   Read[E]
+  def write:  Write[E]
+  def showPK: Show[PK]
 
   final def pkColumn: ColumnName = ColumnName(iden.fieldName)
   final def columns:  Row        = Row(NEList(pkColumn, tailColumns))

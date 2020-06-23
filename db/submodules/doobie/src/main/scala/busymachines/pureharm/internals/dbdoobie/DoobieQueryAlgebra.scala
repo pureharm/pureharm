@@ -32,11 +32,11 @@ import busymachines.pureharm.dbdoobie.implicits._
 abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DAOAlgebra[ConnectionIO, E, PK] {
   def table: Table
 
-  implicit protected def getPK:  Get[PK]
-  implicit protected def putPK:  Put[PK]
-  implicit protected def readE:  Read[E]
-  implicit protected def writeE: Write[E]
-  implicit protected def showPK: Show[PK]
+  implicit protected def getPK:  Get[PK]  = table.get
+  implicit protected def putPK:  Put[PK]  = table.put
+  implicit protected def readE:  Read[E]  = table.read
+  implicit protected def writeE: Write[E] = table.write
+  implicit protected def showPK: Show[PK] = table.showPK
 
   protected def tableName: TableName  = table.tableName
   protected def pkColumn:  ColumnName = table.pkColumn

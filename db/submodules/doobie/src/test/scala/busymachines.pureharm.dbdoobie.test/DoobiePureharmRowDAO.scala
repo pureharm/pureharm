@@ -25,23 +25,36 @@ import busymachines.pureharm.internals.dbdoobie._
 
 /**
   *
+  * Use this also as a rough outline of how you ought to structure
+  * your code. Create a trait that extends the
+  * [[DAOAlgebra[F, MyCaseClass, MyPrimaryKeyType]]]
+  * add whatever new methods/override the default ones you need here.
+  *
+  * Implement the queries in terms of ConnectionIO similar to
+  * [[DoobiePureharmRowDAO.DoobiePureharmRowQueries]]
+  *
+  * and the final DAO in IO similar to
+  * [[DoobiePureharmRowDAO.DoobiePureharmRowDAOImpl]]
+  *
+  * Voila! Bunch of free CRUD! + a lot of helpers to build
+  * common queries in the [[DoobiePureharmRowDAO.DoobiePureharmTable]]
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   *
   */
+private[test] trait DoobiePureharmRowDAO[F[_]] extends PureharmRowDAO[F]
+
 private[test] object DoobiePureharmRowDAO {
 
-  def apply[F[_]: Transactor: BracketAttempt]: PureharmRowDAO[F] =
-    new PureharmRowDAODoobieImpl[F]
+  def apply[F[_]: Transactor: BracketAttempt]: DoobiePureharmRowDAO[F] =
+    new DoobiePureharmRowDAOImpl[F]
 
   //----------------- implementation details -----------------
   import busymachines.pureharm.dbdoobie.implicits._
   import busymachines.pureharm.json._
 
-  implicit val pureharmJSONCol: Codec[PureharmJSONCol] = derive.codec[PureharmJSONCol]
-
-  private class DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
-
+  private object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
     override val tableName: TableName = schema.PureharmRows
 
     override val tailColumns: List[ColumnName] = List(
@@ -53,24 +66,30 @@ private[test] object DoobiePureharmRowDAO {
       ColumnName("jsonb_col"),
       ColumnName("opt_col"),
     )
+
+    implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
+      jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
+
+    override val get:    Get[PhantomPK]     = Get[PhantomPK]
+    override val put:    Put[PhantomPK]     = Put[PhantomPK]
+    override val read:   Read[PureharmRow]  = Read[PureharmRow]
+    override val write:  Write[PureharmRow] = Write[PureharmRow]
+    override val showPK: Show[PhantomPK]    = Show[PhantomPK]
   }
 
-  final private class DoobiePureharmRowQuerries(
-    override val table: DoobiePureharmTable
-  ) extends DoobieQueryAlgebra[PureharmRow, PhantomPK, DoobiePureharmTable] {
-    override val getPK: Get[PhantomPK] = Get[PhantomPK]
-    override val putPK: Put[PhantomPK] = Put[PhantomPK]
+  final private object DoobiePureharmRowQueries
+    extends DoobieQueryAlgebra[PureharmRow, PhantomPK, DoobiePureharmTable.type]
+    with DoobiePureharmRowDAO[ConnectionIO] {
+    override def table: DoobiePureharmTable.type = DoobiePureharmTable
 
-    override val readE: Read[PureharmRow]  = Read[PureharmRow]
-    override val writeE: Write[PureharmRow] = Write[PureharmRow]
-
-    override val showPK: Show[PhantomPK] = Show[PhantomPK]
-
+    //implement queries from PureharmRowDAO here
   }
 
-  final private class PureharmRowDAODoobieImpl[F[_]: BracketAttempt](implicit
+  final private class DoobiePureharmRowDAOImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
-  ) extends DoobieDAOAlgebra[F, PureharmRow, PhantomPK, DoobiePureharmTable] with PureharmRowDAO[F] {
-    override protected val queries: DoobiePureharmRowQuerries = new DoobiePureharmRowQuerries(new DoobiePureharmTable())
+  ) extends DoobieDAOAlgebra[F, PureharmRow, PhantomPK, DoobiePureharmTable.type] with DoobiePureharmRowDAO[F] {
+    override protected val queries: DoobiePureharmRowQueries.type = DoobiePureharmRowQueries
+
+    //lift queries from DoobiePureharmRowQueries here
   }
 }
