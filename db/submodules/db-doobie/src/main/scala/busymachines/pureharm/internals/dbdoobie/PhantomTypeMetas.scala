@@ -17,8 +17,6 @@
   */
 package busymachines.pureharm.internals.dbdoobie
 
-import java.time.LocalDate
-
 import busymachines.pureharm.effects.implicits._
 
 import scala.reflect.runtime.universe.TypeTag
@@ -61,27 +59,20 @@ trait PhantomTypeMetas {
   implicit def phantomBooleanMeta[Tag](implicit tt: TypeTag[Boolean @@ Tag]): Meta[Boolean @@ Tag] =
     Meta.BooleanMeta.timap(v => shapeless.tag[Tag](v))(identity)
 
-  implicit def phantomLocalDateMeta[Tag](implicit tt: TypeTag[LocalDate @@ Tag]): Meta[LocalDate @@ Tag] =
-    Meta.JavaTimeLocalDateMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
   implicit def jsonMeta[A](implicit codec: Codec[A]): Meta[A] =
     Meta.Advanced
       .other[PGobject]("jsonb")
-      .imap(a => {
+      .imap { a =>
         val json = parse(a.getValue).getOrElse(Json.Null)
         codec
           .decodeJson(json)
-          .leftMap { e =>
-            new RuntimeException(s"Failed to read JSON from DB. THIS IS A BUG!!! '$e'"): Throwable
-          }
+          .leftMap(e => new RuntimeException(s"Failed to read JSON from DB. THIS IS A BUG!!! '$e'"): Throwable)
           .unsafeGet()
-      })(
-        (a: A) => {
-          val o = new PGobject
-          o.setType("jsonb")
-          o.setValue(codec(a).noSpaces)
-          o
-        },
-      )
+      } { (a: A) =>
+        val o = new PGobject
+        o.setType("jsonb")
+        o.setValue(codec(a).noSpaces)
+        o
+      }
 
 }

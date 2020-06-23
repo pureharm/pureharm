@@ -21,7 +21,6 @@ import busymachines.pureharm.phantom.PhantomType
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.dbdoobie._
-import busymachines.pureharm.dbdoobie.implicits._
 
 /**
   *
