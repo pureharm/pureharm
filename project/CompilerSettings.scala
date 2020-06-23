@@ -20,13 +20,13 @@ import Keys._
 
 object CompilerSettings {
   lazy val scala2_12:        String = "2.12.11" //https://github.com/scala/scala/releases
-  lazy val scala2_13:        String = "2.13.2" //https://github.com/scala/scala/releases
+  lazy val scala2_13:        String = "2.13.2"  //https://github.com/scala/scala/releases
   lazy val mainScalaVersion: String = scala2_13
 
   //https://github.com/typelevel/kind-projector/releases
-  lazy val kindProjector = "org.typelevel" %% "kind-projector" % "0.10.3"
+  lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % "0.11.0"
   //https://github.com/oleg-py/better-monadic-for/releases
-  lazy val betterMonadicFor = "com.olegpy" %% "better-monadic-for" % "0.3.1"
+  lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % "0.3.1"
 
   lazy val organizationName: String = "com.busymachines"
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
@@ -37,7 +37,7 @@ object CompilerSettings {
       homepage                  := Some(url(pureharmHomepage)),
       scalaVersion              := mainScalaVersion,
       crossScalaVersions        := List(scala2_12, scala2_13),
-      addCompilerPlugin(kindProjector),
+      addCompilerPlugin(kindProjector.cross(CrossVersion.full)),
       addCompilerPlugin(betterMonadicFor),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => scala2_12Flags
@@ -50,7 +50,7 @@ object CompilerSettings {
     * tpolecat's glorious compile flag list:
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
-  def scala2_12Flags: Seq[String] = Seq(
+  def scala2_12Flags: Seq[String]     = Seq(
     //"-Xfatal-warnings",               // Fail the compilation if there are any warnings.
     "-deprecation",                     // Emit warning and location for usages of deprecated APIs.
     "-encoding",                        // yeah, it's part of the "utf-8" thing, two flags
@@ -144,9 +144,9 @@ object CompilerSettings {
     * https://github.com/oleg-py/better-monadic-for
     */
   def betterForPluginCompilerFlags: Seq[String] = Seq(
-    "-P:bm4:no-filtering:y",      // see https://github.com/oleg-py/better-monadic-for#desugaring-for-patterns-without-withfilters--pbm4no-filteringy
-    "-P:bm4:no-map-id:y",         // see https://github.com/oleg-py/better-monadic-for#final-map-optimization--pbm4no-map-idy
-    "-P:bm4:no-tupling:y",        // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
-    "-P:bm4:implicit-patterns:y", //see https://github.com/oleg-py/better-monadic-for#define-implicits-in-for-comprehensions-or-matches
+    "-P:bm4:no-filtering:y",     // see https://github.com/oleg-py/better-monadic-for#desugaring-for-patterns-without-withfilters--pbm4no-filteringy
+    "-P:bm4:no-map-id:y",        // see https://github.com/oleg-py/better-monadic-for#final-map-optimization--pbm4no-map-idy
+    "-P:bm4:no-tupling:y",       // see https://github.com/oleg-py/better-monadic-for#desugar-bindings-as-vals-instead-of-tuples--pbm4no-tuplingy
+    "-P:bm4:implicit-patterns:y",//see https://github.com/oleg-py/better-monadic-for#define-implicits-in-for-comprehensions-or-matches
   )
 }
