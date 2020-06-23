@@ -406,7 +406,7 @@ lazy val postgresqlVersion:      String = "42.2.14" //java — https://github.co
 lazy val hikariCPVersion:        String = "3.4.5"   //java — https://github.com/brettwooldridge/HikariCP/releases
 lazy val doobieVersion:          String = "0.8.8"   //https://github.com/tpolecat/doobie/releases
 lazy val flywayVersion:          String = "6.4.4"   //java — https://github.com/flyway/flyway/releases
-lazy val log4catsVersion:        String = "1.0.1"   //https://github.com/ChristopherDavenport/log4cats/releases
+lazy val log4catsVersion:        String = "1.1.1"   //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"   //https://github.com/qos-ch/logback/releases
 lazy val scalaTestVersion:       String = "3.1.1"   //https://github.com/scalatest/scalatest/releases
 
