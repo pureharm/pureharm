@@ -299,7 +299,7 @@ lazy val `db-doobie-deps` =
     doobieScalatest % Test,
   )
 
-lazy val `db-doobie` = subModule("db", "db-doobie")
+lazy val `db-doobie` = subModule("db", "doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
