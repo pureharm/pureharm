@@ -69,7 +69,7 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
     override def traverse[G[_], A, B](fa: Iterable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Iterable[B]] = {
       import scala.collection.mutable
       foldLeft[A, G[mutable.Builder[B, mutable.Iterable[B]]]](fa, G.pure(mutable.Iterable.newBuilder[B]))((lglb, a) =>
-        G.map2(f(a), lglb)((b: B, lb: mutable.Builder[B, mutable.Iterable[B]]) => lb.addOne(b))
+        G.map2(f(a), lglb)((b: B, lb: mutable.Builder[B, mutable.Iterable[B]]) => lb.+=(b))
       ).map(_.result().toIterable)
     }
   }
