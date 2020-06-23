@@ -29,10 +29,9 @@ import busymachines.pureharm.dbdoobie.implicits._
   * @since 24 Sep 2019
   *
   */
-abstract class DoobieDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-  implicit
+abstract class DoobieDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](implicit
   val transactor: Transactor[F],
-  val F:          Bracket[F, Throwable],
+  val F:          BracketAttempt[F],
 ) extends DAOAlgebra[F, E, PK] {
 
   final protected def transact[A](cio: ConnectionIO[A])(implicit transactor: Transactor[F]): F[A] =

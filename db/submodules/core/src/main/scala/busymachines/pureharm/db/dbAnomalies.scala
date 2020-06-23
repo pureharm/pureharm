@@ -22,19 +22,56 @@ import busymachines.pureharm.anomaly._
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 16 Jun 2019
+  * @since 22 Jun 2020
   *
   */
+
 abstract class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
   extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
   override val id: AnomalyID = DBEntryNotFoundAnomaly.DBEntryNotFoundAnomalyID
 
   override val parameters: Anomaly.Parameters = Anomaly.Parameters(
-    DBEntryNotFoundAnomaly.PK -> pk
+    CommonKeys.PK -> pk
   )
 }
 
 object DBEntryNotFoundAnomaly {
-  private val PK = "pk"
   case object DBEntryNotFoundAnomalyID extends AnomalyID { override val name: String = "ph_db_001" }
+}
+
+abstract class DBBatchInsertFailedAnomaly(
+  val expectedSize:      Int,
+  val actualSize:        Int,
+  override val causedBy: Option[Throwable],
+) extends NotFoundAnomaly(s"DB batch insert expected to insert $expectedSize but inserted $actualSize.", causedBy) {
+  override val id: AnomalyID = DBBatchInsertFailedAnomaly.DBBatchUpdateFailedAnomalyID
+
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters(
+    CommonKeys.Expected -> expectedSize.toString,
+    CommonKeys.Actual   -> actualSize.toString,
+  )
+}
+
+object DBBatchInsertFailedAnomaly {
+  case object DBBatchUpdateFailedAnomalyID extends AnomalyID { override val name: String = "ph_db_002" }
+}
+
+abstract class DBDeleteByPKFailedAnomaly(
+  val pk: String
+) extends NotFoundAnomaly(s"DELETE by PK=$pk did not delete anything ", None) {
+  override val id: AnomalyID = DBDeleteByPKFailedAnomaly.DBDeleteByPKFailedID
+
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters(
+    CommonKeys.PK -> pk
+  )
+}
+
+object DBDeleteByPKFailedAnomaly {
+  case object DBDeleteByPKFailedID extends AnomalyID { override val name: String = "ph_db_003" }
+}
+
+private[db] object CommonKeys {
+  val PK       = "pk"
+  val Expected = "expected"
+  val Actual   = "actual"
 }

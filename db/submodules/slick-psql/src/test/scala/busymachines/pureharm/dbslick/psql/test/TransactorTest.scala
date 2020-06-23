@@ -27,13 +27,13 @@ final class TransactorTest extends PureharmFixtureTest {
 
   override type FixtureParam = Transactor[IO]
 
-  iotest("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
+  test("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
 
-  iotest("closes the active connection") { implicit trans: Transactor[IO] =>
+  test("closes the active connection") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)
@@ -42,7 +42,7 @@ final class TransactorTest extends PureharmFixtureTest {
     } yield assert(isConnected === false)
   }
 
-  iotest("recreates the connection when the current connection is open") { implicit trans: Transactor[IO] =>
+  test("recreates the connection when the current connection is open") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)
@@ -51,7 +51,7 @@ final class TransactorTest extends PureharmFixtureTest {
     } yield assert(isConnected === true)
   }
 
-  iotest("recreates the connection when the current connection is closed") { implicit trans: Transactor[IO] =>
+  test("recreates the connection when the current connection is closed") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)

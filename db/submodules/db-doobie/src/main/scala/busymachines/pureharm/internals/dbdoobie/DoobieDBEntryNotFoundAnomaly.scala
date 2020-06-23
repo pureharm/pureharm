@@ -17,15 +17,3 @@
   */
 package busymachines.pureharm.internals.dbdoobie
 
-import busymachines.pureharm.db.DBEntryNotFoundAnomaly
-
-/**
-  *
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 24 Sep 2019
-  *
-  */
-final private[dbdoobie] case class DoobieDBEntryNotFoundAnomaly(
-  override val pk:       String,
-  override val causedBy: Option[Throwable],
-) extends DBEntryNotFoundAnomaly(pk, causedBy)

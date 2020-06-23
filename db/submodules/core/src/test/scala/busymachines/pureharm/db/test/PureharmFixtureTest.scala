@@ -35,7 +35,9 @@ import busymachines.pureharm.effects._
   */
 abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   import io.chrisdavenport.log4cats._
-  private val logger = slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
+
+  protected val logger: SelfAwareStructuredLogger[IO] =
+    slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
 
   import busymachines.pureharm.effects.implicits._
   //for tests if fine if we just dump everything in global EC.
@@ -50,13 +52,13 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
     */
   def fixture: Resource[IO, FixtureParam]
 
-  protected def iotest(
+  protected def test(
     testName:                                    String,
     testTags:                                    Tag*
   )(
     fun:                                         FixtureParam => IO[_]
   )(implicit pos:                                source.Position): Unit    =
-    test(testName, testTags: _*)(fp => fun(fp).unsafeRunSync())
+    super.test(testName, testTags: _*)(fp => fun(fp).unsafeRunSync())
 
   final override protected def withFixture(test: OneArgTest):      Outcome = {
     def ftest(fix: FixtureParam): IO[Outcome] =

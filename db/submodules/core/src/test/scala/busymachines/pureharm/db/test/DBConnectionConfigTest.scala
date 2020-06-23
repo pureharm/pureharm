@@ -32,7 +32,7 @@ final class DBConnectionConfigTest extends PureharmFixtureTest {
 
   override type FixtureParam = Unit
 
-  iotest("read config from default reference.conf") { _ =>
+  test("read config from default reference.conf") { _ =>
     DBConnectionConfig.default[IO].map { config =>
       assert(
         config == DBConnectionConfig(

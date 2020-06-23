@@ -31,7 +31,10 @@ import busymachines.pureharm.dbdoobie.implicits._
   */
 object Row extends PhantomType[NonEmptyList[ColumnName]] {
 
-  def asFragment(cm: Row.Type): Fragment = {
-    cm.map(f => f: Fragment).intercalate(fr",")
-  }
+  def apply(head: ColumnName, tail: List[ColumnName]): this.Type =
+    this(NEList.fromListUnsafe[ColumnName](head :: tail))
+
+  def asString(cm: Row.Type): String = cm.map(ColumnName.despook).intercalate(", ")
+
+  def asQuestionMarks(cm: Row.Type): String = cm.map(_ => "?").intercalate(", ")
 }

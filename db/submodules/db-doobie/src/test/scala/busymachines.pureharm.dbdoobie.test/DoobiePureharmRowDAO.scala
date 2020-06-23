@@ -20,7 +20,6 @@ package busymachines.pureharm.dbdoobie.test
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
 import busymachines.pureharm.db.test._
-
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.internals.dbdoobie._
 
@@ -44,29 +43,33 @@ private[test] object DoobiePureharmRowDAO {
   private class DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
 
     override val tableName: TableName = schema.PureharmRows
+
     override val tailColumns: List[ColumnName] = List(
-      ColumnName(fr"byte"),
-      ColumnName(fr"int"),
-      ColumnName(fr"long"),
-      ColumnName(fr"big_decimal"),
-      ColumnName(fr"string"),
-      ColumnName(fr"jsonb_col"),
-      ColumnName(fr"opt_col"),
+      ColumnName("byte"),
+      ColumnName("int"),
+      ColumnName("long"),
+      ColumnName("big_decimal"),
+      ColumnName("string"),
+      ColumnName("jsonb_col"),
+      ColumnName("opt_col"),
     )
   }
 
   final private class DoobiePureharmRowQuerries(
-    override val table: DoobiePureharmTable,
+    override val table: DoobiePureharmTable
   ) extends DoobieQueryAlgebra[PureharmRow, PhantomPK, DoobiePureharmTable] {
-    def getPK: Get[PhantomPK] = Get[PhantomPK]
-    def putPK: Put[PhantomPK] = Put[PhantomPK]
+    override val getPK: Get[PhantomPK] = Get[PhantomPK]
+    override val putPK: Put[PhantomPK] = Put[PhantomPK]
 
-    def getE: Read[PureharmRow]  = Read[PureharmRow]
-    def putE: Write[PureharmRow] = Write[PureharmRow]
+    override val getE: Read[PureharmRow]  = Read[PureharmRow]
+    override val putE: Write[PureharmRow] = Write[PureharmRow]
+
+    override val showPK: Show[PhantomPK] = Show[PhantomPK]
+
   }
 
-  final private class PureharmRowDAODoobieImpl[F[_]: BracketAttempt](
-    implicit override val transactor: Transactor[F],
+  final private class PureharmRowDAODoobieImpl[F[_]: BracketAttempt](implicit
+    override val transactor: Transactor[F]
   ) extends DoobieDAOAlgebra[F, PureharmRow, PhantomPK, DoobiePureharmTable] with PureharmRowDAO[F] {
     override protected val queries: DoobiePureharmRowQuerries = new DoobiePureharmRowQuerries(new DoobiePureharmTable())
   }

@@ -21,7 +21,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.dbdoobie.implicits._
-import busymachines.pureharm.identifiable.{FieldName, Identifiable}
+import busymachines.pureharm.identifiable.Identifiable
 
 /**
   *
@@ -30,23 +30,21 @@ import busymachines.pureharm.identifiable.{FieldName, Identifiable}
   *
   */
 abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
-  def tableName: TableName
-
-  def pkFieldName: FieldName = iden.fieldName
+  def tableName:   TableName
   def tailColumns: List[ColumnName]
 
-  def pkColumn: ColumnName = ColumnName(Fragment.const(iden.fieldName))
-  def columns:  Row        = Row(NEList(pkColumn, tailColumns))
+  final def pkColumn: ColumnName = ColumnName(iden.fieldName)
+  final def columns:  Row        = Row(NEList(pkColumn, tailColumns))
 
-  /**
-    * This yields an SQL fragment of the form:
-    * column_name1, column_name2, column_name3, etc
-    */
-  def tuple: Fragment = Row.asFragment(columns)
+  final def rawColumns: List[String] = columns.toList.map(ColumnName.despook)
 
-  /**
-    * Like [[tuple]] but with parentheses
-    * (column_name1, column_name2, column_name3)
-    */
-  def tupleParens: Fragment = fr0"(" ++ tuple ++ fr0")"
+  final def pkOf(e: E): PK = iden.id(e)
+
+  final def tupleString: String = Row.asString(columns)
+
+  final def tupleStringEnclosed: String = s"($tupleString)"
+
+  final def questionMarkTuple: String = Row.asQuestionMarks(columns)
+
+  final def questionMarkTupleEnclosed: String = s"(${Row.asQuestionMarks(columns)})"
 }
