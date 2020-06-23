@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.effects
 
-import busymachines.pureharm.internals.effects.aliases
+import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstances}
 
 /**
   *
@@ -32,4 +32,5 @@ import busymachines.pureharm.internals.effects.aliases
   * @since 06 May 2019
   *
   */
-trait PureharmEffectsAllImplicits extends aliases.PureharmEffectsSyntaxAll with aliases.CatsImplicitsAll
+trait PureharmEffectsAllImplicits
+  extends aliases.PureharmEffectsSyntaxAll with aliases.CatsImplicitsAll with PureharmUnlawfulInstances
