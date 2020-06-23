@@ -23,7 +23,7 @@
   *
   * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.8") //https://github.com/xerial/sbt-sonatype/releases
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.3") //https://github.com/xerial/sbt-sonatype/releases
 
 /**
   *
@@ -34,14 +34,14 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.8") //https://github.com/xer
   *
   * https://github.com/sbt/sbt-pgp/releases
   */
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0") //https://github.com/sbt/sbt-pgp/releases
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1") //https://github.com/sbt/sbt-pgp/releases
 
 /**
   * build configured in ``project/ReleaseProcess``
   *
   * https://github.com/sbt/sbt-release/releases
   */
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.com/sbt/sbt-release/releases
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13") //https://github.com/sbt/sbt-release/releases
 
 /**
   * The best thing since sliced bread.
@@ -49,7 +49,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11") //https://github.co
   * https://github.com/scalameta/sbt-scalafmt/releases
   *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4") //https://github.com/scalameta/sbt-scalafmt/releases
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
@@ -71,4 +71,4 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4") //https://github.com/sc
   *
   * }}}
   */
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.7") //https://github.com/scalacenter/scalafix/releases
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.17") //https://github.com/scalacenter/scalafix/releases
