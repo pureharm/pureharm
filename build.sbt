@@ -225,12 +225,13 @@ lazy val `db` = project
     `db-core-flyway`,
     `db-slick`,
     `db-slick-psql`,
+    `db-doobie`,
   )
 
 //#############################################################################
 
 lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ Seq(
-  flyway, //FIXME: remove in M17 once the deprecation period of Flyway is gone
+  flyway,
   log4cats       % Test,
   logbackClassic % Test,
   scalaTest      % Test,
