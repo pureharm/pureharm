@@ -409,6 +409,10 @@ lazy val testkit = project
     name := "pureharm-testkit",
     libraryDependencies ++= `testkit-deps`.distinct,
   )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+  )
   .aggregate(
     `core`,
     `effects-cats`,
