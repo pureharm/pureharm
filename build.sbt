@@ -60,6 +60,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .aggregate(
     core,
     `effects-cats`,
+    testkit,
     `config`,
     `json-circe`,
     `db`,
@@ -387,6 +388,30 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `json-circe`,
     `db-core`,
     `db-slick`,
+  )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `testkit-deps` =
+  `core-deps` ++
+    `effects-cats-deps` ++ Seq(
+    scalaTest,
+    log4cats,
+    logbackClassic,
+  )
+
+lazy val testkit = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    name := "pureharm-testkit",
+    libraryDependencies ++= `testkit-deps`.distinct,
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
   )
 
 //*****************************************************************************
