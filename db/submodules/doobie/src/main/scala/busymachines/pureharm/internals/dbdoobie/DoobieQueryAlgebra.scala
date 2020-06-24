@@ -38,6 +38,20 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
   implicit protected def writeEImplicit: Write[E] = table.writeE
   implicit protected def showPKImplicit: Show[PK] = table.showPK
 
+  object frags {
+
+    def array[T: Put](fs: List[T]): Fragment =
+      fs.map(n => fr"$n").intercalate(fr",")
+
+    def inArray[T: Put](fs: List[T]): Fragment =
+      fr"IN " ++ inParens(array(fs))
+
+    def inParens(f: Fragment): Fragment = op ++ f ++ cp
+
+    private val op: Fragment = Fragment.const("(")
+    private val cp: Fragment = Fragment.const(")")
+  }
+
   override def find(pk: PK): ConnectionIO[Option[E]] =
     Query[PK, E](findSQL).option(pk)
 
@@ -100,10 +114,10 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
 
   //----- plain string queries -----
   private val findSQL: String =
-    s"SELECT ${table.row.tupleString} FROM ${table.name} WHERE ${table.row.pkColumn} = ?"
+    s"SELECT ${table.row.sql.tuple} FROM ${table.name} WHERE ${table.row.pkColumn} = ?"
 
   private val insertSQL: String =
-    s"INSERT INTO ${table.name} ${table.row.tupleStringEnclosed} VALUES ${table.row.questionMarkTupleEnclosed}"
+    s"INSERT INTO ${table.name} ${table.row.sql.tupleInParens} VALUES ${table.row.sql.qmsInParens}"
 
   /**
     * Generate something like:
@@ -113,7 +127,7 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
     */
   private val updateSQL: String =
     s"""
-       |UPDATE ${table.name} SET ${table.row.allColumnsEqualQuestionMark}
+       |UPDATE ${table.name} SET ${table.row.sql.tupleEqualQM}
        |WHERE ${table.row.pkColumn} = ?
        |""".stripMargin
 
@@ -124,19 +138,16 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
     s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.row.pkColumn} = ?)"
 
   //----- fragments -----
-  private def inArraySQLFragment[T: Put](fs: List[T]): Fragment =
-    fr"IN (" ++ fs.map(n => fr"$n").intercalate(fr",") ++ fr")"
 
   private def deleteManySQLFragment(pks: List[PK]): Fragment =
-    Fragment.const(s"DELETE FROM ${table.name} WHERE ${table.row.pkColumn}") ++ inArraySQLFragment(pks)
+    Fragment.const(s"DELETE FROM ${table.name} WHERE ${table.row.pkColumn}") ++ frags.inArray(pks)
 
   private def existsAtLeastOneSQLFragment(pks: List[PK]): Fragment =
-    Fragment.const(s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.row.pkColumn}") ++ inArraySQLFragment(
-      pks
-    ) ++ fr")"
+    Fragment.const(s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.row.pkColumn}") ++
+      frags.inArray(pks) ++ fr")"
 
   private def existsAllSQLFragment(pks: List[PK]): Fragment =
     Fragment.const(s"SELECT (SELECT COUNT(*) FROM ${table.name} WHERE ${table.row.pkColumn}") ++
-      inArraySQLFragment(pks) ++ fr")" ++ Fragment.const(s" = ${pks.size}")
+      frags.inArray(pks) ++ fr")" ++ Fragment.const(s" = ${pks.size}")
 
 }

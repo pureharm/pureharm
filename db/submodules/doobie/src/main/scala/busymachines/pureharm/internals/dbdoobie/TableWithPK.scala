@@ -53,38 +53,71 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
     final val pkColumn: Column =
       Column.internalTag(iden.fieldName)
 
-    lazy val allCNS: NonEmptyList[Column] = NEList(
+    lazy val columns: NonEmptyList[Column] = NEList(
       pkColumn,
       cnsWithoutPK,
     )
 
     lazy val columnNames: List[String] =
-      allCNS.toList.asInstanceOf[List[String]]
+      columns.toList.asInstanceOf[List[String]]
 
-    final def tupleString: String =
-      columnNames.intercalate(", ")
+    object sql {
+      final val QM    = "?"
+      final val Comma = ", "
 
-    final def tupleStringEnclosed: String = s"($tupleString)"
+      /**
+        * @return
+        *  Comma separated enumeration of all columns:
+        *  {{{
+        *     pk, column1, column 2
+        *  }}}
+        */
+      lazy val tuple: String =
+        commaSeparated(columnNames)
 
-    final private val QM    = "?"
-    final private val Comma = ", "
+      /**
+        * @return
+        *  Comma seperated enumeration of all given columns:
+        *  {{{
+        *     pk, column1, column 2
+        *  }}}
+        */
+      def tuple(col: Column, cols: Column*): String =
+        commaSeparated(NEList.of(col, cols: _*))
 
-    final def questionMarkTuple: String =
-      columnNames.map(_ => QM).intercalate(Comma)
+      lazy val tupleInParens: String = s"(${commaSeparated(columnNames)})"
 
-    final def columnEqualQuestionMark(cn: Column): String =
-      s"$cn = $QM"
+      def tupleInParens(col: Column, cols: Column*): String =
+        s"(${tuple(col, cols: _*)})"
 
-    final def allColumnsEqualQuestionMark: String =
-      allCNS.map(columnEqualQuestionMark).intercalate(Comma)
+      /**
+        * @return
+        *   Comma separated enumeration of ? corresponding
+        *   to the total number of columns in the table
+        */
+      lazy val qms: String =
+        columnNames.map(_ => QM).intercalate(Comma)
 
-    final def questionMarkTupleEnclosed: String =
-      s"($questionMarkTuple)"
+      lazy val qmsInParens: String = s"($qms)"
 
+      def columnEqualQM(c: Column): String = s"$c = $QM"
+
+      def tupleEqualQM(c: Column, cs: Column*): String =
+        (c :: cs.toList).map(columnEqualQM).intercalate(Comma)
+
+      lazy val tupleEqualQM: String =
+        columns.map(columnEqualQM).intercalate(Comma)
+
+      private def commaSeparated(cls: NonEmptyList[Column]): String =
+        this.commaSeparated(cls.toList.map(s => s: String))
+
+      private def commaSeparated(cls: List[String]):         String =
+        cls.intercalate(", ")
+    }
   }
 
-  //========================================
-  //========================================
+  //====================== Ugly mutable stuff here ============================
+
   import scala.collection.mutable
 
   private[this] val orderedColumns: mutable.ListBuffer[Column] = mutable.ListBuffer.empty[Column]
@@ -96,7 +129,7 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
     * Relies on side-effects and may pure FP dieties forgive me!!
     *
     * Use only in contexts where evaluation is DETERMINISTIC!
-    * i.e. in val definitions
+    * i.e. in val definitions, or if you don't care to reuse, shove them in a list
     *
     * This is a limitation of doobie because Read/Write instances
     * depend on the order of your fields in the case class,
@@ -112,13 +145,13 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
     *    object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
     *     override val name: TableName = schema.PureharmRows
     *
-    *     val byte_col:    ColumnName = createColumn("byte")
-    *     val int_col:     ColumnName = createColumn("int")
-    *     val long_col:    ColumnName = createColumn("long")
-    *     val big_decimal: ColumnName = createColumn("big_decimal")
-    *     val string_col:  ColumnName = createColumn("string")
-    *     val jsonb_col:   ColumnName = createColumn("jsonb_col")
-    *     val opt_col:     ColumnName = createColumn("opt_col")
+    *     val byte_col:    Column = createColumn("byte")
+    *     val int_col:     Column = createColumn("int")
+    *     val long_col:    Column = createColumn("long")
+    *     val big_decimal: Column = createColumn("big_decimal")
+    *     val string_col:  Column = createColumn("string")
+    *     val jsonb_col:   Column = createColumn("jsonb_col")
+    *     val opt_col:     Column = createColumn("opt_col")
     *
     *     implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
     *       jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
