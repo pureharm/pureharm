@@ -28,7 +28,7 @@ import busymachines.pureharm.effects._
   */
 final class FlywayConfigTest extends PureharmFixtureTest {
 
-  override def fixture: Resource[IO, Unit] = Resource.pure[IO, Unit](())
+  override def fixture(meta: MetaData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
 
   override type FixtureParam = Unit
 
@@ -36,7 +36,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
   private val `"db/migration"`      = MigrationLocation("db/migration")
   private val `"db/test_migration"` = MigrationLocation("db/test_migration")
 
-  iotest("read config with all fields from reference.conf") { _ =>
+  test("read config with all fields from reference.conf") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration1").map { config =>
       assert(
         config === FlywayConfig
@@ -48,7 +48,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with missing schemas field — should use default") { _ =>
+  test("read config with missing schemas field — should use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration2").map { config =>
       assert(
         config == FlywayConfig
@@ -59,7 +59,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with missing locations field — should use default") { _ =>
+  test("read config with missing locations field — should use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration3").map { config =>
       assert(
         config == FlywayConfig
@@ -70,7 +70,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with missing ignoreMissingMigrations field — should use default") { _ =>
+  test("read config with missing ignoreMissingMigrations field — should use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration4").map { config =>
       assert(
         config == FlywayConfig
@@ -81,7 +81,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with missing cleanOnValidationError field — should use default") { _ =>
+  test("read config with missing cleanOnValidationError field — should use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration5").map { config =>
       assert(
         config == FlywayConfig
@@ -92,7 +92,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with all missing fields — should just use default") { _ =>
+  test("read config with all missing fields — should just use default") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration6").map { config =>
       assert(
         config == FlywayConfig.defaultConfig
@@ -100,7 +100,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with single string schemas as List(schema)") { _ =>
+  test("read config with single string schemas as List(schema)") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration7").map { config =>
       assert(
         config == FlywayConfig
@@ -109,7 +109,7 @@ final class FlywayConfigTest extends PureharmFixtureTest {
     }
   }
 
-  iotest("read config with single string locations as List(location)") { _ =>
+  test("read config with single string locations as List(location)") { _ =>
     FlywayConfig.fromNamespace[IO]("pureharm.db.migrations.migration8").map { config =>
       assert(
         config == FlywayConfig

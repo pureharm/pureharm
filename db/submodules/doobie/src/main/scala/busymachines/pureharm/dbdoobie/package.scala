@@ -15,34 +15,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.test
-
-import busymachines.pureharm.db._
-import busymachines.pureharm.effects._
-import org.scalatest.TestData
+package busymachines.pureharm
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 17 Jun 2019
+  * @since 24 Sep 2019
   *
   */
-final class DBConnectionConfigTest extends PureharmFixtureTest {
-
-  override def fixture(meta: TestData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
-
-  override type FixtureParam = Unit
-
-  test("read config from default reference.conf") { _ =>
-    DBConnectionConfig.default[IO].map { config =>
-      assert(
-        config == DBConnectionConfig(
-          host     = DBHost("localhost:20010"),
-          dbName   = DatabaseName("pureharm_test"),
-          username = DBUsername("pureharmony"),
-          password = DBPassword("pureharmony"),
-        )
-      )
-    }
-  }
+package object dbdoobie extends PureharmDBDoobieTypeDefinitions {
+  object implicits extends PureharmDBDoobieImplicitsAll
 }

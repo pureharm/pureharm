@@ -18,6 +18,8 @@
 package busymachines.pureharm.db
 
 import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 
 /**
   *
@@ -41,7 +43,11 @@ package object test {
   object PhantomString extends PhantomType[String]
   type PhantomString = PhantomString.Type
 
-  object PhantomPK extends PhantomType[String]
+  object PhantomPK extends PhantomType[String] {
+
+    implicit val showPK: Show[this.Type] =
+      Show[String].asInstanceOf[Show[this.Type]]
+  }
   type PhantomPK = PhantomPK.Type
 
   object schema {

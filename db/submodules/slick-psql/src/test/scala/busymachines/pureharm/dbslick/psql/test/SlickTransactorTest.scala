@@ -9,7 +9,7 @@ import busymachines.pureharm.effects._
   * @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 27/01/2020
   */
-final class TransactorTest extends PureharmFixtureTest {
+final class SlickTransactorTest extends PureharmFixtureTest {
 
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 
@@ -17,7 +17,7 @@ final class TransactorTest extends PureharmFixtureTest {
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
-  override def fixture: Resource[IO, Transactor[IO]] =
+  override def fixture(meta: MetaData): Resource[IO, Transactor[IO]] =
     for {
       dbConfig   <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
       transactor <-
@@ -27,13 +27,13 @@ final class TransactorTest extends PureharmFixtureTest {
 
   override type FixtureParam = Transactor[IO]
 
-  iotest("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
+  test("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
 
-  iotest("closes the active connection") { implicit trans: Transactor[IO] =>
+  test("closes the active connection") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)
@@ -42,7 +42,7 @@ final class TransactorTest extends PureharmFixtureTest {
     } yield assert(isConnected === false)
   }
 
-  iotest("recreates the connection when the current connection is open") { implicit trans: Transactor[IO] =>
+  test("recreates the connection when the current connection is open") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)
@@ -51,7 +51,7 @@ final class TransactorTest extends PureharmFixtureTest {
     } yield assert(isConnected === true)
   }
 
-  iotest("recreates the connection when the current connection is closed") { implicit trans: Transactor[IO] =>
+  test("recreates the connection when the current connection is closed") { implicit trans: Transactor[IO] =>
     for {
       isConnected <- trans.isConnected
       _ = assert(isConnected === true)

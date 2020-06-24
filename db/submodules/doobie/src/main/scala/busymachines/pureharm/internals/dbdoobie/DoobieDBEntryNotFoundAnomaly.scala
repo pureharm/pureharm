@@ -15,22 +15,4 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.effects
-
-import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstances}
-
-/**
-  *
-  * Define your own "effects" package and write something like this:
-  * {{{
-  *   package mystuff
-  *
-  *   package object effects extends
-  * }}}
-  *
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 06 May 2019
-  *
-  */
-trait PureharmEffectsAllImplicits
-  extends aliases.PureharmEffectsSyntaxAll with aliases.CatsImplicitsAll with PureharmUnlawfulInstances
+package busymachines.pureharm.internals.dbdoobie

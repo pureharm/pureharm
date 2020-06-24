@@ -34,11 +34,11 @@ import busymachines.pureharm.dbslick._
   * @since 12 Jun 2019
   *
   */
-final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
+final class SlickPureharmRowDAOTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
-  override def fixture: Resource[IO, PureharmRowDAO[IO]] =
-    DAOAlgebraPureharmRowsTest
+  override def fixture(meta: MetaData): Resource[IO, PureharmRowDAO[IO]] =
+    SlickPureharmRowDAOTest
       .transactorResource[IO]
       .map(implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)))
 
@@ -53,21 +53,21 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
     optionalCol = Option(PhantomString("optional_value")),
   )
 
-  iotest("insert + find") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + find") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.find(row.id).flattenOption(fail(s"PK=${row.id} row was not in database"))
     } yield assert(row === fetchedRow)
   }
 
-  iotest("insert + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.retrieve(row.id)
     } yield assert(row === fetchedRow)
   }
 
-  iotest("insert + update (defined opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + update (defined opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _ <- dao.insert(row)
       newRowWithSome = row.copy(
@@ -84,7 +84,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
     } yield assert(newRowWithSome === fetchedRow)
   }
 
-  iotest("insert + update (nulled opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + update (nulled opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       _ <- dao.insert(row)
       newRowWithNone = row.copy(
@@ -101,7 +101,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
     } yield assert(newRowWithNone === fetchedRow)
   }
 
-  iotest("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
     } yield att match {
@@ -111,7 +111,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   }
 }
 
-private[test] object DAOAlgebraPureharmRowsTest {
+private[test] object SlickPureharmRowDAOTest {
 
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {
     val trans = Transactor.pgSQLHikari[F](

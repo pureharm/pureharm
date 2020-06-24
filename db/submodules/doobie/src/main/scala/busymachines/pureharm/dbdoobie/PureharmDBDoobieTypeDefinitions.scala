@@ -15,34 +15,17 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.test
-
-import busymachines.pureharm.db._
-import busymachines.pureharm.effects._
-import org.scalatest.TestData
+package busymachines.pureharm.dbdoobie
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 17 Jun 2019
+  * @since 24 Sep 2019
   *
   */
-final class DBConnectionConfigTest extends PureharmFixtureTest {
+trait PureharmDBDoobieTypeDefinitions
+  extends doobie.Aliases with doobie.free.Types with doobie.free.Modules with doobie.postgres.free.Types
+  with doobie.postgres.free.Modules with doobie.postgres.hi.Modules {
 
-  override def fixture(meta: TestData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
-
-  override type FixtureParam = Unit
-
-  test("read config from default reference.conf") { _ =>
-    DBConnectionConfig.default[IO].map { config =>
-      assert(
-        config == DBConnectionConfig(
-          host     = DBHost("localhost:20010"),
-          dbName   = DatabaseName("pureharm_test"),
-          username = DBUsername("pureharmony"),
-          password = DBPassword("pureharmony"),
-        )
-      )
-    }
-  }
+  val ConnectionIO: doobie.implicits.AsyncConnectionIO.type = doobie.implicits.AsyncConnectionIO
 }
