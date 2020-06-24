@@ -41,17 +41,4 @@ final class DBConnectionConfigTest extends PureharmTest {
       )
     }
   }
-
-  test("intentional failure") {
-    IO.delay {
-      println("I AM IN THE TEST")
-      throw new RuntimeException("YALJFSKFSLKAJ")
-      assert(true, "sdfdklsfd")
-      assert(1 == 2, "FAIL")
-    }
-  }
-
-  test("intentional pending") {
-    IO(pending)
-  }
 }

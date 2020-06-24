@@ -23,7 +23,7 @@ import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalactic.source
 import busymachines.pureharm.effects._
-import org.scalatest.exceptions.{TestFailedException, TestPendingException}
+import org.scalatest.exceptions.{TestCanceledException, TestFailedException, TestPendingException}
 
 /**
   *
@@ -51,50 +51,27 @@ abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTes
   )(implicit
     position: source.Position
   ): Unit = {
-    val mdc = Map("test" -> s"'$testName'", "line" -> position.lineNumber.toString)
+    val mdc = MDCKeys(testName, position)
     val iotest: IO[Assertion] = for {
       _        <- report.info(mdc)(s"STARTING")
       (d, att) <- testFun.timedAttempt(TimeUnit.MILLISECONDS)
       ass      <- att match {
-        case Left(e: TestFailedException) =>
-          report.info(
-            mdc.++(
-              Map(
-                "outcome"  -> Failed(e).productPrefix,
-                "duration" -> d.toString,
-              )
-            )
-          )("FINISHED") *> IO.raiseError[Assertion](e)
-
         case Left(e: TestPendingException) =>
-          report.info(
-            mdc.++(
-              Map(
-                "outcome"  -> Pending.productPrefix,
-                "duration" -> d.toString,
-              )
-            )
-          )("FINISHED") *> IO.raiseError[Assertion](e)
+          report.info(mdc.++(MDCKeys(Pending, d)))("FINISHED") *> IO.raiseError[Assertion](e)
+
+        case Left(e: TestFailedException) =>
+          report.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
+
+        case Left(e: TestCanceledException) =>
+          report.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
         case Left(e) =>
-          report.warn(
-            mdc.++(
-              Map(
-                "outcome"  -> s"Failed because of: ${e.getClass.getCanonicalName} — HINT: Use assertions to signal failures not exception throwing",
-                "duration" -> d.toString,
-              )
-            )
-          )("FINISHED") *> IO.raiseError[Assertion](e)
+          report.warn(mdc.++(MDCKeys(Exceptional(e), d)))(
+            "TERMINATED — fail tests with assertions, not by throwing random"
+          ) *> IO.raiseError[Assertion](e)
 
         case Right(ass) =>
-          report.info(
-            mdc.++(
-              Map(
-                "outcome"  -> Succeeded.productPrefix,
-                "duration" -> d.toString,
-              )
-            )
-          )("FINISHED") *> IO.pure[Assertion](ass)
+          report.info(mdc.++(MDCKeys(Succeeded, d)))("FINISHED") *> IO.pure[Assertion](ass)
 
       }
     } yield ass

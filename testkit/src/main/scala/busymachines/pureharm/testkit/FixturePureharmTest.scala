@@ -61,36 +61,25 @@ abstract class FixturePureharmTest extends FixtureAnyFunSuite with Assertions wi
     super.test(testName, testTags: _*)(fp => testFun(fp).unsafeRunSync())
 
   final override protected def withFixture(test: OneArgTest): Outcome = {
+    val mdc: Map[String, String] = MDCKeys(test)
+
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {
-        _        <- report.info(mdc(test))(s"INITIALIZED")
+        _        <- report.info(mdc)(s"INITIALIZED")
         (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
         outcome  <- out.liftTo[IO]
-        _        <- report.info(
-          mdc(test).++(
-            Map(
-              "outcome"  -> outcome.productPrefix,
-              "duration" -> d.toString,
-            )
-          )
-        )(s"FINISHED")
+        _        <- report.info(mdc.++(MDCKeys(outcome, d)))(s"FINISHED")
       } yield outcome
 
-    val fout: IO[Outcome] = fixture(test)
-      .onError {
-        case e => Resource.liftF[IO, Unit](report.warn(Map("test" -> s"'${test.name}'"), e)("INIT — FAILED"))
-      }
-      .use(ftest)
+    val fout: IO[Outcome] = for {
+      _   <- report.info(mdc)(s"ACQUIRING FIXTURE")
+      out <- fixture(test)
+        .onError {
+          case e => report.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]]
+        }
+        .use(ftest)
+    } yield out
 
     fout.unsafeRunSync()
   }
-
-  private def mdc(test: MetaData): Map[String, String] =
-    test.pos match {
-      case None      =>
-        Map("test" -> s"'${test.name}'")
-      case Some(pos) =>
-        Map("test" -> s"'${test.name}'", "line" -> pos.lineNumber.toString)
-    }
-
 }
