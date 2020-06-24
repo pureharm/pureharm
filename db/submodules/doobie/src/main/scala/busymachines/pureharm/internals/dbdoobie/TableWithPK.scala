@@ -29,7 +29,7 @@ import busymachines.pureharm.identifiable.Identifiable
   * @since 24 Sep 2019
   *
   */
-abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
+abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]) {
   def name: TableName
 
   /**
@@ -47,29 +47,41 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   def readE:  Read[E]
   def writeE: Write[E]
 
-  final val pkColumn: Column = Column.internalTag(iden.fieldName)
+  object row {
+    final def pkValueOf(e: E): PK = iden.id(e)
 
-  final def pkOf(e: E): PK = iden.id(e)
+    final val pkColumn: Column =
+      Column.internalTag(iden.fieldName)
 
-  final def tupleString: String =
-    columnNames.intercalate(", ")
+    lazy val allCNS: NonEmptyList[Column] = NEList(
+      pkColumn,
+      cnsWithoutPK,
+    )
 
-  final def tupleStringEnclosed: String = s"($tupleString)"
+    lazy val columnNames: List[String] =
+      allCNS.toList.asInstanceOf[List[String]]
 
-  final private val QM    = "?"
-  final private val Comma = ", "
+    final def tupleString: String =
+      columnNames.intercalate(", ")
 
-  final def questionMarkTuple: String =
-    columnNames.map(_ => QM).intercalate(Comma)
+    final def tupleStringEnclosed: String = s"($tupleString)"
 
-  final def columnEqualQuestionMark(cn: Column): String =
-    s"$cn = $QM"
+    final private val QM    = "?"
+    final private val Comma = ", "
 
-  final def allColumnsEqualQuestionMark: String =
-    allCNS.map(columnEqualQuestionMark).intercalate(Comma)
+    final def questionMarkTuple: String =
+      columnNames.map(_ => QM).intercalate(Comma)
 
-  final def questionMarkTupleEnclosed: String = s"($questionMarkTuple)"
-//    s"(${Row.asQuestionMarks(columns)})"
+    final def columnEqualQuestionMark(cn: Column): String =
+      s"$cn = $QM"
+
+    final def allColumnsEqualQuestionMark: String =
+      allCNS.map(columnEqualQuestionMark).intercalate(Comma)
+
+    final def questionMarkTupleEnclosed: String =
+      s"($questionMarkTuple)"
+
+  }
 
   //========================================
   //========================================
@@ -77,23 +89,23 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
 
   private[this] val orderedColumns: mutable.ListBuffer[Column] = mutable.ListBuffer.empty[Column]
 
-  lazy val cnsWithoutPK: List[Column] =
+  private lazy val cnsWithoutPK: List[Column] =
     orderedColumns.toList
-
-  lazy val allCNS: NonEmptyList[Column] = NEList(
-    pkColumn,
-    cnsWithoutPK,
-  )
-
-  lazy val columnNames: List[String] =
-    allCNS.toList.asInstanceOf[List[String]]
 
   /**
     * Relies on side-effects and may pure FP dieties forgive me!!
+    *
+    * Use only in contexts where evaluation is DETERMINISTIC!
+    * i.e. in val definitions
+    *
+    * This is a limitation of doobie because Read/Write instances
+    * depend on the order of your fields in the case class,
+    * and your columns should be ordered in the same way.
+    *
+    * This is why writing tests is imperative!
+    *
     * Luckily, usage is restricted on on each individual Table instance
     * so you can only create columns from within a the given table
-    *
-    * Use only to assign to val or lazy val!
     *
     * Usage example:
     * {{{
@@ -148,8 +160,8 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
              |//so you don't need to define it yourself.
              |
              |object RowTable extends TableWithPK[Row, Int] {
-             |  val f1 = CN("f1")
-             |  val f2 = CN("f2")
+             |  val f1 = createColumn("f1")
+             |  val f2 = createColumn("f2")
              |  
              |  //abstract members, elided here
              |}

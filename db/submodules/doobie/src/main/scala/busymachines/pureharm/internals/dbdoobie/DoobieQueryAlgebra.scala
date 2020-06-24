@@ -45,7 +45,7 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
     this.find(pk).flattenOption(DoobieDBEntryNotFoundAnomaly(show.show(pk), Option.empty))
 
   override def insert(e: E): ConnectionIO[PK] =
-    Update[E](insertSQL).withUniqueGeneratedKeys[PK](table.pkColumn)(e)
+    Update[E](insertSQL).withUniqueGeneratedKeys[PK](table.row.pkColumn)(e)
 
   override def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
     val expectedSize = es.size
@@ -69,8 +69,9 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
   }
 
   override def update(e: E): ConnectionIO[E] =
-    Update[(E, PK)](updateSQL).withUniqueGeneratedKeys[E](table.columnNames: _*)((e, table.pkOf(e)))
+    Update[(E, PK)](updateSQL).withUniqueGeneratedKeys[E](table.row.columnNames: _*)((e, table.row.pkValueOf(e)))
 
+  //FIXME: rewrite with postgresql batch update
   override def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] =
     es.traverse(this.update).void
 
@@ -99,10 +100,10 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
 
   //----- plain string queries -----
   private val findSQL: String =
-    s"SELECT ${table.tupleString} FROM ${table.name} WHERE ${table.pkColumn} = ?"
+    s"SELECT ${table.row.tupleString} FROM ${table.name} WHERE ${table.row.pkColumn} = ?"
 
   private val insertSQL: String =
-    s"INSERT INTO ${table.name} ${table.tupleStringEnclosed} VALUES ${table.questionMarkTupleEnclosed}"
+    s"INSERT INTO ${table.name} ${table.row.tupleStringEnclosed} VALUES ${table.row.questionMarkTupleEnclosed}"
 
   /**
     * Generate something like:
@@ -112,30 +113,30 @@ abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DA
     */
   private val updateSQL: String =
     s"""
-       |UPDATE ${table.name} SET ${table.allColumnsEqualQuestionMark}
-       |WHERE ${table.pkColumn} = ?
+       |UPDATE ${table.name} SET ${table.row.allColumnsEqualQuestionMark}
+       |WHERE ${table.row.pkColumn} = ?
        |""".stripMargin
 
   private val deleteSQL: String =
-    s"DELETE FROM ${table.name} WHERE ${table.pkColumn} = ?"
+    s"DELETE FROM ${table.name} WHERE ${table.row.pkColumn} = ?"
 
   private val existsSQL =
-    s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.pkColumn} = ?)"
+    s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.row.pkColumn} = ?)"
 
   //----- fragments -----
   private def inArraySQLFragment[T: Put](fs: List[T]): Fragment =
     fr"IN (" ++ fs.map(n => fr"$n").intercalate(fr",") ++ fr")"
 
   private def deleteManySQLFragment(pks: List[PK]): Fragment =
-    Fragment.const(s"DELETE FROM ${table.name} WHERE ${table.pkColumn}") ++ inArraySQLFragment(pks)
+    Fragment.const(s"DELETE FROM ${table.name} WHERE ${table.row.pkColumn}") ++ inArraySQLFragment(pks)
 
   private def existsAtLeastOneSQLFragment(pks: List[PK]): Fragment =
-    Fragment.const(s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.pkColumn}") ++ inArraySQLFragment(
+    Fragment.const(s"SELECT EXISTS(SELECT 1 FROM ${table.name} WHERE ${table.row.pkColumn}") ++ inArraySQLFragment(
       pks
     ) ++ fr")"
 
   private def existsAllSQLFragment(pks: List[PK]): Fragment =
-    Fragment.const(s"SELECT (SELECT COUNT(*) FROM ${table.name} WHERE ${table.pkColumn}") ++
+    Fragment.const(s"SELECT (SELECT COUNT(*) FROM ${table.name} WHERE ${table.row.pkColumn}") ++
       inArraySQLFragment(pks) ++ fr")" ++ Fragment.const(s" = ${pks.size}")
 
 }
