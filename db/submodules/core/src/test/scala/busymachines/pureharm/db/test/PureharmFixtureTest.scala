@@ -17,11 +17,12 @@
   */
 package busymachines.pureharm.db.test
 
+import java.util.concurrent.TimeUnit
+
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.funsuite.FixtureAnyFunSuite
 import org.scalactic.source
-
 import busymachines.pureharm.effects._
 
 /**
@@ -36,8 +37,8 @@ import busymachines.pureharm.effects._
 abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   import io.chrisdavenport.log4cats._
 
-  protected val logger: SelfAwareStructuredLogger[IO] =
-    slf4j.Slf4jLogger.getLoggerFromName[IO]("PureharmFixtureTest.reporter")
+  private val report: SelfAwareStructuredLogger[IO] =
+    slf4j.Slf4jLogger.getLoggerFromName[IO](s"${getClass.getCanonicalName}.report")
 
   import busymachines.pureharm.effects.implicits._
   //for tests if fine if we just dump everything in global EC.
@@ -53,24 +54,33 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   def fixture: Resource[IO, FixtureParam]
 
   protected def test(
-    testName:                                    String,
-    testTags:                                    Tag*
+    testName: String,
+    testTags: Tag*
   )(
-    fun:                                         FixtureParam => IO[_]
-  )(implicit pos:                                source.Position): Unit    =
-    super.test(testName, testTags: _*)(fp => fun(fp).unsafeRunSync())
+    testFun:  FixtureParam => IO[_]
+  )(implicit
+    position: source.Position
+  ): Unit =
+    super.test(testName, testTags: _*)(fp => testFun(fp).unsafeRunSync())
 
-  final override protected def withFixture(test: OneArgTest):      Outcome = {
+  final override protected def withFixture(test: OneArgTest): Outcome = {
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {
-        _       <- logger.info(Map("test" -> s"'${test.name}'"))(s"INITIALIZED'")
-        outcome <- IO.delay(test(fix))
-        _       <- logger.info(Map("test" -> s"'${test.name}'", "outcome" -> outcome.productPrefix))(s"FINISHED")
+        _        <- report.info(Map("test" -> s"'${test.name}'"))(s"INITIALIZED")
+        (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
+        outcome  <- out.liftTo[IO]
+        _        <- report.info(
+          Map(
+            "test"     -> s"'${test.name}'",
+            "outcome"  -> outcome.productPrefix,
+            "duration" -> d.toString,
+          )
+        )(s"FINISHED")
       } yield outcome
 
     val fout: IO[Outcome] = fixture
       .onError {
-        case e => Resource.liftF[IO, Unit](logger.warn(Map("test" -> s"'${test.name}'"), e)("INIT — FAILED"))
+        case e => Resource.liftF[IO, Unit](report.warn(Map("test" -> s"'${test.name}'"), e)("INIT — FAILED"))
       }
       .use(ftest)
 
