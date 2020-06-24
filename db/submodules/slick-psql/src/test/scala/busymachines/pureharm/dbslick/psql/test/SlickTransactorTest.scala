@@ -9,7 +9,7 @@ import busymachines.pureharm.effects._
   * @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 27/01/2020
   */
-final class TransactorTest extends PureharmFixtureTest {
+final class SlickTransactorTest extends PureharmFixtureTest {
 
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 

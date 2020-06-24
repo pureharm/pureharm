@@ -34,11 +34,11 @@ import busymachines.pureharm.dbslick._
   * @since 12 Jun 2019
   *
   */
-final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
+final class SlickPureharmRowDAOTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
   override def fixture(meta: MetaData): Resource[IO, PureharmRowDAO[IO]] =
-    DAOAlgebraPureharmRowsTest
+    SlickPureharmRowDAOTest
       .transactorResource[IO]
       .map(implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)))
 
@@ -111,7 +111,7 @@ final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   }
 }
 
-private[test] object DAOAlgebraPureharmRowsTest {
+private[test] object SlickPureharmRowDAOTest {
 
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {
     val trans = Transactor.pgSQLHikari[F](
