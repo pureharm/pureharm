@@ -44,6 +44,7 @@ object CompilerSettings {
         case Some((2, 13)) => scala2_13Flags
         case _             => Seq.empty
       }) ++ betterForPluginCompilerFlags,
+      javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
     )
 
   /**
