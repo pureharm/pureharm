@@ -311,7 +311,7 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `config`,
     `json-circe`,
     fullDependency(`db-core`),
-    asTestingDependency(`db-core-flyway`),
+    asTestingLibrary(`db-core-flyway`),
   )
   .aggregate(
     `core`,
@@ -377,7 +377,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `config`,
     `json-circe`,
     fullDependency(`db-core`),
-    asTestingDependency(`db-core-flyway`),
+    asTestingLibrary(`db-core-flyway`),
     `db-slick`,
   )
   .aggregate(
@@ -519,10 +519,21 @@ lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion 
 def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
 
 /**
-  * Used only when one module is useful to test another module, but
-  * in production build they don't require to be used together.
+  * See SBT docs:
+  * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
+  *
+  * or an example:
+  * {{{
+  * val testModule = project
+  *
+  * val prodModule = project
+  *   .dependsOn(asTestingLibrary(testModule))
+  * }}}
+  * To ensure that testing code and dependencies
+  * do not wind up in the "compile" (i.e.) prod part of your
+  * application.
   */
-def asTestingDependency(p: Project): ClasspathDependency = p % "test -> compile"
+def asTestingLibrary(p: Project): ClasspathDependency = p % "test -> compile"
 
 def subModule(parent: String, mod: String): Project =
   Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
