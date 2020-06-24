@@ -54,18 +54,16 @@ private[test] object DoobiePureharmRowDAO {
   import busymachines.pureharm.dbdoobie.implicits._
   import busymachines.pureharm.json._
 
-  private object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
-    override val tableName: TableName = schema.PureharmRows
+  object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
+    override val name: TableName = schema.PureharmRows
 
-    override val tailColumns: List[ColumnName] = List(
-      ColumnName("byte"),
-      ColumnName("int"),
-      ColumnName("long"),
-      ColumnName("big_decimal"),
-      ColumnName("string"),
-      ColumnName("jsonb_col"),
-      ColumnName("opt_col"),
-    )
+    val byte_col:    ColumnName = ColumnName("byte")
+    val int_col:     ColumnName = ColumnName("int")
+    val long_col:    ColumnName = ColumnName("long")
+    val big_decimal: ColumnName = ColumnName("big_decimal")
+    val string_col:  ColumnName = ColumnName("string")
+    val jsonb_col:   ColumnName = ColumnName("jsonb_col")
+    val opt_col:     ColumnName = ColumnName("opt_col")
 
     implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
       jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])

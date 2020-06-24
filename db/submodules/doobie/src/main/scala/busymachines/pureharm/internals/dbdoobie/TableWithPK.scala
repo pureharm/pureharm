@@ -19,6 +19,7 @@ package busymachines.pureharm.internals.dbdoobie
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.identifiable.Identifiable
 
@@ -29,8 +30,7 @@ import busymachines.pureharm.identifiable.Identifiable
   *
   */
 abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
-  def tableName:   TableName
-  def tailColumns: List[ColumnName]
+  def name: TableName
 
   /**
     * Should be overriden as non implicit since doobie doesn't
@@ -47,18 +47,90 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   def readE:  Read[E]
   def writeE: Write[E]
 
-  final def pkColumn: ColumnName = ColumnName(iden.fieldName)
-  final def columns:  Row        = Row(NEList(pkColumn, tailColumns))
-
-  final def rawColumns: List[String] = columns.toList.map(ColumnName.despook)
+  final val pkColumn: ColumnName = ColumnName.internalTag(iden.fieldName)
 
   final def pkOf(e: E): PK = iden.id(e)
 
-  final def tupleString: String = Row.asString(columns)
+  final def tupleString: String =
+    columnNames.intercalate(", ")
 
   final def tupleStringEnclosed: String = s"($tupleString)"
 
-  final def questionMarkTuple: String = Row.asQuestionMarks(columns)
+  final private val QM    = "?"
+  final private val Comma = ", "
 
-  final def questionMarkTupleEnclosed: String = s"(${Row.asQuestionMarks(columns)})"
+  final def questionMarkTuple: String =
+    columnNames.map(_ => QM).intercalate(Comma)
+
+  final def columnEqualQuestionMark(cn: ColumnName): String =
+    s"$cn = $QM"
+
+  final def allColumnsEqualQuestionMark: String =
+    allCNS.map(columnEqualQuestionMark).intercalate(Comma)
+
+  final def questionMarkTupleEnclosed: String = s"($questionMarkTuple)"
+//    s"(${Row.asQuestionMarks(columns)})"
+
+  //========================================
+  //========================================
+  import scala.collection.mutable
+
+  private[this] val orderedColumns: mutable.ListBuffer[ColumnName] = mutable.ListBuffer.empty[ColumnName]
+
+  lazy val cnsWithoutPK: List[ColumnName] =
+    orderedColumns.toList
+
+  lazy val allCNS: NonEmptyList[ColumnName] = NEList(
+    pkColumn,
+    cnsWithoutPK,
+  )
+
+  lazy val columnNames: List[String] =
+    allCNS.toList.asInstanceOf[List[String]]
+
+  final type ColumnName = ColumnName.Type
+
+  protected object ColumnName {
+    import shapeless.tag
+    import tag.@@
+
+    final type Tag  = this.type
+    final type Type = String @@ Tag
+
+    def apply(s: String): ColumnName = {
+      val newValue: Type = internalTag(s)
+      if (orderedColumns.contains(newValue) || iden.fieldName == s) {
+        throw new RuntimeException(
+          s"""
+             |Trying to define column with duplicate name: $s in table:
+             |${TableWithPK.this.getClass.getCanonicalName}
+             |
+             |Unfortunately type-safety does not protect us from this.
+             |So you have to be careful to define columns with unique names
+             |AND in the order they appear in the case class. Example:
+             |
+             |case class Row(id: Int, f1: String, f2: String)
+             |//Identifiable[Row, Int] is generated automatically
+             |//which yields us a column that has name "id" already,
+             |//so you don't need to define it yourself.
+             |
+             |object RowTable extends TableWithPK[Row, Int] {
+             |  val f1 = CN("f1")
+             |  val f2 = CN("f2")
+             |  
+             |  //abstract members, elided here
+             |}
+             |
+             |""".stripMargin
+        )
+      }
+      else {
+        orderedColumns.+=(newValue)
+        newValue
+      }
+
+    }
+
+    private[TableWithPK] def internalTag(s: String): Type = tag[Tag][String](s)
+  }
 }

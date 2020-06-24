@@ -17,8 +17,6 @@
   */
 package busymachines.pureharm.dbdoobie
 
-import busymachines.pureharm.identifiable.FieldName
-
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -28,10 +26,6 @@ import busymachines.pureharm.identifiable.FieldName
 trait PureharmDBDoobieTypeDefinitions
   extends doobie.Aliases with doobie.free.Types with doobie.free.Modules with doobie.postgres.free.Types
   with doobie.postgres.free.Modules with doobie.postgres.hi.Modules {
-
-  type ColumnName = FieldName
-  val ColumnName: FieldName.type = FieldName
-  type Row = busymachines.pureharm.internals.dbdoobie.Row.Type
 
   val ConnectionIO: doobie.implicits.AsyncConnectionIO.type = doobie.implicits.AsyncConnectionIO
 }
