@@ -74,7 +74,7 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
         (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
         outcome  <- out.liftTo[IO]
         _        <- report.info(
-          mdc(test).concat(
+          mdc(test).++(
             Map(
               "outcome"  -> outcome.productPrefix,
               "duration" -> d.toString,
