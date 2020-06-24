@@ -19,9 +19,10 @@ package busymachines.pureharm.dbdoobie.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.db.test.{PhantomPK, _}
+import busymachines.pureharm.db.test._
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbdoobie._
+import busymachines.pureharm.testkit._
 
 /**
   * To properly run this test, you probably want to start the
@@ -34,7 +35,7 @@ import busymachines.pureharm.dbdoobie._
   * @since 24 Sept 2019
   *
   */
-final class DoobiePureharmRowDAOTest extends PureharmFixtureTest {
+final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
   override type FixtureParam = DoobiePureharmRowDAO[IO]
 
   override def fixture(meta: MetaData): Resource[IO, FixtureParam] =
@@ -76,10 +77,7 @@ final class DoobiePureharmRowDAOTest extends PureharmFixtureTest {
   test("retrieve — failed") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
-    } yield att match {
-      case Left(err) => err shouldBe a[DBEntryNotFoundAnomaly]
-      case Right(v)  => fail(s"should have failed, but got: $v")
-    }
+    } yield assertThrows[DBEntryNotFoundAnomaly](att.unsafeGet())
   }
 
   test("exists — not") { implicit dao: PureharmRowDAO[IO] =>

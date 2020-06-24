@@ -22,6 +22,7 @@ import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.db.test._
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.testkit._
 
 /**
   * To properly run this test, you probably want to start the
@@ -34,7 +35,7 @@ import busymachines.pureharm.dbslick._
   * @since 12 Jun 2019
   *
   */
-final class SlickPureharmRowDAOTest extends PureharmFixtureTest {
+final class SlickPureharmRowDAOTest extends FixturePureharmTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
   override def fixture(meta: MetaData): Resource[IO, PureharmRowDAO[IO]] =
@@ -104,10 +105,9 @@ final class SlickPureharmRowDAOTest extends PureharmFixtureTest {
   test("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
-    } yield att match {
-      case Left(err) => err shouldBe a[DBEntryNotFoundAnomaly]
-      case Right(v)  => fail(s"should have failed, but got: $v")
-    }
+    } yield assertThrows[DBEntryNotFoundAnomaly](
+      att.unsafeGet()
+    ) //FIXME: create assertSuccess/assertFailure combinator
   }
 }
 

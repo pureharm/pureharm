@@ -248,6 +248,7 @@ lazy val `db-core` = subModule("db", "core")
     `core`,
     `effects-cats`,
     `config`,
+    asTestingLibrary(testkit),
   )
   .aggregate(
     `core`,

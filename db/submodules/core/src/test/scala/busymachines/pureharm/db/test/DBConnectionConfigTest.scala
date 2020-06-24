@@ -19,7 +19,7 @@ package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
-import org.scalatest.TestData
+import busymachines.pureharm.testkit._
 
 /**
   *
@@ -27,13 +27,9 @@ import org.scalatest.TestData
   * @since 17 Jun 2019
   *
   */
-final class DBConnectionConfigTest extends PureharmFixtureTest {
+final class DBConnectionConfigTest extends PureharmTest {
 
-  override def fixture(meta: TestData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
-
-  override type FixtureParam = Unit
-
-  test("read config from default reference.conf") { _ =>
+  test("read config from default reference.conf") {
     DBConnectionConfig.default[IO].map { config =>
       assert(
         config == DBConnectionConfig(
@@ -44,5 +40,18 @@ final class DBConnectionConfigTest extends PureharmFixtureTest {
         )
       )
     }
+  }
+
+  test("intentional failure") {
+    IO.delay {
+      println("I AM IN THE TEST")
+      throw new RuntimeException("YALJFSKFSLKAJ")
+      assert(true, "sdfdklsfd")
+      assert(1 == 2, "FAIL")
+    }
+  }
+
+  test("intentional pending") {
+    IO(pending)
   }
 }
