@@ -47,7 +47,7 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   def readE:  Read[E]
   def writeE: Write[E]
 
-  final val pkColumn: ColumnName = ColumnName.internalTag(iden.fieldName)
+  final val pkColumn: Column = Column.internalTag(iden.fieldName)
 
   final def pkOf(e: E): PK = iden.id(e)
 
@@ -62,7 +62,7 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   final def questionMarkTuple: String =
     columnNames.map(_ => QM).intercalate(Comma)
 
-  final def columnEqualQuestionMark(cn: ColumnName): String =
+  final def columnEqualQuestionMark(cn: Column): String =
     s"$cn = $QM"
 
   final def allColumnsEqualQuestionMark: String =
@@ -75,12 +75,12 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   //========================================
   import scala.collection.mutable
 
-  private[this] val orderedColumns: mutable.ListBuffer[ColumnName] = mutable.ListBuffer.empty[ColumnName]
+  private[this] val orderedColumns: mutable.ListBuffer[Column] = mutable.ListBuffer.empty[Column]
 
-  lazy val cnsWithoutPK: List[ColumnName] =
+  lazy val cnsWithoutPK: List[Column] =
     orderedColumns.toList
 
-  lazy val allCNS: NonEmptyList[ColumnName] = NEList(
+  lazy val allCNS: NonEmptyList[Column] = NEList(
     pkColumn,
     cnsWithoutPK,
   )
@@ -88,16 +88,49 @@ abstract class TableWithPK[E, PK](implicit val iden: Identifiable[E, PK]) {
   lazy val columnNames: List[String] =
     allCNS.toList.asInstanceOf[List[String]]
 
-  final type ColumnName = ColumnName.Type
+  /**
+    * Relies on side-effects and may pure FP dieties forgive me!!
+    * Luckily, usage is restricted on on each individual Table instance
+    * so you can only create columns from within a the given table
+    *
+    * Use only to assign to val or lazy val!
+    *
+    * Usage example:
+    * {{{
+    *    object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
+    *     override val name: TableName = schema.PureharmRows
+    *
+    *     val byte_col:    ColumnName = createColumn("byte")
+    *     val int_col:     ColumnName = createColumn("int")
+    *     val long_col:    ColumnName = createColumn("long")
+    *     val big_decimal: ColumnName = createColumn("big_decimal")
+    *     val string_col:  ColumnName = createColumn("string")
+    *     val jsonb_col:   ColumnName = createColumn("jsonb_col")
+    *     val opt_col:     ColumnName = createColumn("opt_col")
+    *
+    *     implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
+    *       jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
+    *
+    *     override val showPK: Show[PhantomPK]    = Show[PhantomPK]
+    *     override val metaPK: Meta[PhantomPK]    = Meta[PhantomPK]
+    *     override val readE:  Read[PureharmRow]  = Read[PureharmRow]
+    *     override val writeE: Write[PureharmRow] = Write[PureharmRow]
+    *   }
+    * }}}
+    *
+    */
+  protected[this] def createColumn(s: String): Column = Column(s)
 
-  protected object ColumnName {
+  final type Column = Column.Type
+
+  protected object Column {
     import shapeless.tag
     import tag.@@
 
     final type Tag  = this.type
     final type Type = String @@ Tag
 
-    def apply(s: String): ColumnName = {
+    private[TableWithPK] def apply(s: String): Column = {
       val newValue: Type = internalTag(s)
       if (orderedColumns.contains(newValue) || iden.fieldName == s) {
         throw new RuntimeException(

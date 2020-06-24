@@ -57,13 +57,13 @@ private[test] object DoobiePureharmRowDAO {
   object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
     override val name: TableName = schema.PureharmRows
 
-    val byte_col:    ColumnName = ColumnName("byte")
-    val int_col:     ColumnName = ColumnName("int")
-    val long_col:    ColumnName = ColumnName("long")
-    val big_decimal: ColumnName = ColumnName("big_decimal")
-    val string_col:  ColumnName = ColumnName("string")
-    val jsonb_col:   ColumnName = ColumnName("jsonb_col")
-    val opt_col:     ColumnName = ColumnName("opt_col")
+    val byte_col:    Column = createColumn("byte")
+    val int_col:     Column = createColumn("int")
+    val long_col:    Column = createColumn("long")
+    val big_decimal: Column = createColumn("big_decimal")
+    val string_col:  Column = createColumn("string")
+    val jsonb_col:   Column = createColumn("jsonb_col")
+    val opt_col:     Column = createColumn("opt_col")
 
     implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
       jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
