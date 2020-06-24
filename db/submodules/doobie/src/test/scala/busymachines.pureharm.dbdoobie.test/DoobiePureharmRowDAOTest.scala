@@ -37,7 +37,7 @@ import busymachines.pureharm.dbdoobie._
 final class DoobiePureharmRowDAOTest extends PureharmFixtureTest {
   override type FixtureParam = DoobiePureharmRowDAO[IO]
 
-  override def fixture: Resource[IO, FixtureParam] =
+  override def fixture(meta: MetaData): Resource[IO, FixtureParam] =
     DoobiePureharmRowDAOTest
       .transactorResource[IO]
       .map(implicit t => DoobiePureharmRowDAO[IO])

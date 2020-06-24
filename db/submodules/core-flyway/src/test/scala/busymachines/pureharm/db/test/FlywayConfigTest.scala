@@ -28,7 +28,7 @@ import busymachines.pureharm.effects._
   */
 final class FlywayConfigTest extends PureharmFixtureTest {
 
-  override def fixture: Resource[IO, Unit] = Resource.pure[IO, Unit](())
+  override def fixture(meta: MetaData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
 
   override type FixtureParam = Unit
 

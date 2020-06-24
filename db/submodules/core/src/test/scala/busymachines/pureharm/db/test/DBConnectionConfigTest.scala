@@ -19,6 +19,7 @@ package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
+import org.scalatest.TestData
 
 /**
   *
@@ -28,7 +29,7 @@ import busymachines.pureharm.effects._
   */
 final class DBConnectionConfigTest extends PureharmFixtureTest {
 
-  override def fixture: Resource[IO, Unit] = Resource.pure[IO, Unit](())
+  override def fixture(meta: TestData): Resource[IO, Unit] = Resource.pure[IO, Unit](())
 
   override type FixtureParam = Unit
 

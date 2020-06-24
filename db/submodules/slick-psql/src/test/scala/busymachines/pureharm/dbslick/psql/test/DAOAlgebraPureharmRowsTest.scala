@@ -37,7 +37,7 @@ import busymachines.pureharm.dbslick._
 final class DAOAlgebraPureharmRowsTest extends PureharmFixtureTest {
   override type FixtureParam = PureharmRowDAO[IO]
 
-  override def fixture: Resource[IO, PureharmRowDAO[IO]] =
+  override def fixture(meta: MetaData): Resource[IO, PureharmRowDAO[IO]] =
     DAOAlgebraPureharmRowsTest
       .transactorResource[IO]
       .map(implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)))

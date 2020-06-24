@@ -17,7 +17,7 @@ final class TransactorTest extends PureharmFixtureTest {
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
-  override def fixture: Resource[IO, Transactor[IO]] =
+  override def fixture(meta: MetaData): Resource[IO, Transactor[IO]] =
     for {
       dbConfig   <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
       transactor <-

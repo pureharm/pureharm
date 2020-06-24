@@ -36,6 +36,7 @@ import busymachines.pureharm.effects._
   */
 abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   import io.chrisdavenport.log4cats._
+  final type MetaData = TestData
 
   private val report: SelfAwareStructuredLogger[IO] =
     slf4j.Slf4jLogger.getLoggerFromName[IO](s"${getClass.getCanonicalName}.report")
@@ -50,8 +51,11 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
+    *
+    * @param meta
+    *  Use this information to create table names or something
     */
-  def fixture: Resource[IO, FixtureParam]
+  def fixture(meta: MetaData): Resource[IO, FixtureParam]
 
   protected def test(
     testName: String,
@@ -66,19 +70,20 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
   final override protected def withFixture(test: OneArgTest): Outcome = {
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {
-        _        <- report.info(Map("test" -> s"'${test.name}'"))(s"INITIALIZED")
+        _        <- report.info(mdc(test))(s"INITIALIZED")
         (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
         outcome  <- out.liftTo[IO]
         _        <- report.info(
-          Map(
-            "test"     -> s"'${test.name}'",
-            "outcome"  -> outcome.productPrefix,
-            "duration" -> d.toString,
+          mdc(test).concat(
+            Map(
+              "outcome"  -> outcome.productPrefix,
+              "duration" -> d.toString,
+            )
           )
         )(s"FINISHED")
       } yield outcome
 
-    val fout: IO[Outcome] = fixture
+    val fout: IO[Outcome] = fixture(test)
       .onError {
         case e => Resource.liftF[IO, Unit](report.warn(Map("test" -> s"'${test.name}'"), e)("INIT — FAILED"))
       }
@@ -86,4 +91,13 @@ abstract class PureharmFixtureTest extends FixtureAnyFunSuite with Matchers {
 
     fout.unsafeRunSync()
   }
+
+  private def mdc(test: TestData): Map[String, String] =
+    test.pos match {
+      case None      =>
+        Map("test" -> s"'${test.name}'")
+      case Some(pos) =>
+        Map("test" -> s"'${test.name}'", "line" -> pos.lineNumber.toString)
+    }
+
 }
