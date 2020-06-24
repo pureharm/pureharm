@@ -68,16 +68,13 @@ final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
   test("find — none") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.find(PhantomPK("sdfsdlksld"))
-    } yield att match {
-      case None    => succeed
-      case Some(v) => fail(s"should have been none, but got: $v")
-    }
+    } yield assert(att.isEmpty)
   }
 
   test("retrieve — failed") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
-    } yield assertThrows[DBEntryNotFoundAnomaly](att.unsafeGet())
+    } yield assertFailure[DBEntryNotFoundAnomaly](att)
   }
 
   test("exists — not") { implicit dao: PureharmRowDAO[IO] =>
@@ -117,7 +114,7 @@ final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
         for {
           _ <- dao.insert(row1)
           r <- dao.find(row1.id)
-        } yield assert(r == Option(row1))
+        } yield assertSome(r)(row1)
       }
     } yield succeed
   }
@@ -170,13 +167,7 @@ final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
   test("insertMany — duplicate key") { implicit dao: PureharmRowDAO[IO] =>
     for {
       att <- dao.insertMany(List(row1, row1)).attempt
-    } yield att match {
-      case Left(err: DBBatchInsertFailedAnomaly) =>
-        println(err.getLocalizedMessage)
-        succeed
-      case Left(err) => fail(s"invalid error type, got: ${err.getClass.getCanonicalName}")
-      case Right(v)  => fail(s"should have failed, but got: $v")
-    }
+    } yield assertFailure[DBBatchInsertFailedAnomaly](att)
   }
 
   test("insertMany — deleteMany") { implicit dao: PureharmRowDAO[IO] =>

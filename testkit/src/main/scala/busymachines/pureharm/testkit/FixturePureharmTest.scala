@@ -33,7 +33,8 @@ import busymachines.pureharm.effects._
   * @since 13 Jun 2019
   *
   */
-abstract class FixturePureharmTest extends FixtureAnyFunSuite with Assertions with PureharmTestRuntime {
+abstract class FixturePureharmTest
+  extends FixtureAnyFunSuite with Assertions with PureharmAssertions with PureharmTestRuntime {
   import io.chrisdavenport.log4cats._
   final type MetaData = TestData
 
