@@ -18,9 +18,9 @@
 package busymachines.pureharm.dbslick.psql.test
 
 import busymachines.pureharm.db._
-import busymachines.pureharm.dbslick.{SlickDBIOAsyncExecutorConfig, Transactor}
+import busymachines.pureharm.dbslick._
+import busymachines.pureharm.db.test._
 import busymachines.pureharm.effects._
-
 import busymachines.pureharm.testkit._
 
 /**
@@ -31,13 +31,17 @@ final class SlickTransactorTest extends FixturePureharmTest {
 
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 
+  private lazy val connectionConfig: DBConnectionConfig = PureharmTestConfig.dbConfig.copy(
+    schema = PureharmTestConfig.schemaName("slick_transactor")
+  )
+
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
   override def fixture(meta: MetaData): Resource[IO, Transactor[IO]] =
     for {
-      dbConfig   <- Resource.pure[IO, DBConnectionConfig](PureharmTestConfig.dbConfig)
+      dbConfig   <- Resource.pure[IO, DBConnectionConfig](connectionConfig)
       transactor <-
         Transactor
           .pgSQLHikari[IO](dbProfile = testdb.jdbcProfileAPI, dbConnection = dbConfig, asyncConfig = slickConfig)

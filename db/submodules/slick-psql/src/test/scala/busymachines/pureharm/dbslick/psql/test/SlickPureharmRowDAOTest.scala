@@ -113,10 +113,19 @@ final class SlickPureharmRowDAOTest extends FixturePureharmTest {
 
 private[test] object SlickPureharmRowDAOTest {
 
+  /**
+    * We do this to not conflict with the doobie test if run in parallel
+    * FIXME: use a unique schema for each test case! That way we can
+    * FIXME: fully paralelize DB tests, have to work around
+    */
+  private val dbConfig: DBConnectionConfig = PureharmTestConfig.dbConfig.copy(
+    schema = PureharmTestConfig.schemaName("slick")
+  )
+
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {
     val trans = Transactor.pgSQLHikari[F](
       dbProfile    = testdb.jdbcProfileAPI,
-      dbConnection = PureharmTestConfig.dbConfig,
+      dbConnection = dbConfig,
       asyncConfig  = SlickDBIOAsyncExecutorConfig.default,
     )
 
@@ -126,13 +135,13 @@ private[test] object SlickPureharmRowDAOTest {
 
   private def initDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.migrate[F](dbConfig = PureharmTestConfig.dbConfig, Option.empty)
+      _ <- flyway.Flyway.migrate[F](dbConfig = dbConfig, Option.empty)
     } yield ()
   }
 
   private def cleanDB[F[_]: Sync]: Resource[F, Unit] = Resource.liftF[F, Unit] {
     for {
-      _ <- flyway.Flyway.clean[F](PureharmTestConfig.dbConfig)
+      _ <- flyway.Flyway.clean[F](dbConfig)
     } yield ()
   }
 }

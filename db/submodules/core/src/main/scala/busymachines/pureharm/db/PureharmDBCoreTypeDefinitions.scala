@@ -57,5 +57,8 @@ trait PureharmDBCoreTypeDefinitions {
   final val DatabaseName = db.DatabaseName
   final type DatabaseName = db.DatabaseName.Type
 
+  final val SchemaName = db.SchemaName
+  final type SchemaName = db.SchemaName.Type
+
   final type DAOAlgebra[R[_], E, PK] = db.DAOAlgebra[R, E, PK]
 }

@@ -38,6 +38,9 @@ package object db {
 
     def postgresql(host: DBHost, db: DatabaseName): this.Type =
       this.apply(s"jdbc:postgresql://$host/$db")
+
+    def postgresql(host: DBHost, db: DatabaseName, schema: SchemaName): this.Type =
+      this.apply(s"jdbc:postgresql://$host/$db?currentSchema=$schema")
   }
 
   final type JDBCUrl = JDBCUrl.Type
@@ -53,4 +56,9 @@ package object db {
 
   final object DatabaseName extends PhantomType[String]
   final type DatabaseName = DatabaseName.Type
+
+  final object SchemaName extends PhantomType[String] {
+    def public: SchemaName = SchemaName("public")
+  }
+  final type SchemaName = SchemaName.Type
 }

@@ -221,15 +221,12 @@ final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
 private[test] object DoobiePureharmRowDAOTest {
 
   /**
-    * All these values come from this file:
-    * db/docker-pureharm-postgresql-test.sh
-    *
+    * We do this to not conflict with the slick test if run in parallel
+    * FIXME: use a unique schema for each test case! That way we can
+    * FIXME: fully paralelize DB tests, have to work around
     */
-  private val dbConfig = DBConnectionConfig(
-    host     = DBHost("localhost:20010"),
-    dbName   = DatabaseName("pureharm_test"),
-    username = DBUsername("pureharmony"),
-    password = DBPassword("pureharmony"),
+  private val dbConfig: DBConnectionConfig = PureharmTestConfig.dbConfig.copy(
+    schema = PureharmTestConfig.schemaName("doobie")
   )
 
   import doobie.util.ExecutionContexts

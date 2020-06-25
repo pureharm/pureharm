@@ -18,28 +18,28 @@
 package busymachines.pureharm.db.test
 
 import busymachines.pureharm.db._
-import busymachines.pureharm.effects._
-import busymachines.pureharm.testkit._
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 17 Jun 2019
+  * @since 27 Jan 2020
   *
   */
-final class DBConnectionConfigTest extends PureharmTest {
+object PureharmTestConfig {
 
-  test("read config from default reference.conf") {
-    DBConnectionConfig.default[IO].map { config =>
-      assert(
-        config == DBConnectionConfig(
-          host     = DBHost("localhost:20010"),
-          dbName   = DatabaseName("pureharm_test"),
-          username = DBUsername("pureharmony"),
-          password = DBPassword("pureharmony"),
-          schema   = Option(SchemaName.public),
-        )
-      )
-    }
-  }
+  /**
+    * All these values come from this file:
+    * db/docker-pureharm-postgresql-test.sh
+    *
+    */
+  val dbConfig: DBConnectionConfig = DBConnectionConfig(
+    host     = DBHost("localhost:20010"),
+    dbName   = DatabaseName("pureharm_test"),
+    username = DBUsername("pureharmony"),
+    password = DBPassword("pureharmony"),
+    schema   = Option.empty, //Modify in each test accordingly before using
+  )
+
+  def schemaName(s: String): Option[SchemaName] = Option(SchemaName(s"pureharm_test_$s"))
+
 }
