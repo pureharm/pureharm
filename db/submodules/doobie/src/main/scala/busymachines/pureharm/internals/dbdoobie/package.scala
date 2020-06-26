@@ -19,7 +19,7 @@ package object dbdoobie {
   object DoobieConnectionEC extends PhantomType[ExecutionContext] {
     def safe(ec: ExecutionContextFT): this.Type = this.apply(ec)
   }
-  
+
   type DoobieConnectionEC = DoobieConnectionEC.Type
 
   /**

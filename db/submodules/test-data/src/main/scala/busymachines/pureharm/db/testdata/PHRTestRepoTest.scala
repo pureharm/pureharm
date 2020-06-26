@@ -35,7 +35,7 @@ import busymachines.pureharm.identifiable._
   * @since 25 Jun 2020
   *
   */
-private[pureharm]abstract class PHRTestRepoTest[Trans] extends RepoTest[PHRow, PhantomPK, Trans] {
+abstract private[pureharm] class PHRTestRepoTest[Trans] extends RepoTest[PHRow, PhantomPK, Trans] {
   override type FixtureParam <: PHRTestRepo[IO]
 
   override def data: RepoTestData[PHRow, PhantomPK] = PHRTestRepoTest.pureharmRows
@@ -94,6 +94,5 @@ object PHRTestRepoTest {
       optionalCol = Option.empty,
     )
   }
-
 
 }

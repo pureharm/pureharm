@@ -71,8 +71,8 @@ private[test] object DoobiePHRTestRepo {
 
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
     override val metaPK: Meta[PhantomPK] = Meta[PhantomPK]
-    override val readE:  Read[PHRow]    = Read[PHRow]
-    override val writeE: Write[PHRow]   = Write[PHRow]
+    override val readE:  Read[PHRow]     = Read[PHRow]
+    override val writeE: Write[PHRow]    = Write[PHRow]
   }
 
   final private object DoobiePHRTestQueries
