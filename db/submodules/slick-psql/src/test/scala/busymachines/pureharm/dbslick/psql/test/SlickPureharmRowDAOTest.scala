@@ -37,7 +37,7 @@ import org.scalatest._
   * @since 12 Jun 2019
   *
   */
-final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] {
+final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
 
   override type FixtureParam = SlickPureharmRowDAO[IO]
 

@@ -402,7 +402,11 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-testkit-doobie-deps`.distinct
+    libraryDependencies ++= `db-testkit-doobie-deps`.distinct,
+    //required because JDBC screws up classloading somehow,
+    //and PSQL driver is not found for certain tests that connect to DB.
+    //no idea why
+    Test / fork := true,
   )
   .dependsOn(
     `core`,
@@ -516,11 +520,11 @@ lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-testkit-slick-deps`.distinct
+    libraryDependencies ++= `db-testkit-slick-deps`.distinct,
     //required because JDBC screws up classloading somehow,
     //and PSQL driver is not found for certain tests that connect to DB.
     //no idea why
-    //    Test / fork := true,
+    Test / fork := true,
   )
   .dependsOn(
     `core`,

@@ -152,7 +152,7 @@ abstract class PureharmDAOTest[E, PK, Trans](implicit show: Show[PK]) extends Fi
     }
   }
 
-  test("insertMany ro1, row1 -> duplicate key on row1") { implicit dao: FixtureParam =>
+  test("insertMany row1, row1 -> duplicate key on row1") { implicit dao: FixtureParam =>
     for {
       att <- dao.insertMany(List(data.row1, data.row1)).attempt
       _ = assertFailure[DBBatchInsertFailedAnomaly](att)
