@@ -19,13 +19,6 @@ package busymachines.pureharm.db
 
 import busymachines.pureharm.anomaly._
 
-/**
-  *
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 22 Jun 2020
-  *
-  */
-
 abstract class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
   extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
   override val id: AnomalyID = DBEntryNotFoundAnomaly.DBEntryNotFoundAnomalyID

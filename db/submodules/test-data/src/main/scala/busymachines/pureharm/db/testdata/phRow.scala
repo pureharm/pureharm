@@ -15,19 +15,33 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbdoobie
+package busymachines.pureharm.db.testdata
 
-import busymachines.pureharm.internals.dbdoobie.{PhantomTypeMetas, TransactorImplicits}
+import busymachines.pureharm.identifiable.Identifiable
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 24 Sep 2019
+  * @since 12 Jun 2019
   *
   */
-trait PureharmDBDoobieImplicitsAll
-  extends doobie.syntax.AllSyntax with doobie.util.meta.SqlMeta with doobie.util.meta.TimeMeta
-  with doobie.util.meta.LegacyMeta with doobie.free.Instances with doobie.postgres.Instances
-  with doobie.postgres.free.Instances with doobie.postgres.syntax.ToPostgresMonadErrorOps
-  with doobie.postgres.syntax.ToFragmentOps with doobie.postgres.syntax.ToPostgresExplainOps with PhantomTypeMetas
-  with TransactorImplicits {}
+final private[pureharm] case class PHRow(
+  id:          PhantomPK,
+  byte:        PhantomByte,
+  int:         PhantomInt,
+  long:        PhantomLong,
+  bigDecimal:  PhantomBigDecimal,
+  string:      PhantomString,
+  jsonbCol:    PHJSONCol,
+  optionalCol: Option[PhantomString],
+)
+
+object PHRow {
+
+  implicit val identifiable: Identifiable[PHRow, PhantomPK] = Identifiable.mkIdentifiable
+}
+
+final private[pureharm] case class PHJSONCol(
+  jsonInt:    Int,
+  jsonString: String,
+)

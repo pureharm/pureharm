@@ -70,11 +70,11 @@ trait SlickQueryAlgebraDefinitions {
     * @tparam TA
     *   Slick Table definition
     */
-  abstract class SlickDAOQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]](
+  abstract class SlickRepoQueries[E, PK, TA <: TableWithPK[E, PK]](
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC,
-  ) extends DAOAlgebra[ConnectionIO, E, PK] {
+  ) extends Repo[ConnectionIO, E, PK] {
 
     /**
       * Because creating this object is done via a macro,
@@ -98,7 +98,32 @@ trait SlickQueryAlgebraDefinitions {
 
     def insert(e: E): ConnectionIO[PK] = dao.+=(e).widenCIO.map(_ => eid(e))
 
-    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = dao.++=(es).widenCIO.void
+    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
+      val expectedSize = es.size
+      for {
+        insertedOpt <- dao.++=(es).widenCIO.adaptError {
+          case bux: java.sql.BatchUpdateException =>
+            SlickDBBatchInsertFailedAnomaly(
+              expectedSize = expectedSize,
+              actualSize   = 0,
+              causedBy     = Option(bux),
+            )
+        }
+        _           <- insertedOpt match {
+          //TODO: INVESTIGATE -> not sure when this is None... might have to signal failure as well
+          case None           => Applicative[ConnectionIO].unit
+          case Some(inserted) =>
+            (inserted != expectedSize).ifTrueRaise[ConnectionIO](
+              SlickDBBatchInsertFailedAnomaly(
+                expectedSize = expectedSize,
+                actualSize   = inserted,
+                causedBy     = Option.empty,
+              )
+            )
+        }
+
+      } yield ()
+    }
 
     def update(e: E): ConnectionIO[E] = (dao.update(e): ConnectionIO[Int]).map(_ => e)
 
@@ -119,7 +144,7 @@ trait SlickQueryAlgebraDefinitions {
     private def eid(e: E): PK = identifiable.id(e)
   }
 
-  object SlickDAOQueryAlgebra {
+  object SlickRepoQueries {
 
     def fromTableQuery[E, PK, TA <: TableWithPK[E, PK]](
       qt:             TableQuery[TA]
@@ -127,24 +152,29 @@ trait SlickQueryAlgebraDefinitions {
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
       connectionIOEC: ConnectionIOEC,
-    ): SlickDAOQueryAlgebra[E, PK, TA] =
-      new SlickDAOQueryAlgebra[E, PK, TA]() {
+    ): SlickRepoQueries[E, PK, TA] =
+      new SlickRepoQueries[E, PK, TA]() {
         override val dao: TableQuery[TA] = qt
       }
   }
 
+  @scala.deprecated("Use SlickRepoQueries instead, only the name changed", "0.0.6-M2")
+  type SlickDAOQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]] = SlickRepoQueries[E, PK, TA]
+
+  @scala.deprecated("Use SlickRepoQueries instead, only the name changed", "0.0.6-M2")
+  def SlickDAOQueryAlgebra: SlickRepoQueries.type = SlickRepoQueries
   //===========================================================================
   //===========================================================================
   //===========================================================================
 
-  abstract class SlickDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
+  abstract class SlickRepo[F[_], E, PK, TA <: TableWithPK[E, PK]](
     implicit val transactor:     Transactor[F],
     implicit val columnTypePK:   ColumnType[PK],
     implicit val identifiable:   Identifiable[E, PK],
     implicit val connectionIOEC: ConnectionIOEC,
-  ) extends DAOAlgebra[F, E, PK] {
+  ) extends Repo[F, E, PK] {
 
-    protected def queries: SlickDAOQueryAlgebra[E, PK, TA]
+    protected def queries: SlickRepoQueries[E, PK, TA]
 
     override def find(pk: PK): F[Option[E]] = transactor.run(queries.find(pk))
 
@@ -169,20 +199,20 @@ trait SlickQueryAlgebraDefinitions {
     override def existAll(pks: Iterable[PK]): F[Boolean] = transactor.run(queries.existAll(pks))
   }
 
-  object SlickDAOAlgebra {
+  object SlickRepo {
 
     def fromQueryAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](
-      q:  SlickDAOQueryAlgebra[E, PK, TA]
+      q:  SlickRepoQueries[E, PK, TA]
     )(implicit
       tr: Transactor[F]
-    ): SlickDAOAlgebra[F, E, PK, TA] =
-      new SlickDAOAlgebra[F, E, PK, TA]()(
+    ): SlickRepo[F, E, PK, TA] =
+      new SlickRepo[F, E, PK, TA]()(
         transactor     = tr,
         columnTypePK   = q.columnTypePK,
         identifiable   = q.identifiable,
         connectionIOEC = q.connectionIOEC,
       ) {
-        override protected val queries: SlickDAOQueryAlgebra[E, PK, TA] = q
+        override protected val queries: SlickRepoQueries[E, PK, TA] = q
       }
 
     def fromTableQuery[F[_], E, PK, TA <: TableWithPK[E, PK]](
@@ -192,7 +222,13 @@ trait SlickQueryAlgebraDefinitions {
       columnTypePK:   ColumnType[PK],
       identifiable:   Identifiable[E, PK],
       connectionIOEC: ConnectionIOEC,
-    ): SlickDAOAlgebra[F, E, PK, TA] =
-      fromQueryAlgebra(SlickDAOQueryAlgebra.fromTableQuery(qt))
+    ): SlickRepo[F, E, PK, TA] =
+      fromQueryAlgebra(SlickRepoQueries.fromTableQuery(qt))
   }
+
+  @scala.deprecated("Use SlickRepo instead, only the name changed", "0.0.6-M2")
+  type SlickDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = SlickRepo[F, E, PK, TA]
+
+  @scala.deprecated("Use SlickRepo instead, only the name changed", "0.0.6-M2")
+  def SlickDAOAlgebra: SlickRepo.type = SlickRepo
 }
