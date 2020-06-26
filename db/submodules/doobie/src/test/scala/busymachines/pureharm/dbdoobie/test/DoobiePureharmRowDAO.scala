@@ -47,8 +47,10 @@ private[test] trait DoobiePureharmRowDAO[F[_]] extends PureharmRowDAO[F]
 
 private[test] object DoobiePureharmRowDAO {
 
-  def apply[F[_]: Transactor: BracketAttempt]: DoobiePureharmRowDAO[F] =
+  def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePureharmRowDAO[F] = {
+    implicit val i: Transactor[F] = trans
     new DoobiePureharmRowDAOImpl[F]
+  }
 
   //----------------- implementation details -----------------
   import busymachines.pureharm.dbdoobie.implicits._
@@ -78,15 +80,11 @@ private[test] object DoobiePureharmRowDAO {
     extends DoobieQueryAlgebra[PureharmRow, PhantomPK, DoobiePureharmTable.type]
     with DoobiePureharmRowDAO[ConnectionIO] {
     override def table: DoobiePureharmTable.type = DoobiePureharmTable
-
-    //implement queries from PureharmRowDAO here
   }
 
   final private class DoobiePureharmRowDAOImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
   ) extends DoobieDAOAlgebra[F, PureharmRow, PhantomPK, DoobiePureharmTable.type] with DoobiePureharmRowDAO[F] {
     override protected val queries: DoobiePureharmRowQueries.type = DoobiePureharmRowQueries
-
-    //lift queries from DoobiePureharmRowQueries here
   }
 }

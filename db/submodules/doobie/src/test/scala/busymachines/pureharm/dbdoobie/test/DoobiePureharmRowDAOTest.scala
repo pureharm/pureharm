@@ -41,7 +41,7 @@ final class DoobiePureharmRowDAOTest extends FixturePureharmTest {
   override def fixture(meta: MetaData): Resource[IO, FixtureParam] =
     DoobiePureharmRowDAOTest
       .transactorResource[IO]
-      .map(implicit t => DoobiePureharmRowDAO[IO])
+      .map(DoobiePureharmRowDAO[IO])
 
   private val row1 = PureharmRow(
     id          = PhantomPK("row1_id"),
