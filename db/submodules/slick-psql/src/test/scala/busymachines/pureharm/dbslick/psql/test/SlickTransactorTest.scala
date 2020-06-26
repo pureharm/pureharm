@@ -78,11 +78,11 @@ final class SlickTransactorTest extends FixturePureharmTest {
 
 }
 
-private[test] object SlickTransactorTest extends PHTestSetupSlick(testdb.jdbcProfileAPI) {
+private[test] object SlickTransactorTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
-    PHTDBConfig.dbConfig.copy(
-      schema = PHTDBConfig.schemaName(s"slick_trans_${meta.pos.get.lineNumber}")
+    PHRTestDBConfig.dbConfig.copy(
+      schema = PHRTestDBConfig.schemaName(s"slick_trans_${meta.pos.get.lineNumber}")
     )
 
 }

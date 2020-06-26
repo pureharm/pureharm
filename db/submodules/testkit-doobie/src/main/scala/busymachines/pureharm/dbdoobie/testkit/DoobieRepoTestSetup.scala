@@ -14,7 +14,7 @@ import org.scalatest._
   * @since 26 Jun 2020
   *
   */
-trait PHTestSetupDoobie extends PureharmDAOTestSetup[Transactor[IO]] {
+trait DoobieRepoTestSetup extends RepoTestSetup[Transactor[IO]] {
 
   /**
     * Should be overridden to create a connection config appropriate for the test

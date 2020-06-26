@@ -11,16 +11,16 @@ import busymachines.pureharm.testkit._
   * @since 25 Jun 2020
   *
   */
-abstract class PureharmDAOTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePureharmTest {
-  override type FixtureParam <: DAOAlgebra[IO, E, PK]
+abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePureharmTest {
+  override type FixtureParam <: Repo[IO, E, PK]
 
-  def data: PureharmDAOTestData[E, PK]
+  def data: RepoTestData[E, PK]
 
-  def setup: PureharmDAOTestSetup[Trans]
+  def setup: RepoTestSetup[Trans]
 
   def fixture(meta: MetaData, trans: Trans): Resource[IO, FixtureParam]
 
-  protected def dataSanityCheck: Resource[IO, Unit] =
+  protected def dataAssumptionCheck: Resource[IO, Unit] =
     IO.delay {
         assume(data.pk1 != data.pk2, "Incorrect test data. primary keys have to be different for the two rows")
         assume(data.nonExistentPK != data.pk1, "Incorrect test data. nonExistentPK has to be different from PK1")
@@ -31,7 +31,7 @@ abstract class PureharmDAOTest[E, PK, Trans](implicit show: Show[PK]) extends Fi
 
   override def fixture(meta: MetaData): Resource[IO, FixtureParam] =
     for {
-      _     <- dataSanityCheck
+      _     <- dataAssumptionCheck
       trans <- setup.transactor(meta)
       fix   <- fixture(meta, trans)
     } yield fix

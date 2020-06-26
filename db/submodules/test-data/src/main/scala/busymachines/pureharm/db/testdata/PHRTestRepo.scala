@@ -15,4 +15,16 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.internals.dbdoobie
+package busymachines.pureharm.db.testdata
+
+import busymachines.pureharm.db._
+
+/**
+  *
+  * To be then implemented in the concrete slick, or doobie modules
+  *
+  * @author Lorand Szakacs, https://github.com/lorandszakacs
+  * @since 13 Jun 2019
+  *
+  */
+private[pureharm] trait PHRTestRepo[F[_]] extends Repo[F, PHRow, PhantomPK]

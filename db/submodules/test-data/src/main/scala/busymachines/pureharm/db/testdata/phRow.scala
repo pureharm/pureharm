@@ -25,23 +25,23 @@ import busymachines.pureharm.identifiable.Identifiable
   * @since 12 Jun 2019
   *
   */
-final private[pureharm] case class PHTRow(
+final private[pureharm] case class PHRow(
   id:          PhantomPK,
   byte:        PhantomByte,
   int:         PhantomInt,
   long:        PhantomLong,
   bigDecimal:  PhantomBigDecimal,
   string:      PhantomString,
-  jsonbCol:    PHTJSONCol,
+  jsonbCol:    PHJSONCol,
   optionalCol: Option[PhantomString],
 )
 
-object PHTRow {
+object PHRow {
 
-  implicit val identifiable: Identifiable[PHTRow, PhantomPK] = Identifiable.mkIdentifiable
+  implicit val identifiable: Identifiable[PHRow, PhantomPK] = Identifiable.mkIdentifiable
 }
 
-final private[pureharm] case class PHTJSONCol(
+final private[pureharm] case class PHJSONCol(
   jsonInt:    Int,
   jsonString: String,
 )

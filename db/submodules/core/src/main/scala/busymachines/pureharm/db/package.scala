@@ -61,4 +61,7 @@ package object db {
     def public: SchemaName = SchemaName("public")
   }
   final type SchemaName = SchemaName.Type
+
+  @scala.deprecated("Use Repo instead, will be removed in 0.0.6-M3", "0.0.6-M2")
+  final type DAOAlgebra[R[_], E, PK] = Repo[R, E, PK]
 }

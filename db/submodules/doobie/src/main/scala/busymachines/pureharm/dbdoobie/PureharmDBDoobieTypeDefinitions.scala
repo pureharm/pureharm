@@ -46,4 +46,14 @@ trait PureharmDBDoobieTypeDefinitions
     */
   val DoobieBlocker: internals.dbdoobie.DoobieBlocker.type = internals.dbdoobie.DoobieBlocker
   type DoobieBlocker = internals.dbdoobie.DoobieBlocker
+
+  type TableWithPK[E, PK] = internals.dbdoobie.TableWithPK[E, PK]
+
+  @scala.deprecated("Use DoobieRepo instead, only the name changed", "0.0.6-M2")
+  type DoobieDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]] = internals.dbdoobie.DoobieRepo[F, E, PK, TA]
+  type DoobieRepo[F[_], E, PK, TA <: TableWithPK[E, PK]] = internals.dbdoobie.DoobieRepo[F, E, PK, TA]
+
+  @scala.deprecated("Use DoobieRepo instead, only the name changed", "0.0.6-M2")
+  type DoobieQueryAlgebra[E, PK, TA <: TableWithPK[E, PK]]     = internals.dbdoobie.DoobieRepoQueries[E, PK, TA]
+  type DoobieRepoQueries[E, PK, TA <: TableWithPK[E, PK]]     = internals.dbdoobie.DoobieRepoQueries[E, PK, TA]
 }

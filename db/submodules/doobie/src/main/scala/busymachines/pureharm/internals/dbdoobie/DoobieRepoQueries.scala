@@ -29,7 +29,7 @@ import busymachines.pureharm.dbdoobie.implicits._
   * @since 24 Sep 2019
   *
   */
-abstract class DoobieQueryAlgebra[E, PK, Table <: TableWithPK[E, PK]] extends DAOAlgebra[ConnectionIO, E, PK] {
+abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Repo[ConnectionIO, E, PK] {
   def table: Table
 
   implicit protected def getPKImplicit:  Get[PK]  = table.metaPK.get

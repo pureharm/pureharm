@@ -13,7 +13,7 @@ import org.scalatest._
   * @since 26 Jun 2020
   *
   */
-abstract class PHTestSetupSlick(private val dbProfile: JDBCProfileAPI) extends PureharmDAOTestSetup[Transactor[IO]] {
+abstract class SlickRepoTestSetup(private val dbProfile: JDBCProfileAPI) extends RepoTestSetup[Transactor[IO]] {
 
   /**
     * Should be overridden to create a connection config appropriate for the test

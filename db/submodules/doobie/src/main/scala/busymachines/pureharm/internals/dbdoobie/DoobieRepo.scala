@@ -29,15 +29,15 @@ import busymachines.pureharm.dbdoobie.implicits._
   * @since 24 Sep 2019
   *
   */
-abstract class DoobieDAOAlgebra[F[_], E, PK, TA <: TableWithPK[E, PK]](implicit
+abstract class DoobieRepo[F[_], E, PK, TA <: TableWithPK[E, PK]](implicit
   val transactor: Transactor[F],
   val F:          BracketAttempt[F],
-) extends DAOAlgebra[F, E, PK] {
+) extends Repo[F, E, PK] {
 
   final protected def transact[A](cio: ConnectionIO[A])(implicit transactor: Transactor[F]): F[A] =
     cio.transact(transactor)
 
-  protected def queries: DoobieQueryAlgebra[E, PK, TA]
+  protected def queries: DoobieRepoQueries[E, PK, TA]
 
   override def find(pk: PK): F[Option[E]] = transact(queries.find(pk))
 

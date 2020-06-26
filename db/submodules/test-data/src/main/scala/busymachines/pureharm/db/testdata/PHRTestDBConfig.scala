@@ -25,7 +25,7 @@ import busymachines.pureharm.db._
   * @since 27 Jan 2020
   *
   */
-object PHTDBConfig {
+object PHRTestDBConfig {
 
   /**
     * All these values come from this file:

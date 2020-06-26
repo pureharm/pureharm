@@ -26,10 +26,11 @@ import busymachines.pureharm.effects.{Show, Traverse}
   * @tparam PK
   *   The "primary key", or "id" if you will, by which elements
   *   of type `E` are identified.
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   */
-trait DAOAlgebra[R[_], E, PK] {
+trait Repo[R[_], E, PK] {
   def find(pk: PK): R[Option[E]]
 
   /**

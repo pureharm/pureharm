@@ -37,25 +37,25 @@ import org.scalatest._
   * @since 12 Jun 2019
   *
   */
-final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
+final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with ParallelTestExecution {
 
-  override type FixtureParam = SlickPureharmRowDAO[IO]
+  override type FixtureParam = SlickPHRTestRepo[IO]
 
-  override def setup: PureharmDAOTestSetup[Transactor[IO]] = SlickPureharmRowDAOTest
+  override def setup: RepoTestSetup[Transactor[IO]] = SlickPHRRepoTest
 
-  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, SlickPureharmRowDAO[IO]] =
-    Resource.pure[IO, SlickPureharmRowDAO[IO]] {
+  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, SlickPHRTestRepo[IO]] =
+    Resource.pure[IO, SlickPHRTestRepo[IO]] {
       implicit val t:  Transactor[IO] = trans
       implicit val ec: ConnectionIOEC = ConnectionIOEC(runtime.executionContextCT)
-      SlickPureharmRowDAO[IO]
+      SlickPHRTestRepo[IO]
     }
 }
 
-private[test] object SlickPureharmRowDAOTest extends PHTestSetupSlick(testdb.jdbcProfileAPI) {
+private[test] object SlickPHRRepoTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
-    PHTDBConfig.dbConfig.copy(
-      schema = PHTDBConfig.schemaName(s"slick_${meta.pos.get.lineNumber}")
+    PHRTestDBConfig.dbConfig.copy(
+      schema = PHRTestDBConfig.schemaName(s"slick_${meta.pos.get.lineNumber}")
     )
 
 }

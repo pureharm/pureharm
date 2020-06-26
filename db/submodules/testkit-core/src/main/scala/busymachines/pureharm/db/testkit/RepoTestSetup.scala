@@ -14,7 +14,7 @@ import org.scalatest.TestData
   * @since 25 Jun 2020
   *
   */
-trait PureharmDAOTestSetup[DBTransactor] {
+trait RepoTestSetup[DBTransactor] {
 
   /**
     * Should be overridden to create a connection config appropriate for the test
