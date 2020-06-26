@@ -98,7 +98,32 @@ trait SlickQueryAlgebraDefinitions {
 
     def insert(e: E): ConnectionIO[PK] = dao.+=(e).widenCIO.map(_ => eid(e))
 
-    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = dao.++=(es).widenCIO.void
+    def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
+      val expectedSize = es.size
+      for {
+        insertedOpt <- dao.++=(es).widenCIO.adaptError {
+          case bux: java.sql.BatchUpdateException =>
+            SlickDBBatchInsertFailedAnomaly(
+              expectedSize = expectedSize,
+              actualSize   = 0,
+              causedBy     = Option(bux),
+            )
+        }
+        _           <- insertedOpt match {
+          //TODO: INVESTIGATE -> not sure when this is None... might have to signal failure as well
+          case None           => Applicative[ConnectionIO].unit
+          case Some(inserted) =>
+            (inserted != expectedSize).ifTrueRaise[ConnectionIO](
+              SlickDBBatchInsertFailedAnomaly(
+                expectedSize = expectedSize,
+                actualSize   = inserted,
+                causedBy     = Option.empty,
+              )
+            )
+        }
+
+      } yield ()
+    }
 
     def update(e: E): ConnectionIO[E] = (dao.update(e): ConnectionIO[Int]).map(_ => e)
 
