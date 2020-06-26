@@ -17,8 +17,7 @@
   */
 package busymachines.pureharm.dbslick.psql.test
 
-import busymachines.pureharm.db.test._
-import busymachines.pureharm.db.testkit._
+import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.dbslick.psql.test.testdb._
 
 /**
@@ -27,10 +26,11 @@ import busymachines.pureharm.dbslick.psql.test.testdb._
   * @since 12 Jun 2019
   *
   */
+private[test] trait SlickPureharmRowDAO[F[_]] extends PHTDAO[F]
 
 private[test] object SlickPureharmRowDAO {
 
-  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): PHTDAO[F] =
+  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): SlickPureharmRowDAO[F] =
     new PureharmRowDAOSlickImpl[F]
 
   //----------------- implementation details -----------------
@@ -57,14 +57,14 @@ private[test] object SlickPureharmRowDAO {
 
   final private class SlickPureharmRowQuerries(implicit
     override val connectionIOEC: ConnectionIOEC
-  ) extends SlickDAOQueryAlgebra[PHTRow, PhantomPK, SlickPureharmTable] {
+  ) extends SlickDAOQueryAlgebra[PHTRow, PhantomPK, SlickPureharmTable] with SlickPureharmRowDAO[ConnectionIO] {
     override val dao: TableQuery[SlickPureharmTable] = TableQuery[SlickPureharmTable]
   }
 
   final private class PureharmRowDAOSlickImpl[F[_]](
     implicit override val connectionIOEC: ConnectionIOEC,
     implicit override val transactor:     Transactor[F],
-  ) extends SlickDAOAlgebra[F, PHTRow, PhantomPK, SlickPureharmTable] with PHTDAO[F] {
+  ) extends SlickDAOAlgebra[F, PHTRow, PhantomPK, SlickPureharmTable] with SlickPureharmRowDAO[F] {
     override protected val queries: SlickPureharmRowQuerries = new SlickPureharmRowQuerries
   }
 }

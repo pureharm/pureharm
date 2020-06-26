@@ -33,10 +33,10 @@ import busymachines.pureharm.effects._
   * @since 13 Jun 2019
   *
   */
-abstract class FixturePureharmTest
-  extends FixtureAnyFunSuite with Assertions with PureharmAssertions with PureharmTestRuntime {
-  import io.chrisdavenport.log4cats._
+abstract class FixturePureharmTest extends FixtureAnyFunSuite with Assertions with PureharmAssertions {
   final type MetaData = TestData
+
+  implicit def runtime: PureharmTestRuntime = PureharmTestRuntime
 
   private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
   implicit def testLogger: TestLogger = testLogger_
@@ -63,6 +63,8 @@ abstract class FixturePureharmTest
 
   final override protected def withFixture(test: OneArgTest): Outcome = {
     val mdc: Map[String, String] = MDCKeys(test)
+
+    implicit val timer: Timer[IO] = runtime.timer
 
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {

@@ -15,31 +15,16 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.testkit
+package busymachines.pureharm.db.testdata
 
 import busymachines.pureharm.db._
 
 /**
   *
+  * To be then implemented in the concrete slick, or doobie modules
+  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 27 Jan 2020
+  * @since 13 Jun 2019
   *
   */
-object PHTDBConfig {
-
-  /**
-    * All these values come from this file:
-    * db/docker-pureharm-postgresql-test.sh
-    *
-    */
-  val dbConfig: DBConnectionConfig = DBConnectionConfig(
-    host     = DBHost("localhost:20010"),
-    dbName   = DatabaseName("pureharm_test"),
-    username = DBUsername("pureharmony"),
-    password = DBPassword("pureharmony"),
-    schema   = Option.empty, //Modify in each test accordingly before using
-  )
-
-  def schemaName(s: String): Option[SchemaName] = Option(SchemaName(s"pureharm_test_$s"))
-
-}
+private[pureharm] trait PHTDAO[F[_]] extends DAOAlgebra[F, PHTRow, PhantomPK]

@@ -1,12 +1,11 @@
 package busymachines.pureharm.dbdoobie.test
 
 import busymachines.pureharm.db._
-import busymachines.pureharm.db.test._
+import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.dbdoobie.testkit._
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.testkit._
 import org.scalatest._
 
@@ -17,7 +16,6 @@ import org.scalatest._
   *
   */
 final class DoobiePHRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
-  import runtime._
   override type FixtureParam = DoobiePHRowDAO[IO]
 
   override def setup: PureharmDAOTestSetup[Transactor[IO]] = DoobiePHRowDAOTest

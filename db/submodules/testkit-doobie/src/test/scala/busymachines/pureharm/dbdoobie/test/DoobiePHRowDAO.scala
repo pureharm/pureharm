@@ -19,8 +19,8 @@ package busymachines.pureharm.dbdoobie.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
-import busymachines.pureharm.db.testkit._
-import busymachines.pureharm.db.testkit.{PHTDAO, PHTJSONCol, PHTRow}
+import busymachines.pureharm.db.testdata._
+import busymachines.pureharm.db.testdata.{PHTDAO, PHTJSONCol, PHTRow}
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.internals.dbdoobie._
 

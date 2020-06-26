@@ -27,7 +27,7 @@ import busymachines.pureharm.phantom.PhantomType
   * @since 13 Jun 2019
   *
   */
-package object testkit {
+package object testdata {
   object PhantomByte extends PhantomType[Byte]
   type PhantomByte = PhantomByte.Type
 

@@ -15,34 +15,31 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.testkit
+package busymachines.pureharm.db.testdata
 
-import busymachines.pureharm.db.test._
-import busymachines.pureharm.identifiable.Identifiable
+import busymachines.pureharm.db._
 
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 12 Jun 2019
+  * @since 27 Jan 2020
   *
   */
-final private[pureharm] case class PHTRow(
-  id:          PhantomPK,
-  byte:        PhantomByte,
-  int:         PhantomInt,
-  long:        PhantomLong,
-  bigDecimal:  PhantomBigDecimal,
-  string:      PhantomString,
-  jsonbCol:    PHTJSONCol,
-  optionalCol: Option[PhantomString],
-)
+object PHTDBConfig {
 
-object PHTRow {
+  /**
+    * All these values come from this file:
+    * db/docker-pureharm-postgresql-test.sh
+    *
+    */
+  val dbConfig: DBConnectionConfig = DBConnectionConfig(
+    host     = DBHost("localhost:20010"),
+    dbName   = DatabaseName("pureharm_test"),
+    username = DBUsername("pureharmony"),
+    password = DBPassword("pureharmony"),
+    schema   = Option.empty, //Modify in each test accordingly before using
+  )
 
-  implicit val identifiable: Identifiable[PHTRow, PhantomPK] = Identifiable.mkIdentifiable
+  def schemaName(s: String): Option[SchemaName] = Option(SchemaName(s"pureharm_test_$s"))
+
 }
-
-final private[pureharm] case class PHTJSONCol(
-  jsonInt:    Int,
-  jsonString: String,
-)

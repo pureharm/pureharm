@@ -16,7 +16,7 @@ import org.scalatest.TestData
 trait PureharmDAOTestSetup[DBTransactor] {
 
   /**
-    * Should be overiden to create a connection config appropriate for the test
+    * Should be overridden to create a connection config appropriate for the test
     */
   def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig
 

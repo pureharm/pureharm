@@ -1,11 +1,25 @@
-package busymachines.pureharm.db.testkit
+/**
+  * Copyright (c) 2019 BusyMachines
+  *
+  * See company homepage at: https://www.busymachines.com/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
+package busymachines.pureharm.db.testdata
 
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.db.{testkit, _}
-import busymachines.pureharm.db.test._
-import busymachines.pureharm.identifiable.Identifiable
-import busymachines.pureharm.testkit._
+import busymachines.pureharm.db.testkit._
+import busymachines.pureharm.identifiable._
 
 /**
   *
@@ -28,8 +42,6 @@ private[pureharm]abstract class PHTRowDAOTest[Trans] extends PureharmDAOTest[PHT
 
   override def setup: PureharmDAOTestSetup[Trans]
 
-  implicit override val runtime: PureharmTestRuntime = PureharmTestRuntime
-
   override def fixture(meta: MetaData, trans: Trans): Resource[IO, FixtureParam]
 }
 
@@ -38,7 +50,7 @@ object PHTRowDAOTest {
   object pureharmRows extends PureharmDAOTestData[PHTRow, PhantomPK] {
     override def iden: Identifiable[PHTRow, PhantomPK] = PHTRow.identifiable
 
-    override def row1: PHTRow = testkit.PHTRow(
+    override def row1: PHTRow = PHTRow(
       id          = PhantomPK("row1_id"),
       byte        = PhantomByte(245.toByte),
       int         = PhantomInt(41),
@@ -49,7 +61,7 @@ object PHTRowDAOTest {
       optionalCol = Option(PhantomString("row1_optional_value")),
     )
 
-    override val row2: PHTRow = testkit.PHTRow(
+    override val row2: PHTRow = PHTRow(
       id          = PhantomPK("row2_id"),
       byte        = PhantomByte(123.toByte),
       int         = PhantomInt(4321),

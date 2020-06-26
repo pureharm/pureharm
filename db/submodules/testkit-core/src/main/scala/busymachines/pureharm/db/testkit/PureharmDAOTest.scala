@@ -18,9 +18,6 @@ abstract class PureharmDAOTest[E, PK, Trans](implicit show: Show[PK]) extends Fi
 
   def setup: PureharmDAOTestSetup[Trans]
 
-  implicit val runtime: PureharmTestRuntime
-  import runtime._
-
   def fixture(meta: MetaData, trans: Trans): Resource[IO, FixtureParam]
 
   protected def dataSanityCheck: Resource[IO, Unit] =

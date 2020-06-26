@@ -229,6 +229,7 @@ lazy val `db` = project
     `db-doobie`,
     `db-testkit-core`,
     `db-testkit-doobie`,
+    `db-test-data`,
   )
 
 //#############################################################################
@@ -285,6 +286,7 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
     `config`,
     `db-core`,
   )
+
 //#############################################################################
 
 lazy val `db-testkit-core-deps` =
@@ -315,6 +317,34 @@ lazy val `db-testkit-core` = subModule("db", "testkit-core")
     `db-core`,
     `db-core-flyway`,
     testkit,
+  )
+//#############################################################################
+
+lazy val `db-test-data-deps` =
+  `core-deps` ++ `effects-cats-deps` ++ `db-core-deps` ++ `db-core-flyway-deps`
+
+//used only in the interior of pureharm to test the implementations!
+lazy val `db-test-data` = subModule("db", "test-data")
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    libraryDependencies ++= `db-testkit-core-deps`.distinct
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `db-core`,
+    `db-core-flyway`,
+    `db-testkit-core`,
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `db-core`,
+    `db-core-flyway`,
+    `db-testkit-core`,
   )
 
 //#############################################################################
@@ -349,7 +379,6 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `config`,
     `json-circe`,
     `db-core`,
-    `db-testkit-core`,
   )
 
 //#############################################################################
@@ -382,7 +411,8 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
     `db-core-flyway`,
     `db-doobie`,
     testkit,
-    fullDependency(`db-testkit-core`),
+    `db-testkit-core`,
+    asTestingLibrary(`db-test-data`),
   )
   .aggregate(
     `core`,
@@ -411,15 +441,13 @@ lazy val `db-slick` = subModule("db", "slick")
     `core`,
     `effects-cats`,
     `config`,
-    fullDependency(`db-core`),
-    asTestingLibrary(`db-testkit-core`),
+    `db-core`,
   )
   .aggregate(
     `core`,
     `effects-cats`,
     `config`,
     `db-core`,
-    `db-testkit-core`,
   )
 
 //#############################################################################
@@ -431,17 +459,14 @@ lazy val `db-slick-psql-deps` =
     `json-circe-deps` ++
     `db-core-deps` ++
     `db-slick-deps` ++ Seq(
-    postgresql,
-    log4cats       % Test,
-    logbackClassic % Test,
-    scalaTest      % Test,
+    postgresql
   )
 
 lazy val `db-slick-psql` = subModule("db", "slick-psql")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-slick-psql-deps`.distinct,
+    libraryDependencies ++= `db-slick-psql-deps`.distinct
     //required because JDBC screws up classloading somehow,
     //and PSQL driver is not found for certain tests that connect to DB.
     //no idea why
@@ -452,9 +477,11 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `effects-cats`,
     `config`,
     `json-circe`,
-    fullDependency(`db-core`),
-    asTestingLibrary(`db-core-flyway`),
+    `db-core`,
     `db-slick`,
+    asTestingLibrary(`db-testkit-core`),
+    asTestingLibrary(`db-testkit-slick`),
+    asTestingLibrary(`db-test-data`),
   )
   .aggregate(
     `core`,
@@ -463,9 +490,55 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `json-circe`,
     `db-core`,
     `db-slick`,
+    `db-testkit-core`,
+    `db-testkit-slick`,
+    `db-test-data`,
   )
 
 //#############################################################################
+
+lazy val `db-testkit-slick-deps` =
+  `core-deps` ++
+    `effects-cats-deps` ++
+    `config-deps` ++
+    `json-circe-deps` ++
+    `db-core-deps` ++
+    `db-slick-deps` ++ Seq(
+    postgresql,
+    log4cats,
+    logbackClassic,
+    scalaTest,
+    slickTestkit,
+  )
+
+lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    libraryDependencies ++= `db-testkit-slick-deps`.distinct
+    //required because JDBC screws up classloading somehow,
+    //and PSQL driver is not found for certain tests that connect to DB.
+    //no idea why
+    //    Test / fork := true,
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `json-circe`,
+    `db-core`,
+    `db-slick`,
+    fullDependency(`db-testkit-core`),
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `json-circe`,
+    `db-core`,
+    `db-slick`,
+    `db-testkit-core`,
+  )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
@@ -587,7 +660,8 @@ lazy val doobieScalatest = "org.tpolecat" %% "doobie-scalatest" % doobieVersion 
 //=============================================================================
 
 //https://github.com/slick/slick/releases
-lazy val slick: ModuleID = "com.typesafe.slick" %% "slick" % slickVersion withSources ()
+lazy val slick:        ModuleID = "com.typesafe.slick" %% "slick"         % slickVersion withSources ()
+lazy val slickTestkit: ModuleID = "com.typesafe.slick" %% "slick-testkit" % slickVersion withSources ()
 
 lazy val dbSlick: Seq[ModuleID] = Seq(slick, hikari)
 

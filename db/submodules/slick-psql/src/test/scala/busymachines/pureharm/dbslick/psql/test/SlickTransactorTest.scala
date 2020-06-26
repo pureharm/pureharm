@@ -19,10 +19,11 @@ package busymachines.pureharm.dbslick.psql.test
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbslick._
-import busymachines.pureharm.db.test._
-import busymachines.pureharm.db.testkit.PHTDBConfig
+import busymachines.pureharm.db.testdata._
+import busymachines.pureharm.dbslick.testkit._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
+import org.scalatest._
 
 /**
   * @author Daniel Incicau, daniel.incicau@busymachines.com
@@ -30,23 +31,32 @@ import busymachines.pureharm.testkit._
   */
 final class SlickTransactorTest extends FixturePureharmTest {
 
-  private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
+  implicit override lazy val runtime: PureharmTestRuntime = new PureharmTestRuntime {
 
-  private lazy val connectionConfig: DBConnectionConfig = PHTDBConfig.dbConfig.copy(
-    schema = PHTDBConfig.schemaName("slick_transactor")
-  )
+    println(
+      """
+        |
+        |
+        |ANONOAFSLKJFLKASJ
+        |ALSKFJPASFKASOFK
+        |ALSKFJPASFKASOFK
+        |ALSKFJPASFKASOFK
+        |ALSKFJPASFKASOFK
+        |ALSKFJPASFKASOFK
+        |ALSKFJPASFKASOFK
+        |
+        |
+        |
+        |""".stripMargin)
+
+  }
 
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
   override def fixture(meta: MetaData): Resource[IO, Transactor[IO]] =
-    for {
-      dbConfig   <- Resource.pure[IO, DBConnectionConfig](connectionConfig)
-      transactor <-
-        Transactor
-          .pgSQLHikari[IO](dbProfile = testdb.jdbcProfileAPI, dbConnection = dbConfig, asyncConfig = slickConfig)
-    } yield transactor
+    SlickTransactorTest.transactor(meta)
 
   override type FixtureParam = Transactor[IO]
 
@@ -85,5 +95,14 @@ final class SlickTransactorTest extends FixturePureharmTest {
       isConnected <- trans.isConnected
     } yield assert(isConnected === true)
   }
+
+}
+
+private[test] object SlickTransactorTest extends PHTestSetupSlick(testdb.jdbcProfileAPI) {
+
+  override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
+    PHTDBConfig.dbConfig.copy(
+      schema = PHTDBConfig.schemaName(s"slick_trans_${meta.pos.get.lineNumber}")
+    )
 
 }

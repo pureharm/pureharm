@@ -15,16 +15,33 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db.testkit
+package busymachines.pureharm.db.testdata
 
-import busymachines.pureharm.db._
+import busymachines.pureharm.identifiable.Identifiable
 
 /**
   *
-  * To be then implemented in the concrete slick, or doobie modules
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
-  * @since 13 Jun 2019
+  * @since 12 Jun 2019
   *
   */
-private[pureharm] trait PHTDAO[F[_]] extends DAOAlgebra[F, PHTRow, PhantomPK]
+final private[pureharm] case class PHTRow(
+  id:          PhantomPK,
+  byte:        PhantomByte,
+  int:         PhantomInt,
+  long:        PhantomLong,
+  bigDecimal:  PhantomBigDecimal,
+  string:      PhantomString,
+  jsonbCol:    PHTJSONCol,
+  optionalCol: Option[PhantomString],
+)
+
+object PHTRow {
+
+  implicit val identifiable: Identifiable[PHTRow, PhantomPK] = Identifiable.mkIdentifiable
+}
+
+final private[pureharm] case class PHTJSONCol(
+  jsonInt:    Int,
+  jsonString: String,
+)

@@ -4,7 +4,6 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.testkit._
 import org.scalatest._
 
