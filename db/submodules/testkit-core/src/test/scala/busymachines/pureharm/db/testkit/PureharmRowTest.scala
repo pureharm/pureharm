@@ -60,6 +60,28 @@ object PureharmRowTest {
       optionalCol = Option(PhantomString("row2_optional_value")),
     )
 
-    override def randomPK: PhantomPK = PhantomPK("120-3921-039213")
+    override def nonExistentPK: PhantomPK = PhantomPK("120-3921-039213")
+
+    override val row1Update1: PureharmRow = row1.copy(
+      byte        = PhantomByte(111.toByte),
+      int         = PhantomInt(42),
+      long        = PhantomLong(6.toLong),
+      bigDecimal  = PhantomBigDecimal(BigDecimal("328572")),
+      string      = PhantomString("updated_string"),
+      jsonbCol    = PureharmJSONCol(79, "new_json_col"),
+      optionalCol = Option(PhantomString("new opt_value")),
+    )
+
+    override val row1Update2: PureharmRow = row1.copy(
+      byte        = PhantomByte(5.toByte),
+      int         = PhantomInt(31),
+      long        = PhantomLong(988888.toLong),
+      bigDecimal  = PhantomBigDecimal(BigDecimal("89276")),
+      string      = PhantomString("updated_string_2"),
+      jsonbCol    = PureharmJSONCol(1, "new_json_col_2"),
+      optionalCol = Option.empty,
+    )
   }
+
+
 }
