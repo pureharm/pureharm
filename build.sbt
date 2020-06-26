@@ -341,9 +341,7 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `effects-cats`,
     `config`,
     `json-circe`,
-    fullDependency(`db-core`),
-    asTestingLibrary(`db-testkit-core`),
-    asTestingLibrary(`db-testkit-doobie`),
+    `db-core`,
   )
   .aggregate(
     `core`,
