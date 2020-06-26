@@ -25,7 +25,7 @@ import busymachines.pureharm.db._
   * @since 27 Jan 2020
   *
   */
-object PureharmTestConfig {
+object DBTestConfig {
 
   /**
     * All these values come from this file:
@@ -41,5 +41,6 @@ object PureharmTestConfig {
   )
 
   def schemaName(s: String): Option[SchemaName] = Option(SchemaName(s"pureharm_test_$s"))
+
 
 }

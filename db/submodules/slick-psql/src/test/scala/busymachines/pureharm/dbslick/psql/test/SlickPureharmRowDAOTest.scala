@@ -118,8 +118,8 @@ private[test] object SlickPureharmRowDAOTest {
     * FIXME: use a unique schema for each test case! That way we can
     * FIXME: fully paralelize DB tests, have to work around
     */
-  private val dbConfig: DBConnectionConfig = PureharmTestConfig.dbConfig.copy(
-    schema = PureharmTestConfig.schemaName("slick")
+  private val dbConfig: DBConnectionConfig = DBTestConfig.dbConfig.copy(
+    schema = DBTestConfig.schemaName("slick")
   )
 
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {

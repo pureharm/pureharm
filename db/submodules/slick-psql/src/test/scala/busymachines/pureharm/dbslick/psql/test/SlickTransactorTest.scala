@@ -31,8 +31,8 @@ final class SlickTransactorTest extends FixturePureharmTest {
 
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 
-  private lazy val connectionConfig: DBConnectionConfig = PureharmTestConfig.dbConfig.copy(
-    schema = PureharmTestConfig.schemaName("slick_transactor")
+  private lazy val connectionConfig: DBConnectionConfig = DBTestConfig.dbConfig.copy(
+    schema = DBTestConfig.schemaName("slick_transactor")
   )
 
   /**
