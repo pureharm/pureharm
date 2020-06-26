@@ -38,3 +38,5 @@ trait PureharmTestRuntime {
   implicit final def blocker:    Blocker             = blockingShifter.blocker
 
 }
+
+object PureharmTestRuntime extends PureharmTestRuntime

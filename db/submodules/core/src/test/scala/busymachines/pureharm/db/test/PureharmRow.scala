@@ -17,6 +17,8 @@
   */
 package busymachines.pureharm.db.test
 
+import busymachines.pureharm.identifiable.Identifiable
+
 /**
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -33,6 +35,11 @@ final private[pureharm] case class PureharmRow(
   jsonbCol:    PureharmJSONCol,
   optionalCol: Option[PhantomString],
 )
+
+object PureharmRow {
+
+  implicit val identifiable: Identifiable[PureharmRow, PhantomPK] = Identifiable.mkIdentifiable
+}
 
 final private[pureharm] case class PureharmJSONCol(
   jsonInt:    Int,
