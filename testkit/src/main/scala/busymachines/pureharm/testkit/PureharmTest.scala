@@ -35,11 +35,10 @@ import org.scalatest.exceptions.{TestCanceledException, TestFailedException, Tes
   *
   */
 abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTestRuntime {
-  import io.chrisdavenport.log4cats._
   final type MetaData = TestData
 
-  private val report: SelfAwareStructuredLogger[IO] =
-    slf4j.Slf4jLogger.getLoggerFromName[IO](s"${getClass.getCanonicalName}.report")
+  private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
+  implicit def testLogger: TestLogger = testLogger_
 
   import busymachines.pureharm.effects.implicits._
 
@@ -53,25 +52,25 @@ abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTes
   ): Unit = {
     val mdc = MDCKeys(testName, position)
     val iotest: IO[Assertion] = for {
-      _        <- report.info(mdc)(s"STARTING")
+      _        <- testLogger.info(mdc)(s"STARTING")
       (d, att) <- testFun.timedAttempt(TimeUnit.MILLISECONDS)
       ass      <- att match {
         case Left(e: TestPendingException) =>
-          report.info(mdc.++(MDCKeys(Pending, d)))("FINISHED") *> IO.raiseError[Assertion](e)
+          testLogger.info(mdc.++(MDCKeys(Pending, d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
         case Left(e: TestFailedException) =>
-          report.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
+          testLogger.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
         case Left(e: TestCanceledException) =>
-          report.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
+          testLogger.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
         case Left(e) =>
-          report.warn(mdc.++(MDCKeys(Exceptional(e), d)))(
+          testLogger.warn(mdc.++(MDCKeys(Exceptional(e), d)))(
             "TERMINATED — fail tests with assertions, not by throwing random"
           ) *> IO.raiseError[Assertion](e)
 
         case Right(ass) =>
-          report.info(mdc.++(MDCKeys(Succeeded, d)))("FINISHED") *> IO.pure[Assertion](ass)
+          testLogger.info(mdc.++(MDCKeys(Succeeded, d)))("FINISHED") *> IO.pure[Assertion](ass)
 
       }
     } yield ass

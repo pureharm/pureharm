@@ -38,8 +38,8 @@ abstract class FixturePureharmTest
   import io.chrisdavenport.log4cats._
   final type MetaData = TestData
 
-  private val report: SelfAwareStructuredLogger[IO] =
-    slf4j.Slf4jLogger.getLoggerFromName[IO](s"${getClass.getCanonicalName}.report")
+  private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
+  implicit def testLogger: TestLogger = testLogger_
 
   import busymachines.pureharm.effects.implicits._
   /**
@@ -66,17 +66,17 @@ abstract class FixturePureharmTest
 
     def ftest(fix: FixtureParam): IO[Outcome] =
       for {
-        _        <- report.info(mdc)(s"INITIALIZED")
+        _        <- testLogger.info(mdc)(s"INITIALIZED")
         (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
         outcome  <- out.liftTo[IO]
-        _        <- report.info(mdc.++(MDCKeys(outcome, d)))(s"FINISHED")
+        _        <- testLogger.info(mdc.++(MDCKeys(outcome, d)))(s"FINISHED")
       } yield outcome
 
     val fout: IO[Outcome] = for {
-      _   <- report.info(mdc)(s"ACQUIRING FIXTURE")
+      _   <- testLogger.info(mdc)(s"ACQUIRING FIXTURE")
       out <- fixture(test)
         .onError {
-          case e => report.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]]
+          case e => testLogger.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]]
         }
         .use(ftest)
     } yield out
