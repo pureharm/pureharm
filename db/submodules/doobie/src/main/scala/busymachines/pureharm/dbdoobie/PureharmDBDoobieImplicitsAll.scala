@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.dbdoobie
 
-import busymachines.pureharm.internals.dbdoobie.PhantomTypeMetas
+import busymachines.pureharm.internals.dbdoobie.{PhantomTypeMetas, TransactorImplicits}
 
 /**
   *
@@ -29,4 +29,5 @@ trait PureharmDBDoobieImplicitsAll
   extends doobie.syntax.AllSyntax with doobie.util.meta.SqlMeta with doobie.util.meta.TimeMeta
   with doobie.util.meta.LegacyMeta with doobie.free.Instances with doobie.postgres.Instances
   with doobie.postgres.free.Instances with doobie.postgres.syntax.ToPostgresMonadErrorOps
-  with doobie.postgres.syntax.ToFragmentOps with doobie.postgres.syntax.ToPostgresExplainOps with PhantomTypeMetas {}
+  with doobie.postgres.syntax.ToFragmentOps with doobie.postgres.syntax.ToPostgresExplainOps with PhantomTypeMetas
+  with TransactorImplicits {}

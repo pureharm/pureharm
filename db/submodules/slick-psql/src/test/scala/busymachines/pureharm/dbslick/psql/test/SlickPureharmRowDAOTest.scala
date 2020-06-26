@@ -37,7 +37,7 @@ import org.scalatest._
   * @since 12 Jun 2019
   *
   */
-final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
+final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] {
 
   override type FixtureParam = SlickPureharmRowDAO[IO]
 
@@ -46,7 +46,7 @@ final class SlickPureharmRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with P
   override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, SlickPureharmRowDAO[IO]] =
     Resource.pure[IO, SlickPureharmRowDAO[IO]] {
       implicit val t:  Transactor[IO] = trans
-      implicit val ec: ConnectionIOEC = ConnectionIOEC(runtime.executionContext)
+      implicit val ec: ConnectionIOEC = ConnectionIOEC(runtime.executionContextCT)
       SlickPureharmRowDAO[IO]
     }
 }

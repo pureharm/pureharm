@@ -24,19 +24,21 @@ import busymachines.pureharm.effects._
   */
 trait PureharmTestRuntime {
 
-  private lazy val defaultExecutionContext: ExecutionContext = UnsafePools.cached("phtest-ec")
+  private lazy val defaultExecutionContext: ExecutionContextCT = UnsafePools.cached("phtest-ec")
+  private lazy val defaultFT:               ExecutionContextFT = UnsafePools.fixed("phtest-ft", 8)
 
-  private lazy val defaultContextShift: ContextShift[IO] = IO.contextShift(executionContext)
-  private lazy val defaultTimer:        Timer[IO]        = IO.timer(executionContext)
+  private lazy val defaultContextShift: ContextShift[IO] = IO.contextShift(executionContextCT)
+  private lazy val defaultTimer:        Timer[IO]        = IO.timer(executionContextCT)
 
   private lazy val defaultBlockingShifter: BlockingShifter[IO] =
     BlockingShifter.fromExecutionContext(UnsafePools.cached("phtest-blocker"))
 
-  implicit def executionContext: ExecutionContext    = defaultExecutionContext
-  implicit def contextShift:     ContextShift[IO]    = defaultContextShift
-  implicit def timer:            Timer[IO]           = defaultTimer
-  implicit def blockingShifter:  BlockingShifter[IO] = defaultBlockingShifter
-  implicit final def blocker:    Blocker             = blockingShifter.blocker
+  def executionContextFT:          ExecutionContextFT  = defaultFT
+  implicit def executionContextCT: ExecutionContextCT  = defaultExecutionContext
+  implicit def contextShift:       ContextShift[IO]    = defaultContextShift
+  implicit def timer:              Timer[IO]           = defaultTimer
+  implicit def blockingShifter:    BlockingShifter[IO] = defaultBlockingShifter
+  implicit final def blocker:      Blocker             = blockingShifter.blocker
 
 }
 

@@ -356,6 +356,7 @@ lazy val `db-doobie-deps` =
     `json-circe-deps` ++
     `db-core-deps` ++ Seq(
     doobieCore,
+    doobieHikari,
     doobiePSQL,
     postgresql,
   )
@@ -652,6 +653,7 @@ lazy val postgresql: ModuleID = "org.postgresql" % "postgresql" % postgresqlVers
 
 //https://github.com/tpolecat/doobie/releases
 lazy val doobieCore      = "org.tpolecat" %% "doobie-core"      % doobieVersion withSources ()
+lazy val doobieHikari    = "org.tpolecat" %% "doobie-hikari"    % doobieVersion withSources ()
 lazy val doobiePSQL      = "org.tpolecat" %% "doobie-postgres"  % doobieVersion withSources ()
 lazy val doobieScalatest = "org.tpolecat" %% "doobie-scalatest" % doobieVersion withSources ()
 

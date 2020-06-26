@@ -15,7 +15,7 @@ import org.scalatest._
   * @since 25 Jun 2020
   *
   */
-final class DoobiePHRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
+final class DoobiePHRowDAOTest extends PHTRowDAOTest[Transactor[IO]] {
   override type FixtureParam = DoobiePHRowDAO[IO]
 
   override def setup: PureharmDAOTestSetup[Transactor[IO]] = DoobiePHRowDAOTest

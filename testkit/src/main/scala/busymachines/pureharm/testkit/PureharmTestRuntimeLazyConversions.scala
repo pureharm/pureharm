@@ -22,7 +22,7 @@ import busymachines.pureharm.effects._
   *
   */
 trait PureharmTestRuntimeLazyConversions {
-  implicit def phrtToEC(implicit phtr: PureharmTestRuntime): ExecutionContext    = phtr.executionContext
+  implicit def phrtToEC(implicit phtr: PureharmTestRuntime): ExecutionContext    = phtr.executionContextCT
   implicit def phrtToCS(implicit phtr: PureharmTestRuntime): ContextShift[IO]    = phtr.contextShift
   implicit def phrtToTM(implicit phtr: PureharmTestRuntime): Timer[IO]           = phtr.timer
   implicit def phrtToBS(implicit phtr: PureharmTestRuntime): BlockingShifter[IO] = phtr.blockingShifter

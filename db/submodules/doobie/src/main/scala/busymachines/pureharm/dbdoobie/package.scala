@@ -24,5 +24,7 @@ package busymachines.pureharm
   *
   */
 package object dbdoobie extends PureharmDBDoobieTypeDefinitions {
+
   object implicits extends PureharmDBDoobieImplicitsAll
+
 }
