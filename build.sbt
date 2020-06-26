@@ -382,7 +382,7 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
     `db-core-flyway`,
     `db-doobie`,
     testkit,
-    `db-testkit-core`,
+    fullDependency(`db-testkit-core`),
   )
   .aggregate(
     `core`,
@@ -445,7 +445,7 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     //required because JDBC screws up classloading somehow,
     //and PSQL driver is not found for certain tests that connect to DB.
     //no idea why
-    Test / fork := true,
+//    Test / fork := true,
   )
   .dependsOn(
     `core`,
@@ -464,6 +464,8 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     `db-core`,
     `db-slick`,
   )
+
+//#############################################################################
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++

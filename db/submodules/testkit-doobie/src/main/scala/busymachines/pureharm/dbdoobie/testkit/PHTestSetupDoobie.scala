@@ -14,7 +14,7 @@ import org.scalatest._
   * @since 26 Jun 2020
   *
   */
-trait PureharmTestSetupDoobie extends PureharmDAOTestSetup[Transactor[IO]] {
+trait PHTestSetupDoobie extends PureharmDAOTestSetup[Transactor[IO]] {
 
   /**
     * Should be overiden to create a connection config appropriate for the test
@@ -31,7 +31,7 @@ trait PureharmTestSetupDoobie extends PureharmDAOTestSetup[Transactor[IO]] {
       trans <- IO.pure[Transactor[IO]] {
         Transactor
           .fromDriverManager[IO](
-            driver  = PureharmTestSetupDoobie.PostgresqlDriver,
+            driver  = PHTestSetupDoobie.PostgresqlDriver,
             url     = config.jdbcURL: String,
             user    = config.username: String,
             pass    = config.password: String,
@@ -44,6 +44,6 @@ trait PureharmTestSetupDoobie extends PureharmDAOTestSetup[Transactor[IO]] {
   }
 }
 
-object PureharmTestSetupDoobie {
+object PHTestSetupDoobie {
   private val PostgresqlDriver: String = "org.postgresql.Driver"
 }

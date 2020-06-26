@@ -19,7 +19,8 @@ package busymachines.pureharm.dbdoobie.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
-import busymachines.pureharm.db.test._
+import busymachines.pureharm.db.testkit._
+import busymachines.pureharm.db.testkit.{PHTDAO, PHTJSONCol, PHTRow}
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.internals.dbdoobie._
 
@@ -31,23 +32,23 @@ import busymachines.pureharm.internals.dbdoobie._
   * add whatever new methods/override the default ones you need here.
   *
   * Implement the queries in terms of ConnectionIO similar to
-  * [[DoobiePureharmRowDAO.DoobiePureharmRowQueries]]
+  * [[DoobiePHRowDAO.DoobiePureharmRowQueries]]
   *
   * and the final DAO in IO similar to
-  * [[DoobiePureharmRowDAO.DoobiePureharmRowDAOImpl]]
+  * [[DoobiePHRowDAO.DoobiePureharmRowDAOImpl]]
   *
   * Voila! Bunch of free CRUD! + a lot of helpers to build
-  * common queries in the [[DoobiePureharmRowDAO.DoobiePureharmTable]]
+  * common queries in the [[DoobiePHRowDAO.DoobiePureharmTable]]
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   *
   */
-private[test] trait DoobiePureharmRowDAO[F[_]] extends PureharmRowDAO[F]
+private[test] trait DoobiePHRowDAO[F[_]] extends PHTDAO[F]
 
-private[test] object DoobiePureharmRowDAO {
+private[test] object DoobiePHRowDAO {
 
-  def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePureharmRowDAO[F] = {
+  def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePHRowDAO[F] = {
     implicit val i: Transactor[F] = trans
     new DoobiePureharmRowDAOImpl[F]
   }
@@ -56,7 +57,7 @@ private[test] object DoobiePureharmRowDAO {
   import busymachines.pureharm.dbdoobie.implicits._
   import busymachines.pureharm.json._
 
-  object DoobiePureharmTable extends TableWithPK[PureharmRow, PhantomPK] {
+  object DoobiePureharmTable extends TableWithPK[PHTRow, PhantomPK] {
     override val name: TableName = schema.PureharmRows
 
     val byte_col:    Column = createColumn("byte")
@@ -67,24 +68,23 @@ private[test] object DoobiePureharmRowDAO {
     val jsonb_col:   Column = createColumn("jsonb_col")
     val opt_col:     Column = createColumn("opt_col")
 
-    implicit private[DoobiePureharmRowDAO] val pureharmJSONColMeta: Meta[PureharmJSONCol] =
-      jsonMeta[PureharmJSONCol](derive.codec[PureharmJSONCol])
+    implicit private[DoobiePHRowDAO] val pureharmJSONColMeta: Meta[PHTJSONCol] =
+      jsonMeta[PHTJSONCol](derive.codec[PHTJSONCol])
 
-    override val showPK: Show[PhantomPK]    = Show[PhantomPK]
-    override val metaPK: Meta[PhantomPK]    = Meta[PhantomPK]
-    override val readE:  Read[PureharmRow]  = Read[PureharmRow]
-    override val writeE: Write[PureharmRow] = Write[PureharmRow]
+    override val showPK: Show[PhantomPK] = Show[PhantomPK]
+    override val metaPK: Meta[PhantomPK] = Meta[PhantomPK]
+    override val readE:  Read[PHTRow]    = Read[PHTRow]
+    override val writeE: Write[PHTRow]   = Write[PHTRow]
   }
 
   final private object DoobiePureharmRowQueries
-    extends DoobieQueryAlgebra[PureharmRow, PhantomPK, DoobiePureharmTable.type]
-    with DoobiePureharmRowDAO[ConnectionIO] {
+    extends DoobieQueryAlgebra[PHTRow, PhantomPK, DoobiePureharmTable.type] with DoobiePHRowDAO[ConnectionIO] {
     override def table: DoobiePureharmTable.type = DoobiePureharmTable
   }
 
   final private class DoobiePureharmRowDAOImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
-  ) extends DoobieDAOAlgebra[F, PureharmRow, PhantomPK, DoobiePureharmTable.type] with DoobiePureharmRowDAO[F] {
+  ) extends DoobieDAOAlgebra[F, PHTRow, PhantomPK, DoobiePureharmTable.type] with DoobiePHRowDAO[F] {
     override protected val queries: DoobiePureharmRowQueries.type = DoobiePureharmRowQueries
   }
 }

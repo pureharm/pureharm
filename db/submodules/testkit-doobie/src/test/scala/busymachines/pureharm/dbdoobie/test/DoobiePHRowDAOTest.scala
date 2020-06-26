@@ -16,22 +16,22 @@ import org.scalatest._
   * @since 25 Jun 2020
   *
   */
-final class DoobieDAOTest extends PureharmRowTest[Transactor[IO]] with ParallelTestExecution {
+final class DoobiePHRowDAOTest extends PHTRowDAOTest[Transactor[IO]] with ParallelTestExecution {
   import runtime._
-  override type FixtureParam = DoobiePureharmRowDAO[IO]
+  override type FixtureParam = DoobiePHRowDAO[IO]
 
-  override def setup: PureharmDAOTestSetup[Transactor[IO]] = DoobieDAOTest
+  override def setup: PureharmDAOTestSetup[Transactor[IO]] = DoobiePHRowDAOTest
 
-  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, DoobiePureharmRowDAO[IO]] =
-    Resource.pure[IO, DoobiePureharmRowDAO[IO]](DoobiePureharmRowDAO(trans))
+  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, DoobiePHRowDAO[IO]] =
+    Resource.pure[IO, DoobiePHRowDAO[IO]](DoobiePHRowDAO(trans))
 
 }
 
-object DoobieDAOTest extends PureharmTestSetupDoobie {
+object DoobiePHRowDAOTest extends PHTestSetupDoobie {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
-    DBTestConfig.dbConfig.copy(
-      schema = DBTestConfig.schemaName(s"doobie_${meta.pos.get.lineNumber}")
+    PHTDBConfig.dbConfig.copy(
+      schema = PHTDBConfig.schemaName(s"doobie_${meta.pos.get.lineNumber}")
     )
 
 }

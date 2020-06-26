@@ -21,6 +21,7 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.db.test._
 import busymachines.pureharm.db._
+import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbslick._
 import busymachines.pureharm.testkit._
 
@@ -36,39 +37,39 @@ import busymachines.pureharm.testkit._
   *
   */
 final class SlickPureharmRowDAOTest extends FixturePureharmTest {
-  override type FixtureParam = PureharmRowDAO[IO]
+  override type FixtureParam = PHTDAO[IO]
 
-  override def fixture(meta: MetaData): Resource[IO, PureharmRowDAO[IO]] =
+  override def fixture(meta: MetaData): Resource[IO, PHTDAO[IO]] =
     SlickPureharmRowDAOTest
       .transactorResource[IO]
       .map(implicit t => SlickPureharmRowDAO[IO](t, ConnectionIOEC(executionContext)))
 
-  private val row = PureharmRow(
+  private val row = PHTRow(
     id          = PhantomPK("test1"),
     byte        = PhantomByte(245.toByte),
     int         = PhantomInt(41),
     long        = PhantomLong(0.toLong),
     bigDecimal  = PhantomBigDecimal(BigDecimal("1390749832749238")),
     string      = PhantomString("first_test_in_a_while"),
-    jsonbCol    = PureharmJSONCol(42, "json_column"),
+    jsonbCol    = PHTJSONCol(42, "json_column"),
     optionalCol = Option(PhantomString("optional_value")),
   )
 
-  test("insert + find") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + find") { implicit dao: PHTDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.find(row.id).flattenOption(fail(s"PK=${row.id} row was not in database"))
     } yield assert(row === fetchedRow)
   }
 
-  test("insert + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + retrieve") { implicit dao: PHTDAO[IO] =>
     for {
       _          <- dao.insert(row)
       fetchedRow <- dao.retrieve(row.id)
     } yield assert(row === fetchedRow)
   }
 
-  test("insert + update (defined opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + update (defined opt) + retrieve") { implicit dao: PHTDAO[IO] =>
     for {
       _ <- dao.insert(row)
       newRowWithSome = row.copy(
@@ -77,7 +78,7 @@ final class SlickPureharmRowDAOTest extends FixturePureharmTest {
         long        = PhantomLong(6.toLong),
         bigDecimal  = PhantomBigDecimal(BigDecimal("328572")),
         string      = PhantomString("updated_string"),
-        jsonbCol    = PureharmJSONCol(79, "new_json_col"),
+        jsonbCol    = PHTJSONCol(79, "new_json_col"),
         optionalCol = Option(PhantomString("new opt_value")),
       )
       _ <- dao.update(newRowWithSome)
@@ -85,7 +86,7 @@ final class SlickPureharmRowDAOTest extends FixturePureharmTest {
     } yield assert(newRowWithSome === fetchedRow)
   }
 
-  test("insert + update (nulled opt) + retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("insert + update (nulled opt) + retrieve") { implicit dao: PHTDAO[IO] =>
     for {
       _ <- dao.insert(row)
       newRowWithNone = row.copy(
@@ -94,7 +95,7 @@ final class SlickPureharmRowDAOTest extends FixturePureharmTest {
         long        = PhantomLong(8.toLong),
         bigDecimal  = PhantomBigDecimal(BigDecimal("124325671")),
         string      = PhantomString("second_updated_string"),
-        jsonbCol    = PureharmJSONCol(45, "newest_json_col"),
+        jsonbCol    = PHTJSONCol(45, "newest_json_col"),
         optionalCol = Option.empty,
       )
       _ <- dao.update(newRowWithNone)
@@ -102,7 +103,7 @@ final class SlickPureharmRowDAOTest extends FixturePureharmTest {
     } yield assert(newRowWithNone === fetchedRow)
   }
 
-  test("failed retrieve") { implicit dao: PureharmRowDAO[IO] =>
+  test("failed retrieve") { implicit dao: PHTDAO[IO] =>
     for {
       att <- dao.retrieve(PhantomPK("sdfsdlksld")).attempt
     } yield assertThrows[DBEntryNotFoundAnomaly](
@@ -118,8 +119,8 @@ private[test] object SlickPureharmRowDAOTest {
     * FIXME: use a unique schema for each test case! That way we can
     * FIXME: fully paralelize DB tests, have to work around
     */
-  private val dbConfig: DBConnectionConfig = DBTestConfig.dbConfig.copy(
-    schema = DBTestConfig.schemaName("slick")
+  private val dbConfig: DBConnectionConfig = PHTDBConfig.dbConfig.copy(
+    schema = PHTDBConfig.schemaName("slick")
   )
 
   def transactorResource[F[_]: Concurrent: ContextShift]: Resource[F, Transactor[F]] = {

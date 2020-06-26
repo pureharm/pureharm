@@ -17,9 +17,9 @@
   */
 package busymachines.pureharm.db
 
-import busymachines.pureharm.phantom.PhantomType
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
+import busymachines.pureharm.phantom.PhantomType
 
 /**
   *
@@ -27,7 +27,7 @@ import busymachines.pureharm.effects.implicits._
   * @since 13 Jun 2019
   *
   */
-package object test {
+package object testkit {
   object PhantomByte extends PhantomType[Byte]
   type PhantomByte = PhantomByte.Type
 

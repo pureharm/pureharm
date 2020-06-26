@@ -18,6 +18,7 @@
 package busymachines.pureharm.dbslick.psql.test
 
 import busymachines.pureharm.db.test._
+import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbslick.psql.test.testdb._
 
 /**
@@ -29,7 +30,7 @@ import busymachines.pureharm.dbslick.psql.test.testdb._
 
 private[test] object SlickPureharmRowDAO {
 
-  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): PureharmRowDAO[F] =
+  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): PHTDAO[F] =
     new PureharmRowDAOSlickImpl[F]
 
   //----------------- implementation details -----------------
@@ -38,32 +39,32 @@ private[test] object SlickPureharmRowDAO {
   //---------------- json stuff ---------------
   import busymachines.pureharm.json._
 
-  implicit private val pureharmJSONCol: Codec[PureharmJSONCol]      = derive.codec[PureharmJSONCol]
-  implicit private val jsonColumnType:  ColumnType[PureharmJSONCol] = createJsonbColumnType[PureharmJSONCol]
+  implicit private val pureharmJSONCol: Codec[PHTJSONCol]      = derive.codec[PHTJSONCol]
+  implicit private val jsonColumnType:  ColumnType[PHTJSONCol] = createJsonbColumnType[PHTJSONCol]
 
-  private class SlickPureharmTable(tag: Tag) extends TableWithPK[PureharmRow, PhantomPK](tag, schema.PureharmRows) {
+  private class SlickPureharmTable(tag: Tag) extends TableWithPK[PHTRow, PhantomPK](tag, schema.PureharmRows) {
     val byte       = column[PhantomByte]("byte")
     val int        = column[PhantomInt]("int")
     val long       = column[PhantomLong]("long")
     val bigDecimal = column[PhantomBigDecimal]("big_decimal")
     val string     = column[PhantomString]("string")
-    val jsonCol    = column[PureharmJSONCol]("jsonb_col")
+    val jsonCol    = column[PHTJSONCol]("jsonb_col")
     val optCol     = column[Option[PhantomString]]("opt_col")
 
-    override def * : ProvenShape[PureharmRow] =
-      (id, byte, int, long, bigDecimal, string, jsonCol, optCol) <> ((PureharmRow.apply _).tupled, PureharmRow.unapply)
+    override def * : ProvenShape[PHTRow] =
+      (id, byte, int, long, bigDecimal, string, jsonCol, optCol) <> ((PHTRow.apply _).tupled, PHTRow.unapply)
   }
 
   final private class SlickPureharmRowQuerries(implicit
     override val connectionIOEC: ConnectionIOEC
-  ) extends SlickDAOQueryAlgebra[PureharmRow, PhantomPK, SlickPureharmTable] {
+  ) extends SlickDAOQueryAlgebra[PHTRow, PhantomPK, SlickPureharmTable] {
     override val dao: TableQuery[SlickPureharmTable] = TableQuery[SlickPureharmTable]
   }
 
   final private class PureharmRowDAOSlickImpl[F[_]](
     implicit override val connectionIOEC: ConnectionIOEC,
     implicit override val transactor:     Transactor[F],
-  ) extends SlickDAOAlgebra[F, PureharmRow, PhantomPK, SlickPureharmTable] with PureharmRowDAO[F] {
+  ) extends SlickDAOAlgebra[F, PHTRow, PhantomPK, SlickPureharmTable] with PHTDAO[F] {
     override protected val queries: SlickPureharmRowQuerries = new SlickPureharmRowQuerries
   }
 }

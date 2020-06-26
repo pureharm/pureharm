@@ -20,6 +20,7 @@ package busymachines.pureharm.dbslick.psql.test
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbslick._
 import busymachines.pureharm.db.test._
+import busymachines.pureharm.db.testkit.PHTDBConfig
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
 
@@ -31,8 +32,8 @@ final class SlickTransactorTest extends FixturePureharmTest {
 
   private lazy val slickConfig: SlickDBIOAsyncExecutorConfig = SlickDBIOAsyncExecutorConfig.default
 
-  private lazy val connectionConfig: DBConnectionConfig = DBTestConfig.dbConfig.copy(
-    schema = DBTestConfig.schemaName("slick_transactor")
+  private lazy val connectionConfig: DBConnectionConfig = PHTDBConfig.dbConfig.copy(
+    schema = PHTDBConfig.schemaName("slick_transactor")
   )
 
   /**
