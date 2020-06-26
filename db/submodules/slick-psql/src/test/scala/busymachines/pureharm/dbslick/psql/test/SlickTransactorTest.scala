@@ -31,26 +31,6 @@ import org.scalatest._
   */
 final class SlickTransactorTest extends FixturePureharmTest {
 
-  implicit override lazy val runtime: PureharmTestRuntime = new PureharmTestRuntime {
-
-    println(
-      """
-        |
-        |
-        |ANONOAFSLKJFLKASJ
-        |ALSKFJPASFKASOFK
-        |ALSKFJPASFKASOFK
-        |ALSKFJPASFKASOFK
-        |ALSKFJPASFKASOFK
-        |ALSKFJPASFKASOFK
-        |ALSKFJPASFKASOFK
-        |
-        |
-        |
-        |""".stripMargin)
-
-  }
-
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...

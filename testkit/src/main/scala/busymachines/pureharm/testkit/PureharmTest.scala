@@ -34,12 +34,16 @@ import org.scalatest.exceptions.{TestCanceledException, TestFailedException, Tes
   * @since 24 Jun 2020
   *
   */
-abstract class PureharmTest extends AnyFunSuite with Assertions {
+abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTestRuntimeLazyConversions {
   final type MetaData = TestData
 
   private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
   implicit def testLogger: TestLogger = testLogger_
 
+  /**
+    * @see [[PureharmTestRuntimeLazyConversions]]
+    *     for details as to why this is a def
+    */
   implicit def runtime: PureharmTestRuntime = PureharmTestRuntime
 
   import busymachines.pureharm.effects.implicits._
@@ -52,8 +56,6 @@ abstract class PureharmTest extends AnyFunSuite with Assertions {
   )(implicit
     position: source.Position
   ): Unit = {
-
-    implicit val timer: Timer[IO] = runtime.timer
 
     val mdc = MDCKeys(testName, position)
     val iotest: IO[Assertion] = for {

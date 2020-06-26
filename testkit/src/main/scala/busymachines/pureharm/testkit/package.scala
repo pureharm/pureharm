@@ -15,7 +15,7 @@ import scala.annotation.implicitNotFound
 package object testkit {
 
   @implicitNotFound(
-    """
+    msg = """
       |TestLogger is implemented by default in either:
       |  - busymachines.pureharm.testkit.FixturePureharmTest
       |  - busymachines.pureharm.testkit.PureharmTest
@@ -27,7 +27,7 @@ package object testkit {
       |The purpose of TestLogger is to log everything related to test-setup/
       |tear-down to enrich whatever scalatest tells you
       |
-      |""".stripMargin
+      |"""
   )
   type TestLogger = TestLogger.Type
 
