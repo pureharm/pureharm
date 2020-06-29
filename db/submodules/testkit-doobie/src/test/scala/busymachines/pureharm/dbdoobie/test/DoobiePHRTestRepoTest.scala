@@ -28,8 +28,6 @@ final class DoobiePHRTestRepoTest extends PHRTestRepoTest[Transactor[IO]] with P
 object DoobiePHRTestRepoTest extends DoobieRepoTestSetup {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
-    PHRTestDBConfig.dbConfig.copy(
-      schema = PHRTestDBConfig.schemaName(s"doobie_${meta.pos.get.lineNumber}")
-    )
+    PHRTestDBConfig.dbConfig.withSchemaFromClassAndTest(prefix = "doobie", meta = meta)
 
 }

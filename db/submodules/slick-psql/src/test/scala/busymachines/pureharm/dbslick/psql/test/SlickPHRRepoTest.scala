@@ -54,8 +54,6 @@ final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with Parall
 private[test] object SlickPHRRepoTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
-    PHRTestDBConfig.dbConfig.copy(
-      schema = PHRTestDBConfig.schemaName(s"slick_${meta.pos.get.lineNumber}")
-    )
+    PHRTestDBConfig.dbConfig.withSchemaFromClassAndTest(prefix = "slick", meta = meta)
 
 }

@@ -16,8 +16,27 @@ import org.scalatest.TestData
   */
 trait RepoTestSetup[DBTransactor] {
 
+  implicit class TestSetupClassName(config: DBConnectionConfig) {
+
+    /**
+      * @see [[schemaName]]
+      */
+    def withSchemaFromClassAndTest(meta:   TestData): DBConnectionConfig =
+      config.copy(schema = Option(schemaName(meta)))
+
+    /**
+      * @see [[schemaName]]
+      */
+    def withSchemaFromClassAndTest(prefix: String, meta: TestData): DBConnectionConfig =
+      config.copy(schema = Option(schemaName(prefix, meta)))
+  }
+
   /**
     * Should be overridden to create a connection config appropriate for the test
+    *
+    * To ensure unique schema names for test cases use the extension methods:
+    * [[TestSetupClassName.withSchemaFromClassAndTest]]
+    * or the explicit variants [[schemaName]]
     */
   def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig
 
@@ -32,7 +51,12 @@ trait RepoTestSetup[DBTransactor] {
     meta:        TestData
   )(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, DBTransactor] =
     for {
-      _       <- logger.info(MDCKeys(meta))("SETUP — init").to[Resource[IO, *]]
+      _ <- logger.info(MDCKeys(meta))("SETUP — init").to[Resource[IO, *]]
+      schema = dbConfig(meta).schema.getOrElse("public")
+      _       <-
+        logger
+          .info(MDCKeys(meta) ++ Map("schema" -> schema))(s"SETUP — schema name for test: $schema")
+          .to[Resource[IO, *]]
       _       <- _cleanDB(meta)
       _       <- _initDB(meta)
       fixture <- dbTransactorInstance(meta)
@@ -67,4 +91,38 @@ trait RepoTestSetup[DBTransactor] {
       _ <- flyway.Flyway.clean[IO](dbConfig(meta)).to[Resource[IO, *]]
       _ <- logger.info(MDCKeys(meta))("SETUP — done cleaning DB").to[Resource[IO, *]]
     } yield ()
+
+  /**
+    * @return
+    *   The schema name in the format of:
+    *   ${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
+    */
+  def schemaName(meta:         TestData): SchemaName =
+    truncateSchemaName(SchemaName(s"${schemaNameFromClassAndLineNumber(meta)}"))
+
+  /**
+    *
+    * @return
+    *   The schema name in the format of:
+    *   $prefix_${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
+    */
+  def schemaName(prefix:       String, meta: TestData): SchemaName =
+    truncateSchemaName(SchemaName(s"${prefix}_${schemaNameFromClassAndLineNumber(meta)}"))
+
+  protected def truncateSchemaName(s: SchemaName): SchemaName = SchemaName(s.takeRight(63))
+
+  protected def schemaNameFromClassAndLineNumber(meta: TestData): SchemaName =
+    SchemaName(s"${schemaNameFromClass}_${lineNumberOrTestNameHash(meta)}")
+
+  protected def schemaNameFromClass: String =
+    getClass.getSimpleName.replace("$", "").toLowerCase
+
+  /**
+    * When creating a schema we discriminate using the line number when defined,
+    * otherwise using the hash of the test name, we print it out to the console,
+    * so no worries, you can still identify the test easily.
+    * @return
+    */
+  protected def lineNumberOrTestNameHash(meta: TestData): String =
+    meta.pos.map(_.lineNumber.toString).getOrElse(s"${meta.name.hashCode.toString}")
 }
