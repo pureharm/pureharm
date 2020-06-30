@@ -3,7 +3,6 @@ package busymachines.pureharm.testkit
 import busymachines.pureharm.effects._
 
 /**
-  *
   * Basically the problem is as such:
   * 1) ideally, you probably want only one [[PureharmTestRuntime]] instantiated in your entire test run
   *    to not waste resources and startup time...
@@ -19,7 +18,6 @@ import busymachines.pureharm.effects._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 trait PureharmTestRuntimeLazyConversions {
   implicit def phrtToEC(implicit phtr: PureharmTestRuntime): ExecutionContext    = phtr.executionContextCT

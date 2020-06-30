@@ -18,7 +18,6 @@
 package busymachines.pureharm.dbslick
 
 /**
-  *
   * For now we only expose one single configuration,
   * in future versions we'll provide more configurable,
   * and type-safe DSL, so you don't accidentally shoot yourself

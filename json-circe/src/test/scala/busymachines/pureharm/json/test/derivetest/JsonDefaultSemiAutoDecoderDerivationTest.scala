@@ -28,7 +28,6 @@ import busymachines.pureharm.json.test._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 final class JsonDefaultSemiAutoDecoderDerivationTest extends AnyFlatSpec {
   import melonsDefaultSemiAutoDecoders._

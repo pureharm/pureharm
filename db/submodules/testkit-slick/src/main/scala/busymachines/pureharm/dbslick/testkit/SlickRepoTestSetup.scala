@@ -8,10 +8,8 @@ import busymachines.pureharm.testkit._
 import org.scalatest._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 abstract class SlickRepoTestSetup(private val dbProfile: JDBCProfileAPI) extends RepoTestSetup[Transactor[IO]] {
 

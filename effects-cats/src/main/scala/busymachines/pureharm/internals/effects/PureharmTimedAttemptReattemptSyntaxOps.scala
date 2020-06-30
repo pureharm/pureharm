@@ -26,16 +26,13 @@ import busymachines.pureharm.internals.effects.types.{Attempt, MonadAttempt}
 
 import scala.language.postfixOps
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
-  *
   */
 
 final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
-    *
     * @param unit
     *   You probably don't want a granularity larger than [[MILLISECONDS]]
     *   for accurate timing.
@@ -47,12 +44,11 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *  times both success and failure case.
     */
   def timedAttempt(
-    unit:           TimeUnit = MILLISECONDS
-  )(implicit F:     MonadAttempt[F], timer: Timer[F]): F[(FiniteDuration, Attempt[A])] =
+    unit:       TimeUnit = MILLISECONDS
+  )(implicit F: MonadAttempt[F], timer: Timer[F]): F[(FiniteDuration, Attempt[A])] =
     PureharmTimedAttemptReattemptSyntaxOps.timedAttempt(unit)(fa)
 
   /**
-    *
     * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
@@ -100,7 +96,6 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
       .timedReattempt(PureharmTimedAttemptReattemptSyntaxOps.noLog[F], timeUnit)(retries, betweenRetries)(fa)
 
   /**
-    *
     * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
@@ -152,7 +147,6 @@ object PureharmTimedAttemptReattemptSyntaxOps {
   }
 
   /**
-    *
     * @param timeUnit
     *   You probably don't want a granularity larger than [[MILLISECONDS]]
     *   for accurate timing.
@@ -164,10 +158,10 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     *  times both success and failure case.
     */
   def timedAttempt[F[_], A](
-    timeUnit:       TimeUnit
+    timeUnit:   TimeUnit
   )(
-    fa:             F[A]
-  )(implicit F:     MonadAttempt[F], timer: Timer[F]): F[(FiniteDuration, Attempt[A])] =
+    fa:         F[A]
+  )(implicit F: MonadAttempt[F], timer: Timer[F]): F[(FiniteDuration, Attempt[A])] =
     for {
       start <- realTime(timeUnit)(F, timer)
       att   <- fa.attempt
@@ -175,7 +169,6 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     } yield (end.minus(start), att)
 
   /**
-    *
     * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
@@ -232,7 +225,6 @@ object PureharmTimedAttemptReattemptSyntaxOps {
   }
 
   /**
-    *
     * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
@@ -268,7 +260,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
   ): F[A] =
     this.timedReattempt(noLog(Sync[F]), NANOSECONDS)(retries, betweenRetries)(fa).map(_._2).rethrow
 
-  private def noLog[F[_]:    Applicative]: (Throwable, String) => F[Unit] =
+  private def noLog[F[_]: Applicative]: (Throwable, String) => F[Unit] =
     (_, _) => Applicative[F].unit
 
   //find appropriate util package for this... looks useful...

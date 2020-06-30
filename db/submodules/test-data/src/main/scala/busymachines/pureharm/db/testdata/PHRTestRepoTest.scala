@@ -22,7 +22,6 @@ import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.identifiable._
 
 /**
-  *
   * Common class to enforce a minimal contract for out of the box implementations
   * of [[busymachines.pureharm.db.Repo]] for various backends. For now only for doobie, and slick,
   * soon, hopefully for skunk too :D
@@ -33,7 +32,6 @@ import busymachines.pureharm.identifiable._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
-  *
   */
 abstract private[pureharm] class PHRTestRepoTest[Trans] extends RepoTest[PHRow, PhantomPK, Trans] {
   override type FixtureParam <: PHRTestRepo[IO]

@@ -18,10 +18,8 @@
 package busymachines.pureharm.json
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
-  *
   */
 trait PureharmJsonTypeDefinitions {
   final type Codec[A] = io.circe.Codec[A]

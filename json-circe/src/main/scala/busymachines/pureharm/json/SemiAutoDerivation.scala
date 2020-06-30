@@ -22,7 +22,6 @@ import io.circe.generic.extras.{decoding, encoding, semiauto => circeSemiAuto}
 import shapeless.Lazy
 
 /**
-  *
   * Code mostly gotten from:
   * [[io.circe.generic.extras.semiauto.DerivationHelper]],
   * these are just aliases + some extra to help along the pureharm-style
@@ -30,7 +29,6 @@ import shapeless.Lazy
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 trait SemiAutoDerivation {
 

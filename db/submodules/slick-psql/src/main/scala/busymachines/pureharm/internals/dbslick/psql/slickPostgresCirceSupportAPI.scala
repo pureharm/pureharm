@@ -20,10 +20,8 @@ package busymachines.pureharm.internals.dbslick.psql
 import busymachines.pureharm.json._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 trait SlickPostgresCirceSupportAPI {
 

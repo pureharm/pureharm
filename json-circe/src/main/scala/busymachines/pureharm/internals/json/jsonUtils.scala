@@ -23,10 +23,8 @@ import busymachines.pureharm.effects.implicits._
 import io.circe._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 object JsonDecoding {
 
@@ -52,10 +50,8 @@ final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(ms
 }
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 object JsonParsing {
 
@@ -83,7 +79,6 @@ final case class JsonParsingAnomaly(msg: String) extends InvalidInputAnomaly(msg
 }
 
 /**
-  *
   */
 object JsonAnomalyIDs {
 

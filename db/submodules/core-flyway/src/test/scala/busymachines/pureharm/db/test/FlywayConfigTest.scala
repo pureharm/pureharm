@@ -22,10 +22,8 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
-  *
   */
 final class FlywayConfigTest extends PureharmTest {
 

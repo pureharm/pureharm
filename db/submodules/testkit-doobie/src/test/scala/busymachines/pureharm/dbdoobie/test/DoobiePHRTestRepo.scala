@@ -23,7 +23,6 @@ import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.dbdoobie._
 
 /**
-  *
   * Use this also as a rough outline of how you ought to structure
   * your code. Create a trait that extends the
   * [[Repo[F, MyCaseClass, MyPrimaryKeyType]]]
@@ -40,7 +39,6 @@ import busymachines.pureharm.dbdoobie._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 private[test] trait DoobiePHRTestRepo[F[_]] extends PHRTestRepo[F]
 

@@ -21,13 +21,11 @@ import cats.effect.syntax.AllCatsEffectSyntax
 import cats.{instances, syntax}
 
 /**
-  *
   * Mix this trait into your own effects package to get all cats, cats-effect, and pureharm syntax in one
   * import!
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 06 May 2019
-  *
   */
 private[pureharm] trait CatsImplicitsAll extends CatsSyntaxAliasesCore with CatsSyntaxAliasesEffect
 

@@ -23,14 +23,12 @@ import busymachines.pureharm.json.test._
 import org.scalatest.flatspec.AnyFlatSpec
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 final class JsonDerivationNestedTypesTest1 extends AnyFlatSpec {
 
-  val outdoorMelon:               OutdoorMelon               = OutdoorMelons.WildMelon(
+  val outdoorMelon: OutdoorMelon = OutdoorMelons.WildMelon(
     weight = 42,
     color  = OutdoorMelons.Colors.Green,
   )
@@ -65,7 +63,7 @@ final class JsonDerivationNestedTypesTest1 extends AnyFlatSpec {
 
 final class JsonDerivationNestedTypesTest2 extends AnyFlatSpec {
 
-  val outdoorMelon:               OutdoorMelon               = OutdoorMelons.WildMelon(
+  val outdoorMelon: OutdoorMelon = OutdoorMelons.WildMelon(
     weight = 42,
     color  = OutdoorMelons.Colors.Green,
   )

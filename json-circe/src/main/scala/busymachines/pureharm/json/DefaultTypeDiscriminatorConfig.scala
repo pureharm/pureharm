@@ -18,10 +18,8 @@
 package busymachines.pureharm.json
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 trait DefaultTypeDiscriminatorConfig {
 
@@ -32,7 +30,6 @@ trait DefaultTypeDiscriminatorConfig {
     *
     * Unfortunately, this uses the name of each variant as the value for the
     * "_type" field, leaving JSON-value APIs vulnerable to rename refactorings.
-    *
     */
   implicit final val defaultDerivationConfiguration: io.circe.generic.extras.Configuration =
     io.circe.generic.extras.Configuration.default

@@ -26,13 +26,11 @@ import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, Poo
 object UnsafePools {
 
   /**
-    *
     * This is a reasonable default to back up your application's
     * ContextShift. Make sure that you NEVER do blocking I/O on this
     * thread pool. NEVER! — it's not that hard as long as you respect
     * referential transparency, and are careful with using 3rd party
     * libraries (especially Java ones).
-    *
     *
     * Additionally, we can't really instantiate one of these in a resource
     * "safe" manner, because we need it for the [[cats.effect.IOApp]].
@@ -63,11 +61,10 @@ object UnsafePools {
     * Like [[defaultMainExecutionContext]], but with a custom upper bound for threads,
     * instead one based on the number of available processors
     */
-  def mainExecutionContext(threadNamePrefix:        String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT =
+  def mainExecutionContext(threadNamePrefix: String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT =
     PoolMainCPU.main(threadNamePrefix, maxThreads)
 
   /**
-    *
     * !!! WARNING !!!
     * Prefer [[Pools.fixed]], unless you know what you are doing.
     * The behavior the the Execution context itself is the same
@@ -102,7 +99,7 @@ object UnsafePools {
     * @return
     *   A fixed thread pool
     */
-  def fixed(threadNamePrefix:                       String = "fixed", maxThreads:      Int, daemons: Boolean = false): ExecutionContextFT =
+  def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, maxThreads, daemons)
 
   /**
@@ -127,7 +124,7 @@ object UnsafePools {
     *   for daemon threads.
     * @return
     */
-  def cached(threadNamePrefix:                      String, daemons:                   Boolean = false): ExecutionContextCT =
+  def cached(threadNamePrefix: String, daemons: Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
   /**
@@ -138,7 +135,7 @@ object UnsafePools {
     * -----
     * A simple thread pool with one single thread. Be careful how you use it.
     */
-  def singleThreaded(threadNamePrefix:              String = "single-thread", daemons: Boolean = false): ExecutionContextST =
+  def singleThreaded(threadNamePrefix: String = "single-thread", daemons: Boolean = false): ExecutionContextST =
     ExecutionContextST(PoolFixed.unsafeFixed(threadNamePrefix, 1, daemons))
 
   def availableCPUs: Int = Util.unsafeAvailableCPUs

@@ -21,10 +21,8 @@ import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.internals.dbslick._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions {
   self: slick.jdbc.JdbcProfile =>
@@ -63,7 +61,6 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     *   import MyAppSlickProfile.api._
     * }}}
     *
-    *
     * //RECOMMENDED — but not necessary
     *
     * {{{
@@ -92,7 +89,6 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     *
     * While imports of the associated "implicits" brings you everything you need to
     * actually implement things.
-    *
     */
   trait PureharmSlickAPIWithImplicits
     extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances

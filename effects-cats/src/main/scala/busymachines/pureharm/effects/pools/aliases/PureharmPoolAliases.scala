@@ -20,10 +20,8 @@ package busymachines.pureharm.effects.pools.aliases
 import busymachines.pureharm.effects.pools
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 trait PureharmPoolAliases {
 

@@ -20,10 +20,8 @@ package busymachines.pureharm.config
 import busymachines.pureharm.internals.config
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 trait PureconfigAllTypeDefinitions {
   final type ConfigReader[A] = pureconfig.ConfigReader[A]

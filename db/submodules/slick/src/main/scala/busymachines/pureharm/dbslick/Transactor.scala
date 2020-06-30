@@ -22,10 +22,8 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
-  *
   */
 trait Transactor[F[_]] {
   def run[T](cio: ConnectionIO[T]): F[T]

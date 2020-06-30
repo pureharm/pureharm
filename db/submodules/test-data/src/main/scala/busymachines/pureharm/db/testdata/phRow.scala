@@ -20,10 +20,8 @@ package busymachines.pureharm.db.testdata
 import busymachines.pureharm.identifiable.Identifiable
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 final private[pureharm] case class PHRow(
   id:          PhantomPK,

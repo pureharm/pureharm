@@ -20,10 +20,8 @@ package busymachines.pureharm.effects.pools.test
 import busymachines.pureharm.effects._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 final private[test] class PHTestPools[F[_]](
   val dbBlocking:      ExecutionContextCT,

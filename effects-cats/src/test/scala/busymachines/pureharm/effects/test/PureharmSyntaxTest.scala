@@ -22,10 +22,8 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 May 2019
-  *
   */
 final class PureharmSyntaxTest extends AnyFunSpec {
   private def test: ItWord = it

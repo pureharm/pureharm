@@ -29,7 +29,6 @@ import busymachines.pureharm.dbslick._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
-  *
   */
 trait SlickQueryAlgebraDefinitions {
 
@@ -60,7 +59,6 @@ trait SlickQueryAlgebraDefinitions {
   //===========================================================================
 
   /**
-    *
     * @tparam E
     *   The type of value to be inserted into the table
     * @tparam PK

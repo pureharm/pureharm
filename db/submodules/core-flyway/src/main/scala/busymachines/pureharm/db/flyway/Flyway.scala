@@ -20,10 +20,8 @@ package busymachines.pureharm.db.flyway
 import busymachines.pureharm.db._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
-  *
   */
 object Flyway {
   import org.flywaydb.core.{Flyway => JFlyway}

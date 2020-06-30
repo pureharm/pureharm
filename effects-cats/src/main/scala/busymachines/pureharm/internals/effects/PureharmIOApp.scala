@@ -21,18 +21,14 @@ import cats.Later
 import cats.effect._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 trait PureharmIOApp extends IOApp {
 
   /**
-    *
     * We want to ensure that this is evaluated only once, otherwise we introduce
     * too many possibilities of shooting oneself in the foot.
-    *
     *
     * {{{
     * //created by mixing in the pureharm goodies
@@ -56,7 +52,6 @@ trait PureharmIOApp extends IOApp {
   val ioRuntime: Later[(ContextShift[IO], Timer[IO])]
 
   /**
-    *
     */
   final override protected def contextShift: ContextShift[IO] = ioRuntime.value._1
 

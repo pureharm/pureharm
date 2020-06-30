@@ -20,10 +20,8 @@ package busymachines.pureharm.json
 import busymachines.pureharm.phantom.PhantomType
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 package object test {
 

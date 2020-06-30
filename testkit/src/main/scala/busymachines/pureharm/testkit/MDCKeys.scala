@@ -23,14 +23,12 @@ import org.scalatest._
 import scala.concurrent.duration.FiniteDuration
 
 /**
-  *
   * Common keys used in MDC contexts for loggers... allows us to be somewhat consistent
   * through the entire app especially since in logs these get sorted, so we can prefix
   * them universally
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Jun 2020
-  *
   */
 object MDCKeys {
   protected val OutcomeK: String = "outcome"

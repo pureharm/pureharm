@@ -20,7 +20,6 @@ package busymachines.pureharm.effects
 import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstances}
 
 /**
-  *
   * Define your own "effects" package and write something like this:
   * {{{
   *   package mystuff
@@ -30,7 +29,6 @@ import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstanc
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 06 May 2019
-  *
   */
 trait PureharmEffectsAllImplicits
   extends aliases.PureharmEffectsSyntaxAll with aliases.CatsImplicitsAll with PureharmUnlawfulInstances

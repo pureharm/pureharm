@@ -20,10 +20,8 @@ package busymachines.pureharm.internals.effects.aliases
 import busymachines.pureharm.internals.effects
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Apr 2019
-  *
   */
 private[pureharm] trait PureharmEffectsSyntaxAll
   extends effects.PureharmSyntax.Implicits with effects.PureharmTimedAttemptReattemptSyntaxOps.Implicits

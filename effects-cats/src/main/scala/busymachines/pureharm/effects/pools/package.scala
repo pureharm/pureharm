@@ -20,10 +20,8 @@ package busymachines.pureharm.effects
 import busymachines.pureharm.phantom.PhantomType
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 package object pools {
   private[pureharm] object ExecutionContextFT extends PhantomType[scala.concurrent.ExecutionContext]

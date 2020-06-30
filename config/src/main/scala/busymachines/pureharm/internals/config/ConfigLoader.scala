@@ -24,7 +24,6 @@ import pureconfig._
 import pureconfig.error.ConfigReaderFailures
 
 /**
-  *
   * Important to note:
   * Given a case class:
   * {{{
@@ -39,7 +38,6 @@ import pureconfig.error.ConfigReaderFailures
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 20 Jun 2018
-  *
   */
 trait ConfigLoader[Config] {
 

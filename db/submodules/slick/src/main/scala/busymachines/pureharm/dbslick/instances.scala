@@ -20,9 +20,7 @@ package busymachines.pureharm.dbslick
 import busymachines.pureharm.internals.dbslick.{PureharmSlickConnectionIOOps, SlickConnectionIOCatsInstances}
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
-  *
   */
 object instances extends SlickConnectionIOCatsInstances with PureharmSlickConnectionIOOps.Implicits

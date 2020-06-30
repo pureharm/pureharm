@@ -21,7 +21,6 @@ import io.circe.{Decoder, Encoder}
 import shapeless.tag.@@
 
 /**
-  *
   * Unfortunately type inference rarely (if ever) works
   * with something fully generic like
   * {{{
@@ -43,7 +42,6 @@ import shapeless.tag.@@
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 object PureharmJsonInstances {
 

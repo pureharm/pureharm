@@ -20,7 +20,6 @@ package busymachines.pureharm.internals.effects
 import busymachines.pureharm.effects
 
 /**
-  *
   * Pseudo companion object for [[busymachines.pureharm.effects.MonadAttempt]]
   * type, alias.
   *
@@ -33,7 +32,6 @@ import busymachines.pureharm.effects
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 29 Apr 2019
-  *
   */
 object MonadAttempt {
   def apply[F[_]](implicit F: effects.MonadAttempt[F]): effects.MonadAttempt[F] = F

@@ -6,13 +6,11 @@ import doobie.hikari.HikariTransactor
 import busymachines.pureharm.effects._
 
 /**
-  *
   * There is little point in using something other than a
   * Hikari Transactor for this...
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 trait TransactorImplicits {
 

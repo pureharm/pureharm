@@ -18,7 +18,6 @@
 package busymachines.pureharm.phantom
 
 /**
-  *
   * Example use case:
   * {{{
   * package object api {
@@ -29,7 +28,6 @@ package busymachines.pureharm.phantom
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
-  *
   */
 trait PhantomType[T] {
   import shapeless.tag
@@ -42,7 +40,7 @@ trait PhantomType[T] {
     * Override if you want to do pure transformations on your value
     * before tagging.
     */
-  @inline def apply(value:       T): Type =
+  @inline def apply(value: T): Type =
     tag[Tag][T](value)
 
   /**

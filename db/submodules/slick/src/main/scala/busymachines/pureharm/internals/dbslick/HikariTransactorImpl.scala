@@ -22,10 +22,8 @@ import busymachines.pureharm.dbslick._
 import busymachines.pureharm.effects.implicits._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
-  *
   */
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
   override val slickAPI: JDBCProfileAPI,
@@ -60,7 +58,7 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
     F.bracket(acquire)(_ => use)(_ => release)
   }
 
-  override def closeSession:       F[Unit]          =
+  override def closeSession: F[Unit] =
     for {
       s <- session.get
       _ <- F.delay(s.close())

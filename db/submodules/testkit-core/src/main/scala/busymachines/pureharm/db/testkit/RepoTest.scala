@@ -6,10 +6,8 @@ import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.testkit._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
-  *
   */
 abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePureharmTest {
   override type FixtureParam <: Repo[IO, E, PK]
@@ -22,11 +20,10 @@ abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePu
 
   protected def dataAssumptionCheck: Resource[IO, Unit] =
     IO.delay {
-        assume(data.pk1 != data.pk2, "Incorrect test data. primary keys have to be different for the two rows")
-        assume(data.nonExistentPK != data.pk1, "Incorrect test data. nonExistentPK has to be different from PK1")
-        assume(data.nonExistentPK != data.pk2, "Incorrect test data. nonExistentPK has to be different from PK2")
-      }
-      .to[Resource[IO, *]]
+      assume(data.pk1 != data.pk2, "Incorrect test data. primary keys have to be different for the two rows")
+      assume(data.nonExistentPK != data.pk1, "Incorrect test data. nonExistentPK has to be different from PK1")
+      assume(data.nonExistentPK != data.pk2, "Incorrect test data. nonExistentPK has to be different from PK2")
+    }.to[Resource[IO, *]]
       .void
 
   override def fixture(meta: MetaData): Resource[IO, FixtureParam] =

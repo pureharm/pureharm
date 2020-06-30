@@ -18,10 +18,8 @@
 package busymachines.pureharm
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
-  *
   */
 package object effects extends PureharmEffectsAllTypes {
   /**

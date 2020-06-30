@@ -20,7 +20,6 @@ package busymachines.pureharm.dbslick.psql.test
 import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
 
 /**
-  *
   * This is an example of the recommended way of setting up your Pureharm slickDB
   * profile object (sans a lot of other compatibility things)
   *
@@ -34,7 +33,6 @@ import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 private[test] trait PureharmTestPSQLProfile extends PureharmSlickPostgresProfile {
   override val api: PureharmTestAPI = new PureharmTestAPI {}
@@ -42,6 +40,6 @@ private[test] trait PureharmTestPSQLProfile extends PureharmSlickPostgresProfile
   trait PureharmTestAPI extends super.API with PureharmSlickPostgresAPIWithImplicits
 }
 
-private[test] object testdb                 extends PureharmTestPSQLProfile {
+private[test] object testdb extends PureharmTestPSQLProfile {
   val implicits: PureharmTestAPI = this.api
 }

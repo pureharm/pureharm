@@ -18,10 +18,8 @@
 package busymachines.pureharm.config.test
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 final private[test] case class PureharmTestConfig(
   phantomInt:            PhantomInt,

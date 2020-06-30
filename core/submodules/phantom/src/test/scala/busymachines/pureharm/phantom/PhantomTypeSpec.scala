@@ -20,10 +20,8 @@ package busymachines.pureharm.phantom
 import org.scalatest.funspec.AnyFunSpec
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
-  *
   */
 final class PhantomTypeSpec extends AnyFunSpec {
   import PhantomTypeSpec._

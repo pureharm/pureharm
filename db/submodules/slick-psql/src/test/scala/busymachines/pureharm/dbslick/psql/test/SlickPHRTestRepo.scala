@@ -21,10 +21,8 @@ import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.dbslick.psql.test.testdb._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 private[test] trait SlickPHRTestRepo[F[_]] extends PHRTestRepo[F]
 

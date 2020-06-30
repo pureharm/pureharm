@@ -21,10 +21,8 @@ import busymachines.pureharm.dbslick.ConnectionIO
 import slick.dbio.{DBIOAction, Effect, NoStream}
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 01 Aug 2019
-  *
   */
 object PureharmSlickConnectionIOOps {
 

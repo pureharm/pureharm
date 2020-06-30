@@ -22,10 +22,8 @@ import busymachines.pureharm.phantom.PhantomType
 import scala.concurrent.duration._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 package object test {
   object PhantomInt            extends PhantomType[Int]

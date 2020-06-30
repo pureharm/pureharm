@@ -22,7 +22,6 @@ package busymachines.pureharm.anomaly
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 private[pureharm] trait AnomalyConstructors[Resulting <: AnomalyBase] {
   def apply(id: AnomalyID): Resulting
