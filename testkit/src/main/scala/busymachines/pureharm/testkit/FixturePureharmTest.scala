@@ -25,13 +25,11 @@ import org.scalactic.source
 import busymachines.pureharm.effects._
 
 /**
-  *
   * This is an experimental base class,
   * at some point it should be moved to a testkit module
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
-  *
   */
 abstract class FixturePureharmTest
   extends FixtureAnyFunSuite with Assertions with PureharmAssertions with PureharmTestRuntimeLazyConversions {

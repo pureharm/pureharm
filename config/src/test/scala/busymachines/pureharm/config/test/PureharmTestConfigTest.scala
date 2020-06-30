@@ -26,10 +26,8 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 final class PureharmTestConfigTest extends AnyFunSuite with Matchers {
 

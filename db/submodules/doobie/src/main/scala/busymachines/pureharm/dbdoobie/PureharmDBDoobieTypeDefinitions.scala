@@ -20,10 +20,8 @@ package busymachines.pureharm.dbdoobie
 import busymachines.pureharm.internals
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 trait PureharmDBDoobieTypeDefinitions
   extends doobie.Aliases with doobie.free.Types with doobie.free.Modules with doobie.postgres.free.Types

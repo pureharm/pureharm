@@ -20,10 +20,8 @@ package busymachines.pureharm.config
 import busymachines.pureharm.internals.config.PureharmConfigInstances
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 trait PureharmAllConfigImplicits
   extends pureconfig.BasicReaders with pureconfig.CollectionReaders with pureconfig.ProductReaders

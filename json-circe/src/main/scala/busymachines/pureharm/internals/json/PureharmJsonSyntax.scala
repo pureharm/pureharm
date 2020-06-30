@@ -21,10 +21,8 @@ import io.circe._
 import busymachines.pureharm.effects._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 object PureharmJsonSyntax {
 

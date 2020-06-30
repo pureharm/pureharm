@@ -20,7 +20,6 @@ package busymachines.pureharm.db
 import busymachines.pureharm.effects.{Show, Traverse}
 
 /**
-  *
   * @tparam E
   *   The type of elements manipulated by this DAO
   * @tparam PK
@@ -34,7 +33,6 @@ trait Repo[R[_], E, PK] {
   def find(pk: PK): R[Option[E]]
 
   /**
-    *
     * Required to render the [[PK]] to return in anomaly
     *
     * @return

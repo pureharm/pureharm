@@ -22,10 +22,8 @@ import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.json.test._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 private[test] object melonsDefaultSemiAutoDecoders {
 
@@ -35,7 +33,6 @@ private[test] object melonsDefaultSemiAutoDecoders {
 }
 
 /**
-  *
   */
 private[test] object melonsDefaultSemiAutoEncoders {
 
@@ -45,7 +42,6 @@ private[test] object melonsDefaultSemiAutoEncoders {
 }
 
 /**
-  *
   */
 private[test] object melonsDefaultSemiAutoCodecs {
 

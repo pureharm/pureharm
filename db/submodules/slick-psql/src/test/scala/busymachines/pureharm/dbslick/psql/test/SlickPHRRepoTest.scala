@@ -35,7 +35,6 @@ import org.scalatest._
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with ParallelTestExecution {
 

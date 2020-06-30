@@ -18,13 +18,11 @@
 package busymachines.pureharm.phantom
 
 /**
-  *
   * See [[PhantomType]], but basically, the apply
   * method returns an `Either[E, A]`
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 09 May 2019
-  *
   */
 trait SafePhantomType[E, A] {
   import shapeless.tag

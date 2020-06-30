@@ -26,13 +26,11 @@ import busymachines.pureharm.effects._
 import org.scalatest.exceptions.{TestCanceledException, TestFailedException, TestPendingException}
 
 /**
-  *
   * This is an experimental base class,
   * at some point it should be moved to a testkit module
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Jun 2020
-  *
   */
 abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTestRuntimeLazyConversions {
   final type MetaData = TestData
@@ -71,7 +69,7 @@ abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTes
         case Left(e: TestCanceledException) =>
           testLogger.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
-        case Left(e) =>
+        case Left(e)    =>
           testLogger.warn(mdc.++(MDCKeys(Exceptional(e), d)))(
             "TERMINATED — fail tests with assertions, not by throwing random"
           ) *> IO.raiseError[Assertion](e)

@@ -7,10 +7,8 @@ import io.chrisdavenport.log4cats._
 import scala.annotation.implicitNotFound
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 package object testkit {
 

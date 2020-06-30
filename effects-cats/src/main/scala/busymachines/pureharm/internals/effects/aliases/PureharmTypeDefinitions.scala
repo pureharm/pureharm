@@ -21,10 +21,8 @@ import busymachines.pureharm.internals.effects
 import busymachines.pureharm.internals.effects.types
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
-  *
   */
 trait PureharmTypeDefinitions {
 
@@ -58,7 +56,6 @@ trait PureharmTypeDefinitions {
   final val BracketAttempt: effects.BracketAttempt.type = effects.BracketAttempt
 
   /**
-    *
     * Used to block on an F[A], and ensure that all recovery and
     * shifting back is always done.
     *
@@ -79,7 +76,6 @@ trait PureharmTypeDefinitions {
     *
     * @author Lorand Szakacs, https://github.com/lorandszakacs
     * @since 13 Jun 2019
-    *
     */
   final type BlockingShifter[F[_]] = effects.BlockingShifter[F]
   final val BlockingShifter: effects.BlockingShifter.type = effects.BlockingShifter

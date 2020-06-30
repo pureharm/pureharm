@@ -20,10 +20,8 @@ package busymachines.pureharm.dbdoobie
 import busymachines.pureharm.internals.dbdoobie.{PhantomTypeMetas, TransactorImplicits}
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 trait PureharmDBDoobieImplicitsAll
   extends doobie.syntax.AllSyntax with doobie.util.meta.SqlMeta with doobie.util.meta.TimeMeta

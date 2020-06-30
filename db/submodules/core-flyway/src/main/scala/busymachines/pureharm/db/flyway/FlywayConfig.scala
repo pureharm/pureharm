@@ -21,7 +21,6 @@ import busymachines.pureharm.config._
 import busymachines.pureharm.config.implicits._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
   * --

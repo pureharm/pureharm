@@ -9,10 +9,8 @@ import busymachines.pureharm.testkit._
 import org.scalatest._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 trait DoobieRepoTestSetup extends RepoTestSetup[Transactor[IO]] {
 

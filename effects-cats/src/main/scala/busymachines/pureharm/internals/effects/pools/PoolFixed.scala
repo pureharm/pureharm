@@ -45,8 +45,8 @@ private[pureharm] object PoolFixed {
     */
   def unsafeFixed(
     threadNamePrefix: String,
-    maxThreads: Int,
-    daemons:    Boolean,
+    maxThreads:       Int,
+    daemons:          Boolean,
   ): ExecutionContextFT =
     ExecutionContextFT(Util.exitOnFatal(unsafeExecutorService(threadNamePrefix, maxThreads, daemons)))
 

@@ -9,10 +9,8 @@ import busymachines.pureharm.testkit._
 import org.scalatest.TestData
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
-  *
   */
 trait RepoTestSetup[DBTransactor] {
 
@@ -97,16 +95,15 @@ trait RepoTestSetup[DBTransactor] {
     *   The schema name in the format of:
     *   ${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
     */
-  def schemaName(meta:         TestData): SchemaName =
+  def schemaName(meta: TestData): SchemaName =
     truncateSchemaName(SchemaName(s"${schemaNameFromClassAndLineNumber(meta)}"))
 
   /**
-    *
     * @return
     *   The schema name in the format of:
     *   $prefix_${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
     */
-  def schemaName(prefix:       String, meta: TestData): SchemaName =
+  def schemaName(prefix: String, meta: TestData): SchemaName =
     truncateSchemaName(SchemaName(s"${prefix}_${schemaNameFromClassAndLineNumber(meta)}"))
 
   protected def truncateSchemaName(s: SchemaName): SchemaName = SchemaName(s.takeRight(63))

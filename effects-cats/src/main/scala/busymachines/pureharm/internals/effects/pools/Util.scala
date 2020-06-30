@@ -23,16 +23,14 @@ import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 private[pureharm] object Util {
 
   def unsafeAvailableCPUs: Int = Runtime.getRuntime.availableProcessors()
 
-  private[pools] def exitOnFatal(ec:                ExecutorService): ExecutionContext = new ExecutionContext {
+  private[pools] def exitOnFatal(ec: ExecutorService): ExecutionContext = new ExecutionContext {
     private val underlying: ExecutionContext = ExecutionContext.fromExecutorService(ec)
 
     override def execute(r: Runnable): Unit = {

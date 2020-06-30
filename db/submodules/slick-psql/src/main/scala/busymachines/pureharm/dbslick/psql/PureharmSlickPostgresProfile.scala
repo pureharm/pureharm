@@ -23,7 +23,6 @@ import busymachines.pureharm.internals.dbslick._
 import busymachines.pureharm.internals.dbslick.psql
 
 /**
-  *
   * If by any chance you are not using Postgres, then
   * you should be using [[PureharmSlickDBProfile]] as a
   * starting point and mixing in whatever you have specific
@@ -31,7 +30,6 @@ import busymachines.pureharm.internals.dbslick.psql
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
-  *
   */
 trait PureharmSlickPostgresProfile
   extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
@@ -65,7 +63,6 @@ trait PureharmSlickPostgresProfile
     *   import MyAppSlickProfile.api._
     * }}}
     *
-    *
     * //RECOMMENDED — but not necessary
     *
     * {{{
@@ -94,7 +91,6 @@ trait PureharmSlickPostgresProfile
     *
     * While imports of the associated "implicits" brings you everything you need to
     * actually implement things.
-    *
     */
   trait PureharmSlickPostgresAPIWithImplicits
     extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances

@@ -21,10 +21,8 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.dbslick._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
-  *
   */
 final private[internals] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)
   extends MonadError[ConnectionIO, Throwable] {

@@ -18,7 +18,6 @@
 package busymachines.pureharm.internals.effects
 
 /**
-  *
   * Pseudo companion object for [[busymachines.pureharm.effects.BracketAttempt]]
   * type, alias.
   *
@@ -31,7 +30,6 @@ package busymachines.pureharm.internals.effects
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 03 May 2019
-  *
   */
 object BracketAttempt {
   def apply[F[_]](implicit i: cats.effect.Bracket[F, Throwable]): cats.effect.Bracket[F, Throwable] = i

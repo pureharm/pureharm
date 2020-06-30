@@ -10,10 +10,8 @@ import busymachines.pureharm.testkit._
 import org.scalatest._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
-  *
   */
 final class DoobiePHRTestRepoTest extends PHRTestRepoTest[Transactor[IO]] with ParallelTestExecution {
   override type FixtureParam = DoobiePHRTestRepo[IO]

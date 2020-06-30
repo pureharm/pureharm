@@ -20,13 +20,11 @@ package busymachines.pureharm.anomaly
 import busymachines.pureharm.anomaly
 
 /**
-  *
   * Mix this into your app's "core" package to get all these nice little
   * anomalies.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
-  *
   */
 trait PureharmAnomalyTypeDefinitions {
 

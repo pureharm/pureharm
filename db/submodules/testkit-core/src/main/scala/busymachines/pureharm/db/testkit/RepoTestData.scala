@@ -8,7 +8,6 @@ import busymachines.pureharm.identifiable.Identifiable
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
-  *
   */
 trait RepoTestData[E, PK] {
 

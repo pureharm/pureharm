@@ -18,9 +18,7 @@
 package busymachines.pureharm
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 package object anomaly extends AnomalyParamtersImplicits

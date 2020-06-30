@@ -18,10 +18,8 @@
 package busymachines.pureharm.anomaly
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
-  *
   */
 abstract class InconsistentStateCatastrophe(
   override val message:  String,

@@ -24,10 +24,8 @@ import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.identifiable.Identifiable
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]) {
   def name: TableName
@@ -162,7 +160,6 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
     *     override val writeE: Write[PureharmRow] = Write[PureharmRow]
     *   }
     * }}}
-    *
     */
   protected[this] def createColumn(s: String): Column = Column(s)
 

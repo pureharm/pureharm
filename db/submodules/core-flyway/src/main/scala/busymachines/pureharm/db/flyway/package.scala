@@ -20,10 +20,8 @@ package busymachines.pureharm.db
 import busymachines.pureharm.phantom._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
-  *
   */
 package object flyway {
 

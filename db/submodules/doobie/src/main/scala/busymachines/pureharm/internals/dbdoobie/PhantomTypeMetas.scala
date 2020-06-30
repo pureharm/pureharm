@@ -27,10 +27,8 @@ import org.postgresql.util.PGobject
 import shapeless.tag.@@
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 //FIXME: actually add all primitve types, currently only have the ones required to run tests
 trait PhantomTypeMetas {

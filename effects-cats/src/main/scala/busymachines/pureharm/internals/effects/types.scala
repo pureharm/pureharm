@@ -18,10 +18,8 @@
 package busymachines.pureharm.internals.effects
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
-  *
   */
 object types {
 

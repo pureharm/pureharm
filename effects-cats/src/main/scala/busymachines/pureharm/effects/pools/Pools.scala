@@ -21,10 +21,8 @@ import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, Uti
 import cats.effect._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 object Pools {
 

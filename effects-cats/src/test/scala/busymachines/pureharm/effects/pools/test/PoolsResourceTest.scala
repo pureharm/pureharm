@@ -23,14 +23,12 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
 /**
-  *
   * We usually run two things on a given thread pool,
   * so that one can manually inspect thread names in the console
   * to glimpse some behavior
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 final class PoolsResourceTest extends AnyFunSuite {
 

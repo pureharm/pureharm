@@ -18,19 +18,15 @@
 package busymachines.pureharm.json.test
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 import busymachines.pureharm.anomaly._
 import org.scalatest.flatspec.AnyFlatSpec
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 final class AnomalyJsonCodecTest extends AnyFlatSpec {
 

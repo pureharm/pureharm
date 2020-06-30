@@ -22,14 +22,12 @@ import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.json.test._
 
 /**
-  *
   * Here we test [[busymachines.pureharm.json.Codec]] derivation
   *
   * See the [[Melon]] hierarchy
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 final class JsonDefaultSemiAutoCodecDerivationTest extends AnyFlatSpec {
   import melonsDefaultSemiAutoCodecs._

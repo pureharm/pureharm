@@ -22,7 +22,6 @@ import cats.{effect => ce}
 import scala.{concurrent => sc}
 
 /**
-  *
   * Trait to mixin all sorts of type aliases for most commonly used
   * effects. This trait should be mixed in each of your projects
   * to gain "one import experience" for your effect needs.
@@ -32,7 +31,6 @@ import scala.{concurrent => sc}
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Apr 2019
-  *
   */
 private[pureharm] trait CatsTypeAliases {
 

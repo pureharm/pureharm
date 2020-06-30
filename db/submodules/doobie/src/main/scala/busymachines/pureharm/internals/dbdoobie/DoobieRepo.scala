@@ -24,10 +24,8 @@ import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.dbdoobie.implicits._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
-  *
   */
 abstract class DoobieRepo[F[_], E, PK, TA <: TableWithPK[E, PK]](implicit
   val transactor: Transactor[F],

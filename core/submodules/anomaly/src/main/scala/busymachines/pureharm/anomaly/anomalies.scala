@@ -20,10 +20,8 @@ package busymachines.pureharm.anomaly
 import scala.collection.immutable.Seq
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 trait AnomaliesBase extends AnomalyBase with Product with Serializable {
   def firstAnomaly: AnomalyBase

@@ -21,10 +21,8 @@ import pureconfig.{ConfigReader, ConfigWriter}
 import shapeless.tag.@@
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
-  *
   */
 object PureharmConfigInstances {
 

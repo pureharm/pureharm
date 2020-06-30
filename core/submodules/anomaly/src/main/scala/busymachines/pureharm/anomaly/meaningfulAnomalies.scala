@@ -38,7 +38,6 @@ package busymachines.pureharm.anomaly
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 object MeaningfulAnomalies {
 
@@ -108,7 +107,7 @@ object MeaningfulAnomalies {
   private[pureharm] val ConflictMsg = "Conflict"
 }
 
-private[pureharm] case object NotFoundAnomalyID     extends AnomalyID {
+private[pureharm] case object NotFoundAnomalyID extends AnomalyID {
   override val name: String = "0"
 }
 
@@ -116,11 +115,11 @@ private[pureharm] case object UnauthorizedAnomalyID extends AnomalyID {
   override val name: String = "1"
 }
 
-private[pureharm] case object ForbiddenAnomalyID    extends AnomalyID {
+private[pureharm] case object ForbiddenAnomalyID extends AnomalyID {
   override val name: String = "2"
 }
 
-private[pureharm] case object DeniedAnomalyID       extends AnomalyID {
+private[pureharm] case object DeniedAnomalyID extends AnomalyID {
   override val name: String = "3"
 }
 
@@ -128,6 +127,6 @@ private[pureharm] case object InvalidInputAnomalyID extends AnomalyID {
   override val name: String = "4"
 }
 
-private[pureharm] case object ConflictAnomalyID     extends AnomalyID {
+private[pureharm] case object ConflictAnomalyID extends AnomalyID {
   override val name: String = "5"
 }

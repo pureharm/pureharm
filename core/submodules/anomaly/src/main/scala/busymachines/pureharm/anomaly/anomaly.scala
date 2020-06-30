@@ -20,17 +20,13 @@ package busymachines.pureharm.anomaly
 import scala.collection.immutable.Seq
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
-  *
   */
 
 /**
-  *
   * You should express your business logic expected ways
   * of failure using this trait.
-  *
   */
 abstract class Anomaly(
   override val message: String,
@@ -74,7 +70,7 @@ object AnomalyID {
 
 final private[pureharm] case class AnomalyIDUnderlying(override val name: String) extends AnomalyID
 
-object Anomaly                                 extends AnomalyConstructors[Anomaly] {
+object Anomaly extends AnomalyConstructors[Anomaly] {
   private[pureharm] val AnomalyString: String = "Anomaly"
 
   type Parameter = StringOrSeqString

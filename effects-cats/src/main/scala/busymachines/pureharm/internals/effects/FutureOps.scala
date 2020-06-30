@@ -23,10 +23,8 @@ import busymachines.pureharm.effects._
 import scala.collection.compat._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 May 2019
-  *
   */
 private[internals] object FutureOps {
   private val unitFunction: Any => Unit = _ => ()
@@ -55,27 +53,25 @@ private[internals] object FutureOps {
 //    Future.traverse(in)(fn).map(_ => ())
 
   /**
-    *
     * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.traverse]]
     */
   @inline def traverse_[A, B](
-    in:                Seq[A]
-  )(fn:                A => Future[B])(implicit executor: ExecutionContext):                  Future[Unit]      =
+    in: Seq[A]
+  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.traverse(in)(fn))
 
   /**
-    *
     * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.traverse]]
     */
   @inline def traverse_[A, B](
-    in:                Set[A]
-  )(fn:                A => Future[B])(implicit executor: ExecutionContext):                  Future[Unit]      =
+    in: Set[A]
+  )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.traverse(in)(fn))
 
   //the generic version gets: Cannot construct a collection of type M[A] with elements of type A based on a collection of type M[scala.concurrent.Future[A]]
@@ -93,7 +89,6 @@ private[internals] object FutureOps {
 //    this.void(Future.sequence(in))
 
   /**
-    *
     * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
     * for the combined effects.
     *
@@ -101,11 +96,10 @@ private[internals] object FutureOps {
     */
   @inline def sequence_[A, To](
     in:                Seq[Future[A]]
-  )(implicit executor: ExecutionContext):                 Future[Unit]                       =
+  )(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.sequence(in))
 
   /**
-    *
     * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
     * for the combined effects.
     *
@@ -113,11 +107,10 @@ private[internals] object FutureOps {
     */
   @inline def sequence_[A, To](
     in:                Set[Future[A]]
-  )(implicit executor: ExecutionContext):                 Future[Unit]                       =
+  )(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.sequence(in))
 
   /**
-    *
     * Syntactically inspired from [[Future.traverse]], but it differs semantically
     * insofar as this method does not attempt to run any futures in parallel. "M" stands
     * for "monadic", as opposed to "applicative" which is the foundation for the formal definition
@@ -140,12 +133,10 @@ private[internals] object FutureOps {
     *   }
     *   //... and so on, and so on!
     * }}}
-    *
-    *
     */
   @inline def serialize[A, B, M[X] <: IterableOnce[X]](
-    in:                M[A]
-  )(fn:                A => Future[B])(implicit bf:       BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] = {
+    in: M[A]
+  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] = {
     import scala.collection.mutable
     if (in.iterator.isEmpty) {
       Future.successful(bf.newBuilder(in).result())
@@ -174,7 +165,7 @@ private[internals] object FutureOps {
     * for the combined effects.
     */
   @inline def serialize_[A, B, M[X] <: IterableOnce[X]](
-    in:                M[A]
-  )(fn:                A => Future[B])(implicit bf:       BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
+    in: M[A]
+  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
     this.void(FutureOps.serialize(in)(fn))
 }

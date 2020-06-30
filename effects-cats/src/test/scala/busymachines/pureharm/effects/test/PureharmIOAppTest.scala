@@ -21,20 +21,16 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
 /**
-  *
   * This is an example of "main" method, built using pureharm.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
-  *
   */
 object PureharmIOAppTest extends PureharmIOApp {
 
   /**
-    *
     * We want to ensure that this is evaluated only once, otherwise we introduce
     * too many possibilities of shooting oneself in the foot.
-    *
     *
     * {{{
     * //created by mixing in the pureharm goodies

@@ -4,10 +4,8 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.phantom._
 
 /**
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
-  *
   */
 package object dbdoobie {
 
