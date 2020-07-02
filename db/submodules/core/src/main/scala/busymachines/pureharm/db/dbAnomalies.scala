@@ -19,7 +19,9 @@ package busymachines.pureharm.db
 
 import busymachines.pureharm.anomaly._
 
-abstract class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
+//=============================================================================
+
+final case class DBEntryNotFoundAnomaly(val pk: String, override val causedBy: Option[Throwable])
   extends NotFoundAnomaly(s"DB row with pk=$pk not found", causedBy) {
   override val id: AnomalyID = DBEntryNotFoundAnomaly.DBEntryNotFoundAnomalyID
 
@@ -32,11 +34,13 @@ object DBEntryNotFoundAnomaly {
   case object DBEntryNotFoundAnomalyID extends AnomalyID { override val name: String = "ph_db_001" }
 }
 
-abstract class DBBatchInsertFailedAnomaly(
+//=============================================================================
+
+final case class DBBatchInsertFailedAnomaly(
   val expectedSize:      Int,
   val actualSize:        Int,
   override val causedBy: Option[Throwable],
-) extends NotFoundAnomaly(s"DB batch insert expected to insert $expectedSize but inserted $actualSize.", causedBy) {
+) extends InvalidInputAnomaly(s"DB batch insert expected to insert $expectedSize but inserted $actualSize.", causedBy) {
   override val id: AnomalyID = DBBatchInsertFailedAnomaly.DBBatchUpdateFailedAnomalyID
 
   override val parameters: Anomaly.Parameters = Anomaly.Parameters(
@@ -49,9 +53,11 @@ object DBBatchInsertFailedAnomaly {
   case object DBBatchUpdateFailedAnomalyID extends AnomalyID { override val name: String = "ph_db_002" }
 }
 
-abstract class DBDeleteByPKFailedAnomaly(
+//=============================================================================
+
+final case class DBDeleteByPKFailedAnomaly(
   val pk: String
-) extends NotFoundAnomaly(s"DELETE by PK=$pk did not delete anything ", None) {
+) extends InvalidInputAnomaly(s"DELETE by PK=$pk did not delete anything ", None) {
   override val id: AnomalyID = DBDeleteByPKFailedAnomaly.DBDeleteByPKFailedID
 
   override val parameters: Anomaly.Parameters = Anomaly.Parameters(
@@ -63,8 +69,30 @@ object DBDeleteByPKFailedAnomaly {
   case object DBDeleteByPKFailedID extends AnomalyID { override val name: String = "ph_db_003" }
 }
 
+//=============================================================================
+
+final case class DBUniqueConstraintViolationAnomaly(
+  val column: String,
+  val value:  String,
+) extends ConflictAnomaly(s"Unique key constrain violation: key=$column, value: $value", None) {
+  override val id: AnomalyID = DBUniqueConstraintViolationAnomaly.DBUniqueConstraintViolationID
+
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters(
+    CommonKeys.Key   -> column,
+    CommonKeys.Value -> value,
+  )
+}
+
+object DBUniqueConstraintViolationAnomaly {
+  case object DBUniqueConstraintViolationID extends AnomalyID { override val name: String = "ph_db_004" }
+}
+
+//=============================================================================
+
 private[db] object CommonKeys {
   val PK       = "pk"
+  val Key      = "key"
+  val Value    = "value"
   val Expected = "expected"
   val Actual   = "actual"
 }

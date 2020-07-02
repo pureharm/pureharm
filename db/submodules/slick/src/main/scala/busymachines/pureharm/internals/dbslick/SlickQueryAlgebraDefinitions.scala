@@ -91,7 +91,7 @@ trait SlickQueryAlgebraDefinitions {
 
     def retrieve(pk: PK)(implicit show: Show[PK]): ConnectionIO[E] =
       (dao.filter(_.id === pk).result.head: ConnectionIO[E]).adaptError {
-        case NonFatal(e) => SlickDBEntryNotFoundAnomaly(pk.show, Option(e))
+        case NonFatal(e) => DBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
     def insert(e: E): ConnectionIO[PK] = dao.+=(e).widenCIO.map(_ => eid(e))
@@ -101,7 +101,7 @@ trait SlickQueryAlgebraDefinitions {
       for {
         insertedOpt <- dao.++=(es).widenCIO.adaptError {
           case bux: java.sql.BatchUpdateException =>
-            SlickDBBatchInsertFailedAnomaly(
+            DBBatchInsertFailedAnomaly(
               expectedSize = expectedSize,
               actualSize   = 0,
               causedBy     = Option(bux),
@@ -112,7 +112,7 @@ trait SlickQueryAlgebraDefinitions {
           case None           => Applicative[ConnectionIO].unit
           case Some(inserted) =>
             (inserted != expectedSize).ifTrueRaise[ConnectionIO](
-              SlickDBBatchInsertFailedAnomaly(
+              DBBatchInsertFailedAnomaly(
                 expectedSize = expectedSize,
                 actualSize   = inserted,
                 causedBy     = Option.empty,
