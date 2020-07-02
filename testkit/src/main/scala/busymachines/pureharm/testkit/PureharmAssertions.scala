@@ -34,6 +34,9 @@ trait PureharmAssertions {
   def assertFailure[E <: Throwable](a: Attempt[_])(implicit ct: ClassTag[E], pos: source.Position): Assertion =
     assertThrows(a.unsafeGet())
 
+  def interceptFailure[E <: Throwable](a: Attempt[_])(implicit ct: ClassTag[E], pos: source.Position): E =
+    intercept[E](a.unsafeGet())
+
   def assertSuccess[T](a: Attempt[T])(expected: T)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     a match {
       case Left(e)       => fail(s"excepted Right($e) but was Left($e)")

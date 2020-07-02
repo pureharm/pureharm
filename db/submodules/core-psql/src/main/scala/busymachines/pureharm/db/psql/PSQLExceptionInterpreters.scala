@@ -1,10 +1,11 @@
 package busymachines.pureharm.db.psql
 
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.anomaly._
 import busymachines.pureharm.db._
-import org.postgresql.util._
 
-import scala.util.matching.Regex
+import org.postgresql.util._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -16,7 +17,31 @@ object PSQLExceptionInterpreters {
     val UniqueViolation: String = PSQLState.UNIQUE_VIOLATION.getState
   }
 
-  object PSQLErrorParsers {}
+  object PSQLErrorParsers {
+    import atto._, Atto._
+    private val underscore = char('_')
+    private val column: Parser[String] = many1(letterOrDigit | underscore).map(_.mkString_(""))
+
+    /**
+      * usually has the value of format:
+      * {{{Key (id)=(row1_id) already exists.}}}
+      */
+    object unique {
+
+      val parser: Parser[(String, String)] = for {
+        _          <- string("Key (")
+        columnName <- column
+        _          <- string(")=(")
+        value      <- column
+        _          <- string(") already exists.")
+      } yield (columnName, value)
+
+      def apply[F[_]: MonadAttempt](s: String): F[(String, String)] =
+        parser.parse(s).done.either.leftMap(s => new RuntimeException(s): Throwable).liftTo[F]
+
+    }
+
+  }
 
   /**
     * Only call when [[PSQLException#getSQLState]] == [[PSQLStates.UniqueViolation]]
@@ -24,17 +49,15 @@ object PSQLExceptionInterpreters {
     * Will attempt to extract the values of the state by doing regex over the
     * error message... yey, java?
     */
-  def uniqueKey(e: PSQLException): DBUniqueConstraintViolationAnomaly =
-    /**
-      * usually has the value of format:
-      * {{{Key (id)=(row1_id) already exists}}}
-      */
-    ???
+  def uniqueKey(e: PSQLException): Attempt[DBUniqueConstraintViolationAnomaly] =
+    PSQLExceptionInterpreters.PSQLErrorParsers
+      .unique[Attempt](e.getServerErrorMessage.getDetail)
+      .map(t => DBUniqueConstraintViolationAnomaly(t._1, t._2))
 
   lazy val adapt: PartialFunction[Throwable, Throwable] = {
     case e: PSQLException =>
       e.getSQLState match {
-        case PSQLStates.UniqueViolation => uniqueKey(e)
+        case PSQLStates.UniqueViolation => uniqueKey(e).getOrElse(e)
         case _                          => NotImplementedCatastrophe(s"TODO: implement PSQLExceptionState: ${e.getSQLState}. For: $e", e)
       }
     case e => NotImplementedCatastrophe(s"TODO: implement case non-psql exception: $e", e)

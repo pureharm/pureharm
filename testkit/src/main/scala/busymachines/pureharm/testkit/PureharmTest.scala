@@ -32,7 +32,8 @@ import org.scalatest.exceptions.{TestCanceledException, TestFailedException, Tes
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Jun 2020
   */
-abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTestRuntimeLazyConversions {
+abstract class PureharmTest
+  extends AnyFunSuite with PureharmAssertions with Assertions with PureharmTestRuntimeLazyConversions {
   final type MetaData = TestData
 
   private lazy val testLogger_ = TestLogger.fromClass(this.getClass)

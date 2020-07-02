@@ -58,6 +58,19 @@ abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePu
     } yield assert(data.row1 === fetchedRow)
   }
 
+  test("insert row1 + row -> duplicate primary key") { implicit dao: FixtureParam =>
+    for {
+      _          <- dao.insert(data.row1)
+      fetchedRow <- dao.find(data.pk1).flattenOption(fail(s"PK=${data.pk1} row was not in database"))
+      _ = assert(data.row1 === fetchedRow)
+      attempt <- dao.insert(data.row1).attempt
+      failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
+    } yield {
+      assert(failure.column == data.iden.fieldName, "pk column in error")
+      assert(failure.value == data.pk1.show, "duplicate value in error")
+    }
+  }
+
   test("insert row1 + retrieve -> success") { implicit dao: FixtureParam =>
     for {
       _          <- dao.insert(data.row1)
