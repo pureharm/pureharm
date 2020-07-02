@@ -224,6 +224,7 @@ lazy val `db` = project
   .aggregate(
     `db-core`,
     `db-core-flyway`,
+    `db-core-psql`,
     `db-slick`,
     `db-slick-psql`,
     `db-doobie`,
@@ -259,6 +260,31 @@ lazy val `db-core` = subModule("db", "core")
     `config`,
   )
 
+//#############################################################################
+lazy val `db-core-psql-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ Seq(
+  postgresql,
+  fastParse,
+)
+
+lazy val `db-core-psql` = subModule("db", "core-psql")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    libraryDependencies ++= `db-core-psql-deps`.distinct
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `db-core`,
+    asTestingLibrary(testkit),
+  )
+  .aggregate(
+    `core`,
+    `effects-cats`,
+    `config`,
+    `db-core`,
+  )
 //#############################################################################
 
 lazy val `db-core-flyway-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
@@ -354,7 +380,8 @@ lazy val `db-doobie-deps` =
     `effects-cats-deps` ++
     `config-deps` ++
     `json-circe-deps` ++
-    `db-core-deps` ++ Seq(
+    `db-core-deps` ++
+    `db-core-psql-deps` ++ Seq(
     doobieCore,
     doobieHikari,
     doobiePSQL,
@@ -373,6 +400,7 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `config`,
     `json-circe`,
     `db-core`,
+    `db-core-psql`,
   )
   .aggregate(
     `core`,
@@ -380,6 +408,7 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `config`,
     `json-circe`,
     `db-core`,
+    `db-core-psql`,
   )
 
 //#############################################################################
@@ -586,6 +615,7 @@ lazy val catsEffectVersion:      String = "2.1.3"   //https://github.com/typelev
 lazy val fs2Version:             String = "2.4.2"   //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val circeVersion:           String = "0.13.0"  //https://github.com/circe/circe/releases
 lazy val pureconfigVersion:      String = "0.12.3"  //https://github.com/pureconfig/pureconfig/releases
+lazy val fastParseVersion:       String = "2.3.0"   //https://github.com/lihaoyi/fastparse/tags
 lazy val slickVersion:           String = "3.3.2"   //https://github.com/slick/slick/releases
 lazy val postgresqlVersion:      String = "42.2.14" //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.4.5"   //java — https://github.com/brettwooldridge/HikariCP/releases
@@ -683,7 +713,7 @@ lazy val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 //=============================================================================
 
 lazy val pureConfig: ModuleID = "com.github.pureconfig" %% "pureconfig" % pureconfigVersion withSources ()
-
+lazy val fastParse:  ModuleID = "com.lihaoyi"           %% "fastparse"  % fastParseVersion  withSources ()
 //=============================================================================
 //=================================  LOGGING ==================================
 //=============================================================================

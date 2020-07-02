@@ -20,6 +20,7 @@ package busymachines.pureharm.internals.dbdoobie
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.db._
+import busymachines.pureharm.db.psql.PSQLExceptionInterpreters
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.dbdoobie.implicits._
 
