@@ -37,8 +37,8 @@ object DBEntryNotFoundAnomaly {
 //=============================================================================
 
 final case class DBBatchInsertFailedAnomaly(
-  val expectedSize:      Int,
-  val actualSize:        Int,
+  expectedSize:          Int,
+  actualSize:            Int,
   override val causedBy: Option[Throwable],
 ) extends InvalidInputAnomaly(s"DB batch insert expected to insert $expectedSize but inserted $actualSize.", causedBy) {
   override val id: AnomalyID = DBBatchInsertFailedAnomaly.DBBatchUpdateFailedAnomalyID
@@ -56,7 +56,7 @@ object DBBatchInsertFailedAnomaly {
 //=============================================================================
 
 final case class DBDeleteByPKFailedAnomaly(
-  val pk: String
+  pk: String
 ) extends InvalidInputAnomaly(s"DELETE by PK=$pk did not delete anything ", None) {
   override val id: AnomalyID = DBDeleteByPKFailedAnomaly.DBDeleteByPKFailedID
 
@@ -72,8 +72,8 @@ object DBDeleteByPKFailedAnomaly {
 //=============================================================================
 
 final case class DBUniqueConstraintViolationAnomaly(
-  val column: String,
-  val value:  String,
+  column: String,
+  value:  String,
 ) extends ConflictAnomaly(s"Unique key constrain violation: key=$column, value: $value", None) {
   override val id: AnomalyID = DBUniqueConstraintViolationAnomaly.DBUniqueConstraintViolationID
 
