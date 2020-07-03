@@ -95,7 +95,8 @@ trait SlickRepoQueriesDefinitions {
         case NonFatal(e) => DBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
-    def insert(e: E): ConnectionIO[PK] = dao.+=(e).widenCIO.map(_ => eid(e))
+    def insert(e: E): ConnectionIO[PK] =
+      dao.+=(e).map(_ => eid(e)).widenCIO.adaptError(PSQLExceptionInterpreters.adapt)
 
     def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
       val expectedSize = es.size
