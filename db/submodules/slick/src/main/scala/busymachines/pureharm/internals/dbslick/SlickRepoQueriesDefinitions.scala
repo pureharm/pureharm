@@ -126,9 +126,11 @@ trait SlickRepoQueriesDefinitions {
       } yield ()
     }
 
-    def update(e: E): ConnectionIO[E] = (dao.update(e): ConnectionIO[Int]).map(_ => e)
+    def update(e: E): ConnectionIO[E] =
+      (dao.update(e): ConnectionIO[Int]).map(_ => e).widenCIO.adaptError(PSQLExceptionInterpreters.adapt)
 
-    def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] = es.traverse_((e: E) => update(e))
+    def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] =
+      es.traverse_((e: E) => update(e)).widenCIO.adaptError(PSQLExceptionInterpreters.adapt)
 
     def delete(pk: PK): ConnectionIO[Unit] = dao.filter(_.id === pk).delete.widenCIO.void
 
