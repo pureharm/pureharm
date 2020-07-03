@@ -435,7 +435,6 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= `db-testkit-doobie-deps`.distinct,
-    Test / fork := true,
   )
   .dependsOn(
     `core`,
