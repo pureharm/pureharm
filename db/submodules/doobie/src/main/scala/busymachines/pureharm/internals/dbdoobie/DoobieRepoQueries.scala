@@ -82,11 +82,13 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
   }
 
   override def update(e: E): ConnectionIO[E] =
-    Update[(E, PK)](updateSQL).withUniqueGeneratedKeys[E](table.row.columnNames: _*)((e, table.row.pkValueOf(e)))
+    Update[(E, PK)](updateSQL)
+      .withUniqueGeneratedKeys[E](table.row.columnNames: _*)((e, table.row.pkValueOf(e)))
+      .adaptError(PSQLExceptionInterpreters.adapt)
 
   //FIXME: rewrite with postgresql batch update
   override def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] =
-    es.traverse(this.update).void
+    es.traverse(this.update).void.adaptError(PSQLExceptionInterpreters.adapt)
 
   override def delete(pk: PK): ConnectionIO[Unit] =
     for {
