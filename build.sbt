@@ -476,12 +476,14 @@ lazy val `db-slick` = subModule("db", "slick")
     `effects-cats`,
     `config`,
     `db-core`,
+    `db-core-psql`,
   )
   .aggregate(
     `core`,
     `effects-cats`,
     `config`,
     `db-core`,
+    `db-core-psql`,
   )
 
 //#############################################################################

@@ -20,6 +20,7 @@ package busymachines.pureharm.internals.dbslick
 import busymachines.pureharm.identifiable.Identifiable
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
+import busymachines.pureharm.db.psql.PSQLExceptionInterpreters
 import busymachines.pureharm.dbslick._
 
 /**
@@ -104,11 +105,12 @@ trait SlickQueryAlgebraDefinitions {
             DBBatchInsertFailedAnomaly(
               expectedSize = expectedSize,
               actualSize   = 0,
-              causedBy     = Option(bux),
+              causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
             )
         }
         _           <- insertedOpt match {
-          //TODO: INVESTIGATE -> not sure when this is None... might have to signal failure as well
+          //From docs: None if the database returned no row * count for some part of the batch
+          //since we are on postgresql, this should actually never happen
           case None           => Applicative[ConnectionIO].unit
           case Some(inserted) =>
             (inserted != expectedSize).ifTrueRaise[ConnectionIO](

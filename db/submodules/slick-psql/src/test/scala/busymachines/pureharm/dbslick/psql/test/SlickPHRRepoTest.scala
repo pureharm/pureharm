@@ -48,6 +48,50 @@ final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with Parall
       implicit val ec: ConnectionIOEC = ConnectionIOEC(runtime.executionContextCT)
       SlickPHRTestRepo[IO]
     }
+
+  test("insert row1 + row2 (w/ same unique_string) -> conflict") { implicit repo =>
+    for {
+      _       <- repo.insert(data.row1)
+      attempt <-
+        repo
+          .insert(data.row2.copy(uniqueString = data.row1.uniqueString))
+          .attempt
+      failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
+    } yield {
+      assert(failure.column == "unique_string", "column name")
+      assert(failure.value == data.row1.uniqueString, "column name")
+    }
+  }
+
+  test("insert row1 + row2 (w/ same unique_int) -> conflict") { implicit repo =>
+    for {
+      _       <- repo.insert(data.row1)
+      attempt <-
+        repo
+          .insert(data.row2.copy(uniqueInt = data.row1.uniqueInt))
+          .attempt
+      failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
+    } yield {
+      assert(failure.column == "unique_int", "column name")
+      assert(failure.value == data.row1.uniqueInt.toString, "column name")
+    }
+  }
+
+  test("insert row1 + row2 (w/ same unique_json) -> conflict") { implicit repo =>
+    import SlickPHRTestRepo.pureharmJSONCol
+    import busymachines.pureharm.json.implicits._
+    for {
+      _       <- repo.insert(data.row1)
+      attempt <-
+        repo
+          .insert(data.row2.copy(uniqueJSON = data.row1.uniqueJSON))
+          .attempt
+      failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
+    } yield {
+      assert(failure.column == "unique_json", "column name")
+      assertSuccess(failure.value.decodeAs[PHJSONCol])(data.row1.uniqueJSON)
+    }
+  }
 }
 
 private[test] object SlickPHRRepoTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {

@@ -37,8 +37,8 @@ private[test] object SlickPHRTestRepo {
   //---------------- json stuff ---------------
   import busymachines.pureharm.json._
 
-  implicit private val pureharmJSONCol:      Codec[PHJSONCol]       = derive.codec[PHJSONCol]
-  implicit private val jsonColumnType:       ColumnType[PHJSONCol]  = createJsonbColumnType[PHJSONCol]
+  implicit val pureharmJSONCol:        Codec[PHJSONCol]      = derive.codec[PHJSONCol]
+  implicit private val jsonColumnType: ColumnType[PHJSONCol] = createJsonbColumnType[PHJSONCol]
 
   implicit private val uniqueJsonColumnType: ColumnType[UniqueJSON] =
     jsonColumnType.asInstanceOf[ColumnType[UniqueJSON]] //TODO: implement map operations on column types...
