@@ -48,6 +48,15 @@ package object testdata {
   }
   type PhantomPK = PhantomPK.Type
 
+  object UniqueString extends PhantomType[String]
+  type UniqueString = UniqueString.Type
+
+  object UniqueInt extends PhantomType[Int]
+  type UniqueInt = UniqueInt.Type
+
+  object UniqueJSON extends PhantomType[PHJSONCol]
+  type UniqueJSON = UniqueJSON.Type
+
   object schema {
     val PureharmRows: TableName = TableName("pureharm_rows")
   }

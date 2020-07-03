@@ -23,5 +23,8 @@ create TABLE "pureharm_rows"(
     "big_decimal" DOUBLE PRECISION NOT NULL,
     "string" VARCHAR NOT NULL,
     "jsonb_col" JSONB NOT NULL,
-    "opt_col" VARCHAR NULL
+    "opt_col" VARCHAR NULL,
+    "unique_string" VARCHAR NOT NULL UNIQUE,
+    "unique_int" INT NOT NULL UNIQUE,
+    "unique_json" JSONB NOT NULL UNIQUE
 );

@@ -37,20 +37,38 @@ private[test] object SlickPHRTestRepo {
   //---------------- json stuff ---------------
   import busymachines.pureharm.json._
 
-  implicit private val pureharmJSONCol: Codec[PHJSONCol]      = derive.codec[PHJSONCol]
-  implicit private val jsonColumnType:  ColumnType[PHJSONCol] = createJsonbColumnType[PHJSONCol]
+  implicit private val pureharmJSONCol:      Codec[PHJSONCol]       = derive.codec[PHJSONCol]
+  implicit private val jsonColumnType:       ColumnType[PHJSONCol]  = createJsonbColumnType[PHJSONCol]
+
+  implicit private val uniqueJsonColumnType: ColumnType[UniqueJSON] =
+    jsonColumnType.asInstanceOf[ColumnType[UniqueJSON]] //TODO: implement map operations on column types...
 
   private class SlickPHRTestTable(tag: Tag) extends TableWithPK[PHRow, PhantomPK](tag, schema.PureharmRows) {
-    val byte       = column[PhantomByte]("byte")
-    val int        = column[PhantomInt]("int")
-    val long       = column[PhantomLong]("long")
-    val bigDecimal = column[PhantomBigDecimal]("big_decimal")
-    val string     = column[PhantomString]("string")
-    val jsonCol    = column[PHJSONCol]("jsonb_col")
-    val optCol     = column[Option[PhantomString]]("opt_col")
+    val byte         = column[PhantomByte]("byte")
+    val int          = column[PhantomInt]("int")
+    val long         = column[PhantomLong]("long")
+    val bigDecimal   = column[PhantomBigDecimal]("big_decimal")
+    val string       = column[PhantomString]("string")
+    val jsonCol      = column[PHJSONCol]("jsonb_col")
+    val optCol       = column[Option[PhantomString]]("opt_col")
+    val uniqueString = column[UniqueString]("unique_string")
+    val uniqueInt    = column[UniqueInt]("int")
+    val uniqueJSON   = column[UniqueJSON]("unique_json")
 
     override def * : ProvenShape[PHRow] =
-      (id, byte, int, long, bigDecimal, string, jsonCol, optCol) <> ((PHRow.apply _).tupled, PHRow.unapply)
+      (
+        id,
+        byte,
+        int,
+        long,
+        bigDecimal,
+        string,
+        jsonCol,
+        optCol,
+        uniqueString,
+        uniqueInt,
+        uniqueJSON,
+      ) <> ((PHRow.apply _).tupled, PHRow.unapply)
   }
 
   final private class SlickPHRTestQueries(implicit

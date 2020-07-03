@@ -56,16 +56,24 @@ private[test] object DoobiePHRTestRepo {
   object DoobieDoobiePHRTestTable extends TableWithPK[PHRow, PhantomPK] {
     override val name: TableName = schema.PureharmRows
 
-    val byte_col:    Column = createColumn("byte")
-    val int_col:     Column = createColumn("int")
-    val long_col:    Column = createColumn("long")
-    val big_decimal: Column = createColumn("big_decimal")
-    val string_col:  Column = createColumn("string")
-    val jsonb_col:   Column = createColumn("jsonb_col")
-    val opt_col:     Column = createColumn("opt_col")
+    val byte_col:      Column = createColumn("byte")
+    val int_col:       Column = createColumn("int")
+    val long_col:      Column = createColumn("long")
+    val big_decimal:   Column = createColumn("big_decimal")
+    val string_col:    Column = createColumn("string")
+    val jsonb_col:     Column = createColumn("jsonb_col")
+    val opt_col:       Column = createColumn("opt_col")
+    val unique_string: Column = createColumn("unique_string")
+    val unique_int:    Column = createColumn("unique_int")
+    val unique_json:   Column = createColumn("unique_json")
+
+    implicit val jsonCodec: Codec[PHJSONCol] = derive.codec[PHJSONCol]
 
     implicit private[DoobiePHRTestRepo] val pureharmJSONColMeta: Meta[PHJSONCol] =
-      jsonMeta[PHJSONCol](derive.codec[PHJSONCol])
+      jsonMeta[PHJSONCol](jsonCodec)
+
+    implicit private[DoobiePHRTestRepo] val pureharmUniqueJSONColMeta: Meta[UniqueJSON] =
+      pureharmJSONColMeta.imap(UniqueJSON.spook)(UniqueJSON.despook)
 
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
     override val metaPK: Meta[PhantomPK] = Meta[PhantomPK]

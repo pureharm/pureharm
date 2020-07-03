@@ -49,37 +49,46 @@ object PHRTestRepoTest {
     override def iden: Identifiable[PHRow, PhantomPK] = PHRow.identifiable
 
     override def row1: PHRow = PHRow(
-      id          = PhantomPK("row1_id"),
-      byte        = PhantomByte(245.toByte),
-      int         = PhantomInt(41),
-      long        = PhantomLong(0.toLong),
-      bigDecimal  = PhantomBigDecimal(BigDecimal("1390749832749238")),
-      string      = PhantomString("row1_string"),
-      jsonbCol    = PHJSONCol(42, "row1_json_column"),
-      optionalCol = Option(PhantomString("row1_optional_value")),
+      id           = PhantomPK("row1_id"),
+      byte         = PhantomByte(245.toByte),
+      int          = PhantomInt(41),
+      long         = PhantomLong(0.toLong),
+      bigDecimal   = PhantomBigDecimal(BigDecimal("1390749832749238")),
+      string       = PhantomString("row1_string"),
+      jsonbCol     = PHJSONCol(42, "row1_json_column"),
+      optionalCol  = Option(PhantomString("row1_optional_value")),
+      uniqueString = UniqueString("unique_string_value_1"),
+      uniqueInt    = UniqueInt(490),
+      uniqueJSON   = UniqueJSON(PHJSONCol(421, "unique_json_value_1")),
     )
 
     override val row2: PHRow = PHRow(
-      id          = PhantomPK("row2_id"),
-      byte        = PhantomByte(123.toByte),
-      int         = PhantomInt(4321),
-      long        = PhantomLong(12L),
-      bigDecimal  = PhantomBigDecimal(BigDecimal("23414")),
-      string      = PhantomString("row2_string"),
-      jsonbCol    = PHJSONCol(44, "row2_json_column"),
-      optionalCol = Option(PhantomString("row2_optional_value")),
+      id           = PhantomPK("row2_id"),
+      byte         = PhantomByte(123.toByte),
+      int          = PhantomInt(4321),
+      long         = PhantomLong(12L),
+      bigDecimal   = PhantomBigDecimal(BigDecimal("23414")),
+      string       = PhantomString("row2_string"),
+      jsonbCol     = PHJSONCol(44, "row2_json_column"),
+      optionalCol  = Option(PhantomString("row2_optional_value")),
+      uniqueString = UniqueString("unique_string_value_2"),
+      uniqueInt    = UniqueInt(491),
+      uniqueJSON   = UniqueJSON(PHJSONCol(421, "unique_json_value_2")),
     )
 
     override def nonExistentPK: PhantomPK = PhantomPK("120-3921-039213")
 
     override val row1Update1: PHRow = row1.copy(
-      byte        = PhantomByte(111.toByte),
-      int         = PhantomInt(42),
-      long        = PhantomLong(6.toLong),
-      bigDecimal  = PhantomBigDecimal(BigDecimal("328572")),
-      string      = PhantomString("updated_string"),
-      jsonbCol    = PHJSONCol(79, "new_json_col"),
-      optionalCol = Option(PhantomString("new opt_value")),
+      byte         = PhantomByte(111.toByte),
+      int          = PhantomInt(42),
+      long         = PhantomLong(6.toLong),
+      bigDecimal   = PhantomBigDecimal(BigDecimal("328572")),
+      string       = PhantomString("updated_string"),
+      jsonbCol     = PHJSONCol(79, "new_json_col"),
+      optionalCol  = Option(PhantomString("new opt_value")),
+      uniqueString = UniqueString("unique_string_value_1_update"),
+      uniqueInt    = UniqueInt(49012),
+      uniqueJSON   = UniqueJSON(PHJSONCol(4121, "unique_json_value_1_update")),
     )
 
     override val row1Update2: PHRow = row1.copy(
