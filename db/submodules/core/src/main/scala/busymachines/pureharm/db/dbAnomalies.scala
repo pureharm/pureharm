@@ -74,12 +74,12 @@ object DBDeleteByPKFailedAnomaly {
 final case class DBUniqueConstraintViolationAnomaly(
   column: String,
   value:  String,
-) extends ConflictAnomaly(s"Unique key constrain violation: key=$column, value: $value", None) {
+) extends ConflictAnomaly(s"Unique key constraint violation: column=$column, value: $value", None) {
   override val id: AnomalyID = DBUniqueConstraintViolationAnomaly.DBUniqueConstraintViolationID
 
   override val parameters: Anomaly.Parameters = Anomaly.Parameters(
-    CommonKeys.Key   -> column,
-    CommonKeys.Value -> value,
+    CommonKeys.Column -> column,
+    CommonKeys.Value  -> value,
   )
 }
 
@@ -89,10 +89,39 @@ object DBUniqueConstraintViolationAnomaly {
 
 //=============================================================================
 
+final case class DBForeignKeyConstraintViolationAnomaly(
+  table:        String,
+  constraint:   String,
+  column:       String,
+  value:        String,
+  foreignTable: String,
+) extends ConflictAnomaly(
+    s"Foreign key constraint violation table=$table, constraint=$constraint. Column=$column, value=$value, foreign_table=$foreignTable",
+    None,
+  ) {
+  override val id: AnomalyID = DBForeignKeyConstraintViolationAnomaly.DBForeignKeyConstraintViolationID
+
+  override val parameters: Anomaly.Parameters = Anomaly.Parameters(
+    CommonKeys.Table        -> table,
+    CommonKeys.Constraint   -> constraint,
+    CommonKeys.Column       -> column,
+    CommonKeys.Value        -> value,
+    CommonKeys.ForeignTable -> foreignTable,
+  )
+}
+
+object DBForeignKeyConstraintViolationAnomaly {
+  case object DBForeignKeyConstraintViolationID extends AnomalyID { override val name: String = "ph_db_005" }
+}
+
+//=============================================================================
 private[db] object CommonKeys {
-  val PK       = "pk"
-  val Key      = "key"
-  val Value    = "value"
-  val Expected = "expected"
-  val Actual   = "actual"
+  val PK           = "pk"
+  val Column       = "column"
+  val Constraint   = "constraint"
+  val Table        = "table"
+  val ForeignTable = "table_foreign"
+  val Value        = "value"
+  val Expected     = "expected"
+  val Actual       = "actual"
 }

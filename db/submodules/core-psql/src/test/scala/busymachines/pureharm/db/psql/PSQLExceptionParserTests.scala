@@ -16,4 +16,11 @@ final class PSQLExceptionParserTests extends PureharmTest {
       attempt <- parsers.unique[IO]("Key (id)=(row1_id) already exists.").attempt
     } yield assertSuccess(attempt)(("id", "row1_id"))
   }
+
+  test("foreign") {
+    for {
+      attempt <-
+        parsers.foreignKey[IO]("""Key (row_id)=(120-3921-039213) is not present in table "pureharm_rows".""").attempt
+    } yield assertSuccess(attempt)(("row_id", "120-3921-039213", "pureharm_rows"))
+  }
 }

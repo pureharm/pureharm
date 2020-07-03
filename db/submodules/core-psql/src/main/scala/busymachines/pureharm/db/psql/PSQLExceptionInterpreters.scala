@@ -20,13 +20,28 @@ object PSQLExceptionInterpreters {
 
   object PSQLErrorParsers {
     import atto._, Atto._
-    private val underscore = char('_')
+    private val underscore  = char('_')
+    private val closeParens = char(')')
+    private val doubleQuote = char('"')
     private val column: Parser[String] = many1(letterOrDigit | underscore).map(_.mkString_(""))
-    private val values: Parser[String] = many1(anyChar).map(_.mkString_(""))
+
+    private val untilNextDoubleQuote: Parser[String] =
+      manyUntil(anyChar, doubleQuote).map(_.mkString(""))
+
+    /**
+      * Consumes the last parenthesis as well
+      */
+    def untilLastClosedParens: Parser[String] = for {
+      head      <- manyUntil(anyChar, closeParens).map(_.mkString(""))
+      remaining <- get
+      tail      <- if (remaining.contains(')')) untilLastClosedParens else "".pure[Parser]
+    } yield s"$head$tail"
 
     /**
       * usually has the value of format:
-      * {{{Key (id)=(row1_id) already exists.}}}
+      * {{{
+      *   Key (id)=(row1_id) already exists.
+      * }}}
       */
     object unique {
 
@@ -34,16 +49,34 @@ object PSQLExceptionInterpreters {
         _          <- string("Key (")
         columnName <- column
         _          <- string(")=(")
-        //the parser here is hard to write since it would require look-ahead
-        //to the ') already exists.' at the end in order to parse all
-        //possible postgresql values... and that's difficult. So this hack
-        //will work just fine :)
-        value      <- values.map(_.stripSuffix(") already exists."))
+        value      <- untilLastClosedParens
+        _          <- string(" already exists.")
       } yield (columnName, value)
 
       def apply[F[_]: MonadAttempt](s: String): F[(String, String)] =
         parser.parse(s).done.either.leftMap(s => new RuntimeException(s): Throwable).liftTo[F]
 
+    }
+
+    /**
+      * example:
+      * {{{
+      *   Key (row_id)=(120-3921-039213) is not present in table "pureharm_rows".
+      * }}}
+      */
+    object foreignKey {
+
+      private val parser: Parser[(String, String, String)] = for {
+        _          <- string("Key (")
+        columnName <- column
+        _          <- string(")=(")
+        value      <- untilLastClosedParens
+        _          <- untilNextDoubleQuote
+        table      <- untilNextDoubleQuote
+      } yield (columnName, value, table)
+
+      def apply[F[_]: MonadAttempt](s: String): F[(String, String, String)] =
+        parser.parse(s).done.either.leftMap(s => new RuntimeException(s): Throwable).liftTo[F]
     }
 
   }
@@ -59,11 +92,33 @@ object PSQLExceptionInterpreters {
       .unique[Attempt](e.getServerErrorMessage.getDetail)
       .map(t => DBUniqueConstraintViolationAnomaly(t._1, t._2))
 
+  /**
+    * Only call when [[PSQLException#getSQLState]] == [[PSQLStates.ForeignKeyViolation]]
+    *
+    * Will attempt to extract the values of the state by doing regex over the
+    * error message... yey, java?
+    */
+  def foreignKey(e: PSQLException): Attempt[DBForeignKeyConstraintViolationAnomaly] = {
+    val msg = e.getServerErrorMessage
+    for {
+      table                   <- Option(msg.getTable).liftTo[Attempt](e)
+      constraint              <- Option(msg.getConstraint).liftTo[Attempt](e)
+      (column, value, fTable) <- PSQLErrorParsers.foreignKey[Attempt](msg.getDetail)
+    } yield DBForeignKeyConstraintViolationAnomaly(
+      table        = table,
+      constraint   = constraint,
+      column       = column,
+      value        = value,
+      foreignTable = fTable,
+    )
+  }
+
   lazy val adapt: PartialFunction[Throwable, Throwable] = {
     case e: PSQLException =>
       e.getSQLState match {
-        case PSQLStates.UniqueViolation => uniqueKey(e).getOrElse(e)
-        case _                          => e
+        case PSQLStates.UniqueViolation     => uniqueKey(e).getOrElse(e)
+        case PSQLStates.ForeignKeyViolation => foreignKey(e).getOrElse(e)
+        case _                              => e
       }
     case e => e
   }
