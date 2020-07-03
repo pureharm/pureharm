@@ -208,11 +208,7 @@ lazy val `config` = project
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `db-deps` =
-  `db-core-deps` ++
-    `db-core-flyway-deps` ++
-    `db-slick-deps` ++
-    `db-slick-psql-deps`
+lazy val `db-deps` = Seq.empty
 
 lazy val `db` = project
   .settings(PublishingSettings.noPublishSettings)
@@ -231,16 +227,12 @@ lazy val `db` = project
     `db-testkit-core`,
     `db-testkit-doobie`,
     `db-test-data`,
+    `db-testkit-slick`,
   )
 
 //#############################################################################
 
-lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ Seq(
-  flyway,
-  log4cats       % Test,
-  logbackClassic % Test,
-  scalaTest      % Test,
-)
+lazy val `db-core-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps`
 
 lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
@@ -252,7 +244,6 @@ lazy val `db-core` = subModule("db", "core")
     `core`,
     `effects-cats`,
     `config`,
-    asTestingLibrary(testkit),
   )
   .aggregate(
     `core`,
@@ -290,12 +281,13 @@ lazy val `db-core-psql` = subModule("db", "core-psql")
   )
 //#############################################################################
 
-lazy val `db-core-flyway-deps` = `core-deps` ++ `effects-cats-deps` ++ `config-deps` ++ `db-core-deps` ++ Seq(
-  flyway,
-  log4cats       % Test,
-  logbackClassic % Test,
-  scalaTest      % Test,
-)
+lazy val `db-core-flyway-deps` =
+  `core-deps` ++
+    `effects-cats-deps` ++
+    `config-deps` ++
+    `db-core-deps` ++ Seq(
+    flyway
+  )
 
 lazy val `db-core-flyway` = subModule("db", "core-flyway")
   .settings(PublishingSettings.sonatypeSettings)
@@ -307,13 +299,15 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
     `core`,
     `effects-cats`,
     `config`,
-    fullDependency(`db-core`),
+    `db-core`,
+    asTestingLibrary(testkit),
   )
   .aggregate(
     `core`,
     `effects-cats`,
     `config`,
     `db-core`,
+    testkit,
   )
 
 //#############################################################################
@@ -434,7 +428,7 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= `db-testkit-doobie-deps`.distinct,
+    libraryDependencies ++= `db-testkit-doobie-deps`.distinct
   )
   .dependsOn(
     `core`,
