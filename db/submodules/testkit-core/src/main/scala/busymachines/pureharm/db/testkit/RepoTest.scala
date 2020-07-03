@@ -165,7 +165,9 @@ abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends FixturePu
   test("insertMany row1, row1 -> duplicate key on row1") { implicit dao: FixtureParam =>
     for {
       att <- dao.insertMany(List(data.row1, data.row1)).attempt
-      _ = assertFailure[DBBatchInsertFailedAnomaly](att)
+      e = interceptFailure[DBBatchInsertFailedAnomaly](att)
+      _ = assert(Option(e.getCause).nonEmpty, "insert should have cause")
+      _ = assertFailure[DBUniqueConstraintViolationAnomaly](e.getCause.asLeft)
       row1 <- dao.find(data.pk1)
     } yield assert(row1.isEmpty, "... on batch insert one failure, means all fail, but row1 was still added")
   }

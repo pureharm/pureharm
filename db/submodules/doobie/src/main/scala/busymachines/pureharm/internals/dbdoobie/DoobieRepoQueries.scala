@@ -68,7 +68,7 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
           DBBatchInsertFailedAnomaly(
             expectedSize = expectedSize,
             actualSize   = 0,
-            causedBy     = Option(bux),
+            causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
           )
       }
       _        <- (inserted != expectedSize).ifTrueRaise[ConnectionIO](
