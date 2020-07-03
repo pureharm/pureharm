@@ -2,7 +2,6 @@ package busymachines.pureharm.db.psql
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.anomaly._
 import busymachines.pureharm.db._
 
 import org.postgresql.util._

@@ -1,7 +1,6 @@
 package busymachines.pureharm.db.psql
 
 import busymachines.pureharm.effects._
-import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.testkit.PureharmTest
 
 /**

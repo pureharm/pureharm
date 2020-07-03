@@ -68,7 +68,7 @@ private[test] object SlickPHRTestRepo {
         uniqueString,
         uniqueInt,
         uniqueJSON,
-      ) <> ((PHRow.apply _).tupled, PHRow.unapply)
+      ).<>((PHRow.apply _).tupled, PHRow.unapply)
   }
 
   final private class SlickPHRTestQueries(implicit
