@@ -96,7 +96,7 @@ trait PureharmSlickPostgresProfile
   @scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module", "0.0.6-M3")
   trait PureharmSlickPostgresAPIWithImplicits
     extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-    with PureharmSlickConnectionIOOps.Implicits with SlickQueryAlgebraDefinitions with SlickAliases
+    with PureharmSlickConnectionIOOps.Implicits with SlickRepoQueriesDefinitions with SlickAliases
     with psql.SlickPostgresCirceSupportAPI {
     final override protected val enclosingProfile:         slick.jdbc.JdbcProfile     = self
     final override protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile = self

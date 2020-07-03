@@ -24,14 +24,14 @@ import busymachines.pureharm.db.psql.PSQLExceptionInterpreters
 import busymachines.pureharm.dbslick._
 
 /**
-  * See [[busymachines.pureharm.dbslick.PureharmSlickDBProfile]]
+  * See [[busymachines.pureharm.dbslick.PureharmSlickPostgresProfile]]
   * On how to get to use this. Don't blame me, it's how you usually do stuff
   * with slick.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   */
-trait SlickQueryAlgebraDefinitions {
+trait SlickRepoQueriesDefinitions {
 
   protected val enclosingProfile: slick.jdbc.JdbcProfile
 
