@@ -19,7 +19,7 @@ package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects.Attempt
 import busymachines.pureharm.effects.implicits._
-import org.scalactic.{Prettifier, source}
+import org.scalactic.{source, Prettifier}
 import org.scalatest._
 
 import scala.reflect.ClassTag

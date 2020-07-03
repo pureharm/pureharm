@@ -5,9 +5,9 @@ import org.postgresql.util.PSQLException
 
 object PSQLExceptionDebug {
 
-  def apply(e: PSQLException):String = PSQLExceptionShow.show(e)
+  def apply(e: PSQLException): String = PSQLExceptionShow.show(e)
 
-  implicit val PSQLExceptionShow: Show[PSQLException] = Show.show{e =>
+  implicit val PSQLExceptionShow: Show[PSQLException] = Show.show { e =>
     val msg = e.getServerErrorMessage
     s"""
        |

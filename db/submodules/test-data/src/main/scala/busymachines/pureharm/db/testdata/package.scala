@@ -71,7 +71,7 @@ package object testdata {
   type PhantomUUID = PhantomUUID.Type
 
   object schema {
-    val PureharmRows: TableName = TableName("pureharm_rows")
+    val PureharmRows:         TableName = TableName("pureharm_rows")
     val PureharmExternalRows: TableName = TableName("pureharm_external_rows")
   }
 

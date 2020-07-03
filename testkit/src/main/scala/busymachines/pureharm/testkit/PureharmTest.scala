@@ -23,8 +23,8 @@ import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalactic.source
 import busymachines.pureharm.effects._
-import busymachines.pureharm.testkit.util.{MDCKeys, PureharmAssertions, PureharmTestRuntime, PureharmTestRuntimeLazyConversions}
-import org.scalatest.exceptions.{TestCanceledException, TestFailedException, TestPendingException}
+import busymachines.pureharm.testkit.util._
+import org.scalatest.exceptions._
 
 /**
   * This is an experimental base class,

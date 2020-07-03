@@ -23,7 +23,7 @@ import org.scalatest._
 import org.scalatest.funsuite.FixtureAnyFunSuite
 import org.scalactic.source
 import busymachines.pureharm.effects._
-import busymachines.pureharm.testkit.util.{MDCKeys, PureharmAssertions, PureharmTestRuntime, PureharmTestRuntimeLazyConversions}
+import busymachines.pureharm.testkit.util._
 
 /**
   * This is an experimental base class,

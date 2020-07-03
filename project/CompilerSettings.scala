@@ -51,7 +51,7 @@ object CompilerSettings {
     * tpolecat's glorious compile flag list:
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
-  def scala2_12Flags: Seq[String]     = Seq(
+  def scala2_12Flags: Seq[String] = Seq(
     //"-Xfatal-warnings",               // Fail the compilation if there are any warnings.
     "-deprecation",                     // Emit warning and location for usages of deprecated APIs.
     "-encoding",                        // yeah, it's part of the "utf-8" thing, two flags
