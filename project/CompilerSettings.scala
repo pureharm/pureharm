@@ -20,7 +20,7 @@ import Keys._
 
 object CompilerSettings {
   lazy val scala2_12:        String = "2.12.11" //https://github.com/scala/scala/releases
-  lazy val scala2_13:        String = "2.13.2"  //https://github.com/scala/scala/releases
+  lazy val scala2_13:        String = "2.13.3"  //https://github.com/scala/scala/releases
   lazy val mainScalaVersion: String = scala2_13
 
   //https://github.com/typelevel/kind-projector/releases
