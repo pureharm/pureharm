@@ -21,6 +21,7 @@ object PSQLExceptionInterpreters {
     import atto._, Atto._
     private val underscore = char('_')
     private val column: Parser[String] = many1(letterOrDigit | underscore).map(_.mkString_(""))
+    private val values: Parser[String] = many1(anyChar).map(_.mkString_(""))
 
     /**
       * usually has the value of format:
@@ -32,8 +33,11 @@ object PSQLExceptionInterpreters {
         _          <- string("Key (")
         columnName <- column
         _          <- string(")=(")
-        value      <- column
-        _          <- string(") already exists.")
+        //the parser here is hard to write since it would require look-ahead
+        //to the ') already exists.' at the end in order to parse all
+        //possible postgresql values... and that's difficult. So this hack
+        //will work just fine :)
+        value      <- values.map(_.stripSuffix(") already exists."))
       } yield (columnName, value)
 
       def apply[F[_]: MonadAttempt](s: String): F[(String, String)] =
