@@ -62,8 +62,8 @@ object PSQLExceptionInterpreters {
     case e: PSQLException =>
       e.getSQLState match {
         case PSQLStates.UniqueViolation => uniqueKey(e).getOrElse(e)
-        case _                          => NotImplementedCatastrophe(s"TODO: implement PSQLExceptionState: ${e.getSQLState}. For: $e", e)
+        case _                          => e
       }
-    case e => NotImplementedCatastrophe(s"TODO: implement case non-psql exception: $e", e)
+    case e => e
   }
 }
