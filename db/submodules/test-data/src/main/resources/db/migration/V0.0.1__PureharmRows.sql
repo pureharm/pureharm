@@ -15,7 +15,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 --
-create TABLE "pureharm_rows"(
+create TABLE pureharm_rows(
     "id"   VARCHAR NOT NULL PRIMARY KEY,
     "byte" SMALLINT NOT NULL,
     "int" INT NOT NULL,
