@@ -23,6 +23,7 @@ import org.scalatest._
 import org.scalatest.funsuite.FixtureAnyFunSuite
 import org.scalactic.source
 import busymachines.pureharm.effects._
+import busymachines.pureharm.testkit.util.{MDCKeys, PureharmAssertions, PureharmTestRuntime, PureharmTestRuntimeLazyConversions}
 
 /**
   * This is an experimental base class,
@@ -31,9 +32,10 @@ import busymachines.pureharm.effects._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
-abstract class FixturePureharmTest
+abstract class PureharmTestWithResource
   extends FixtureAnyFunSuite with Assertions with PureharmAssertions with PureharmTestRuntimeLazyConversions {
-  final type MetaData = TestData
+  final override type FixtureParam = ResourceType
+  final type MetaData              = TestData
 
   /**
     * @see [[PureharmTestRuntimeLazyConversions]]
@@ -45,6 +47,8 @@ abstract class FixturePureharmTest
   implicit def testLogger: TestLogger = testLogger_
 
   import busymachines.pureharm.effects.implicits._
+
+  type ResourceType
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
@@ -52,13 +56,13 @@ abstract class FixturePureharmTest
     * @param meta
     *  Use this information to create table names or something
     */
-  def fixture(meta: MetaData): Resource[IO, FixtureParam]
+  def resource(meta: MetaData): Resource[IO, ResourceType]
 
   protected def test(
     testName: String,
     testTags: Tag*
   )(
-    testFun:  FixtureParam => IO[Assertion]
+    testFun:  ResourceType => IO[Assertion]
   )(implicit
     position: source.Position
   ): Unit =
@@ -67,7 +71,7 @@ abstract class FixturePureharmTest
   final override protected def withFixture(test: OneArgTest): Outcome = {
     val mdc: Map[String, String] = MDCKeys(test)
 
-    def ftest(fix: FixtureParam): IO[Outcome] =
+    def ftest(fix: ResourceType): IO[Outcome] =
       for {
         _        <- testLogger.info(mdc)(s"INITIALIZED")
         (d, out) <- IO.delay(test(fix)).timedAttempt(TimeUnit.MILLISECONDS)
@@ -77,7 +81,7 @@ abstract class FixturePureharmTest
 
     val fout: IO[Outcome] = for {
       _   <- testLogger.info(mdc)(s"ACQUIRING FIXTURE")
-      out <- fixture(test)
+      out <- resource(test)
         .onError {
           case e => testLogger.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]]
         }

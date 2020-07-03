@@ -36,17 +36,17 @@ import org.scalatest._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
-final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with ParallelTestExecution {
+final class SlickPHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with ParallelTestExecution {
 
-  override type FixtureParam = SlickPHRTestRepo[IO]
+  override type ResourceType = SlickPHRowRepo[IO]
 
-  override def setup: RepoTestSetup[Transactor[IO]] = SlickPHRRepoTest
+  override def setup: DBTestSetup[Transactor[IO]] = SlickPHRowRepoTest
 
-  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, SlickPHRTestRepo[IO]] =
-    Resource.pure[IO, SlickPHRTestRepo[IO]] {
+  override def resource(meta: MetaData, trans: Transactor[IO]): Resource[IO, SlickPHRowRepo[IO]] =
+    Resource.pure[IO, SlickPHRowRepo[IO]] {
       implicit val t:  Transactor[IO] = trans
       implicit val ec: ConnectionIOEC = ConnectionIOEC(runtime.executionContextCT)
-      SlickPHRTestRepo[IO]
+      SlickPHRowRepo[IO]
     }
 
   test("insert row1 + row2 (w/ same unique_string) -> conflict") { implicit repo =>
@@ -78,7 +78,7 @@ final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with Parall
   }
 
   test("insert row1 + row2 (w/ same unique_json) -> conflict") { implicit repo =>
-    import SlickPHRTestRepo.pureharmJSONCol
+    import SlickPHRowRepo.pureharmJSONCol
     import busymachines.pureharm.json.implicits._
     for {
       _       <- repo.insert(data.row1)
@@ -94,7 +94,7 @@ final class SlickPHRRepoTest extends PHRTestRepoTest[Transactor[IO]] with Parall
   }
 }
 
-private[test] object SlickPHRRepoTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {
+private[test] object SlickPHRowRepoTest extends SlickDBTestSetup(testdb.jdbcProfileAPI) {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
     PHRTestDBConfig.dbConfig.withSchemaFromClassAndTest(prefix = "slick", meta = meta)

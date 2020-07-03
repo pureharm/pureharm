@@ -28,3 +28,8 @@ create TABLE "pureharm_rows"(
     "unique_int" INT NOT NULL UNIQUE,
     "unique_json" JSONB NOT NULL UNIQUE
 );
+
+CREATE TABLE "pureharm_external_rows"(
+    "id" UUID NOT NULL PRIMARY KEY,
+    "row_id" VARCHAR NOT NULL REFERENCES "pureharm_rows"("id")
+)

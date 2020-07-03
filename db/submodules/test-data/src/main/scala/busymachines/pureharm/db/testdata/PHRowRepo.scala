@@ -25,4 +25,4 @@ import busymachines.pureharm.db._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
-private[pureharm] trait PHRTestRepo[F[_]] extends Repo[F, PHRow, PhantomPK]
+private[pureharm] trait PHRowRepo[F[_]] extends Repo[F, PHRow, PhantomPK]

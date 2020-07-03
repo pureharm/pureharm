@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.testkit
+package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects._
 

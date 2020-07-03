@@ -1,4 +1,4 @@
-package busymachines.pureharm.testkit
+package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects._
 

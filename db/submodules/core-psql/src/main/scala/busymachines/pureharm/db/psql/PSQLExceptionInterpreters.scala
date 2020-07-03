@@ -13,7 +13,9 @@ import org.postgresql.util._
 object PSQLExceptionInterpreters {
 
   object PSQLStates {
-    val UniqueViolation: String = PSQLState.UNIQUE_VIOLATION.getState
+    val NotNullViolation:    String = PSQLState.NOT_NULL_VIOLATION.getState
+    val ForeignKeyViolation: String = PSQLState.FOREIGN_KEY_VIOLATION.getState
+    val UniqueViolation:     String = PSQLState.UNIQUE_VIOLATION.getState
   }
 
   object PSQLErrorParsers {

@@ -6,13 +6,15 @@ import busymachines.pureharm.db.flyway.FlywayConfig
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.testkit._
+import busymachines.pureharm.testkit.util.{MDCKeys, PureharmTestRuntime}
 import org.scalatest.TestData
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
-trait RepoTestSetup[DBTransactor] {
+trait DBTestSetup[DBTransactor] {
+  final type RT = PureharmTestRuntime
 
   implicit class TestSetupClassName(config: DBConnectionConfig) {
 
@@ -41,13 +43,9 @@ trait RepoTestSetup[DBTransactor] {
   //hack to remove unused param error
   def flywayConfig(meta: TestData): Option[FlywayConfig] = Option(meta) >> Option.empty
 
-  protected def dbTransactorInstance(
-    meta:        TestData
-  )(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, DBTransactor]
+  protected def dbTransactorInstance(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, DBTransactor]
 
-  def transactor(
-    meta:        TestData
-  )(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, DBTransactor] =
+  def transactor(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, DBTransactor] =
     for {
       _ <- logger.info(MDCKeys(meta))("SETUP — init").to[Resource[IO, *]]
       schema = dbConfig(meta).schema.getOrElse("public")
@@ -60,7 +58,7 @@ trait RepoTestSetup[DBTransactor] {
       fixture <- dbTransactorInstance(meta)
     } yield fixture
 
-  protected def _initDB(meta: TestData)(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, Unit] =
+  protected def _initDB(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, Unit] =
     for {
       _    <- logger.info(MDCKeys(meta))("SETUP — preparing DB").to[Resource[IO, *]]
       migs <- flyway.Flyway.migrate[IO](dbConfig = dbConfig(meta), flywayConfig(meta)).to[Resource[IO, *]]
@@ -83,7 +81,7 @@ trait RepoTestSetup[DBTransactor] {
       _    <- logger.info(MDCKeys(meta))("SETUP — done preparing DB").to[Resource[IO, *]]
     } yield ()
 
-  protected def _cleanDB(meta: TestData)(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, Unit] =
+  protected def _cleanDB(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, Unit] =
     for {
       _ <- logger.info(MDCKeys(meta))("SETUP — cleaning DB for a clean slate").to[Resource[IO, *]]
       _ <- flyway.Flyway.clean[IO](dbConfig(meta)).to[Resource[IO, *]]

@@ -15,11 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.testkit
+package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects.Attempt
 import busymachines.pureharm.effects.implicits._
-import org.scalactic.{source, Prettifier}
+import org.scalactic.{Prettifier, source}
 import org.scalatest._
 
 import scala.reflect.ClassTag

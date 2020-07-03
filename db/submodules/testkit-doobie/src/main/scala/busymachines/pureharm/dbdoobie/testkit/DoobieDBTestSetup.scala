@@ -1,17 +1,19 @@
-package busymachines.pureharm.dbslick.testkit
+package busymachines.pureharm.dbdoobie.testkit
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.db.testkit._
-import busymachines.pureharm.dbslick._
+import busymachines.pureharm.dbdoobie._
+import busymachines.pureharm.dbdoobie.implicits._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
+import busymachines.pureharm.testkit.util.{MDCKeys, PureharmTestRuntime}
 import org.scalatest._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
   */
-abstract class SlickRepoTestSetup(private val dbProfile: JDBCProfileAPI) extends RepoTestSetup[Transactor[IO]] {
+trait DoobieDBTestSetup extends DBTestSetup[Transactor[IO]] {
 
   /**
     * Should be overridden to create a connection config appropriate for the test
@@ -22,14 +24,15 @@ abstract class SlickRepoTestSetup(private val dbProfile: JDBCProfileAPI) extends
     meta:        TestData
   )(implicit rt: PureharmTestRuntime, logger: TestLogger): Resource[IO, Transactor[IO]] = {
     val config = dbConfig(meta)
-    import rt._
+    import rt.contextShift
     for {
       _     <- logger.info(MDCKeys(meta))(s"CREATING Transactor[IO] for: ${config.jdbcURL}").to[Resource[IO, *]]
-      trans <- Transactor.pgSQLHikari[IO](
-        dbProfile    = dbProfile,
-        dbConnection = config,
-        asyncConfig  = SlickDBIOAsyncExecutorConfig.default,
+      trans <- Transactor.pureharmTransactor[IO](
+        dbConfig  = dbConfig(meta),
+        dbConnEC  = DoobieConnectionEC.safe(rt.executionContextFT),
+        dbBlocker = DoobieBlocker(rt.blocker),
       )
+
     } yield trans
   }
 }

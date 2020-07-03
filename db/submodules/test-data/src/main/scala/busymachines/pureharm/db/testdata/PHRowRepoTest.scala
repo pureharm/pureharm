@@ -33,17 +33,13 @@ import busymachines.pureharm.identifiable._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
-abstract private[pureharm] class PHRTestRepoTest[Trans] extends RepoTest[PHRow, PhantomPK, Trans] {
-  override type FixtureParam <: PHRTestRepo[IO]
+abstract private[pureharm] class PHRowRepoTest[Trans] extends RepoTest[PHRow, PhantomPK, Trans] {
+  override type ResourceType <: PHRowRepo[IO]
 
-  override def data: RepoTestData[PHRow, PhantomPK] = PHRTestRepoTest.pureharmRows
-
-  override def setup: RepoTestSetup[Trans]
-
-  override def fixture(meta: MetaData, trans: Trans): Resource[IO, FixtureParam]
+  override def data: PHRowRepoTest.pureharmRows.type = PHRowRepoTest.pureharmRows
 }
 
-object PHRTestRepoTest {
+object PHRowRepoTest {
 
   object pureharmRows extends RepoTestData[PHRow, PhantomPK] {
     override def iden: Identifiable[PHRow, PhantomPK] = PHRow.identifiable
@@ -99,6 +95,16 @@ object PHRTestRepoTest {
       string      = PhantomString("updated_string_2"),
       jsonbCol    = PHJSONCol(1, "new_json_col_2"),
       optionalCol = Option.empty,
+    )
+
+    val ext1: ExtPHRow = ExtPHRow(
+      id    = PhantomUUID.unsafeFromString("9320e4a5-a736-4623-96d4-92c61ce1c5cf"),
+      rowID = row1.id,
+    )
+
+    val extNoFPK: ExtPHRow = ExtPHRow(
+      id    = PhantomUUID.unsafeFromString("014ef766-232a-4952-87b8-f6b051dbf7d1"),
+      rowID = nonExistentPK,
     )
   }
 

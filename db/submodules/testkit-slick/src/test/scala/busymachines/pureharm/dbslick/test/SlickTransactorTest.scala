@@ -29,16 +29,16 @@ import org.scalatest._
   * @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 27/01/2020
   */
-final class SlickTransactorTest extends FixturePureharmTest {
+final class SlickTransactorTest extends PureharmTestWithResource {
 
   /**
     * Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
-  override def fixture(meta: MetaData): Resource[IO, Transactor[IO]] =
+  override def resource(meta: MetaData): Resource[IO, Transactor[IO]] =
     SlickTransactorTest.transactor(meta)
 
-  override type FixtureParam = Transactor[IO]
+  override type ResourceType = Transactor[IO]
 
   test("creates the transactor and the session connection is open from the start") { implicit trans: Transactor[IO] =>
     for {
@@ -78,7 +78,7 @@ final class SlickTransactorTest extends FixturePureharmTest {
 
 }
 
-private[test] object SlickTransactorTest extends SlickRepoTestSetup(testdb.jdbcProfileAPI) {
+private[test] object SlickTransactorTest extends SlickDBTestSetup(testdb.jdbcProfileAPI) {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
     PHRTestDBConfig.dbConfig.copy(

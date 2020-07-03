@@ -4,7 +4,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbdoobie._
-import busymachines.pureharm.dbdoobie.test.DoobiePHRTestRepo.DoobieDoobiePHRTestTable
+import busymachines.pureharm.dbdoobie.test.DoobiePHRowRepo.DoobieDoobiePHRTestTable
 import busymachines.pureharm.dbdoobie.testkit._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
@@ -14,13 +14,13 @@ import org.scalatest._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
-final class DoobiePHRTestRepoTest extends PHRTestRepoTest[Transactor[IO]] with ParallelTestExecution {
-  override type FixtureParam = DoobiePHRTestRepo[IO]
+final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with ParallelTestExecution {
+  override type ResourceType = DoobiePHRowRepo[IO]
 
-  override def setup: RepoTestSetup[Transactor[IO]] = DoobiePHRTestRepoTest
+  override def setup: DBTestSetup[Transactor[IO]] = DoobiePHRowRepoTest
 
-  override def fixture(meta: MetaData, trans: Transactor[IO]): Resource[IO, DoobiePHRTestRepo[IO]] =
-    Resource.pure[IO, DoobiePHRTestRepo[IO]](DoobiePHRTestRepo(trans))
+  override def resource(meta: MetaData, trans: Transactor[IO]): Resource[IO, DoobiePHRowRepo[IO]] =
+    Resource.pure[IO, DoobiePHRowRepo[IO]](DoobiePHRowRepo(trans))
 
   test("insert row1 + row2 (w/ same unique_string) -> conflict") { implicit repo =>
     for {
@@ -67,7 +67,7 @@ final class DoobiePHRTestRepoTest extends PHRTestRepoTest[Transactor[IO]] with P
   }
 }
 
-object DoobiePHRTestRepoTest extends DoobieRepoTestSetup {
+object DoobiePHRowRepoTest extends DoobieDBTestSetup {
 
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig =
     PHRTestDBConfig.dbConfig.withSchemaFromClassAndTest(prefix = "doobie", meta = meta)

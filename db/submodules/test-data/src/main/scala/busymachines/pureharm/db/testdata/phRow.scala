@@ -38,7 +38,6 @@ final private[pureharm] case class PHRow(
 )
 
 object PHRow {
-
   implicit val identifiable: Identifiable[PHRow, PhantomPK] = Identifiable.mkIdentifiable
 }
 
@@ -46,3 +45,12 @@ final private[pureharm] case class PHJSONCol(
   jsonInt:    Int,
   jsonString: String,
 )
+
+final case class ExtPHRow(
+  id:    PhantomUUID,
+  rowID: PhantomPK,
+)
+
+object ExtPHRow {
+  implicit val identifiable: Identifiable[ExtPHRow, PhantomUUID] = Identifiable.mkIdentifiable
+}

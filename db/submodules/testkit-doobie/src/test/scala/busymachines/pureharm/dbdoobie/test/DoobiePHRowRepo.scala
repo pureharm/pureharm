@@ -29,22 +29,22 @@ import busymachines.pureharm.dbdoobie._
   * add whatever new methods/override the default ones you need here.
   *
   * Implement the queries in terms of ConnectionIO similar to
-  * [[DoobiePHRTestRepo.DoobiePHRTestQueries]]
+  * [[DoobiePHRowRepo.DoobiePHRTestQueries]]
   *
   * and the final DAO in IO similar to
-  * [[DoobiePHRTestRepo.DoobiePHRTestRepoImpl]]
+  * [[DoobiePHRowRepo.DoobiePHRTestRepoImpl]]
   *
   * Voila! Bunch of free CRUD! + a lot of helpers to build
-  * common queries in the [[DoobiePHRTestRepo.DoobieDoobiePHRTestTable]]
+  * common queries in the [[DoobiePHRowRepo.DoobieDoobiePHRTestTable]]
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   */
-private[test] trait DoobiePHRTestRepo[F[_]] extends PHRTestRepo[F]
+private[test] trait DoobiePHRowRepo[F[_]] extends PHRowRepo[F]
 
-private[test] object DoobiePHRTestRepo {
+private[test] object DoobiePHRowRepo {
 
-  def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePHRTestRepo[F] = {
+  def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePHRowRepo[F] = {
     implicit val i: Transactor[F] = trans
     new DoobiePHRTestRepoImpl[F]
   }
@@ -69,10 +69,10 @@ private[test] object DoobiePHRTestRepo {
 
     implicit val jsonCodec: Codec[PHJSONCol] = derive.codec[PHJSONCol]
 
-    implicit private[DoobiePHRTestRepo] val pureharmJSONColMeta: Meta[PHJSONCol] =
+    implicit private[DoobiePHRowRepo] val pureharmJSONColMeta: Meta[PHJSONCol] =
       jsonMeta[PHJSONCol](jsonCodec)
 
-    implicit private[DoobiePHRTestRepo] val pureharmUniqueJSONColMeta: Meta[UniqueJSON] =
+    implicit private[DoobiePHRowRepo] val pureharmUniqueJSONColMeta: Meta[UniqueJSON] =
       pureharmJSONColMeta.imap(UniqueJSON.spook)(UniqueJSON.despook)
 
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
@@ -82,13 +82,13 @@ private[test] object DoobiePHRTestRepo {
   }
 
   final private object DoobiePHRTestQueries
-    extends DoobieRepoQueries[PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRTestRepo[ConnectionIO] {
+    extends DoobieRepoQueries[PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRowRepo[ConnectionIO] {
     override def table: DoobieDoobiePHRTestTable.type = DoobieDoobiePHRTestTable
   }
 
   final private class DoobiePHRTestRepoImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
-  ) extends DoobieRepo[F, PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRTestRepo[F] {
+  ) extends DoobieRepo[F, PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRowRepo[F] {
     override protected val queries: DoobiePHRTestQueries.type = DoobiePHRTestQueries
   }
 }

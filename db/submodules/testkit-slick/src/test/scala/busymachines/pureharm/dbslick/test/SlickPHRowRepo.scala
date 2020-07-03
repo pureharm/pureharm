@@ -24,11 +24,11 @@ import testdb._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
-private[test] trait SlickPHRTestRepo[F[_]] extends PHRTestRepo[F]
+private[test] trait SlickPHRowRepo[F[_]] extends PHRowRepo[F]
 
-private[test] object SlickPHRTestRepo {
+private[test] object SlickPHRowRepo {
 
-  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): SlickPHRTestRepo[F] =
+  def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): SlickPHRowRepo[F] =
     new SlickPHRTestRepoImpl[F]
 
   //----------------- implementation details -----------------
@@ -73,14 +73,14 @@ private[test] object SlickPHRTestRepo {
 
   final private class SlickPHRTestQueries(implicit
     override val connectionIOEC: ConnectionIOEC
-  ) extends SlickRepoQueries[PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRTestRepo[ConnectionIO] {
+  ) extends SlickRepoQueries[PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRowRepo[ConnectionIO] {
     override val dao: TableQuery[SlickPHRTestTable] = TableQuery[SlickPHRTestTable]
   }
 
   final private class SlickPHRTestRepoImpl[F[_]](
     implicit override val connectionIOEC: ConnectionIOEC,
     implicit override val transactor:     Transactor[F],
-  ) extends SlickRepo[F, PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRTestRepo[F] {
+  ) extends SlickRepo[F, PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRowRepo[F] {
     override protected val queries: SlickPHRTestQueries = new SlickPHRTestQueries
   }
 }
