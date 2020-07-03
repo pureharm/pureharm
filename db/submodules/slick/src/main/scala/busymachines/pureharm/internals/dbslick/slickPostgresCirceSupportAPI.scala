@@ -15,18 +15,17 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.internals.dbslick.psql
+package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.json._
+import busymachines.pureharm.json.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.SlickPostgresCirceSupportAPI", "0.0.6-M3")
 trait SlickPostgresCirceSupportAPI {
 
-  import busymachines.pureharm.json.implicits._
   import scala.reflect.ClassTag
 
   protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile
@@ -41,6 +40,7 @@ trait SlickPostgresCirceSupportAPI {
 
   final private object CirceJsonJDBCDriverType extends DriverJdbcType[Json] {
     import java.sql.{PreparedStatement, ResultSet}
+
     import slick.ast.FieldSymbol
 
     override val sqlType: Int = java.sql.Types.OTHER
@@ -69,12 +69,10 @@ trait SlickPostgresCirceSupportAPI {
 
 }
 
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON", "0.0.6-M3")
 sealed trait PostgresqlJSON extends Product with Serializable {
   val typeName: String
 }
 
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON", "0.0.6-M3")
 object PostgresqlJSON {
   case object jsonb extends PostgresqlJSON { override val typeName: String = "jsonb" }
   case object json  extends PostgresqlJSON { override val typeName: String = "json" }

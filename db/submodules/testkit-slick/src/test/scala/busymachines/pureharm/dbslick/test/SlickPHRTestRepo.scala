@@ -15,10 +15,10 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.psql.test
+package busymachines.pureharm.dbslick.test
 
 import busymachines.pureharm.db.testdata._
-import busymachines.pureharm.dbslick.psql.test.testdb._
+import testdb._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -52,7 +52,7 @@ private[test] object SlickPHRTestRepo {
     val jsonCol      = column[PHJSONCol]("jsonb_col")
     val optCol       = column[Option[PhantomString]]("opt_col")
     val uniqueString = column[UniqueString]("unique_string")
-    val uniqueInt    = column[UniqueInt]("int")
+    val uniqueInt    = column[UniqueInt]("unique_int")
     val uniqueJSON   = column[UniqueJSON]("unique_json")
 
     override def * : ProvenShape[PHRow] =

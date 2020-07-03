@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.psql.test
+package busymachines.pureharm.dbslick.test
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.db._

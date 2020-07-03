@@ -15,9 +15,9 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.psql.test
+package busymachines.pureharm.dbslick.test
 
-import busymachines.pureharm.dbslick.psql.PureharmSlickPostgresProfile
+import busymachines.pureharm.dbslick.PureharmSlickPostgresProfile
 
 /**
   * This is an example of the recommended way of setting up your Pureharm slickDB

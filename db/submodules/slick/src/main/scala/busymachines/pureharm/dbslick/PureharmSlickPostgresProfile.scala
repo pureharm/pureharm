@@ -15,23 +15,15 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.dbslick.psql
+package busymachines.pureharm.dbslick
 
 import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
-import busymachines.pureharm.dbslick._
-import busymachines.pureharm.internals.dbslick._
-import busymachines.pureharm.internals.dbslick.psql
+import busymachines.pureharm.internals
 
 /**
-  * If by any chance you are not using Postgres, then
-  * you should be using [[PureharmSlickDBProfile]] as a
-  * starting point and mixing in whatever you have specific
-  * for your database.
-  *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module", "0.0.6-M3")
 trait PureharmSlickPostgresProfile
   extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
 
@@ -80,7 +72,7 @@ trait PureharmSlickPostgresProfile
     *   import myapp.effects._
     *   import myapp.effects.implicits._ //see how to use pureharm-effects-cats
     *   import myapp.db._
-    *   import myapp.db.implicits._ //see how to use pureharm-effects-cats
+    *   import myapp.db.implicits._
     *
     *   class MyAppDomainSlickDAOIMPL {
     *     //dao method implementations
@@ -93,16 +85,16 @@ trait PureharmSlickPostgresProfile
     * While imports of the associated "implicits" brings you everything you need to
     * actually implement things.
     */
-  @scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module", "0.0.6-M3")
   trait PureharmSlickPostgresAPIWithImplicits
-    extends this.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-    with PureharmSlickConnectionIOOps.Implicits with SlickQueryAlgebraDefinitions with SlickAliases
-    with psql.SlickPostgresCirceSupportAPI {
+    extends this.API with internals.dbslick.PureharmSlickInstances.PhantomTypeInstances
+    with internals.dbslick.SlickConnectionIOCatsInstances with internals.dbslick.PureharmSlickConnectionIOOps.Implicits
+    with internals.dbslick.SlickQueryAlgebraDefinitions with internals.dbslick.SlickAliases
+    with internals.dbslick.SlickPostgresCirceSupportAPI {
     final override protected val enclosingProfile:         slick.jdbc.JdbcProfile     = self
     final override protected val enclosingPostgresProfile: slick.jdbc.PostgresProfile = self
 
-    final type PostgresqlJSON = psql.PostgresqlJSON
-    final val PostgresqlJSON: psql.PostgresqlJSON.type = psql.PostgresqlJSON
+    final type PostgresqlJSON = internals.dbslick.PostgresqlJSON
+    final val PostgresqlJSON: internals.dbslick.PostgresqlJSON.type = internals.dbslick.PostgresqlJSON
   }
 
   final def slickJDBCProfileAPI: SlickJDBCProfileAPI = this.api
