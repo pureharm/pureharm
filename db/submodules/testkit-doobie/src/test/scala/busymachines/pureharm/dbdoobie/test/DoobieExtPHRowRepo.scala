@@ -34,7 +34,7 @@ private[test] object DoobieExtPHRowRepo {
 
   def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobieExtPHRowRepo[F] = {
     implicit val i: Transactor[F] = trans
-    new DoobiePHRTestRepoImpl[F]
+    new DoobieExtPHRrowRepoImpl[F]
   }
 
   //----------------- implementation details -----------------
@@ -55,7 +55,7 @@ private[test] object DoobieExtPHRowRepo {
     override def table: DoobiePHExtRowTable.type = DoobiePHExtRowTable
   }
 
-  final private class DoobiePHRTestRepoImpl[F[_]: BracketAttempt](implicit
+  final private class DoobieExtPHRrowRepoImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
   ) extends DoobieRepo[F, ExtPHRow, PhantomUUID, DoobiePHExtRowTable.type] with DoobieExtPHRowRepo[F] {
     override protected val queries: DoobieExtPHRowQueries.type = DoobieExtPHRowQueries

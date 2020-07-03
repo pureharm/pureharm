@@ -29,13 +29,13 @@ import busymachines.pureharm.dbdoobie._
   * add whatever new methods/override the default ones you need here.
   *
   * Implement the queries in terms of ConnectionIO similar to
-  * [[DoobiePHRowRepo.DoobiePHRTestQueries]]
+  * [[DoobiePHRowRepo.DoobiePHRowQueries]]
   *
   * and the final DAO in IO similar to
-  * [[DoobiePHRowRepo.DoobiePHRTestRepoImpl]]
+  * [[DoobiePHRowRepo.DoobiePHRowRepoImpl]]
   *
   * Voila! Bunch of free CRUD! + a lot of helpers to build
-  * common queries in the [[DoobiePHRowRepo.DoobieDoobiePHRTestTable]]
+  * common queries in the [[DoobiePHRowRepo.DoobieDoobiePHRowTable]]
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
@@ -46,14 +46,14 @@ private[test] object DoobiePHRowRepo {
 
   def apply[F[_]: BracketAttempt](trans: Transactor[F]): DoobiePHRowRepo[F] = {
     implicit val i: Transactor[F] = trans
-    new DoobiePHRTestRepoImpl[F]
+    new DoobiePHRowRepoImpl[F]
   }
 
   //----------------- implementation details -----------------
   import busymachines.pureharm.dbdoobie.implicits._
   import busymachines.pureharm.json._
 
-  object DoobieDoobiePHRTestTable extends TableWithPK[PHRow, PhantomPK] {
+  object DoobieDoobiePHRowTable extends TableWithPK[PHRow, PhantomPK] {
     override val name: TableName = schema.PureharmRows
 
     val byte_col:      Column = createColumn("byte")
@@ -81,14 +81,14 @@ private[test] object DoobiePHRowRepo {
     override val writeE: Write[PHRow]    = Write[PHRow]
   }
 
-  final private object DoobiePHRTestQueries
-    extends DoobieRepoQueries[PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRowRepo[ConnectionIO] {
-    override def table: DoobieDoobiePHRTestTable.type = DoobieDoobiePHRTestTable
+  final private object DoobiePHRowQueries
+    extends DoobieRepoQueries[PHRow, PhantomPK, DoobieDoobiePHRowTable.type] with DoobiePHRowRepo[ConnectionIO] {
+    override def table: DoobieDoobiePHRowTable.type = DoobieDoobiePHRowTable
   }
 
-  final private class DoobiePHRTestRepoImpl[F[_]: BracketAttempt](implicit
+  final private class DoobiePHRowRepoImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
-  ) extends DoobieRepo[F, PHRow, PhantomPK, DoobieDoobiePHRTestTable.type] with DoobiePHRowRepo[F] {
-    override protected val queries: DoobiePHRTestQueries.type = DoobiePHRTestQueries
+  ) extends DoobieRepo[F, PHRow, PhantomPK, DoobieDoobiePHRowTable.type] with DoobiePHRowRepo[F] {
+    override protected val queries: DoobiePHRowQueries.type = DoobiePHRowQueries
   }
 }

@@ -29,7 +29,7 @@ private[test] trait SlickPHRowRepo[F[_]] extends PHRowRepo[F]
 private[test] object SlickPHRowRepo {
 
   def apply[F[_]: Transactor](implicit ec: ConnectionIOEC): SlickPHRowRepo[F] =
-    new SlickPHRTestRepoImpl[F]
+    new SlickPHRowRepoImpl[F]
 
   //----------------- implementation details -----------------
   import testdb.implicits._
@@ -43,7 +43,7 @@ private[test] object SlickPHRowRepo {
   implicit private val uniqueJsonColumnType: ColumnType[UniqueJSON] =
     jsonColumnType.asInstanceOf[ColumnType[UniqueJSON]] //TODO: implement map operations on column types...
 
-  private class SlickPHRTestTable(tag: Tag) extends TableWithPK[PHRow, PhantomPK](tag, schema.PureharmRows) {
+  private class SlickPHRowTable(tag: Tag) extends TableWithPK[PHRow, PhantomPK](tag, schema.PureharmRows) {
     val byte         = column[PhantomByte]("byte")
     val int          = column[PhantomInt]("int")
     val long         = column[PhantomLong]("long")
@@ -71,16 +71,16 @@ private[test] object SlickPHRowRepo {
       ).<>((PHRow.apply _).tupled, PHRow.unapply)
   }
 
-  final private class SlickPHRTestQueries(implicit
+  final private class SlickPHRowQueries(implicit
     override val connectionIOEC: ConnectionIOEC
-  ) extends SlickRepoQueries[PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRowRepo[ConnectionIO] {
-    override val dao: TableQuery[SlickPHRTestTable] = TableQuery[SlickPHRTestTable]
+  ) extends SlickRepoQueries[PHRow, PhantomPK, SlickPHRowTable] with SlickPHRowRepo[ConnectionIO] {
+    override val dao: TableQuery[SlickPHRowTable] = TableQuery[SlickPHRowTable]
   }
 
-  final private class SlickPHRTestRepoImpl[F[_]](
+  final private class SlickPHRowRepoImpl[F[_]](
     implicit override val connectionIOEC: ConnectionIOEC,
     implicit override val transactor:     Transactor[F],
-  ) extends SlickRepo[F, PHRow, PhantomPK, SlickPHRTestTable] with SlickPHRowRepo[F] {
-    override protected val queries: SlickPHRTestQueries = new SlickPHRTestQueries
+  ) extends SlickRepo[F, PHRow, PhantomPK, SlickPHRowTable] with SlickPHRowRepo[F] {
+    override protected val queries: SlickPHRowQueries = new SlickPHRowQueries
   }
 }

@@ -4,7 +4,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.db.testkit._
 import busymachines.pureharm.dbdoobie._
-import busymachines.pureharm.dbdoobie.test.DoobiePHRowRepo.DoobieDoobiePHRTestTable
+import busymachines.pureharm.dbdoobie.test.DoobiePHRowRepo.DoobieDoobiePHRowTable
 import busymachines.pureharm.dbdoobie.testkit._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
@@ -31,7 +31,7 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
           .attempt
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
-      assert(failure.column == DoobieDoobiePHRTestTable.unique_string, "column name")
+      assert(failure.column == DoobieDoobiePHRowTable.unique_string, "column name")
       assert(failure.value == data.row1.uniqueString, "column name")
     }
   }
@@ -45,13 +45,13 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
           .attempt
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
-      assert(failure.column == DoobieDoobiePHRTestTable.unique_int, "column name")
+      assert(failure.column == DoobieDoobiePHRowTable.unique_int, "column name")
       assert(failure.value == data.row1.uniqueInt.toString, "column name")
     }
   }
 
   test("insert row1 + row2 (w/ same unique_json) -> conflict") { implicit repo =>
-    import DoobieDoobiePHRTestTable.jsonCodec
+    import DoobieDoobiePHRowTable.jsonCodec
     import busymachines.pureharm.json.implicits._
     for {
       _       <- repo.insert(data.row1)
@@ -61,7 +61,7 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
           .attempt
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
-      assert(failure.column == DoobieDoobiePHRTestTable.unique_json, "column name")
+      assert(failure.column == DoobieDoobiePHRowTable.unique_json, "column name")
       assertSuccess(failure.value.decodeAs[PHJSONCol])(data.row1.uniqueJSON)
     }
   }
