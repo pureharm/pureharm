@@ -23,7 +23,10 @@ import busymachines.pureharm.json._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.SlickPostgresCirceSupportAPI", "0.0.6-M3")
+@scala.deprecated(
+  "Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.SlickPostgresCirceSupportAPI",
+  "0.0.6-M3",
+)
 trait SlickPostgresCirceSupportAPI {
 
   import busymachines.pureharm.json.implicits._
@@ -69,12 +72,18 @@ trait SlickPostgresCirceSupportAPI {
 
 }
 
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON", "0.0.6-M3")
+@scala.deprecated(
+  "Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON",
+  "0.0.6-M3",
+)
 sealed trait PostgresqlJSON extends Product with Serializable {
   val typeName: String
 }
 
-@scala.deprecated("Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON", "0.0.6-M3")
+@scala.deprecated(
+  "Will be removed in the future, use the same type from the pureharm-db-slick module, busymachines.pureharm.internals.dbslick.PostgresqlJSON",
+  "0.0.6-M3",
+)
 object PostgresqlJSON {
   case object jsonb extends PostgresqlJSON { override val typeName: String = "jsonb" }
   case object json  extends PostgresqlJSON { override val typeName: String = "json" }
