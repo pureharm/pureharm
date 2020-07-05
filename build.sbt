@@ -374,9 +374,7 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies ++= Seq(
-      doobieScalatest.withDottyCompat(scalaVersion.value)
-    )
+    libraryDependencies ++= Nil
   )
   .dependsOn(
     `core`,
@@ -590,7 +588,6 @@ lazy val postgresql: ModuleID = "org.postgresql" % "postgresql" % postgresqlVers
 lazy val doobieCore      = "org.tpolecat" %% "doobie-core"      % doobieVersion withSources ()
 lazy val doobieHikari    = "org.tpolecat" %% "doobie-hikari"    % doobieVersion withSources ()
 lazy val doobiePSQL      = "org.tpolecat" %% "doobie-postgres"  % doobieVersion withSources ()
-lazy val doobieScalatest = "org.tpolecat" %% "doobie-scalatest" % doobieVersion withSources ()
 
 //=============================================================================
 //============================= DATABASE - SLICK ==============================
