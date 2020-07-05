@@ -72,3 +72,8 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0") //https://github.com/sc
   * }}}
   */
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.17") //https://github.com/scalacenter/scalafix/releases
+
+/**
+  * https://github.com/lampepfl/dotty/releases
+  */
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.4.1")
