@@ -63,7 +63,16 @@ lazy val root = Project(id = "pureharm", base = file("."))
     testkit,
     `config`,
     `json-circe`,
-    `db`,
+    `db-core`,
+    `db-core-flyway`,
+    `db-core-psql`,
+    `db-slick`,
+    `db-slick-psql`,
+    `db-doobie`,
+    `db-testkit-core`,
+    `db-testkit-doobie`,
+    `db-test-data`,
+    `db-testkit-slick`,
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -78,11 +87,6 @@ lazy val core = project
     libraryDependencies ++= Nil,
   )
   .dependsOn(
-    `core-anomaly`,
-    `core-phantom`,
-    `core-identifiable`,
-  )
-  .aggregate(
     `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
@@ -123,9 +127,6 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
     )
   )
   .dependsOn(
-    `core-phantom`
-  )
-  .aggregate(
     `core-phantom`
   )
 
@@ -196,28 +197,6 @@ lazy val `config` = project
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `db` = project
-  .settings(PublishingSettings.noPublishSettings)
-  .settings(CompilerSettings.commonSettings)
-  .settings(
-    name := "pureharm-db",
-    libraryDependencies ++= Nil,
-  )
-  .aggregate(
-    `db-core`,
-    `db-core-flyway`,
-    `db-core-psql`,
-    `db-slick`,
-    `db-slick-psql`,
-    `db-doobie`,
-    `db-testkit-core`,
-    `db-testkit-doobie`,
-    `db-test-data`,
-    `db-testkit-slick`,
-  )
-
-//#############################################################################
-
 lazy val `db-core` = subModule("db", "core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
@@ -225,11 +204,6 @@ lazy val `db-core` = subModule("db", "core")
     libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
-    `effects-cats`,
-    `config`,
-  )
-  .aggregate(
     `core`,
     `effects-cats`,
     `config`,
@@ -254,12 +228,6 @@ lazy val `db-core-psql` = subModule("db", "core-psql")
     `db-core`,
     asTestingLibrary(testkit),
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `db-core`,
-  )
 //#############################################################################
 
 lazy val `db-core-flyway` = subModule("db", "core-flyway")
@@ -276,13 +244,6 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
     `config`,
     `db-core`,
     asTestingLibrary(testkit),
-  )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `db-core`,
-    testkit,
   )
 
 //#############################################################################
@@ -305,14 +266,6 @@ lazy val `db-testkit-core` = subModule("db", "testkit-core")
     `db-core-flyway`,
     testkit,
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `db-core`,
-    `db-core-flyway`,
-    testkit,
-  )
 //#############################################################################
 
 //used only in the interior of pureharm to test the implementations!
@@ -323,14 +276,6 @@ lazy val `db-test-data` = subModule("db", "test-data")
     libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `db-core`,
-    `db-core-flyway`,
-    `db-testkit-core`,
-  )
-  .aggregate(
     `core`,
     `effects-cats`,
     `config`,
@@ -359,14 +304,6 @@ lazy val `db-doobie` = subModule("db", "doobie")
     `db-core`,
     `db-core-psql`,
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `json-circe`,
-    `db-core`,
-    `db-core-psql`,
-  )
 
 //#############################################################################
 
@@ -387,16 +324,6 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
     `db-testkit-core`,
     asTestingLibrary(`db-test-data`),
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `db-core`,
-    `db-core-flyway`,
-    `db-doobie`,
-    testkit,
-    `db-testkit-core`,
-  )
 
 //#############################################################################
 
@@ -414,13 +341,6 @@ lazy val `db-slick` = subModule("db", "slick")
     `effects-cats`,
     `config`,
     `json-circe`,
-    `db-core`,
-    `db-core-psql`,
-  )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
     `db-core`,
     `db-core-psql`,
   )
@@ -445,17 +365,6 @@ lazy val `db-slick-psql` = subModule("db", "slick-psql")
     asTestingLibrary(`db-testkit-slick`),
     asTestingLibrary(`db-test-data`),
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `json-circe`,
-    `db-core`,
-    `db-slick`,
-    `db-testkit-core`,
-    `db-testkit-slick`,
-    `db-test-data`,
-  )
 
 //#############################################################################
 
@@ -479,17 +388,6 @@ lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
     `db-testkit-core`,
     asTestingLibrary(`db-test-data`),
   )
-  .aggregate(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `json-circe`,
-    `db-core`,
-    `db-core-psql`,
-    `db-slick`,
-    testkit,
-    `db-testkit-core`,
-  )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
@@ -507,10 +405,6 @@ lazy val testkit = project
     ),
   )
   .dependsOn(
-    `core`,
-    `effects-cats`,
-  )
-  .aggregate(
     `core`,
     `effects-cats`,
   )
