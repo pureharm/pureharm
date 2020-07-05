@@ -144,6 +144,6 @@ trait AnomalyBase extends Product with Serializable {
   */
 sealed trait StringOrSeqString extends Product with Serializable
 
-final case class StringWrapper private (s: String) extends StringOrSeqString
+final case class StringWrapper private[anomaly] (s: String) extends StringOrSeqString
 
-final case class SeqStringWrapper private (ses: Seq[String]) extends StringOrSeqString
+final case class SeqStringWrapper private[anomaly] (ses: Seq[String]) extends StringOrSeqString
