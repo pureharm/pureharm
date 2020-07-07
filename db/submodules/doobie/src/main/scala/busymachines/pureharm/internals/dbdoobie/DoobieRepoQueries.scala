@@ -20,6 +20,7 @@ package busymachines.pureharm.internals.dbdoobie
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.db._
+import busymachines.pureharm.db.psql.PSQLExceptionInterpreters
 import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.dbdoobie.implicits._
 
@@ -54,24 +55,24 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
     Query[PK, E](findSQL).option(pk)
 
   override def retrieve(pk: PK)(implicit show: Show[PK]): ConnectionIO[E] =
-    this.find(pk).flattenOption(DoobieDBEntryNotFoundAnomaly(show.show(pk), Option.empty))
+    this.find(pk).flattenOption(DBEntryNotFoundAnomaly(show.show(pk), Option.empty))
 
   override def insert(e: E): ConnectionIO[PK] =
-    Update[E](insertSQL).withUniqueGeneratedKeys[PK](table.row.pkColumn)(e)
+    Update[E](insertSQL).withUniqueGeneratedKeys[PK](table.row.pkColumn)(e).adaptError(PSQLExceptionInterpreters.adapt)
 
   override def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
     val expectedSize = es.size
     for {
       inserted <- Update[E](insertSQL).updateMany(es).adaptError {
         case bux: java.sql.BatchUpdateException =>
-          DoobieDBBatchInsertFailedAnomaly(
+          DBBatchInsertFailedAnomaly(
             expectedSize = expectedSize,
             actualSize   = 0,
-            causedBy     = Option(bux),
+            causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
           )
       }
       _        <- (inserted != expectedSize).ifTrueRaise[ConnectionIO](
-        DoobieDBBatchInsertFailedAnomaly(
+        DBBatchInsertFailedAnomaly(
           expectedSize = expectedSize,
           actualSize   = inserted,
           causedBy     = Option.empty,
@@ -81,23 +82,25 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
   }
 
   override def update(e: E): ConnectionIO[E] =
-    Update[(E, PK)](updateSQL).withUniqueGeneratedKeys[E](table.row.columnNames: _*)((e, table.row.pkValueOf(e)))
+    Update[(E, PK)](updateSQL)
+      .withUniqueGeneratedKeys[E](table.row.columnNames: _*)((e, table.row.pkValueOf(e)))
+      .adaptError(PSQLExceptionInterpreters.adapt)
 
   //FIXME: rewrite with postgresql batch update
   override def updateMany[M[_]: Traverse](es: M[E]): ConnectionIO[Unit] =
-    es.traverse(this.update).void
+    es.traverse(this.update).void.adaptError(PSQLExceptionInterpreters.adapt)
 
   override def delete(pk: PK): ConnectionIO[Unit] =
     for {
       deleted <- Update[PK](deleteSQL).run(pk)
-      _       <- (deleted == 1).ifFalseRaise[ConnectionIO](DoobieDBDeleteByPKFailedAnomaly(pk.show))
+      _       <- (deleted == 1).ifFalseRaise[ConnectionIO](DBDeleteByPKFailedAnomaly(pk.show))
     } yield ()
 
   override def deleteMany(pks: Iterable[PK]): ConnectionIO[Unit] = {
     val q = deleteManySQLFragment(pks.toList).update
     for {
       deleted <- q.run
-      _       <- (deleted == pks.size).ifFalseRaise[ConnectionIO](DoobieDBDeleteByPKFailedAnomaly(pks.mkString(", ")))
+      _       <- (deleted == pks.size).ifFalseRaise[ConnectionIO](DBDeleteByPKFailedAnomaly(pks.mkString(", ")))
     } yield ()
   }
 

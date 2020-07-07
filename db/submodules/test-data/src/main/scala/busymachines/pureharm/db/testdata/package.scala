@@ -17,6 +17,8 @@
   */
 package busymachines.pureharm.db
 
+import java.util.UUID
+
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phantom.PhantomType
@@ -48,8 +50,29 @@ package object testdata {
   }
   type PhantomPK = PhantomPK.Type
 
+  object UniqueString extends PhantomType[String]
+  type UniqueString = UniqueString.Type
+
+  object UniqueInt extends PhantomType[Int]
+  type UniqueInt = UniqueInt.Type
+
+  object UniqueJSON extends PhantomType[PHJSONCol]
+  type UniqueJSON = UniqueJSON.Type
+
+  object PhantomUUID extends PhantomType[UUID] {
+    def unsafeFromString(s: String):      PhantomUUID = this(UUID.fromString(s))
+    def unsafeFromBytes(a:  Array[Byte]): PhantomUUID = this(UUID.nameUUIDFromBytes(a))
+
+    def unsafeGenerate: PhantomUUID = this(UUID.randomUUID())
+    def generate[F[_]: Sync]: F[PhantomUUID] = Sync[F].delay(unsafeGenerate)
+
+    implicit val showUUID: Show[PhantomUUID] = Show.fromToString[PhantomUUID]
+  }
+  type PhantomUUID = PhantomUUID.Type
+
   object schema {
-    val PureharmRows: TableName = TableName("pureharm_rows")
+    val PureharmRows:         TableName = TableName("pureharm_rows")
+    val PureharmExternalRows: TableName = TableName("pureharm_external_rows")
   }
 
 }

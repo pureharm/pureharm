@@ -12,10 +12,8 @@
     </root>
 
     <logger name="slick" level="WARN"/>
-
     <logger name="org.flywaydb.core.internal.command.DbMigrate" level="INFO"/>
     <logger name="org.flywaydb" level="WARN"/>
-
     <logger name="com.zaxxer.hikari" level="WARN"/>
 
 </configuration>

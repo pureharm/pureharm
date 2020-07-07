@@ -24,6 +24,10 @@ import busymachines.pureharm.internals.dbslick._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
+@scala.deprecated(
+  "Use busymachines.pureharm.dbslick.PureharmSlickPostgresProfile, support for non Postgresql slick will be dropped in the future",
+  "0.0.6-M2",
+)
 trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions {
   self: slick.jdbc.JdbcProfile =>
 
@@ -92,7 +96,7 @@ trait PureharmSlickDBProfile extends PureharmDBCoreTypeDefinitions with Pureharm
     */
   trait PureharmSlickAPIWithImplicits
     extends self.API with PureharmSlickInstances.PhantomTypeInstances with SlickConnectionIOCatsInstances
-    with PureharmSlickConnectionIOOps.Implicits with SlickQueryAlgebraDefinitions with SlickAliases {
+    with PureharmSlickConnectionIOOps.Implicits with SlickRepoQueriesDefinitions with SlickAliases {
     final override protected val enclosingProfile: slick.jdbc.JdbcProfile = self
   }
 

@@ -15,7 +15,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 --
-create TABLE "pureharm_rows"(
+create TABLE pureharm_rows(
     "id"   VARCHAR NOT NULL PRIMARY KEY,
     "byte" SMALLINT NOT NULL,
     "int" INT NOT NULL,
@@ -23,5 +23,13 @@ create TABLE "pureharm_rows"(
     "big_decimal" DOUBLE PRECISION NOT NULL,
     "string" VARCHAR NOT NULL,
     "jsonb_col" JSONB NOT NULL,
-    "opt_col" VARCHAR NULL
+    "opt_col" VARCHAR NULL,
+    "unique_string" VARCHAR NOT NULL UNIQUE,
+    "unique_int" INT NOT NULL UNIQUE,
+    "unique_json" JSONB NOT NULL UNIQUE
 );
+
+CREATE TABLE "pureharm_external_rows"(
+    "id" UUID NOT NULL PRIMARY KEY,
+    "row_id" VARCHAR NOT NULL REFERENCES "pureharm_rows"("id")
+)

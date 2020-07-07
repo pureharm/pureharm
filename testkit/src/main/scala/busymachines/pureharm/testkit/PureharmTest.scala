@@ -23,7 +23,8 @@ import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalactic.source
 import busymachines.pureharm.effects._
-import org.scalatest.exceptions.{TestCanceledException, TestFailedException, TestPendingException}
+import busymachines.pureharm.testkit.util._
+import org.scalatest.exceptions._
 
 /**
   * This is an experimental base class,
@@ -32,7 +33,8 @@ import org.scalatest.exceptions.{TestCanceledException, TestFailedException, Tes
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Jun 2020
   */
-abstract class PureharmTest extends AnyFunSuite with Assertions with PureharmTestRuntimeLazyConversions {
+abstract class PureharmTest
+  extends AnyFunSuite with PureharmAssertions with Assertions with PureharmTestRuntimeLazyConversions {
   final type MetaData = TestData
 
   private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
