@@ -151,8 +151,6 @@ object PureharmSyntax {
     }
   }
 
-  final private val singletonUnitAttempt: Attempt[Unit] = Right[Throwable, Unit](())
-
   /**
     * This helps mimick operations on the ``Attempt`` using
     * the standard ``Either`` companion, thus making all
@@ -165,8 +163,6 @@ object PureharmSyntax {
     def pure[A](a: A): Attempt[A] = Right[Throwable, A](a)
 
     def raiseError[A](t: Throwable): Attempt[A] = Left[Throwable, A](t)
-
-    def unit: Attempt[Unit] = singletonUnitAttempt
   }
 
   //--------------------------- TRY ---------------------------
