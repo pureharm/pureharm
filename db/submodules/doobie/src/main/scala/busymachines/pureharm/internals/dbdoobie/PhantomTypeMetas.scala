@@ -17,13 +17,14 @@
   */
 package busymachines.pureharm.internals.dbdoobie
 
+import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phantom.{SafeSpook, Spook}
-import doobie.Meta
-
+import doobie.{Get, Meta, Put}
 import io.circe._
 import io.circe.parser._
 import org.postgresql.util.PGobject
+import scala.reflect.runtime.universe.TypeTag
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -36,10 +37,17 @@ trait PhantomTypeMetas {
     meta:  Meta[Underlying],
   ): Meta[Phantom] = meta.imap(spook.spook)(spook.despook)
 
-  implicit final def safePhatomTypeMeta[Err, Underlying, Phantom](implicit
+  implicit final def safePhatomGet[Err, Underlying: TypeTag, Phantom: TypeTag](implicit
+    spook:     SafeSpook[Err, Underlying, Phantom],
+    get:       Get[Underlying],
+    showErr:   Show[Err],
+    showUnder: Show[Underlying],
+  ): Get[Phantom] = get.temap(s => spook.spook(s).leftMap(_.show))
+
+  implicit final def safePhatomPut[Err, Underlying, Phantom](implicit
     spook: SafeSpook[Err, Underlying, Phantom],
-    meta:  Meta[Underlying],
-  ): Meta[Phantom] = meta.imap(spook.unsafe)(spook.despook)
+    put:   Put[Underlying],
+  ): Put[Phantom] = put.contramap(spook.despook)
 
   implicit def jsonMeta[A](implicit codec: Codec[A]): Meta[A] =
     Meta.Advanced
