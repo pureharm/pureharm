@@ -17,7 +17,8 @@
   */
 package busymachines.pureharm.config
 
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.anomaly.InvalidInputAnomaly
+import busymachines.pureharm.phantom._
 
 import scala.concurrent.duration._
 
@@ -41,4 +42,13 @@ package object test {
   type PhantomSet            = PhantomSet.Type
   type PhantomFiniteDuration = PhantomFiniteDuration.Type
   type PhantomDuration       = PhantomDuration.Type
+  type SafePhantomInt        = SafePhantomInt.Type
+
+  object SafePhantomInt extends SafePhantomType[Throwable, Int] {
+    override def check(value: Int): Either[Throwable, Int] = {
+      import busymachines.pureharm.effects.implicits._
+      if (value > 0) Either.right(value)
+      else Either.left(InvalidInputAnomaly(s"TEST_CASE_INVALID_SAFE_PHANTOM_ANOMALY"))
+    }
+  }
 }
