@@ -17,7 +17,9 @@
   */
 package busymachines.pureharm.json
 
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.anomaly.InvalidInputAnomaly
+import busymachines.pureharm.phantom._
+import busymachines.pureharm.effects.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -27,6 +29,22 @@ package object test {
 
   object Weight extends PhantomType[Int]
   type Weight = Weight.Type
+
+  object SafeWeight extends SafePhantomType[Throwable, Int] {
+
+    /**
+      * @return
+      *   - Right — of the original (or transformed) value to be tagged
+      *   - Left — of the failure type you want
+      */
+    override def check(value: Int): Either[Throwable, Int] = if (value > 0) {
+      Either.right(value)
+    }
+    else {
+      Either.left(InvalidInputAnomaly("Weight should be larger than 0"))
+    }
+  }
+  type SafeWeight = SafeWeight.Type
 
   object Weights extends PhantomType[List[Int]]
   type Weights = Weights.Type

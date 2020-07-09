@@ -43,6 +43,7 @@ private[test] case class WaterMelon(
 
 private[test] case class PhantomMelon(
   weight:     Weight,
+  safeWeight: SafeWeight,
   weights:    Weights,
   weightsSet: WeigthsSet,
   duo:        MelonDuo,
