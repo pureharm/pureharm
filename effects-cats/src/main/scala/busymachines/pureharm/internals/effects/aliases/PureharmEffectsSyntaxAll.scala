@@ -25,4 +25,4 @@ import busymachines.pureharm.internals.effects
   */
 private[pureharm] trait PureharmEffectsSyntaxAll
   extends effects.PureharmSyntax.Implicits with effects.PureharmTimedAttemptReattemptSyntaxOps.Implicits
-  with effects.PureharmPhantomShowInstances.Implicits
+  with effects.PureharmShowInstances.Implicits
