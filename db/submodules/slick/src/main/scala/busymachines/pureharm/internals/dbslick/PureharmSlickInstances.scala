@@ -18,6 +18,7 @@
 package busymachines.pureharm.internals.dbslick
 
 import busymachines.pureharm.phantom._
+import busymachines.pureharm.effects.implicits._
 
 import scala.reflect.ClassTag
 
@@ -51,10 +52,10 @@ object PureharmSlickInstances {
       column: ColumnType[Underlying],
     ): ColumnType[Phantom] = MappedColumnType.base[Phantom, Underlying](spook.despook, spook.spook)
 
-    implicit final def safePhantomTypeColumn[Err, Underlying, Phantom: ClassTag](implicit
+    implicit final def safePhantomTypeColumn[Err <: Throwable, Underlying, Phantom: ClassTag](implicit
       spook:  SafeSpook[Err, Underlying, Phantom],
       column: ColumnType[Underlying],
-    ): ColumnType[Phantom] = MappedColumnType.base[Phantom, Underlying](spook.despook, spook.unsafe)
+    ): ColumnType[Phantom] = MappedColumnType.base[Phantom, Underlying](spook.despook, s => spook.spook(s).unsafeGet())
   }
 
 }
