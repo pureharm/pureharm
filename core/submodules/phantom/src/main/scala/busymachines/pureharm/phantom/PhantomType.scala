@@ -62,7 +62,7 @@ trait PhantomType[T] {
 }
 
 /**
-  * Use this typeclass to talk generically about SafePhantomType. For instance, the way
+  * Use this typeclass to talk generically about PhantomType. For instance, the way
   * we define generic circe encoders/decoders is the following (taken from pureharm-json-circe):
   * {{{
   *       implicit final def phatomTypeEncoder[Underlying, Phantom](implicit
