@@ -418,7 +418,7 @@ lazy val testkit = project
 
 lazy val scalaCollCompatVersion: String = "2.1.6"    //https://github.com/scala/scala-collection-compat/releases
 lazy val shapelessVersion:       String = "2.4.0-M1" //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:            String = "2.1.1"    //https://github.com/typelevel/cats/releases
+lazy val catsVersion:            String = "2.2.0-RC1"    //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.1.3"    //https://github.com/typelevel/cats-effect/releases
 lazy val fs2Version:             String = "2.4.2"    //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val circeVersion:           String = "0.13.0"   //https://github.com/circe/circe/releases
