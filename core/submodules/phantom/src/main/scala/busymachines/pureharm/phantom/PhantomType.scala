@@ -40,14 +40,49 @@ trait PhantomType[T] {
     * Override if you want to do pure transformations on your value
     * before tagging.
     */
-  @inline def apply(value: T): Type =
-    tag[Tag][T](value)
+  @inline def apply(v: T): Type = tag[Tag][T](v)
 
   /**
     * alias for [[apply]]
     */
-  @inline final def spook(value: T): Type =
-    apply(value)
+  @inline final def spook(v: T): Type = apply(v)
 
-  @inline final def despook(spook: Type): T = spook
+  @inline final def despook(t: Type): T = t
+
+  /**
+    * Override for a custom spook instance
+    */
+  implicit def spookInstance: Spook[T, Type] = defaultSpook
+
+  private[this] lazy val defaultSpook = new Spook[T, Type] {
+    override def spook(v:   T):    Type = PhantomType.this.spook(v)
+    override def despook(t: Type): T    = PhantomType.this.despook(t)
+  }
+
+}
+
+/**
+  * Use this typeclass to talk generically about SafePhantomType. For instance, the way
+  * we define generic circe encoders/decoders is the following (taken from pureharm-json-circe):
+  * {{{
+  *       implicit final def phatomTypeEncoder[Underlying, Phantom](implicit
+  *       spook:   Spook[Underlying, Phantom],
+  *       encoder: Encoder[Underlying],
+  *     ): Encoder[Phantom] = encoder.contramap(spook.despook)
+  *
+  *     implicit final def phatomTypeDecoder[Underlying, Phantom](implicit
+  *       spook:   Spook[Underlying, Phantom],
+  *       decoder: Decoder[Underlying],
+  *     ): Decoder[Phantom] = decoder.map(spook.spook)
+  * }}}
+  *
+  * @tparam T
+  *  the underlying type
+  * @tparam PT
+  *  the final tagged type, "phantom" type.
+  */
+trait Spook[T, PT] {
+  def spook(a: T): PT
+
+  def despook(t: PT): T
 }
