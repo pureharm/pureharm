@@ -69,12 +69,6 @@ private[test] object DoobiePHRowRepo {
 
     implicit val jsonCodec: Codec[PHJSONCol] = derive.codec[PHJSONCol]
 
-    implicit private[DoobiePHRowRepo] val pureharmJSONColMeta: Meta[PHJSONCol] =
-      jsonMeta[PHJSONCol](jsonCodec)
-
-    implicit private[DoobiePHRowRepo] val pureharmUniqueJSONColMeta: Meta[UniqueJSON] =
-      pureharmJSONColMeta.imap(UniqueJSON.spook)(UniqueJSON.despook)
-
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
     override val metaPK: Meta[PhantomPK] = Meta[PhantomPK]
     override val readE:  Read[PHRow]     = Read[PHRow]

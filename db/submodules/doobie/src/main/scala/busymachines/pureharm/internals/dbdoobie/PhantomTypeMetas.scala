@@ -18,44 +18,28 @@
 package busymachines.pureharm.internals.dbdoobie
 
 import busymachines.pureharm.effects.implicits._
-
-import scala.reflect.runtime.universe.TypeTag
+import busymachines.pureharm.phantom.{SafeSpook, Spook}
 import doobie.Meta
+
 import io.circe._
 import io.circe.parser._
 import org.postgresql.util.PGobject
-import shapeless.tag.@@
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   */
-//FIXME: actually add all primitve types, currently only have the ones required to run tests
 trait PhantomTypeMetas {
 
-  implicit def phantomStringMeta[Tag]: Meta[String @@ Tag] =
-    Meta.StringMeta.asInstanceOf[Meta[String @@ Tag]]
+  implicit final def phantomTypeMeta[Underlying, Phantom](implicit
+    spook: Spook[Underlying, Phantom],
+    meta:  Meta[Underlying],
+  ): Meta[Phantom] = meta.imap(spook.spook)(spook.despook)
 
-  implicit def phantomByteMeta[Tag](implicit tt: TypeTag[Byte @@ Tag]): Meta[Byte @@ Tag] =
-    Meta.ByteMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomIntMeta[Tag](implicit tt: TypeTag[Int @@ Tag]): Meta[Int @@ Tag] =
-    Meta.IntMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomLongMeta[Tag](implicit tt: TypeTag[Long @@ Tag]): Meta[Long @@ Tag] =
-    Meta.LongMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomFloatMeta[Tag](implicit tt: TypeTag[Float @@ Tag]): Meta[Float @@ Tag] =
-    Meta.FloatMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomDoubleMeta[Tag](implicit tt: TypeTag[Double @@ Tag]): Meta[Double @@ Tag] =
-    Meta.DoubleMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomScalaBigDecimalMeta[Tag](implicit tt: TypeTag[BigDecimal @@ Tag]): Meta[BigDecimal @@ Tag] =
-    Meta.ScalaBigDecimalMeta.timap(v => shapeless.tag[Tag](v))(identity)
-
-  implicit def phantomBooleanMeta[Tag](implicit tt: TypeTag[Boolean @@ Tag]): Meta[Boolean @@ Tag] =
-    Meta.BooleanMeta.timap(v => shapeless.tag[Tag](v))(identity)
+  implicit final def safePhatomTypeMeta[Err, Underlying, Phantom](implicit
+    spook: SafeSpook[Err, Underlying, Phantom],
+    meta:  Meta[Underlying],
+  ): Meta[Phantom] = meta.imap(spook.unsafe)(spook.despook)
 
   implicit def jsonMeta[A](implicit codec: Codec[A]): Meta[A] =
     Meta.Advanced
