@@ -21,20 +21,20 @@ import busymachines.pureharm.config._
 
 import scala.concurrent.duration._
 import busymachines.pureharm.effects._
-
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
+import busymachines.pureharm.testkit.PureharmTest
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-final class PureharmTestConfigTest extends AnyFunSuite with Matchers {
+final class PureharmTestConfigTest extends PureharmTest {
 
   test("load config with phantom common types") {
-    val read = PureharmTestConfig.default[IO]
-    assert(
-      read.unsafeRunSync() === PureharmTestConfig(
+
+    for {
+      read <- PureharmTestConfig.default[IO]
+    } yield assert(
+      read === PureharmTestConfig(
         PhantomInt(42),
         PhantomString("phantom"),
         PhantomBoolean(false),
@@ -42,12 +42,24 @@ final class PureharmTestConfigTest extends AnyFunSuite with Matchers {
         PhantomSet(Set("value1", "value2")),
         PhantomFiniteDuration(10.minutes),
         PhantomDuration(10.minutes),
+        SafePhantomInt.unsafe(123),
       )
     )
+
   }
 
   test("fail when loading invalid config") {
-    val read = PureharmTestConfig.fromNamespace[IO]("pureharm.config.test.invalid")
-    the[ConfigAggregateAnomalies] thrownBy read.unsafeRunSync()
+    for {
+      readAtt <- PureharmTestConfig.fromNamespace[IO]("pureharm.config.test.invalid").attempt
+    } yield assertFailure[ConfigAggregateAnomalies](readAtt)
+  }
+
+  test("fail on safe phantom type when loading invalid config") {
+    for {
+      readAtt <- PureharmTestConfig.fromNamespace[IO]("pureharm.config.test.invalid.safephantom").attempt
+      failure = interceptFailure[ConfigAggregateAnomalies](readAtt)
+    } yield {
+      assert(failure.firstAnomaly.message.contains("TEST_CASE_INVALID_SAFE_PHANTOM_ANOMALY"), "... failure type")
+    }
   }
 }

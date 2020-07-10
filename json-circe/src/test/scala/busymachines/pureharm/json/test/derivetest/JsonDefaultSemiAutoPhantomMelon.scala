@@ -17,9 +17,11 @@
   */
 package busymachines.pureharm.json.test.derivetest
 
-import org.scalatest.flatspec.AnyFlatSpec
+import busymachines.pureharm.anomaly.InvalidInputAnomaly
+import busymachines.pureharm.effects._
 import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.json.test._
+import busymachines.pureharm.testkit.PureharmTest
 
 /**
   * Here we test [[busymachines.pureharm.json.Decoder]] derivation
@@ -29,14 +31,15 @@ import busymachines.pureharm.json.test._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
-final class JsonDefaultSemiAutoPhantomMelon extends AnyFlatSpec {
+final class JsonDefaultSemiAutoPhantomMelon extends PureharmTest {
   import melonsDefaultSemiAutoCodecs._
 
   //-----------------------------------------------------------------------------------------------
 
-  it should "... encode + decode phantomMelon" in {
+  test("... encode + decode phantomMelon") {
     val originalPhantomMelon: Melon = PhantomMelon(
       weight     = Weight(42),
+      safeWeight = SafeWeight.unsafe(42),
       weights    = Weights(List(1, 2)),
       weightsSet = WeigthsSet(Set(3, 4)),
       duo        = MelonDuo((5, "duo")),
@@ -46,6 +49,22 @@ final class JsonDefaultSemiAutoPhantomMelon extends AnyFlatSpec {
     val encoded = originalPhantomMelon.asJson
     val decoded = encoded.unsafeDecodeAs[Melon]
 
-    assertResult(originalPhantomMelon)(decoded)
+    IO(assertResult(originalPhantomMelon)(decoded))
+  }
+
+  test("... encode + fail on decode of wrong safePhantomMelon") {
+    val originalPhantomMelon: Melon = PhantomMelon(
+      weight     = Weight(42),
+      safeWeight = SafeWeight.unsafe(-1),
+      weights    = Weights(List(1, 2)),
+      weightsSet = WeigthsSet(Set(3, 4)),
+      duo        = MelonDuo((5, "duo")),
+      trio       = MelonTrio((6, "trio", List(1, 2, 3))),
+    )
+
+    val encoded = originalPhantomMelon.asJson
+    val attempt = encoded.decodeAs[Melon]
+
+    IO(assertFailure[InvalidInputAnomaly](attempt))
   }
 }

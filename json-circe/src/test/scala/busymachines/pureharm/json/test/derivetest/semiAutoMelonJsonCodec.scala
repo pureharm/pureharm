@@ -19,6 +19,7 @@ package busymachines.pureharm.json.test.derivetest
 
 import busymachines.pureharm.json._
 import busymachines.pureharm.json.implicits._
+import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.json.test._
 
 /**
@@ -26,7 +27,6 @@ import busymachines.pureharm.json.test._
   * @since 11 Jun 2019
   */
 private[test] object melonsDefaultSemiAutoDecoders {
-
   implicit val tasteDecoder:          Decoder[Taste]          = derive.enumerationDecoder[Taste]
   implicit val melonDecoder:          Decoder[Melon]          = derive.decoder[Melon]
   implicit val anarchistMelonDecoder: Decoder[AnarchistMelon] = derive.decoder[AnarchistMelon]
@@ -35,7 +35,6 @@ private[test] object melonsDefaultSemiAutoDecoders {
 /**
   */
 private[test] object melonsDefaultSemiAutoEncoders {
-
   implicit val tasteEncoder:          Encoder[Taste]          = derive.enumerationEncoder[Taste]
   implicit val melonEncoder:          Encoder.AsObject[Melon] = derive.encoder[Melon]
   implicit val anarchistMelonEncoder: Encoder[AnarchistMelon] = derive.encoder[AnarchistMelon]
@@ -44,7 +43,6 @@ private[test] object melonsDefaultSemiAutoEncoders {
 /**
   */
 private[test] object melonsDefaultSemiAutoCodecs {
-
   implicit val tasteCodec:          Codec[Taste]          = derive.enumerationCodec[Taste]
   implicit val melonCodec:          Codec[Melon]          = derive.codec[Melon]
   implicit val anarchistMelonCodec: Codec[AnarchistMelon] = derive.codec[AnarchistMelon]

@@ -29,12 +29,14 @@ final private[test] case class PureharmTestConfig(
   phantomSet:            PhantomSet,
   phantomFiniteDuration: PhantomFiniteDuration,
   phantomDuration:       PhantomDuration,
+  safePhantomInt:        SafePhantomInt,
 )
 
 import busymachines.pureharm.config._
 
 private[test] object PureharmTestConfig extends ConfigLoader[PureharmTestConfig] {
-  import busymachines.pureharm.config.implicits._
+  import busymachines.pureharm.effects.implicits._ //needed for Show[Throwable]
+  import busymachines.pureharm.config.implicits._  //needed for all phantomType implicits
   import busymachines.pureharm.effects._
 
   implicit override val configReader: ConfigReader[PureharmTestConfig] =
