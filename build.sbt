@@ -396,6 +396,7 @@ lazy val `rest-http4s-tapir` = project
     name := "pureharm-rest-http4s-tapir",
     libraryDependencies ++= Seq(
       http4sDSL,
+      http4sCirce,
       http4sServer,
       tapirCore,
       tapirCirce,
@@ -532,6 +533,7 @@ lazy val slickTestkit: ModuleID = "com.typesafe.slick" %% "slick-testkit" % slic
 //=========================== HTTP - HTTP4S + TAPIR ===========================
 //=============================================================================
 lazy val http4sDSL    = "org.http4s" %% "http4s-dsl"          % http4sVersion withSources ()
+lazy val http4sCirce  = "org.http4s" %% "http4s-circe"        % http4sVersion withSources ()
 lazy val http4sServer = "org.http4s" %% "http4s-blaze-server" % http4sVersion withSources ()
 
 lazy val tapirCore   = "com.softwaremill.sttp.tapir" %% "tapir-core"          % tapirVersion withSources ()

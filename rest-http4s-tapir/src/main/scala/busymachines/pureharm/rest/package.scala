@@ -5,5 +5,5 @@ package busymachines.pureharm
   * @since 10 Jul 2020
   */
 package object rest extends PureharmRestTypeDefinitions {
-  object implicits extends PureharmRestTapirImplicits
+  object implicits extends PureharmRestTapirImplicits with PureharmHttp4sCirceInstances
 }
