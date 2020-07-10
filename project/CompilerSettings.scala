@@ -30,6 +30,9 @@ object CompilerSettings {
   //https://github.com/oleg-py/better-monadic-for/releases
   lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % "0.3.1"
 
+  //https://github.com/tek/splain
+  lazy val splain = "io.tryp" % "splain" % "0.5.7"
+
   lazy val organizationName: String = "com.busymachines"
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
 
@@ -46,6 +49,7 @@ object CompilerSettings {
                                  Seq(
                                    compilerPlugin(kindProjector.cross(CrossVersion.full)),
                                    compilerPlugin(betterMonadicFor),
+                                   compilerPlugin(splain).cross(CrossVersion.patch),
                                  )
                                }),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
