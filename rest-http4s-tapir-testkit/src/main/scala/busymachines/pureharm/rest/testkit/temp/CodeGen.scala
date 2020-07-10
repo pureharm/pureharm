@@ -7,6 +7,31 @@ import busymachines.pureharm.testkit.PureharmTest
   * @since 10 Jul 2020
   */
 class CodeGen extends PureharmTest {
+  import busymachines.pureharm.effects._
+  val caseClasses = 50
+  test("data") {
+    IO {
+      println("""
+                |package busymachines.pureharm.rest.temp.stress
+                |
+                |import busymachines.pureharm.rest.temp._
+                |
+                |""".stripMargin)
+      println(List.range(1, caseClasses).map(data).mkString("\n\n"))
+    }.as(succeed)
+  }
+
+  test("tapir") {
+    IO {
+      println("""
+                |package busymachines.pureharm.rest.temp.stress
+                |
+                |import busymachines.pureharm.rest.temp._
+                |
+                |""".stripMargin)
+      println(List.range(1, caseClasses).map(tapir).mkString("\n\n"))
+    }.as(succeed)
+  }
 
   def data(i: Int): String =
     s"""
@@ -70,29 +95,4 @@ class CodeGen extends PureharmTest {
        |//---------------------------------
        |""".stripMargin
 
-  import busymachines.pureharm.effects._
-
-  test("data") {
-    IO {
-      println("""
-                |package busymachines.pureharm.rest.temp.stress
-                |
-                |import busymachines.pureharm.rest.temp._
-                |
-                |""".stripMargin)
-      println(List.range(1, 100).map(data).mkString("\n\n"))
-    }.as(succeed)
-  }
-
-  test("tapir") {
-    IO {
-      println("""
-                |package busymachines.pureharm.rest.temp.stress
-                |
-                |import busymachines.pureharm.rest.temp._
-                |
-                |""".stripMargin)
-      println(List.range(1, 100).map(tapir).mkString("\n\n"))
-    }.as(succeed)
-  }
 }
