@@ -61,6 +61,9 @@ lazy val root = Project(id = "pureharm", base = file("."))
   .settings(PublishingSettings.noPublishSettings)
   .settings(CompilerSettings.commonSettings)
   .aggregate(
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     core,
     `effects-cats`,
     testkit,
