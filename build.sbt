@@ -17,18 +17,6 @@
   */
 
 //#############################################################################
-//################################## README ##################################
-//#############################################################################
-//
-// The reason all modules gather their dependencies up top, is so that
-// downstream modules declare ALL their transitive dependencies explicitly
-// because otherwise fetching source code for all is kinda bugged :(
-// plus, this way it should be always clear that a module only puts its
-// UNIQUE dependencies out in the clear. Everything else gets brought on
-// transitively anyway. So whatever change you make, please respect the
-// pattern that you see here. Maybe even borrow it for other projects.
-//
-//#############################################################################
 //#############################################################################
 //#############################################################################
 
@@ -79,6 +67,8 @@ lazy val root = Project(id = "pureharm", base = file("."))
     `db-testkit-doobie`,
     `db-test-data`,
     `db-testkit-slick`,
+    `rest-http4s-tapir`,
+    `rest-http4s-tapir-testkit`,
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -396,6 +386,45 @@ lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++ HTTP ++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `rest-http4s-tapir` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    name := "pureharm-rest-http4s-tapir",
+    libraryDependencies ++= Seq(
+      http4sDSL,
+      http4sServer,
+      tapirCore,
+      tapirCirce,
+      tapirHttp4s,
+    ),
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `json-circe`,
+  )
+
+//#############################################################################
+
+lazy val `rest-http4s-tapir-testkit` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    name := "pureharm-rest-testkit-http4s-tapir",
+    libraryDependencies ++= Seq(),
+  )
+  .dependsOn(
+    `core`,
+    `effects-cats`,
+    `json-circe`,
+    `rest-http4s-tapir`,
+    testkit,
+  )
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -436,6 +465,8 @@ lazy val doobieVersion:          String = "0.9.0"     //https://github.com/tpole
 lazy val flywayVersion:          String = "6.4.4"     //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.1.1"     //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"     //https://github.com/qos-ch/logback/releases
+lazy val http4sVersion:          String = "1.0.0-M3"  //https://github.com/http4s/http4s/releases
+lazy val tapirVersion:           String = "0.16.1"    //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:       String = "3.2.0"     //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
@@ -496,6 +527,16 @@ lazy val doobiePSQL   = "org.tpolecat" %% "doobie-postgres" % doobieVersion with
 //https://github.com/slick/slick/releases
 lazy val slick:        ModuleID = "com.typesafe.slick" %% "slick"         % slickVersion withSources ()
 lazy val slickTestkit: ModuleID = "com.typesafe.slick" %% "slick-testkit" % slickVersion withSources ()
+
+//=============================================================================
+//=========================== HTTP - HTTP4S + TAPIR ===========================
+//=============================================================================
+lazy val http4sDSL    = "org.http4s" %% "http4s-dsl"          % http4sVersion withSources ()
+lazy val http4sServer = "org.http4s" %% "http4s-blaze-server" % http4sVersion withSources ()
+
+lazy val tapirCore   = "com.softwaremill.sttp.tapir" %% "tapir-core"          % tapirVersion withSources ()
+lazy val tapirCirce  = "com.softwaremill.sttp.tapir" %% "tapir-json-circe"    % tapirVersion withSources ()
+lazy val tapirHttp4s = "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % tapirVersion withSources ()
 
 //=============================================================================
 //================================== TESTING ==================================
