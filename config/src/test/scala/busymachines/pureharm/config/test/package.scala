@@ -45,6 +45,7 @@ package object test {
   type SafePhantomInt        = SafePhantomInt.Type
 
   object SafePhantomInt extends SafePhantomType[Throwable, Int] {
+
     override def check(value: Int): Either[Throwable, Int] = {
       import busymachines.pureharm.effects.implicits._
       if (value > 0) Either.right(value)

@@ -58,7 +58,11 @@ trait PureharmDBCoreTypeDefinitions {
   final val SchemaName = db.SchemaName
   final type SchemaName = db.SchemaName.Type
 
+  final type DBConnectionConfig = db.DBConnectionConfig
+  final val DBConnectionConfig: db.DBConnectionConfig.type = db.DBConnectionConfig
+
   @scala.deprecated("Use Repo instead, will be removed in 0.0.6-M3", "0.0.6-M2")
   final type DAOAlgebra[R[_], E, PK] = db.Repo[R, E, PK]
   final type Repo[R[_], E, PK]       = db.Repo[R, E, PK]
+
 }
