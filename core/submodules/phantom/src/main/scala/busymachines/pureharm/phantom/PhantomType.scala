@@ -54,9 +54,10 @@ trait PhantomType[T] {
     */
   implicit def spookInstance: Spook[T, Type] = defaultSpook
 
-  private[this] lazy val defaultSpook = new Spook[T, Type] {
-    override def spook(v:   T):    Type = PhantomType.this.spook(v)
-    override def despook(t: Type): T    = PhantomType.this.despook(t)
+  private[this] lazy val defaultSpook: Spook[T, Type] = new Spook[T, Type] {
+    @inline override def spook(v:   T):    Type = PhantomType.this.spook(v)
+    @inline override def despook(t: Type): T    = PhantomType.this.despook(t)
+    override lazy val symbolicName: String = PhantomType.this.getClass.getSimpleName.stripSuffix("$")
   }
 
 }
@@ -85,4 +86,10 @@ trait Spook[T, PT] {
   def spook(a: T): PT
 
   def despook(t: PT): T
+
+  def symbolicName: String
+}
+
+object Spook {
+  @inline def apply[T, PT](implicit s: Spook[T, PT]): Spook[T, PT] = s
 }
