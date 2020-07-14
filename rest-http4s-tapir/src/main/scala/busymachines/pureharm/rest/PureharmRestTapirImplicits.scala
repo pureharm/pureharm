@@ -3,6 +3,7 @@ package busymachines.pureharm.rest
 import java.util.UUID
 
 import busymachines.pureharm.anomaly.{AnomalyBase, SeqStringWrapper}
+import busymachines.pureharm.internals.rest.PureharmTapirSchemas
 import busymachines.pureharm.phantom.Spook
 import sttp.tapir
 
@@ -64,40 +65,6 @@ trait PureharmRestTapirImplicits {
     * this makes erroring out of the application
     * much easier
     */
-  implicit val tapirSchemaAnomalies: tapir.Schema[AnomalyBase] = {
-    import cats.data.NonEmptyChain
-    import cats.implicits._
-    val seqOrString: tapir.Schema[SeqStringWrapper] = tapir.Schema(
-      tapir.SchemaType.SCoproduct(
-        tapir.SchemaType.SObjectInfo("string or array of strings"),
-        List(
-          tapir.Schema.schemaForString,
-          tapir.Schema.schemaForArray[String],
-        ),
-        None,
-      )
-    )
-
-    //using Chain because adding things with symbolic operators to an Iterable is... is...
-    val baseSchema = NonEmptyChain(
-      "id"         -> tapir.Schema.schemaForString,
-      "message"    -> tapir.Schema.schemaForString,
-      "parameters" -> tapir.Schema.schemaForMap[SeqStringWrapper](seqOrString),
-    )
-
-    val schemaAnomalyBase: tapir.Schema[AnomalyBase] = tapir.Schema(
-      tapir.SchemaType.SProduct(
-        tapir.SchemaType.SObjectInfo("io.circe.JsonObject"),
-        baseSchema.toIterable,
-      )
-    )
-    tapir.Schema(
-      tapir.SchemaType.SProduct(
-        tapir.SchemaType.SObjectInfo("io.circe.JsonObject"),
-        baseSchema
-          .append("messages" -> tapir.Schema.schemaForOption[AnomalyBase](schemaAnomalyBase))
-          .toIterable,
-      )
-    )
-  }
+  implicit val tapirSchemaAnomalies: tapir.Schema[Throwable] =
+    PureharmTapirSchemas.tapirSchemaAnomalies
 }

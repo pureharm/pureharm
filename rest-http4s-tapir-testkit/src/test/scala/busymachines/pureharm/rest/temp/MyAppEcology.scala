@@ -11,7 +11,7 @@ import org.http4s.server.Router
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jul 2020
   */
-object MyAppWiring {
+object MyAppEcology {
 
   case class MyApp[F[_]](
     domainLogic: DomainLogic[F],
@@ -30,9 +30,9 @@ object MyAppWiring {
 
   def everything[F[_]: Sync](implicit http4sRuntime: TestHttp4sRuntime[F]): F[MyApp[F]] =
     for {
-      domainApps <- MyAppWiring.domainLogic[F]
-      domainAPIs <- MyAppWiring.restAPIs[F](domainApps)(http4sRuntime)
-      app        <- MyAppWiring.http4sApp[F](domainAPIs)
+      domainApps <- MyAppEcology.domainLogic[F]
+      domainAPIs <- MyAppEcology.restAPIs[F](domainApps)(http4sRuntime)
+      app        <- MyAppEcology.http4sApp[F](domainAPIs)
     } yield MyApp[F](
       domainApps,
       domainAPIs,
@@ -57,7 +57,7 @@ object MyAppWiring {
     ).pure[F]
   }
 
-  def http4sApp[F[_]: Monad](apis: MyAppWiring.RestAPIs[F]): F[HttpApp[F]] = {
+  def http4sApp[F[_]: Monad](apis: MyAppEcology.RestAPIs[F]): F[HttpApp[F]] = {
     import org.http4s.implicits._
     val routes: HttpRoutes[F] = NEList
       .of(

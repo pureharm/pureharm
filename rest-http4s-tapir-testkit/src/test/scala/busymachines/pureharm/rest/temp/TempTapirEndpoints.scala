@@ -1,7 +1,7 @@
 package busymachines.pureharm.rest.temp
 
-import sttp.tapir.server.{PartialServerEndpoint, ServerDefaults}
-import sttp.tapir.server.http4s.Http4sServerOptions
+import sttp.model.StatusCode
+import sttp.tapir.server.PartialServerEndpoint
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -80,7 +80,7 @@ object TempTapirEndpoints {
         _ <- F.delay(println(s"I AM $ctx"))
         _ <- F.delay(println(s"GET LOGIC HERE — $id"))
       } yield MyOutputType(
-        id = PHUUID.unsafeGenerate,
+        id = id,
         f1 = PHString.unsafeGenerate,
         f2 = PHInt.unsafeGenerate,
         f3 = PHLong.unsafeGenerate,
@@ -107,33 +107,149 @@ object TempTapirEndpoints {
 
   ////------------------------------------------------
 
-  trait BaseRest[F[_]] extends RestDefs[F, Sync[F], TestHttp4sRuntime[F]]
+  trait MyAppRest[F[_]] extends RestDefs[F, Sync[F], TestHttp4sRuntime[F]]
 
   final class SomeAPI[F[_]](
     domain:                              SomeOrganizer[F]
   )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
-    extends BaseRest[F] {
+    extends MyAppRest[F] {
 
     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] = authedEndpoint.get
       .in("test" / path[PHUUID])
       .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
 
     val testPostEndpoint: SimpleEndpoint[(MyAuthToken, MyInputType), MyOutputType] = authedEndpoint.post
       .in("test")
       .in(jsonBody[MyInputType])
       .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Created))
+
+    val testNotFound: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "not_found")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testUnauthorized: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "unauthorized")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testForbidden: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "forbidden")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testDenied: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "denied")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testInvalidInput: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "invalid_input")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testConflict: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "conflict")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testAnomalies: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "anomalies")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testNotImplemented: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "not_implemented")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testCatastrophe: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "catastrophe")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val testNormalThrowable: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
+      .in("test" / "throwable")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
 
     import sttp.tapir.server.http4s._
 
-    val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRoutes {
-      case (auth: MyAuthToken, ph: PHUUID) => domain.getLogic(ph)(auth).attemptAnomaly
+    val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRouteRecoverErrors {
+      case (auth: MyAuthToken, ph: PHUUID) => domain.getLogic(ph)(auth)
     }
 
-    val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRoutes {
-      case (auth: MyAuthToken, myInputType: MyInputType) => domain.postLogic(myInputType)(auth).attemptAnomaly
+    val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors {
+      case (auth: MyAuthToken, myInputType: MyInputType) => domain.postLogic(myInputType)(auth)
     }
 
-    val routes: HttpRoutes[F] = testGetRoute <+> testPostRoute
+    val testNotFoundRoute: HttpRoutes[F] = testNotFound.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](NotFoundAnomaly("test_not_found"))
+    }
+
+    val testUnauthorizedRoute: HttpRoutes[F] = testUnauthorized.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](UnauthorizedAnomaly("test_unauthorized"))
+    }
+
+    val testForbiddenRoute: HttpRoutes[F] = testForbidden.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](ForbiddenAnomaly("test_forbidden"))
+    }
+
+    val testDeniedRoute: HttpRoutes[F] = testDenied.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](DeniedAnomaly("test_denied"))
+    }
+
+    val testInvalidInputRoute: HttpRoutes[F] = testInvalidInput.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](InvalidInputAnomaly("test_invalid_input"))
+    }
+
+    val testConflictRoute: HttpRoutes[F] = testConflict.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](ConflictAnomaly("test_conflict"))
+    }
+
+    private case object TestAnomaliesID extends AnomalyID { override val name: String = "test_anomalies" }
+
+    val testAnomaliesRoute: HttpRoutes[F] = testAnomalies.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](
+        Anomalies(
+          TestAnomaliesID,
+          "test_anomalies",
+          ConflictAnomaly("test_conflict"),
+          InvalidInputAnomaly("test_invalid_input"),
+        )
+      )
+    }
+
+    val testNotImplementedRoute: HttpRoutes[F] = testNotImplemented.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](NotImplementedCatastrophe("not_implemented"))
+    }
+
+    val testCatastropheRoute: HttpRoutes[F] = testCatastrophe.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](InconsistentStateCatastrophe("catastrophe"))
+    }
+
+    val testNormalThrowableRoute: HttpRoutes[F] = testNormalThrowable.toRouteRecoverErrors { _ =>
+      F.raiseError[MyOutputType](new RuntimeException("throwable"))
+    }
+
+    val routes: HttpRoutes[F] = NEList
+      .of[HttpRoutes[F]](
+        testGetRoute,
+        testPostRoute,
+        testNotFoundRoute,
+        testUnauthorizedRoute,
+        testForbiddenRoute,
+        testDeniedRoute,
+        testInvalidInputRoute,
+        testConflictRoute,
+        testAnomaliesRoute,
+        testNotImplementedRoute,
+        testCatastropheRoute,
+        testNormalThrowableRoute,
+      )
+      .reduceK
 
   }
 

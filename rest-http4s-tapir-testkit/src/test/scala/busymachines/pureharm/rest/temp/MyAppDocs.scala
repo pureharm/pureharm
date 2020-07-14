@@ -10,7 +10,7 @@ import sttp.tapir.openapi._
   */
 object MyAppDocs {
 
-  def printYAML[F[_]: Sync](rapi: MyAppWiring.RestAPIs[F]): F[Unit] = {
+  def printYAML[F[_]: Sync](rapi: MyAppEcology.RestAPIs[F]): F[Unit] = {
     val yaml = generateYAML[F](rapi)
     Sync[F].delay(
       println(s"""
@@ -29,12 +29,12 @@ object MyAppDocs {
     )
   }
 
-  def generateYAML[F[_]: Monad](rapi: MyAppWiring.RestAPIs[F]): String = {
+  def generateYAML[F[_]: Monad](rapi: MyAppEcology.RestAPIs[F]): String = {
     import sttp.tapir.openapi.circe.yaml._
     generate[F](rapi).toYaml
   }
 
-  def generate[F[_]: Monad](rapi: MyAppWiring.RestAPIs[F]): OpenAPI = {
+  def generate[F[_]: Monad](rapi: MyAppEcology.RestAPIs[F]): OpenAPI = {
     import sttp.tapir.openapi._
     import sttp.tapir.docs.openapi._
 

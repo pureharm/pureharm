@@ -19,7 +19,7 @@ object TempRestMain extends PureharmIOApp {
     implicit val CE: ConcurrentEffect[IO] = IO.ioConcurrentEffect(contextShift)
     for {
       http4sRuntime <- TestHttp4sRuntime[IO](UnsafePools.cached("htt4s"))(Sync[IO], contextShift).pure[IO]
-      app           <- MyAppWiring.everything[IO](Sync[IO], http4sRuntime)
+      app           <- MyAppEcology.everything[IO](Sync[IO], http4sRuntime)
       _             <- MyAppDocs.printYAML[IO](app.restAPIs)
       blazeServer = blazeServerBuilder[IO](app.http4sApp)(CE, timer)
       _ <- blazeServer.serve.compile.drain

@@ -1,0 +1,1717 @@
+{
+	"info": {
+		"_postman_id": "b3512500-082c-45e9-a472-619e6a73ec5b",
+		"name": "test-pureharm-coll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "test",
+			"item": [
+				{
+					"name": "post_test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "91442202-5989-4598-9c7b-40febeb1f7fc",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"post\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.f1).to.eql(\"11111\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "Bearer 201948210948029",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"f1\": \"11111\",\n    \"f2\": 222,\n    \"f3\": 333,\n    \"f4\": [\n        \"7b85370e-c51c-11ea-87d0-0242ac130003\",\n        \"7b85370e-c51c-11ea-87d0-0242ac130003\"\n    ],\n    \"f5\": \"aaaaaa\"\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"f1\": \"<string>\",\n    \"f2\": \"<integer>\",\n    \"f3\": \"<long>\",\n    \"f4\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"f5\": \"<string>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/test",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"f1\": \"<string>\",\n    \"f2\": \"<integer>\",\n    \"f3\": \"<long>\",\n    \"f4\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"f5\": \"<string>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/test",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "post_invalid_json_body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c8c006bb-238a-4134-8eef-8e109ba213b8",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer 201948210948029"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"f1\": \"11111\",\n    \"f2\": \"123a\",\n    \"f3\": 333,\n    \"f4\": [\n        \"7b85370e-c51c-11ea-87d0-0242ac130003\",\n        \"7b85370e-c51c-11ea-87d0-0242ac130003\"\n    ],\n    \"f5\": \"aaaaaa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"f1\": \"<string>\",\n    \"f2\": \"<integer>\",\n    \"f3\": \"<long>\",\n    \"f4\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"f5\": \"<string>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/test",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"f1\": \"<string>\",\n    \"f2\": \"<integer>\",\n    \"f3\": \"<long>\",\n    \"f4\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"f5\": \"<string>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/test",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_UUID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d0b9264a-9631-4a55-a5ee-768902f4e70e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "Bearer 2034923-0492",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/d7417268-c5e1-11ea-87d0-0242ac130003",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"d7417268-c5e1-11ea-87d0-0242ac130003"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_UUID_invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c82e63fb-18e5-4b55-a23c-ec6077d54f08",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer 2034923-0492"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/d7417268-c5e1-11ea-87d0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"d7417268-c5e1-11ea-87d0"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_not_found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a92e9e0-f68d-4e73-b80e-fb26d05362f1",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"0\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "Bearer efasdfsadf",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/not_found",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"not_found"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7b1b5bef-b7ba-4185-9463-fc3acc40078a",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"2\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/unauthorized",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"unauthorized"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_forbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f99474c2-0927-432c-ba71-6133da077b4b",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"2\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/forbidden",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"forbidden"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_denied",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "357b3d43-e05c-41fc-85a2-a78333635c1f",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"3\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/denied",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"denied"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_invalid_input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f462ad58-fae8-4567-b320-01df7db1ffbf",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"4\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/invalid_input",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"invalid_input"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_conflict",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a511f8f7-e0fa-4c80-916c-b5411c5f11c0",
+								"exec": [
+									"pm.test(\"Status code is 409\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"5\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/conflict",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"conflict"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_anomalies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "71c94ff6-f6a3-45f7-bb33-b00966007031",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"test_anomalies\");",
+									"});",
+									"pm.test(\"contains messages\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"messages\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/anomalies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"anomalies"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_not_implemented",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b8eb2ce-1762-4c78-8a25-4ed1b77eeced",
+								"exec": [
+									"pm.test(\"Status code is 501\", function () {",
+									"    pm.response.to.have.status(501);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"NI_0\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/not_implemented",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"not_implemented"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_catastrophe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee94311a-f35f-4608-aee7-f6274d0ea2c5",
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"IS_0\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/catastrophe",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"catastrophe"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_throwable",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7f0dc0b6-3bda-467e-89f3-2b9eb7a58e31",
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"pm.test(\"anomaly_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"UH_0\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/throwable",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"throwable"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_this_does_not_exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4a8804d6-3da5-4a90-98a9-f866887545d0",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "Bearer efasdfsadf"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test/this_does_not_exist_lol",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"this_does_not_exist_lol"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"variable": [
+		{
+			"id": "baseUrl",
+			"key": "baseUrl",
+			"value": "http://localhost:12345/api",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
