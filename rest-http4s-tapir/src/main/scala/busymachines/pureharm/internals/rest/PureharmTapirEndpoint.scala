@@ -1,6 +1,7 @@
 package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.anomaly._
+import busymachines.pureharm.internals.json.AnomalyJsonCodec.pureharmAnomalyBaseCodec
 import sttp.tapir._
 
 /**
@@ -8,38 +9,38 @@ import sttp.tapir._
   * @since 14 Jul 2020
   */
 object PureharmTapirEndpoint {
+  import busymachines.pureharm.json.{Decoder, Encoder, Codec => CCodec}
+
+  val throwableDecoder: Decoder[Throwable] = pureharmAnomalyBaseCodec.map {
+    case e:   Anomaly     => e: Throwable
+    case e:   Anomalies   => e: Throwable
+    case e:   Catastrophe => e: Throwable
+    case thr: Throwable   =>
+      UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", thr): Throwable
+  }
+
+  val throwableEncoder: Encoder[Throwable] = pureharmAnomalyBaseCodec.contramap {
+    case e: AnomalyBase => e: AnomalyBase
+    case e: Throwable   =>
+      UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", e): AnomalyBase
+  }
+
+  implicit val thrCC: CCodec[Throwable] = CCodec.from(throwableDecoder, throwableEncoder)
 
   def phEndpoint: Endpoint[Unit, Throwable, Unit, Nothing] = {
     import sttp.tapir.json.circe._
 
     import busymachines.pureharm.internals.json.AnomalyJsonCodec.pureharmAnomalyBaseCodec
 
-    import busymachines.pureharm.json.{Decoder, Encoder, Codec => CCodec}
-
-    val throwableDecoder: Decoder[Throwable] = pureharmAnomalyBaseCodec.map {
-      case e:   Anomaly     => e: Throwable
-      case e:   Anomalies   => e: Throwable
-      case e:   Catastrophe => e: Throwable
-      case thr: Throwable   =>
-        UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", thr): Throwable
-    }
-
-    val throwableEncoder: Encoder[Throwable] = pureharmAnomalyBaseCodec.contramap {
-      case e: AnomalyBase => e: AnomalyBase
-      case e: Throwable   =>
-        UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", e): AnomalyBase
-    }
-
-    implicit val thrCC: CCodec[Throwable]                 = CCodec.from(throwableDecoder, throwableEncoder)
-    implicit val nfcc:  CCodec[NotFoundAnomaly]           = thrCC.asInstanceOf[CCodec[NotFoundAnomaly]]
-    implicit val uacc:  CCodec[UnauthorizedAnomaly]       = thrCC.asInstanceOf[CCodec[UnauthorizedAnomaly]]
-    implicit val facc:  CCodec[ForbiddenAnomaly]          = thrCC.asInstanceOf[CCodec[ForbiddenAnomaly]]
-    implicit val dncc:  CCodec[DeniedAnomaly]             = thrCC.asInstanceOf[CCodec[DeniedAnomaly]]
-    implicit val iicc:  CCodec[InvalidInputAnomaly]       = thrCC.asInstanceOf[CCodec[InvalidInputAnomaly]]
-    implicit val cfcc:  CCodec[ConflictAnomaly]           = thrCC.asInstanceOf[CCodec[ConflictAnomaly]]
-    implicit val ascc:  CCodec[Anomalies]                 = thrCC.asInstanceOf[CCodec[Anomalies]]
-    implicit val nicc:  CCodec[NotImplementedCatastrophe] = thrCC.asInstanceOf[CCodec[NotImplementedCatastrophe]]
-    implicit val ctcc:  CCodec[Catastrophe]               = thrCC.asInstanceOf[CCodec[Catastrophe]]
+    implicit val nfcc: CCodec[NotFoundAnomaly]           = thrCC.asInstanceOf[CCodec[NotFoundAnomaly]]
+    implicit val uacc: CCodec[UnauthorizedAnomaly]       = thrCC.asInstanceOf[CCodec[UnauthorizedAnomaly]]
+    implicit val facc: CCodec[ForbiddenAnomaly]          = thrCC.asInstanceOf[CCodec[ForbiddenAnomaly]]
+    implicit val dncc: CCodec[DeniedAnomaly]             = thrCC.asInstanceOf[CCodec[DeniedAnomaly]]
+    implicit val iicc: CCodec[InvalidInputAnomaly]       = thrCC.asInstanceOf[CCodec[InvalidInputAnomaly]]
+    implicit val cfcc: CCodec[ConflictAnomaly]           = thrCC.asInstanceOf[CCodec[ConflictAnomaly]]
+    implicit val ascc: CCodec[Anomalies]                 = thrCC.asInstanceOf[CCodec[Anomalies]]
+    implicit val nicc: CCodec[NotImplementedCatastrophe] = thrCC.asInstanceOf[CCodec[NotImplementedCatastrophe]]
+    implicit val ctcc: CCodec[Catastrophe]               = thrCC.asInstanceOf[CCodec[Catastrophe]]
 
     implicit val thrSc: Schema[Throwable]                 = PureharmTapirSchemas.tapirSchemaAnomalies
     implicit val nfsc:  Schema[NotFoundAnomaly]           = thrSc.asInstanceOf[Schema[NotFoundAnomaly]]
