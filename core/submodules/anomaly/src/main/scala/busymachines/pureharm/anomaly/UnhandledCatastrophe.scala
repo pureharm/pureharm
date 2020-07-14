@@ -26,11 +26,12 @@ import busymachines.pureharm.anomaly.Anomaly.Parameters
 abstract class UnhandledCatastrophe(
   override val message: String,
   cause:                Throwable,
+  params:               Anomaly.Parameters,
 ) extends Catastrophe(message, Option(cause)) with Product with Serializable {
   override def id: AnomalyID = UnhandledCatastropheID
 
-  override def parameters: Parameters = super.parameters ++ Parameters(
-    "causedBy" -> causedBy.toString
+  override def parameters: Parameters = params ++ Parameters(
+    "causedBy" -> cause.toString
   )
 }
 
@@ -48,10 +49,10 @@ object UnhandledCatastrophe {
     UnhandledCatastropheImpl(id = id, message = message, cause = causedBy)
 
   def apply(id:       AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): UnhandledCatastrophe =
-    UnhandledCatastropheImpl(id = id, parameters = parameters, cause = causedBy)
+    UnhandledCatastropheImpl(id = id, params = parameters, cause = causedBy)
 
   def apply(message:  String, parameters:    Anomaly.Parameters, causedBy: Throwable): UnhandledCatastrophe =
-    UnhandledCatastropheImpl(message = message, parameters = parameters, cause = causedBy)
+    UnhandledCatastropheImpl(message = message, params = parameters, cause = causedBy)
 
   def apply(
     id:               AnomalyID,
@@ -59,22 +60,22 @@ object UnhandledCatastrophe {
     parameters:       Anomaly.Parameters,
     causedBy:         Throwable,
   ): UnhandledCatastrophe =
-    UnhandledCatastropheImpl(id = id, message = message, parameters = parameters, cause = causedBy)
+    UnhandledCatastropheImpl(id = id, message = message, params = parameters, cause = causedBy)
 
   def apply(a: AnomalyBase, causedBy: Throwable): UnhandledCatastrophe =
     UnhandledCatastropheImpl(
-      id         = a.id,
-      message    = a.message,
-      parameters = a.parameters,
-      cause      = causedBy,
+      id      = a.id,
+      message = a.message,
+      params  = a.parameters,
+      cause   = causedBy,
     )
 
   def apply(a: AnomalyBase): UnhandledCatastrophe =
     UnhandledCatastropheImpl(
-      id         = a.id,
-      message    = a.message,
-      parameters = a.parameters,
-      cause      = Anomaly(a),
+      id      = a.id,
+      message = a.message,
+      params  = a.parameters,
+      cause   = Anomaly(a),
     )
 
   def apply(message: String, causedBy: Throwable): UnhandledCatastrophe =
@@ -82,8 +83,8 @@ object UnhandledCatastrophe {
 }
 
 final private[pureharm] case class UnhandledCatastropheImpl(
-  override val id:         AnomalyID = UnhandledCatastropheID,
-  override val message:    String = UnhandledCatastrophe.UnhandledCatastropheMsg,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  cause:                   Throwable,
-) extends UnhandledCatastrophe(message, cause = cause)
+  override val id:      AnomalyID = UnhandledCatastropheID,
+  override val message: String = UnhandledCatastrophe.UnhandledCatastropheMsg,
+  params:               Anomaly.Parameters = Anomaly.Parameters.empty,
+  cause:                Throwable,
+) extends UnhandledCatastrophe(message, cause = cause, params)
