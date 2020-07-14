@@ -395,12 +395,12 @@ lazy val `rest-http4s-tapir` = project
   .settings(
     name := "pureharm-rest-http4s-tapir",
     libraryDependencies ++= Seq(
-      http4sDSL,
-      http4sCirce,
-      http4sServer,
-      tapirCore,
-      tapirCirce,
-      tapirHttp4s,
+      http4sDSL.withDottyCompat(scalaVersion.value),
+      http4sCirce.withDottyCompat(scalaVersion.value),
+      http4sServer.withDottyCompat(scalaVersion.value),
+      tapirCore.withDottyCompat(scalaVersion.value),
+      tapirCirce.withDottyCompat(scalaVersion.value),
+      tapirHttp4s.withDottyCompat(scalaVersion.value),
     ),
   )
   .dependsOn(
@@ -416,7 +416,10 @@ lazy val `rest-http4s-tapir-testkit` = project
   .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-rest-testkit-http4s-tapir",
-    libraryDependencies ++= Seq(),
+    libraryDependencies ++= Seq(
+      tapirOpenAPI.withDottyCompat(scalaVersion.value)   % Test,
+      tapirCirceYAML.withDottyCompat(scalaVersion.value) % Test,
+    ),
   )
   .dependsOn(
     `core`,
@@ -466,7 +469,7 @@ lazy val doobieVersion:          String = "0.9.0"     //https://github.com/tpole
 lazy val flywayVersion:          String = "6.4.4"     //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.1.1"     //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"     //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:          String = "1.0.0-M3"  //https://github.com/http4s/http4s/releases
+lazy val http4sVersion:          String = "0.21.6"    //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:           String = "0.16.1"    //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:       String = "3.2.0"     //https://github.com/scalatest/scalatest/releases
 
@@ -539,6 +542,10 @@ lazy val http4sServer = "org.http4s" %% "http4s-blaze-server" % http4sVersion wi
 lazy val tapirCore   = "com.softwaremill.sttp.tapir" %% "tapir-core"          % tapirVersion withSources ()
 lazy val tapirCirce  = "com.softwaremill.sttp.tapir" %% "tapir-json-circe"    % tapirVersion withSources ()
 lazy val tapirHttp4s = "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % tapirVersion withSources ()
+
+//for testing
+lazy val tapirOpenAPI   = "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs"       % tapirVersion withSources ()
+lazy val tapirCirceYAML = "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % tapirVersion withSources ()
 
 //=============================================================================
 //================================== TESTING ==================================
