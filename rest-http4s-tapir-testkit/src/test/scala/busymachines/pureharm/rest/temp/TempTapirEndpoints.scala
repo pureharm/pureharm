@@ -23,16 +23,6 @@ object TempTapirEndpoints {
   import busymachines.pureharm.effects._
   import busymachines.pureharm.effects.implicits._
 
-  implicit private class Ops[F[_], A](fa: F[A]) {
-
-    def attemptAnomaly(implicit AA: ApplicativeAttempt[F]): F[Either[AnomalyBase, A]] = fa.attempt.map {
-      _.leftMap[AnomalyBase] {
-        case b:   AnomalyBase => b
-        case thr: Throwable   => InconsistentStateCatastrophe(s"Unhandled throwable: ${thr.toString}", thr)
-      }
-    }
-  }
-
   abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
     implicit def F:            EffectType
     implicit def contextShift: ContextShift[F]
