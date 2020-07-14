@@ -4,7 +4,7 @@ import cats.effect.{ContextShift, Sync}
 
 /**
   */
-trait RouteDefs[F[_], ET <: Sync[F], Runtime <: Http4sRuntime[F, ET]] {
+trait RestDefs[F[_], ET <: Sync[F], Runtime <: Http4sRuntime[F, ET]] {
 
   protected def http4sRuntime: Http4sRuntime[F, ET]
 

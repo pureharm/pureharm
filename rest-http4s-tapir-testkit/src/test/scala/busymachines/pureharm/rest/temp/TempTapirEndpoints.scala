@@ -107,12 +107,12 @@ object TempTapirEndpoints {
 
   ////------------------------------------------------
 
-  trait BaseAPI[F[_]] extends RouteDefs[F, Sync[F], TestHttp4sRuntime[F]]
+  trait BaseRest[F[_]] extends RestDefs[F, Sync[F], TestHttp4sRuntime[F]]
 
   final class SomeAPI[F[_]](
     domain:                              SomeOrganizer[F]
   )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
-    extends BaseAPI[F] {
+    extends BaseRest[F] {
 
     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] = authedEndpoint.get
       .in("test" / path[PHUUID])
