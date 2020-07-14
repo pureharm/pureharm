@@ -119,6 +119,14 @@ object TempTapirEndpoints {
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
+    val testGetEndpointQueryParams: SimpleEndpoint[(MyAuthToken, PHUUID, PHLong, Option[PHInt]), MyOutputType] =
+      authedEndpoint.get
+        .in("test_q" / path[PHUUID])
+        .in(query[PHLong]("long"))
+        .in(query[Option[PHInt]]("opt_int"))
+        .out(jsonBody[MyOutputType])
+        .out(statusCode(StatusCode.Ok))
+
     val testPostEndpoint: SimpleEndpoint[(MyAuthToken, MyInputType), MyOutputType] = authedEndpoint.post
       .in("test")
       .in(jsonBody[MyInputType])
@@ -181,6 +189,12 @@ object TempTapirEndpoints {
       case (auth: MyAuthToken, ph: PHUUID) => domain.getLogic(ph)(auth)
     }
 
+    val testGetEndpointQueryParamsRoute: HttpRoutes[F] = testGetEndpointQueryParams.toRouteRecoverErrors {
+      case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
+        F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
+          domain.getLogic(ph)(auth)
+    }
+
     val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors {
       case (auth: MyAuthToken, myInputType: MyInputType) => domain.postLogic(myInputType)(auth)
     }
@@ -237,6 +251,7 @@ object TempTapirEndpoints {
     val routes: HttpRoutes[F] = NEList
       .of[HttpRoutes[F]](
         testGetRoute,
+        testGetEndpointQueryParamsRoute,
         testPostRoute,
         testNotFoundRoute,
         testUnauthorizedRoute,
