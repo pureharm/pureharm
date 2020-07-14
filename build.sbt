@@ -143,7 +143,8 @@ lazy val `effects-cats` = project
     ),
   )
   .dependsOn(
-    `core-phantom`
+    `core-phantom`,
+    `core-anomaly`,
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
