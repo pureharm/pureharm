@@ -23,22 +23,6 @@ object TempTapirEndpoints {
   import busymachines.pureharm.effects._
   import busymachines.pureharm.effects.implicits._
 
-  abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
-    implicit def F:            EffectType
-    implicit def contextShift: ContextShift[F]
-    def blockingEC:            ExecutionContextCT
-
-    implicit def pureharmHTT4sServerOption: Http4sServerOptions[F] = Http4sServerOptions[F](
-      createFile               = Http4sServerOptions.defaultCreateFile[F],
-      blockingExecutionContext = blockingEC,
-      ioChunkSize              = 8192,
-      decodeFailureHandler     = ServerDefaults.decodeFailureHandler,
-      logRequestHandling       = Http4sServerOptions.defaultLogRequestHandling[F],
-    )
-
-    val dsl: Http4sDsl[F] = Http4sDsl[F]
-  }
-
   final class TestHttp4sRuntime[F[_]](
     override val blockingEC:   ExecutionContextCT
   )(implicit
@@ -123,11 +107,12 @@ object TempTapirEndpoints {
 
   ////------------------------------------------------
 
-  final class SomeAPI[F[_]](
-    domain:                     SomeOrganizer[F]
-  )(implicit val http4sRuntime: TestHttp4sRuntime[F]) {
+  trait BaseAPI[F[_]] extends RouteDefs[F, Sync[F], TestHttp4sRuntime[F]]
 
-    import http4sRuntime._
+  final class SomeAPI[F[_]](
+    domain:                              SomeOrganizer[F]
+  )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
+    extends BaseAPI[F] {
 
     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] = authedEndpoint.get
       .in("test" / path[PHUUID])
