@@ -857,7 +857,7 @@
 									"});",
 									"pm.test(\"Your test name\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(\"4\");",
+									"    pm.expect(jsonData.id).to.eql(\"rest_missing_qp\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -957,7 +957,7 @@
 					]
 				},
 				{
-					"name": "get_test_UUID_invalid_path",
+					"name": "get_test_m_UUID_invalid_path_TODO",
 					"event": [
 						{
 							"listen": "test",
@@ -1188,7 +1188,7 @@
 									"});",
 									"pm.test(\"Your test name\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(\"\");",
+									"    pm.expect(jsonData.id).to.eql(\"auth_missing_header\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1289,12 +1289,12 @@
 							"script": {
 								"id": "73912458-956a-4c8d-850c-2bcd7cd60590",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
 									"});",
 									"pm.test(\"Your test name\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
+									"    pm.expect(jsonData.id).to.eql(\"auth_invalid_header\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1390,6 +1390,241 @@
 							],
 							"cookie": [],
 							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_h_no_header",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a2776dec-c360-4556-98b3-589a95583e91",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"anomaly id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"rest_missing_header\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "{{authToken}}"
+							},
+							{
+								"key": "X-TEST-HEADER",
+								"type": "text",
+								"value": "1234",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test_h/d7417268-c5e1-11ea-87d0-0242ac130003",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test_h",
+								"d7417268-c5e1-11ea-87d0-0242ac130003"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_h_invalid_header_value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cdbc4e67-4043-40b4-a756-6d687106dd01",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "{{authToken}}"
+							},
+							{
+								"key": "X-TEST-HEADER",
+								"type": "text",
+								"value": "not-a-number-yey"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test_h/d7417268-c5e1-11ea-87d0-0242ac130003",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test_h",
+								"d7417268-c5e1-11ea-87d0-0242ac130003"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
 						}
 					]
 				}
@@ -1844,6 +2079,123 @@
 							],
 							"cookie": [],
 							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "get_test_h",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "889ae2c7-583b-451a-87a7-6dc66586d9ac",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"type": "text",
+								"value": "{{authToken}}"
+							},
+							{
+								"key": "X-TEST-HEADER",
+								"value": "1234",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/test_h/d7417268-c5e1-11ea-87d0-0242ac130003",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test_h",
+								"d7417268-c5e1-11ea-87d0-0242ac130003"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"message\": \"<string>\",\n \"parameters\": \"<object>\",\n \"messages\": {\n  \"id\": \"<string>\",\n  \"message\": \"<string>\",\n  \"parameters\": \"<object>\",\n  \"messages\": {\n   \"value\": \"<Circular reference to #/components/schemas/JsonObject detected>\"\n  }\n }\n}"
+						},
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/test/:p1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"test",
+										":p1"
+									],
+									"variable": [
+										{
+											"key": "p1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"id\": \"<string>\",\n \"f1\": \"<string>\",\n \"f2\": \"<integer>\",\n \"f3\": \"<long>\",\n \"f4\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"f5\": \"<string>\"\n}"
 						}
 					]
 				},
