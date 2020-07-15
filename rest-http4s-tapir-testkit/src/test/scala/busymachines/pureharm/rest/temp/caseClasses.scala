@@ -11,6 +11,7 @@ final case class MyInputType(
   f1: PHString,
   f2: PHInt,
   f3: PHLong,
+  fl: List[PHLong],
   f4: List[PHUUID],
   f5: Option[PHString],
 )
@@ -24,6 +25,7 @@ final case class MyOutputType(
   f1: PHString,
   f2: PHInt,
   f3: PHLong,
+  fl: List[PHLong],
   f4: List[PHUUID],
   f5: Option[PHString],
 )

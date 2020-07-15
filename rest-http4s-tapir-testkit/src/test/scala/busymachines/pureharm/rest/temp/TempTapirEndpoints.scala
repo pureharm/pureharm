@@ -84,6 +84,7 @@ object TempTapirEndpoints {
         f1 = PHString.unsafeGenerate,
         f2 = PHInt.unsafeGenerate,
         f3 = PHLong.unsafeGenerate,
+        fl = List(PHLong.unsafeGenerate),
         f4 = List(PHUUID.unsafeGenerate, PHUUID.unsafeGenerate, PHUUID.unsafeGenerate),
         f5 = Option(PHString.unsafeGenerate),
       )
@@ -100,6 +101,7 @@ object TempTapirEndpoints {
         f1 = input.f1,
         f2 = input.f2,
         f3 = input.f3,
+        fl = input.fl,
         f4 = input.f4,
         f5 = input.f5,
       )
@@ -119,6 +121,12 @@ object TempTapirEndpoints {
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
+    val testPostEndpoint: SimpleEndpoint[(MyAuthToken, MyInputType), MyOutputType] = authedEndpoint.post
+      .in("test")
+      .in(jsonBody[MyInputType])
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Created))
+
     val testGetEndpointQueryParams: SimpleEndpoint[(MyAuthToken, PHUUID, PHLong, Option[PHInt]), MyOutputType] =
       authedEndpoint.get
         .in("test_q" / path[PHUUID])
@@ -127,59 +135,53 @@ object TempTapirEndpoints {
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
 
-    val testPostEndpoint: SimpleEndpoint[(MyAuthToken, MyInputType), MyOutputType] = authedEndpoint.post
-      .in("test")
-      .in(jsonBody[MyInputType])
-      .out(jsonBody[MyOutputType])
-      .out(statusCode(StatusCode.Created))
-
     val testNotFound: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "not_found")
+      .in("test_logic" / "not_found")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testUnauthorized: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "unauthorized")
+      .in("test_logic" / "unauthorized")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testForbidden: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "forbidden")
+      .in("test_logic" / "forbidden")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testDenied: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "denied")
+      .in("test_logic" / "denied")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testInvalidInput: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "invalid_input")
+      .in("test_logic" / "invalid_input")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testConflict: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "conflict")
+      .in("test_logic" / "conflict")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testAnomalies: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "anomalies")
+      .in("test_logic" / "anomalies")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testNotImplemented: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "not_implemented")
+      .in("test_logic" / "not_implemented")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testCatastrophe: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "catastrophe")
+      .in("test_logic" / "catastrophe")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 
     val testNormalThrowable: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
-      .in("test" / "throwable")
+      .in("test_logic" / "throwable")
       .out(jsonBody[MyOutputType])
       .out(statusCode(StatusCode.Ok))
 

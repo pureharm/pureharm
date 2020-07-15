@@ -2,7 +2,6 @@ package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
 import busymachines.pureharm.rest.Http4sDsl
-import sttp.tapir.server.ServerDefaults
 import sttp.tapir.server.http4s.Http4sServerOptions
 
 /**
@@ -68,11 +67,13 @@ abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
   implicit def contextShift: ContextShift[F]
   def blockingEC:            ExecutionContextCT
 
-  implicit val pureharmHTT4sServerOption: Http4sServerOptions[F] = Http4sServerOptions[F](
+  implicit def pureharmHTT4sServerOption: Http4sServerOptions[F] = _defaultOps
+
+  private[this] lazy val _defaultOps = Http4sServerOptions[F](
     createFile               = Http4sServerOptions.defaultCreateFile[F],
     blockingExecutionContext = blockingEC,
     ioChunkSize              = 8192,
-    decodeFailureHandler     = ServerDefaults.decodeFailureHandler,
+    decodeFailureHandler     = PureharmTapirDecodeFailureHandler.handler(), //ServerDefaults.decodeFailureHandler,
     logRequestHandling       = Http4sServerOptions.defaultLogRequestHandling[F],
   )
 

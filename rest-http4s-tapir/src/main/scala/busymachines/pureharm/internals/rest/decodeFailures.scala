@@ -9,7 +9,7 @@ import busymachines.pureharm.anomaly._
   */
 
 final private[pureharm] case class CirceDecodingAnomaly(
-  failure: io.circe.DecodingFailure
+  failure: DecodingFailure
 ) extends InvalidInputAnomaly(
     "Failed to decode JSON. See 'parameters.path' for a history of decoding failure.",
     Option(failure),

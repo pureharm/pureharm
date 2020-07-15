@@ -2,7 +2,6 @@ package busymachines.pureharm.rest
 
 import java.util.UUID
 
-import busymachines.pureharm.anomaly.{AnomalyBase, SeqStringWrapper}
 import busymachines.pureharm.internals.rest.PureharmTapirSchemas
 import busymachines.pureharm.phantom.Spook
 import sttp.tapir
