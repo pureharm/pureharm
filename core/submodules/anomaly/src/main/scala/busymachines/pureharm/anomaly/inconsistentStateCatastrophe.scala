@@ -42,14 +42,14 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
     InconsistentStateCatastropheImpl(id = id, message = message, causedBy = Option(causedBy))
 
   override def apply(id:       AnomalyID, parameters: Anomaly.Parameters, causedBy: Throwable): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(id = id, parameters = parameters, causedBy = Option(causedBy))
+    InconsistentStateCatastropheImpl(id = id, params = parameters, causedBy = Option(causedBy))
 
   override def apply(
     message:                   String,
     parameters:                Anomaly.Parameters,
     causedBy:                  Throwable,
   ): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(message = message, parameters = parameters, causedBy = Option(causedBy))
+    InconsistentStateCatastropheImpl(message = message, params = parameters, causedBy = Option(causedBy))
 
   override def apply(
     id: AnomalyID,
@@ -57,14 +57,14 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
     parameters: Anomaly.Parameters,
     causedBy:   Throwable,
   ): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters, causedBy = Option(causedBy))
+    InconsistentStateCatastropheImpl(id = id, message = message, params = parameters, causedBy = Option(causedBy))
 
   override def apply(a: AnomalyBase, causedBy: Throwable): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(
-      id         = a.id,
-      message    = a.message,
-      parameters = a.parameters,
-      causedBy   = Option(causedBy),
+      id       = a.id,
+      message  = a.message,
+      params   = a.parameters,
+      causedBy = Option(causedBy),
     )
 
   override def apply(id:         AnomalyID):            InconsistentStateCatastrophe =
@@ -74,26 +74,26 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
     InconsistentStateCatastropheImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(parameters = parameters)
+    InconsistentStateCatastropheImpl(params = parameters)
 
   override def apply(id:         AnomalyID, message: String): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(id = id, message = message)
 
   override def apply(id:         AnomalyID, parameters: Anomaly.Parameters):          InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(id = id, parameters = parameters)
+    InconsistentStateCatastropheImpl(id = id, params = parameters)
 
   override def apply(message:    String, parameters:    Anomaly.Parameters): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(message = message, parameters = parameters)
+    InconsistentStateCatastropheImpl(message = message, params = parameters)
 
   override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): InconsistentStateCatastrophe =
-    InconsistentStateCatastropheImpl(id = id, message = message, parameters = parameters)
+    InconsistentStateCatastropheImpl(id = id, message = message, params = parameters)
 
   override def apply(a:          AnomalyBase): InconsistentStateCatastrophe =
     InconsistentStateCatastropheImpl(
-      id         = a.id,
-      message    = a.message,
-      parameters = a.parameters,
-      causedBy   = Option(Anomaly(a)),
+      id       = a.id,
+      message  = a.message,
+      params   = a.parameters,
+      causedBy = Option(Anomaly(a)),
     )
 
   override def apply(message: String, causedBy: Throwable): InconsistentStateCatastrophe =
@@ -101,8 +101,10 @@ object InconsistentStateCatastrophe extends CatastropheConstructors[Inconsistent
 }
 
 final private[pureharm] case class InconsistentStateCatastropheImpl(
-  override val id:         AnomalyID = InconsistentStateCatastropheID,
-  override val message:    String = InconsistentStateCatastrophe.InconsistentStateCatastropheMsg,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
-) extends InconsistentStateCatastrophe(message, causedBy = causedBy)
+  override val id:       AnomalyID = InconsistentStateCatastropheID,
+  override val message:  String = InconsistentStateCatastrophe.InconsistentStateCatastropheMsg,
+  params:                Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy: Option[Throwable] = None,
+) extends InconsistentStateCatastrophe(message, causedBy = causedBy) {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}

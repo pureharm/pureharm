@@ -39,27 +39,29 @@ object ForbiddenAnomaly
     ForbiddenFailureImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): ForbiddenAnomaly =
-    ForbiddenFailureImpl(parameters = parameters)
+    ForbiddenFailureImpl(params = parameters)
 
   override def apply(id:         AnomalyID, message: String): ForbiddenAnomaly =
     ForbiddenFailureImpl(id = id, message = message)
 
   override def apply(id:         AnomalyID, parameters: Anomaly.Parameters): ForbiddenAnomaly =
-    ForbiddenFailureImpl(id = id, parameters = parameters)
+    ForbiddenFailureImpl(id = id, params = parameters)
 
   override def apply(message:    String, parameters:    Anomaly.Parameters): ForbiddenAnomaly =
-    ForbiddenFailureImpl(message = message, parameters = parameters)
+    ForbiddenFailureImpl(message = message, params = parameters)
 
   override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): ForbiddenAnomaly =
-    ForbiddenFailureImpl(id = id, message = message, parameters = parameters)
+    ForbiddenFailureImpl(id = id, message = message, params = parameters)
 
   override def apply(a:          AnomalyBase): ForbiddenAnomaly =
-    ForbiddenFailureImpl(id = a.id, message = a.message, parameters = a.parameters)
+    ForbiddenFailureImpl(id = a.id, message = a.message, params = a.parameters)
 }
 
 final private[pureharm] case class ForbiddenFailureImpl(
-  override val id:         AnomalyID = ForbiddenAnomalyID,
-  override val message:    String = MeaningfulAnomalies.ForbiddenMsg,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
-) extends ForbiddenAnomaly(message, causedBy) with Product with Serializable
+  override val id:       AnomalyID = ForbiddenAnomalyID,
+  override val message:  String = MeaningfulAnomalies.ForbiddenMsg,
+  params:                Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy: Option[Throwable] = None,
+) extends ForbiddenAnomaly(message, causedBy) with Product with Serializable {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}

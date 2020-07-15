@@ -87,4 +87,6 @@ final private[pureharm] case class UnhandledCatastropheImpl(
   override val message: String = UnhandledCatastrophe.UnhandledCatastropheMsg,
   params:               Anomaly.Parameters = Anomaly.Parameters.empty,
   cause:                Throwable,
-) extends UnhandledCatastrophe(message, cause = cause, params)
+) extends UnhandledCatastrophe(message, cause = cause, params) {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}

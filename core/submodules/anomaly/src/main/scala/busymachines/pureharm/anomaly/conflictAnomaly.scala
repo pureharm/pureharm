@@ -39,27 +39,29 @@ object ConflictAnomaly
     ConflictAnomalyImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): ConflictAnomaly =
-    ConflictAnomalyImpl(parameters = parameters)
+    ConflictAnomalyImpl(params = parameters)
 
   override def apply(id:         AnomalyID, message: String): ConflictAnomaly =
     ConflictAnomalyImpl(id = id, message = message)
 
   override def apply(id:         AnomalyID, parameters: Anomaly.Parameters): ConflictAnomaly =
-    ConflictAnomalyImpl(id = id, parameters = parameters)
+    ConflictAnomalyImpl(id = id, params = parameters)
 
   override def apply(message:    String, parameters:    Anomaly.Parameters): ConflictAnomaly =
-    ConflictAnomalyImpl(message = message, parameters = parameters)
+    ConflictAnomalyImpl(message = message, params = parameters)
 
   override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): ConflictAnomaly =
-    ConflictAnomalyImpl(id = id, message = message, parameters = parameters)
+    ConflictAnomalyImpl(id = id, message = message, params = parameters)
 
   override def apply(a:          AnomalyBase): ConflictAnomaly =
-    ConflictAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
+    ConflictAnomalyImpl(id = a.id, message = a.message, params = a.parameters)
 }
 
 final private[pureharm] case class ConflictAnomalyImpl(
-  override val id:         AnomalyID = ConflictAnomalyID,
-  override val message:    String = MeaningfulAnomalies.ConflictMsg,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
-) extends ConflictAnomaly(message, causedBy) with Product with Serializable
+  override val id:       AnomalyID = ConflictAnomalyID,
+  override val message:  String = MeaningfulAnomalies.ConflictMsg,
+  params:                Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy: Option[Throwable] = None,
+) extends ConflictAnomaly(message, causedBy) with Product with Serializable {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}

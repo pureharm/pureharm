@@ -31,7 +31,13 @@ import scala.collection.immutable.Seq
 abstract class Anomaly(
   override val message: String,
   val causedBy:         Option[Throwable] = None,
-) extends Exception(message, causedBy.orNull) with AnomalyBase
+) extends Exception(message, causedBy.orNull) with AnomalyBase {
+
+  override def parameters: Anomaly.Parameters = causedBy match {
+    case None        => Anomaly.Parameters.empty
+    case Some(cause) => Anomaly.Parameters("causedBy" -> cause.toString)
+  }
+}
 
 /**
   * Some suggested naming conventions are put here so that they're easily accessible.
@@ -101,29 +107,31 @@ object Anomaly extends AnomalyConstructors[Anomaly] {
     AnomalyImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): Anomaly =
-    AnomalyImpl(parameters = parameters)
+    AnomalyImpl(params = parameters)
 
   override def apply(id:         AnomalyID, message: String): Anomaly =
     AnomalyImpl(id = id, message = message)
 
   override def apply(id:         AnomalyID, parameters: Anomaly.Parameters): Anomaly =
-    AnomalyImpl(id = id, parameters = parameters)
+    AnomalyImpl(id = id, params = parameters)
 
   override def apply(message:    String, parameters:    Anomaly.Parameters): Anomaly =
-    AnomalyImpl(message = message, parameters = parameters)
+    AnomalyImpl(message = message, params = parameters)
 
   override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): Anomaly =
-    AnomalyImpl(id = id, message = message, parameters = parameters)
+    AnomalyImpl(id = id, message = message, params = parameters)
 
   override def apply(a:          AnomalyBase): Anomaly =
-    AnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
+    AnomalyImpl(id = a.id, message = a.message, params = a.parameters)
 }
 
 final private[pureharm] case class AnomalyImpl(
-  override val id:         AnomalyID = DefaultAnomalyID,
-  override val message:    String = Anomaly.AnomalyString,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-) extends Anomaly(message) {}
+  override val id:      AnomalyID = DefaultAnomalyID,
+  override val message: String = Anomaly.AnomalyString,
+  params:               Anomaly.Parameters = Anomaly.Parameters.empty,
+) extends Anomaly(message) {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}
 
 private[pureharm] case object DefaultAnomalyID extends AnomalyID {
   override val name: String = "DA_0"
