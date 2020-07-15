@@ -2,6 +2,7 @@ package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
 import busymachines.pureharm.rest.Http4sDsl
+import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
 import sttp.tapir.server.http4s.Http4sServerOptions
 
 /**
@@ -67,7 +68,7 @@ abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
   implicit def contextShift: ContextShift[F]
   def blockingEC:            ExecutionContextCT
 
-  implicit def pureharmHTT4sServerOption: Http4sServerOptions[F] = _defaultOps
+  implicit def http4sServerOptions: Http4sServerOptions[F] = _defaultOps
 
   private[this] lazy val _defaultOps = Http4sServerOptions[F](
     createFile               = Http4sServerOptions.defaultCreateFile[F],
@@ -78,4 +79,24 @@ abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
   )
 
   val dsl: Http4sDsl[F] = Http4sDsl[F]
+
+  implicit protected class OptionsOps(ops: Http4sServerOptions[F]) {
+
+    def withCustomHeaderAuthValidation(headerName: String): Http4sServerOptions[F] =
+      this.withAuthValidation(PureharmTapirDecodeFailureHandler.missingCustomHeaderAuth(headerName))
+
+    def withBearerAuthValidation: Http4sServerOptions[F] =
+      this.withAuthValidation(PureharmTapirDecodeFailureHandler.missingBearerAuth)
+
+    def withApiKeyAuthValidation: Http4sServerOptions[F] =
+      this.withAuthValidation(PureharmTapirDecodeFailureHandler.missingApiKeyAuth)
+
+    def withAuthValidation(f: DecodeFailureContext => Option[DecodeFailureHandling]): Http4sServerOptions[F] =
+      ops.copy(
+        decodeFailureHandler = PureharmTapirDecodeFailureHandler.handler(
+          missingOrInvalidAuth = f
+        )
+      )
+  }
+
 }

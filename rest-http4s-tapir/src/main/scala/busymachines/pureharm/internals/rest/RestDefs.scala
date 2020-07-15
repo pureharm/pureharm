@@ -12,5 +12,5 @@ trait RestDefs[F[_], ET <: Sync[F], RT <: Http4sRuntime[F, ET]] {
   implicit def F:            ET              = http4sRuntime.F
   implicit def contextShift: ContextShift[F] = http4sRuntime.contextShift
 
-  implicit def tapirHttp4Ops: Http4sServerOptions[F] = http4sRuntime.pureharmHTT4sServerOption
+  implicit def tapirHttp4Ops: Http4sServerOptions[F] = http4sRuntime.http4sServerOptions
 }

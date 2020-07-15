@@ -39,4 +39,18 @@ package object temp {
     def generate[F[_]: Sync]: F[PHUUID] = Sync[F].delay(unsafeGenerate)
   }
 
+  type MyAuthToken = MyAuthToken.Type
+
+  object MyAuthToken extends PhantomType[Long] {
+    def unsafeGenerate: MyAuthToken = this.apply(scala.util.Random.between(1000L, 9000L))
+    def generate[F[_]: Sync]: F[MyAuthToken] = Sync[F].delay(this.unsafeGenerate)
+  }
+
+  type PHHeader = PHHeader.Type
+
+  object PHHeader extends PhantomType[Long] {
+    def unsafeGenerate: PHHeader = this.apply(scala.util.Random.between(1000L, 9000L))
+    def generate[F[_]: Sync]: F[PHHeader] = Sync[F].delay(this.unsafeGenerate)
+  }
+
 }

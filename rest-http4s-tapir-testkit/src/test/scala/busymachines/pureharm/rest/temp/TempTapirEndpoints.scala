@@ -1,7 +1,8 @@
 package busymachines.pureharm.rest.temp
 
 import sttp.model.StatusCode
-import sttp.tapir.server.PartialServerEndpoint
+import sttp.tapir.model.UsernamePassword
+import sttp.tapir.server.http4s.Http4sServerOptions
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -28,7 +29,11 @@ object TempTapirEndpoints {
   )(implicit
     override val F:            Sync[F],
     override val contextShift: ContextShift[F],
-  ) extends Http4sRuntime[F, Sync[F]] {}
+  ) extends Http4sRuntime[F, Sync[F]] {
+
+    override val http4sServerOptions: Http4sServerOptions[F] =
+      super.http4sServerOptions.withCustomHeaderAuthValidation(AuthTokenHeaderName)
+  }
 
   object TestHttp4sRuntime {
 
@@ -38,28 +43,37 @@ object TempTapirEndpoints {
 
   implicit class TempOps(o: TapirAuth.type) {
 
-    private val Bearer  = "Bearer"
-    private val Bearer_ = s"$Bearer "
-
-    def xBearer[T: Codec[List[String], *, CodecFormat.TextPlain]](
+    def xCustomAuthHeader[T: Codec[String, *, CodecFormat.TextPlain]](
       headerName: String
     ): EndpointInput.Auth.Http[T] = {
       val codec     = implicitly[Codec[List[String], T, CodecFormat.TextPlain]]
-      val authCodec = Codec.list(Codec.string.map(Mapping.stringPrefix(Bearer_))).map(codec).schema(codec.schema)
-      EndpointInput.Auth.Http(Bearer, header[T](headerName)(authCodec))
+      val authCodec = Codec.list(Codec.string).map(codec).schema(codec.schema)
+      EndpointInput.Auth.Http(
+        "Custom",
+        header[T](headerName)(authCodec).description(
+          s"Authentication done with token required in header: $headerName"
+        ),
+      )
     }
 
   }
 
-  object MyAuthToken extends PhantomType[String]
-  type MyAuthToken = MyAuthToken.Type
+  //using this over Authentication to double as CSRF token as well
+  private lazy val AuthTokenHeaderName = "X-AUTH-TOKEN"
 
-  private val AuthTokenHeaderName = "X-AUTH-TOKEN" //using this over Authentication to double as CSRF token as well
-
-  type AuthedEndpoint[F[_], In, Out] = PartialServerEndpoint[MyAuthContext, In, AnomalyBase, Out, Nothing, F]
+//  type AuthedEndpoint[F[_], In, Out] = PartialServerEndpoint[MyAuthContext, In, AnomalyBase, Out, Nothing, F]
 
   val authedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
-    phEndpoint.in(auth.xBearer[MyAuthToken](AuthTokenHeaderName))
+    phEndpoint.in(auth.xCustomAuthHeader[MyAuthToken](AuthTokenHeaderName))
+
+  val bearerAuthedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
+    phEndpoint.in(auth.bearer[MyAuthToken])
+
+  val basicAuthedEndpoint: SimpleEndpoint[UsernamePassword, Unit] =
+    phEndpoint.in(auth.basic[UsernamePassword])
+
+  val apiKeyAuthedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
+    phEndpoint.in(auth.apiKey[MyAuthToken](query[MyAuthToken]("apiKey")))
 
   case class MyAuthContext(token: MyAuthToken)
 
@@ -116,6 +130,17 @@ object TempTapirEndpoints {
   )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
     extends MyAppRest[F] {
 
+    val nonAuthedGetEndpoint: SimpleEndpoint[Unit, MyOutputType] = phEndpoint.get
+      .in("no_auth")
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
+
+    val nonAuthedPostEndpoint: SimpleEndpoint[MyInputType, MyOutputType] = phEndpoint.post
+      .in("no_auth")
+      .in(jsonBody[MyInputType])
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Created))
+
     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] = authedEndpoint.get
       .in("test" / path[PHUUID])
       .out(jsonBody[MyOutputType])
@@ -134,6 +159,12 @@ object TempTapirEndpoints {
         .in(query[Option[PHInt]]("opt_int"))
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
+
+    val testGetWithHeaderEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID, PHHeader), MyOutputType] = authedEndpoint.get
+      .in("test_h" / path[PHUUID])
+      .in(header[PHHeader]("X-TEST-HEADER"))
+      .out(jsonBody[MyOutputType])
+      .out(statusCode(StatusCode.Ok))
 
     val testNotFound: SimpleEndpoint[MyAuthToken, MyOutputType] = authedEndpoint.get
       .in("test_logic" / "not_found")
@@ -187,6 +218,14 @@ object TempTapirEndpoints {
 
     import sttp.tapir.server.http4s._
 
+    val nonAuthedGetRoute: HttpRoutes[F] = nonAuthedGetEndpoint.toRouteRecoverErrors { _ =>
+      domain.getLogic(PHUUID.unsafeGenerate)(MyAuthToken.unsafeGenerate)
+    }
+
+    val nonAuthedPostRoute: HttpRoutes[F] = nonAuthedPostEndpoint.toRouteRecoverErrors {
+      case (myInputType: MyInputType) => domain.postLogic(myInputType)(MyAuthToken.unsafeGenerate)
+    }
+
     val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRouteRecoverErrors {
       case (auth: MyAuthToken, ph: PHUUID) => domain.getLogic(ph)(auth)
     }
@@ -195,6 +234,11 @@ object TempTapirEndpoints {
       case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
         F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
           domain.getLogic(ph)(auth)
+    }
+
+    val testGetWithHeaderRoute: HttpRoutes[F] = testGetWithHeaderEndpoint.toRouteRecoverErrors {
+      case (auth: MyAuthToken, ph: PHUUID, header: PHHeader) =>
+        F.delay[Unit](println(s"header: $header")) >> domain.getLogic(ph)(auth)
     }
 
     val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors {
@@ -252,8 +296,11 @@ object TempTapirEndpoints {
 
     val routes: HttpRoutes[F] = NEList
       .of[HttpRoutes[F]](
+        nonAuthedGetRoute,
+        nonAuthedPostRoute,
         testGetRoute,
         testGetEndpointQueryParamsRoute,
+        testGetWithHeaderRoute,
         testPostRoute,
         testNotFoundRoute,
         testUnauthorizedRoute,

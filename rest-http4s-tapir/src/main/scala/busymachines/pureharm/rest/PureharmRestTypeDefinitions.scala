@@ -15,3 +15,4 @@ trait PureharmRestTypeDefinitions extends PureharmRestHttp4sTypeDefinitions with
   type RestDefs[F[_], ET <: Sync[F], Runtime <: Http4sRuntime[F, ET]] =
     busymachines.pureharm.internals.rest.RestDefs[F, ET, Runtime]
 }
+
