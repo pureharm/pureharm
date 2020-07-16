@@ -36,7 +36,6 @@ final private[pureharm] case class CirceDecodingAnomaly(
     * TODO: test to see if this heuristic works properly for:
     *  - arrays in arrays
     *  - arrays containing objects containing arrays (and failure is in these nested arrays)
-    *  - previous top level fields were arrays, and were all right
     * @return
     */
   private def countArrayFailureIndex(o: List[CursorOp]): Option[Int] = {
@@ -144,9 +143,14 @@ object MissingHeader {
 
 //--------------------------------------------
 final private[pureharm] case class InvalidMultiple(
-  tapirMessage: String
+  tapirMessage: String,
+  validations:  Seq[String],
 ) extends InvalidInputAnomaly(tapirMessage) {
   override val id: AnomalyID = InvalidMultiple.ID
+
+  override val parameters: Anomaly.Parameters = super.parameters ++ Anomaly.Parameters(
+    "validations" -> validations
+  )
 
 }
 
@@ -162,7 +166,7 @@ abstract private[pureharm] class InvalidRequestPart(
 ) extends InvalidInputAnomaly(
     s"Request part: '$tpe' is present, but has an invalid value. Please check that it's of the proper type, e.g. a number, UUID, proper date format, etc."
   ) {
-  override val id: AnomalyID = MissingRequestPart.ID
+  override val id: AnomalyID = InvalidRequestPart.ID
 
   override def parameters: Anomaly.Parameters = super.parameters ++ Anomaly.Parameters(
     "partType"   -> tpe,

@@ -1,7 +1,6 @@
 package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.anomaly.{Anomaly, InvalidInputAnomaly, UnauthorizedAnomaly}
 import sttp.model.StatusCode
 import sttp.tapir.server.DecodeFailureHandling._
 
@@ -48,14 +47,6 @@ object PureharmTapirDecodeFailureHandler {
     badRequestOnPathErrorIfPathShapeMatches:   Boolean = false,
     badRequestOnPathInvalidIfPathShapeMatches: Boolean = true,
   ): DecodeFailureHandler = { ctx: DecodeFailureContext =>
-    println(
-      s"""
-         |
-         |ctx.input   = ${ctx.input}
-         |ctx.failure = ${ctx.failure}
-         |""".stripMargin
-    )
-
     val tapirDefaultFlow: PartialFunction[DecodeFailureContext, DecodeFailureHandling] = {
       case DecodeFailureContext(input, _) =>
         input match {
@@ -103,25 +94,32 @@ object PureharmTapirDecodeFailureHandler {
         }
       case _ => Option.empty
     }
-
   }
 
+  /**
+    * Tapir says "invalid" even when stuff is missing, which is annoying
+    * @see
+    * sttp.tapir.server.ServerDefaults.FailureMessages#failureSourceMessage
+    */
+  private val TapirDefaultMessage: String = "Invalid value for"
+  private val Missing:             String = "Missing"
+  private val SeeDiagnostic:       String = "[See diagnostic]"
+
   def anomalyResponse(code: StatusCode, ctx: DecodeFailureContext): DecodeFailureHandling = {
-    __debug(ctx.failure)
     val anomaly: Throwable = ctx.failure match {
       case DecodeResult.Missing                    =>
         ctx.input match {
           case qp: EndpointInput.Query[_] =>
-            MissingQueryParam(qp.name, tapirResponse(ctx).replace("Invalid value for", "Missing"))
+            MissingQueryParam(qp.name, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
           case hd: EndpointIO.Header[_]   =>
-            MissingHeader(hd.name, tapirResponse(ctx).replace("Invalid value for", "Missing"))
+            MissingHeader(hd.name, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
           case in: Product                =>
-            MissingRequestPartGeneric(in.productPrefix, tapirResponse(ctx).replace("Invalid value for", "Missing"))
+            MissingRequestPartGeneric(in.productPrefix, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
           case _:  EndpointInput[_]       =>
-            MissingRequestPartGeneric("[See diagnostic]", tapirResponse(ctx).replace("Invalid value for", "Missing"))
+            MissingRequestPartGeneric(SeeDiagnostic, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
         }
       case DecodeResult.Multiple(vs)               =>
-        InvalidMultiple(tapirResponse(ctx))
+        InvalidMultiple(tapirResponse(ctx), vs.map(_.toString))
       case DecodeResult.Error(original, error)     =>
         error match {
           case e: io.circe.DecodingFailure => CirceDecodingAnomaly(e)
@@ -135,14 +133,14 @@ object PureharmTapirDecodeFailureHandler {
               case in: Product                =>
                 InvalidRequestPartGeneric(in.productPrefix, original, tapirResponse(ctx), error.toString)
               case _:  EndpointInput[_]       =>
-                InvalidRequestPartGeneric("[See Diagnostic]", original, tapirResponse(ctx), error.toString)
+                InvalidRequestPartGeneric(SeeDiagnostic, original, tapirResponse(ctx), error.toString)
             }
         }
 
       case DecodeResult.Mismatch(expected, actual) =>
         ctx.input match {
           case p: Product          => MismatchAnomaly(p.productPrefix, expected, actual, tapirResponse(ctx))
-          case _: EndpointInput[_] => MismatchAnomaly("Unknown", expected, actual, tapirResponse(ctx))
+          case _: EndpointInput[_] => MismatchAnomaly(SeeDiagnostic, expected, actual, tapirResponse(ctx))
         }
       case DecodeResult.InvalidValue(errors)       =>
         ValidationAnomaly(
@@ -153,7 +151,7 @@ object PureharmTapirDecodeFailureHandler {
     response(jsonBody[Throwable].and(statusCode(code)))(anomaly)
   }
 
-  private def __debug(failure: DecodeResult.Failure): Unit = {
+  private[internals] def __debug(failure: DecodeResult.Failure): Unit = {
     failure match {
       case DecodeResult.Missing                    =>
         println("""

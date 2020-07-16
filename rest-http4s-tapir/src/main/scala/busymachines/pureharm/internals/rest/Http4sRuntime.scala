@@ -37,7 +37,7 @@ import sttp.tapir.server.http4s.Http4sServerOptions
   *     domain:                     SomeOrganizer[F]
   *   )(implicit val http4sRuntime: TestHttp4sRuntime[F]) {
   *
-  *     import http4sRuntime._
+  *     import http4sRuntime._ //or extend RestDef which provides implicit forwarders to the runtime
   *
   *     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] = authedEndpoint.get
   *       .in("test" / path[PHUUID])
