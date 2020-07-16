@@ -350,7 +350,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
     )
 
     val anomaly = failure.asInstanceOf[Anomalies]
-    val read = rawJson.unsafeDecodeAs[Throwable]
+    val read    = rawJson.unsafeDecodeAs[Throwable]
     read match {
       case as: AnomaliesBase =>
         assert(as.id.name == anomaly.id.name, "id")

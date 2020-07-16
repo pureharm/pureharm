@@ -126,34 +126,34 @@ class CodeGen extends PureharmTest {
 
   def http4sPlain(i: Int): String =
     s"""
-      |//--------------------------------------------
-      |object TempHttp4sClassic$i {
-      |  import busymachines.pureharm.rest._
-      |  import busymachines.pureharm.rest.implicits._
-      |
-      |  import org.http4s.dsl.Http4sDsl
-      |  import busymachines.pureharm.effects._
-      |  import busymachines.pureharm.effects.implicits._
-      |
-      |  def service[F[_]: Sync]: HttpRoutes[F] = {
-      |    val dsl: Http4sDsl[F] = Http4sDsl[F]
-      |    import dsl._
-      |    HttpRoutes.of[F] {
-      |      case GET -> Root / "test" => Ok(Sync[F].delay(??? : MyOutputType$i))
-      |
-      |      case req @ POST -> Root / path =>
-      |        Ok {
-      |          for {
-      |            _      <- req.as[MyInputType$i]
-      |            _      <- path.pure[F]
-      |            result <- (??? : MyOutputType$i).pure[F]
-      |          } yield result
-      |        }
-      |
-      |    }
-      |  }
-      |
-      |}
-      |//--------------------------------------------
-      |""".stripMargin
+       |//--------------------------------------------
+       |object TempHttp4sClassic$i {
+       |  import busymachines.pureharm.rest._
+       |  import busymachines.pureharm.rest.implicits._
+       |
+       |  import org.http4s.dsl.Http4sDsl
+       |  import busymachines.pureharm.effects._
+       |  import busymachines.pureharm.effects.implicits._
+       |
+       |  def service[F[_]: Sync]: HttpRoutes[F] = {
+       |    val dsl: Http4sDsl[F] = Http4sDsl[F]
+       |    import dsl._
+       |    HttpRoutes.of[F] {
+       |      case GET -> Root / "test" => Ok(Sync[F].delay(??? : MyOutputType$i))
+       |
+       |      case req @ POST -> Root / path =>
+       |        Ok {
+       |          for {
+       |            _      <- req.as[MyInputType$i]
+       |            _      <- path.pure[F]
+       |            result <- (??? : MyOutputType$i).pure[F]
+       |          } yield result
+       |        }
+       |
+       |    }
+       |  }
+       |
+       |}
+       |//--------------------------------------------
+       |""".stripMargin
 }
