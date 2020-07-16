@@ -38,14 +38,14 @@ package object temp {
   type PHLong = PHLong.Type
 
   object PHLong extends PhantomType[Long] {
-    def unsafeGenerate: PHLong = this.apply(scala.util.Random.between(1000L, 9000L))
+    def unsafeGenerate: PHLong = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[PHLong] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHInt = PHInt.Type
 
   object PHInt extends PhantomType[Int] {
-    def unsafeGenerate: PHInt = this.apply(scala.util.Random.between(100: Int, 900: Int))
+    def unsafeGenerate: PHInt = this.apply((scala.util.Random.nextInt() % 900) + 100)
     def generate[F[_]: Sync]: F[PHInt] = Sync[F].delay(this.unsafeGenerate)
   }
 
@@ -59,14 +59,14 @@ package object temp {
   type MyAuthToken = MyAuthToken.Type
 
   object MyAuthToken extends PhantomType[Long] {
-    def unsafeGenerate: MyAuthToken = this.apply(scala.util.Random.between(1000L, 9000L))
+    def unsafeGenerate: MyAuthToken = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[MyAuthToken] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHHeader = PHHeader.Type
 
   object PHHeader extends PhantomType[Long] {
-    def unsafeGenerate: PHHeader = this.apply(scala.util.Random.between(1000L, 9000L))
+    def unsafeGenerate: PHHeader = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[PHHeader] = Sync[F].delay(this.unsafeGenerate)
   }
 
