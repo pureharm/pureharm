@@ -1,7 +1,7 @@
 package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.anomaly._
-import busymachines.pureharm.internals.json.AnomalyJsonCodec.pureharmAnomalyBaseCodec
+import busymachines.pureharm.internals.json.AnomalyJsonCodec
 import sttp.tapir._
 
 /**
@@ -11,26 +11,10 @@ import sttp.tapir._
 object PureharmTapirEndpoint {
   import busymachines.pureharm.json.{Decoder, Encoder, Codec => CCodec}
 
-  val throwableDecoder: Decoder[Throwable] = pureharmAnomalyBaseCodec.map {
-    case e:   Anomaly     => e: Throwable
-    case e:   Anomalies   => e: Throwable
-    case e:   Catastrophe => e: Throwable
-    case thr: Throwable   =>
-      UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", thr): Throwable
-  }
-
-  val throwableEncoder: Encoder[Throwable] = pureharmAnomalyBaseCodec.contramap {
-    case e: AnomalyBase => e: AnomalyBase
-    case e: Throwable   =>
-      UnhandledCatastrophe(s"Unhandled Throwable bubbled up to REST api. This is a bug", e): AnomalyBase
-  }
-
-  implicit val thrCC: CCodec[Throwable] = CCodec.from(throwableDecoder, throwableEncoder)
-
   def phEndpoint: Endpoint[Unit, Throwable, Unit, Nothing] = {
     import sttp.tapir.json.circe._
 
-    import busymachines.pureharm.internals.json.AnomalyJsonCodec.pureharmAnomalyBaseCodec
+    implicit val thrCC: CCodec[Throwable] = AnomalyJsonCodec.pureharmThrowableCodec
 
     implicit val nfcc: CCodec[NotFoundAnomaly]           = thrCC.asInstanceOf[CCodec[NotFoundAnomaly]]
     implicit val uacc: CCodec[UnauthorizedAnomaly]       = thrCC.asInstanceOf[CCodec[UnauthorizedAnomaly]]

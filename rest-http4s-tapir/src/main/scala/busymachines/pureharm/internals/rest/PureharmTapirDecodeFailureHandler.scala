@@ -14,7 +14,8 @@ object PureharmTapirDecodeFailureHandler {
   import sttp.tapir.server._
   import sttp.tapir.json.circe._
 
-  import PureharmTapirEndpoint.thrCC
+  import busymachines.pureharm.internals.json.AnomalyJsonCodec._
+
   implicit val sc: Schema[Throwable] = PureharmTapirSchemas.tapirSchemaAnomalies
 
   /**

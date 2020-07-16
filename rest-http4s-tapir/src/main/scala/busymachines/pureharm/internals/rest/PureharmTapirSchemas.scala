@@ -27,7 +27,9 @@ object PureharmTapirSchemas {
     val baseSchema = NonEmptyChain(
       "id"         -> tapir.Schema.schemaForString,
       "message"    -> tapir.Schema.schemaForString,
-      "parameters" -> tapir.Schema.schemaForMap[SeqStringWrapper](seqOrString),
+      "parameters" -> tapir.Schema.schemaForOption(
+        tapir.Schema.schemaForMap[SeqStringWrapper](seqOrString)
+      ),
     )
 
     val schemaAnomalyBase: tapir.Schema[AnomalyBase] = tapir.Schema(

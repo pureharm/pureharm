@@ -75,7 +75,11 @@ abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
     blockingExecutionContext = blockingEC,
     ioChunkSize              = 8192,
     decodeFailureHandler     = PureharmTapirDecodeFailureHandler.handler(), //ServerDefaults.decodeFailureHandler,
-    logRequestHandling       = Http4sServerOptions.defaultLogRequestHandling[F],
+    logRequestHandling       = Http4sServerOptions
+      .defaultLogRequestHandling[F]
+      .copy(
+        logLogicExceptions = false
+      ),
   )
 
   val dsl: Http4sDsl[F] = Http4sDsl[F]
