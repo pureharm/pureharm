@@ -19,6 +19,7 @@ package busymachines.pureharm.internals.effects.aliases
 
 import cats.{effect => ce}
 
+import scala.annotation.implicitNotFound
 import scala.{concurrent => sc}
 
 /**
@@ -170,6 +171,7 @@ private[pureharm] trait CatsTypeAliases {
   final val Show: cats.Show.type = cats.Show
 
   //----------- cats-effect types -----------
+  @implicitNotFound("Custom Sync not found message")
   final type Sync[F[_]] = ce.Sync[F]
   final val Sync: ce.Sync.type = ce.Sync
 
@@ -234,7 +236,13 @@ private[pureharm] trait CatsTypeAliases {
   //intentionally has same companion object as Deferred.
   final val TryableDeferred: ce.concurrent.Deferred.type = ce.concurrent.Deferred
 
+  @deprecated(
+    "`MVar` is now deprecated in favour of a new generation `MVar2` with `tryRead` and `swap` support",
+    "2.2.0",
+  )
   final type MVar[F[_], A] = ce.concurrent.MVar[F, A]
+
+  final type MVar2[F[_], A] = ce.concurrent.MVar2[F, A]
   final val MVar: ce.concurrent.MVar.type = ce.concurrent.MVar
 
   final type Ref[F[_], A] = ce.concurrent.Ref[F, A]

@@ -24,6 +24,7 @@ package busymachines.pureharm.internals.json
 import busymachines.pureharm.anomaly._
 import io.circe.Decoder.Result
 import io.circe._
+import cats.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -41,110 +42,151 @@ trait AnomalyJsonCodec {
     override def apply(a: AnomalyID): Json = Json.fromString(a.name)
   }
 
-  implicit final private val pureharmStringOrSeqCodec: Codec[Anomaly.Parameter] = new Codec[Anomaly.Parameter] {
+  implicit final private val pureharmStringOrSeqEncoder: Encoder[Anomaly.Parameter] = {
+    case StringWrapper(s)      => Json.fromString(s)
+    case SeqStringWrapper(ses) => Json.fromValues(ses.map(Json.fromString))
+  }
 
-    override def apply(a: Anomaly.Parameter): Json =
-      a match {
-        case StringWrapper(s)      => Json.fromString(s)
-        case SeqStringWrapper(ses) => Json.fromValues(ses.map(Json.fromString))
-      }
-
-    override def apply(c: HCursor): Result[Anomaly.Parameter] = {
-      val sa: Result[String] = c.as[String]
-      if (sa.isRight) {
-        sa.map(Anomaly.Parameter)
-      }
-      else {
-        c.as[List[String]].map(Anomaly.Parameter)
-      }
+  implicit final private val pureharmStringOrSeqDecoder: Decoder[Anomaly.Parameter] = (c: HCursor) => {
+    val sa: Result[String] = c.as[String]
+    if (sa.isRight) {
+      sa.map(Anomaly.Parameter)
+    }
+    else {
+      c.as[List[String]].map(Anomaly.Parameter)
     }
   }
 
-  implicit final private val pureharmAnomalyBaseParamsCodec: Codec[Anomaly.Parameters] =
-    new Codec[Anomaly.Parameters] {
-
-      override def apply(c: HCursor): Result[Anomaly.Parameters] = {
-        val jsonObj = c.as[JsonObject]
-        val m       = jsonObj.map(_.toMap)
-        val m2: Either[DecodingFailure, Either[DecodingFailure, Anomaly.Parameters]] = m.map { e: Map[String, Json] =>
-          val potentialFailures = e.map { p: (String, Json) => p._2.as[Anomaly.Parameter].map(s => (p._1, s)) }.toList
-
-          if (potentialFailures.nonEmpty) {
-            val first: Either[DecodingFailure, List[(String, Anomaly.Parameter)]] =
-              potentialFailures.head.map(e => List(e))
-            val rest = potentialFailures.tail
-            val r: Either[DecodingFailure, List[(String, Anomaly.Parameter)]] = rest.foldRight(first) { (v, acc) =>
-              for {
-                prevAcc <- acc
-                newVal  <- v
-              } yield prevAcc :+ newVal
-            }
-            r.map(l => Anomaly.Parameters(l: _*))
-          }
-          else {
-            Right[DecodingFailure, Anomaly.Parameters](Anomaly.Parameters.empty)
-          }
-        }
-        m2.flatMap(x => identity(x))
+  implicit final private val pureharmAnomalyBaseParamsEncoder: Encoder[Anomaly.Parameters] =
+    (a: Anomaly.Parameters) =>
+      if (a.isEmpty) {
+        Json.fromJsonObject(JsonObject.empty)
+      }
+      else {
+        val parametersJson = a.map { p: (String, Anomaly.Parameter) => (p._1, pureharmStringOrSeqEncoder(p._2)) }
+        io.circe.Json.fromFields(parametersJson)
       }
 
-      override def apply(a: Anomaly.Parameters): Json =
-        if (a.isEmpty) {
-          Json.fromJsonObject(JsonObject.empty)
+  implicit final private val pureharmAnomalyBaseParamsDecoder: Decoder[Anomaly.Parameters] =
+    (c: HCursor) => {
+      val jsonObj = c.as[JsonObject]
+      val m       = jsonObj.map(_.toMap)
+      val m2: Either[DecodingFailure, Either[DecodingFailure, Anomaly.Parameters]] = m.map { e: Map[String, Json] =>
+        val potentialFailures = e.map { p: (String, Json) => p._2.as[Anomaly.Parameter].map(s => (p._1, s)) }.toList
+
+        if (potentialFailures.nonEmpty) {
+          val first: Either[DecodingFailure, List[(String, Anomaly.Parameter)]] =
+            potentialFailures.head.map(e => List(e))
+          val rest = potentialFailures.tail
+          val r: Either[DecodingFailure, List[(String, Anomaly.Parameter)]] = rest.foldRight(first) { (v, acc) =>
+            for {
+              prevAcc <- acc
+              newVal  <- v
+            } yield prevAcc :+ newVal
+          }
+          r.map(l => Anomaly.Parameters(l: _*))
         }
         else {
-          val parametersJson = a.map { p: (String, Anomaly.Parameter) => (p._1, pureharmStringOrSeqCodec(p._2)) }
-          io.circe.Json.fromFields(parametersJson)
+          Right[DecodingFailure, Anomaly.Parameters](Anomaly.Parameters.empty)
         }
+      }
+      m2.flatMap(x => identity(x))
     }
 
-  implicit final val pureharmAnomalyBaseCodec: Codec[AnomalyBase] = new Codec[AnomalyBase] {
+  private val nonRecursiveAnomalyBaseDecoder: Decoder[AnomalyBase] = (c: HCursor) =>
+    for {
+      id     <- c.get[AnomalyID](PureharmJsonConstants.id)
+      msg    <- c.get[String](PureharmJsonConstants.message)
+      params <- c.getOrElse[Anomaly.Parameters](PureharmJsonConstants.parameters)(Anomaly.Parameters.empty)
+    } yield Anomaly(id, msg, params)
 
-    override def apply(c: HCursor): Result[AnomalyBase] =
-      for {
-        id     <- c.get[AnomalyID](PureharmJsonConstants.id)
-        msg    <- c.get[String](PureharmJsonConstants.message)
-        params <- c.getOrElse[Anomaly.Parameters](PureharmJsonConstants.parameters)(Anomaly.Parameters.empty)
-      } yield Anomaly(id, msg, params)
-
-    override def apply(a: AnomalyBase): Json = {
-      val id      = AnomalyIDCodec(a.id)
-      val message = Json.fromString(a.message)
-      if (a.parameters.isEmpty) {
-        Json.obj(
-          PureharmJsonConstants.id      -> id,
-          PureharmJsonConstants.message -> message,
-        )
-      }
-      else {
-        val params = pureharmAnomalyBaseParamsCodec(a.parameters)
-        Json.obj(
-          PureharmJsonConstants.id         -> id,
-          PureharmJsonConstants.message    -> message,
-          PureharmJsonConstants.parameters -> params,
-        )
-      }
+  private val nonRecursiveAnomalyBaseEncoder: Encoder[AnomalyBase] = (a: AnomalyBase) => {
+    val id      = AnomalyIDCodec(a.id)
+    val message = Json.fromString(a.message)
+    if (a.parameters.isEmpty) {
+      Json.obj(
+        PureharmJsonConstants.id      -> id,
+        PureharmJsonConstants.message -> message,
+      )
+    }
+    else {
+      val params = pureharmAnomalyBaseParamsEncoder(a.parameters)
+      Json.obj(
+        PureharmJsonConstants.id         -> id,
+        PureharmJsonConstants.message    -> message,
+        PureharmJsonConstants.parameters -> params,
+      )
     }
   }
 
-  implicit final val AnomaliesCodec: Codec[AnomaliesBase] = new Codec[AnomaliesBase] {
-
-    override def apply(a: AnomaliesBase): Json = {
-      val fm          = (pureharmAnomalyBaseCodec: Encoder[AnomalyBase])(a)
-      val arr         = a.messages.map(pureharmAnomalyBaseCodec.apply)
+  implicit final val pureharmAnomalyBaseEncoder: Encoder[AnomalyBase] = {
+    case a @ (as: AnomaliesBase) =>
+      val fm          = nonRecursiveAnomalyBaseEncoder(a)
+      val arr         = as.messages.map(nonRecursiveAnomalyBaseEncoder.apply)
       val messagesObj = Json.obj(PureharmJsonConstants.messages -> Json.arr(arr: _*))
       messagesObj.deepMerge(fm)
-    }
-
-    override def apply(c: HCursor): Result[AnomaliesBase] =
-      for {
-        fm   <- c.as[AnomalyBase]
-        msgs <- c.get[Seq[AnomalyBase]](PureharmJsonConstants.messages)
-        _    <-
-          if (msgs.isEmpty)
-            Left(DecodingFailure("Anomalies.message needs to be non empty array", c.history))
-          else
-            Right.apply(())
-      } yield Anomalies(fm.id, fm.message, Anomaly(msgs.head), msgs.tail.map(a => Anomaly(a)): _*)
+    case a => nonRecursiveAnomalyBaseEncoder(a)
   }
+
+  implicit final val pureharmAnomalyBaseDecoder: Decoder[AnomalyBase] = (c: HCursor) => {
+    val seqCodec = Decoder.decodeSeq[AnomalyBase](nonRecursiveAnomalyBaseDecoder)
+    for {
+      fm <- c.as[AnomalyBase](nonRecursiveAnomalyBaseDecoder)
+      msgCur = c.downField(PureharmJsonConstants.messages)
+      msgs   <-
+        if (msgCur.succeeded) {
+          c.get[Seq[AnomalyBase]](PureharmJsonConstants.messages)(seqCodec)
+        }
+        else {
+          Seq.empty[AnomalyBase].pure[Result]
+        }
+      result <-
+        if (msgCur.failed) {
+          if (msgs.isEmpty) {
+            fm.pure[Result]
+          }
+          else {
+            Left(DecodingFailure("This should never happen, how is my sequence not empty?", c.history))
+          }
+        }
+        else {
+          if (msgs.isEmpty) {
+            Left(DecodingFailure("Anomalies.message needs to be non empty array", c.history))
+          }
+          else {
+            Anomalies(fm.id, fm.message, Anomaly(msgs.head), msgs.tail.map(a => Anomaly(a)): _*).pure[Result]
+          }
+        }
+    } yield result
+  }
+
+  //convenience, for explicit use in other pureharm modules
+  final val pureharmAnomalyBaseCodec: Codec[AnomalyBase] = Codec.from[AnomalyBase](
+    pureharmAnomalyBaseDecoder,
+    pureharmAnomalyBaseEncoder,
+  )
+
+  implicit final val pureharmThrowableDecoder: Decoder[Throwable] = pureharmAnomalyBaseDecoder.map {
+    case e:   Anomaly     => e: Throwable
+    case e:   Anomalies   => e: Throwable
+    case e:   Catastrophe => e: Throwable
+    case thr: Throwable   =>
+      UnhandledCatastrophe(s"Unhandled Throwable. This usually signals a bug. ", thr): Throwable
+  }
+
+  implicit final val pureharmThrowableEncoder: Encoder[Throwable] = pureharmAnomalyBaseEncoder.contramap {
+    case e: AnomalyBase => e: AnomalyBase
+    case e: Throwable   =>
+      UnhandledCatastrophe(
+        s"Unhandled Throwable. This usually signals a bug. ${e.toString}",
+        e,
+      ): AnomalyBase
+  }
+
+  //convenience, for explicit use in other pureharm modules
+  final val pureharmThrowableCodec: Codec[Throwable] = Codec.from[Throwable](
+    pureharmThrowableDecoder,
+    pureharmThrowableEncoder,
+  )
+
 }

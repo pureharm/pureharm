@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.internals.effects
 
+import busymachines.pureharm.anomaly.{AnomalyBase, UnhandledCatastrophe}
 import busymachines.pureharm.effects._
 
 /**
@@ -26,6 +27,8 @@ import busymachines.pureharm.effects._
 object PureharmSyntax {
 
   trait Implicits {
+
+    implicit final def pureharmFOps[F[_], A](fa: F[A]): FOps[F, A] = new FOps[F, A](fa)
 
     implicit final def pureharmFOptionOps[F[_], A](foa: F[Option[A]]): FOptionOps[F, A] = new FOptionOps[F, A](foa)
     implicit final def pureharmPureOptionOps[A](oa:     Option[A]):    PureOptionOps[A] = new PureOptionOps[A](oa)
@@ -54,6 +57,25 @@ object PureharmSyntax {
 
     implicit final def pureharmIOPseudoCompanionOps(c: IO.type): IOPseudoCompanionOps =
       new IOPseudoCompanionOps(c)
+  }
+
+  //---------------------------- FOps ----------------------------
+
+  final class FOps[F[_], A] private[PureharmSyntax] (val fa: F[A]) extends AnyVal {
+    import cats.implicits._
+
+    /**
+      * Wraps any non-anomaly as an [[UnhandledCatastrophe]], this usually signals
+      * a bug, as pureharm encourages that any throwables be such anomalies.
+      */
+    def attemptAnomaly(implicit F: ApplicativeAttempt[F]): F[Either[AnomalyBase, A]] =
+      F.map(
+        F.attempt[A](fa)
+      )(_.leftMap[AnomalyBase] {
+        case a: AnomalyBase => a
+        case NonFatal(e) => UnhandledCatastrophe(e): AnomalyBase
+      })
+
   }
 
   //--------------------------- OPTION ---------------------------

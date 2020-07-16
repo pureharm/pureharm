@@ -67,12 +67,14 @@ trait SafePhantomType[E, T] {
     */
   implicit def safeSpookInstance: SafeSpook[E, T, Type] = defaultSpook
 
-  private[this] lazy val defaultSpook = new SafeSpook[E, T, Type] {
+  private[this] lazy val defaultSpook: SafeSpook[E, T, Type] = new SafeSpook[E, T, Type] {
     @inline override def spook(a: T): Either[E, Type] = SafePhantomType.this.spook(a)
 
     @inline override def despook(t: Type): T = SafePhantomType.this.despook(t)
 
     @inline override def unsafe(a: T): Type = SafePhantomType.this.unsafe(a)
+
+    override lazy val symbolicName: String = SafePhantomType.this.getClass.getSimpleName.stripSuffix("$")
   }
 }
 
@@ -107,4 +109,6 @@ trait SafeSpook[E, T, PT] {
   def despook(t: PT): T
 
   def unsafe(v: T): PT
+
+  def symbolicName: String
 }

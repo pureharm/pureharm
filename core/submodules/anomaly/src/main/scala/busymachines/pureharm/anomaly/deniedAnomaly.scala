@@ -39,27 +39,29 @@ object DeniedAnomaly
     DeniedAnomalyImpl(message = message)
 
   override def apply(parameters: Anomaly.Parameters): DeniedAnomaly =
-    DeniedAnomalyImpl(parameters = parameters)
+    DeniedAnomalyImpl(params = parameters)
 
   override def apply(id:         AnomalyID, message: String): DeniedAnomaly =
     DeniedAnomalyImpl(id = id, message = message)
 
   override def apply(id:         AnomalyID, parameters: Anomaly.Parameters): DeniedAnomaly =
-    DeniedAnomalyImpl(id = id, parameters = parameters)
+    DeniedAnomalyImpl(id = id, params = parameters)
 
   override def apply(message:    String, parameters:    Anomaly.Parameters): DeniedAnomaly =
-    DeniedAnomalyImpl(message = message, parameters = parameters)
+    DeniedAnomalyImpl(message = message, params = parameters)
 
   override def apply(id:         AnomalyID, message: String, parameters: Anomaly.Parameters): DeniedAnomaly =
-    DeniedAnomalyImpl(id = id, message = message, parameters = parameters)
+    DeniedAnomalyImpl(id = id, message = message, params = parameters)
 
   override def apply(a:          AnomalyBase): DeniedAnomaly =
-    DeniedAnomalyImpl(id = a.id, message = a.message, parameters = a.parameters)
+    DeniedAnomalyImpl(id = a.id, message = a.message, params = a.parameters)
 }
 
 final private[pureharm] case class DeniedAnomalyImpl(
-  override val id:         AnomalyID = DeniedAnomalyID,
-  override val message:    String = MeaningfulAnomalies.DeniedMsg,
-  override val parameters: Anomaly.Parameters = Anomaly.Parameters.empty,
-  override val causedBy:   Option[Throwable] = None,
-) extends DeniedAnomaly(message, causedBy) with Product with Serializable
+  override val id:       AnomalyID = DeniedAnomalyID,
+  override val message:  String = MeaningfulAnomalies.DeniedMsg,
+  params:                Anomaly.Parameters = Anomaly.Parameters.empty,
+  override val causedBy: Option[Throwable] = None,
+) extends DeniedAnomaly(message, causedBy) with Product with Serializable {
+  override val parameters: Anomaly.Parameters = super.parameters ++ params
+}

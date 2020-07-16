@@ -20,7 +20,7 @@ import Keys._
 import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 
 object CompilerSettings {
-  lazy val scala2_12:        String = "2.12.11"    //https://github.com/scala/scala/releases
+  lazy val scala2_12:        String = "2.12.12"    //https://github.com/scala/scala/releases
   lazy val scala2_13:        String = "2.13.3"     //https://github.com/scala/scala/releases
   lazy val dottyVersion:     String = "0.25.0-RC2" //https://github.com/lampepfl/dotty/releases
   lazy val mainScalaVersion: String = scala2_13
@@ -29,6 +29,9 @@ object CompilerSettings {
   lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % "0.11.0"
   //https://github.com/oleg-py/better-monadic-for/releases
   lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % "0.3.1"
+
+  //https://github.com/tek/splain
+  lazy val splain = "io.tryp" % "splain" % "0.5.7"
 
   lazy val organizationName: String = "com.busymachines"
   lazy val pureharmHomepage: String = "https://github.com/busymachines/pureharm"
@@ -46,6 +49,7 @@ object CompilerSettings {
                                  Seq(
                                    compilerPlugin(kindProjector.cross(CrossVersion.full)),
                                    compilerPlugin(betterMonadicFor),
+                                   //compilerPlugin(splain).cross(CrossVersion.patch),
                                  )
                                }),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {

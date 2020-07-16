@@ -231,7 +231,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
   behavior of "... serializing composite Anomalies"
 
   it should "... encode Anomalies" in {
-    val failure: AnomaliesBase = Anomalies(
+    val failure: AnomalyBase = Anomalies(
       AnomalyID("test"),
       "test message",
       NotFoundAnomaly(
@@ -285,9 +285,80 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
     )
 
     val read = rawJson.unsafeDecodeAs[AnomalyBase]
-    assert(read.id.name == failure.id.name, "id")
-    assert(read.message == failure.message, "message")
-    assert(read.parameters == failure.parameters, "parameters")
+    read match {
+      case as: AnomaliesBase =>
+        assert(read.id.name == failure.id.name, "id")
+        assert(read.message == failure.message, "message")
+        assert(read.parameters == failure.parameters, "parameters")
+        assert(as.messages.length == 2, "# of messages")
+      case _ => fail("should have decoded as AnomaliesBase")
+    }
+  }
+
+  it should "... encode Throwable" in {
+    val failure: Throwable = Anomalies(
+      AnomalyID("test"),
+      "test message",
+      NotFoundAnomaly(
+        "one",
+        Anomaly.Parameters(
+          "3" -> "1",
+          "4" -> List("1", "2"),
+        ),
+      ),
+      NotFoundAnomaly(
+        "two",
+        Anomaly.Parameters(
+          "5" -> "6",
+          "6" -> List("6", "7"),
+        ),
+      ),
+    )
+    val rawJson = failure.asJson.spaces2
+    assert(
+      rawJson ==
+        """
+          |{
+          |  "id" : "test",
+          |  "message" : "test message",
+          |  "messages" : [
+          |    {
+          |      "id" : "0",
+          |      "message" : "one",
+          |      "parameters" : {
+          |        "3" : "1",
+          |        "4" : [
+          |          "1",
+          |          "2"
+          |        ]
+          |      }
+          |    },
+          |    {
+          |      "id" : "0",
+          |      "message" : "two",
+          |      "parameters" : {
+          |        "5" : "6",
+          |        "6" : [
+          |          "6",
+          |          "7"
+          |        ]
+          |      }
+          |    }
+          |  ]
+          |}
+          |""".stripMargin.trim
+    )
+
+    val anomaly = failure.asInstanceOf[Anomalies]
+    val read    = rawJson.unsafeDecodeAs[Throwable]
+    read match {
+      case as: AnomaliesBase =>
+        assert(as.id.name == anomaly.id.name, "id")
+        assert(as.message == anomaly.message, "message")
+        assert(as.parameters == anomaly.parameters, "parameters")
+        assert(as.messages.length == 2, "# of messages")
+      case _ => fail("should have decoded as AnomaliesBase")
+    }
   }
 
   it should "... fail when decoding and empty Anomalies" in {
@@ -300,7 +371,7 @@ final class AnomalyJsonCodecTest extends AnyFlatSpec {
         |}
         |""".stripMargin.trim
 
-    rawJson.decodeAs[AnomaliesBase] match {
+    rawJson.decodeAs[AnomalyBase] match {
       case Left(_)  => //yey!!!
       case Right(_) => fail("should have failed")
     }
