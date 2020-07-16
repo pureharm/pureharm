@@ -1519,12 +1519,13 @@
 							"script": {
 								"id": "cdbc4e67-4043-40b4-a756-6d687106dd01",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
 									"});",
-									"pm.test(\"Your test name\", function () {",
+									"pm.test(\"header\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
+									"    pm.expect(jsonData.id).to.eql(\"rest_invalid_hd\");",
+									"    pm.expect(jsonData.parameters.headerName).to.eql(\"X-TEST-HEADER\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1645,9 +1646,8 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"pm.test(\"Your test name\", function () {",
+									"pm.test(\"no_auth\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(\"d7417268-c5e1-11ea-87d0-0242ac130003\");",
 									"});"
 								],
 								"type": "text/javascript"
