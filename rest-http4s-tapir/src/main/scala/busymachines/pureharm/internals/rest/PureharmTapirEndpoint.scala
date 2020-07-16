@@ -8,8 +8,8 @@ import sttp.tapir._
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jul 2020
   */
-object PureharmTapirEndpoint {
-  import busymachines.pureharm.json.{Decoder, Encoder, Codec => CCodec}
+private[internals] object PureharmTapirEndpoint {
+  import busymachines.pureharm.json.{Codec => CCodec}
 
   def phEndpoint: Endpoint[Unit, Throwable, Unit, Nothing] = {
     import sttp.tapir.json.circe._
@@ -40,16 +40,18 @@ object PureharmTapirEndpoint {
     import sttp.model.StatusCode
     endpoint.errorOut(
       oneOf[Throwable](
-        statusMapping(StatusCode.NotFound, jsonBody[NotFoundAnomaly].description("not found")),
-        statusMapping(StatusCode.Unauthorized, jsonBody[UnauthorizedAnomaly].description("unauthorized")),
-        statusMapping(StatusCode.Forbidden, jsonBody[ForbiddenAnomaly].description("forbidden")),
-        statusMapping(StatusCode.Forbidden, jsonBody[DeniedAnomaly].description("access denied")),
-        statusMapping(StatusCode.BadRequest, jsonBody[InvalidInputAnomaly].description("invalid input")),
-        statusMapping(StatusCode.Conflict, jsonBody[ConflictAnomaly].description("conflicting value")),
-        statusMapping(StatusCode.BadRequest, jsonBody[Anomalies].description("invalid input, multiple validation")),
-        statusMapping(StatusCode.NotImplemented, jsonBody[NotImplementedCatastrophe].description("not implemented")),
-        statusMapping(StatusCode.InternalServerError, jsonBody[Catastrophe].description("internal server error")),
-        statusMapping(StatusCode.InternalServerError, jsonBody[Throwable].description("internal server error")),
+        // format: off
+        statusMapping(StatusCode.NotFound,            jsonBody[NotFoundAnomaly]          .description("not found")),
+        statusMapping(StatusCode.Unauthorized,        jsonBody[UnauthorizedAnomaly]      .description("unauthorized")),
+        statusMapping(StatusCode.Forbidden,           jsonBody[ForbiddenAnomaly]         .description("forbidden")),
+        statusMapping(StatusCode.Forbidden,           jsonBody[DeniedAnomaly]            .description("access denied")),
+        statusMapping(StatusCode.BadRequest,          jsonBody[InvalidInputAnomaly]      .description("invalid input")),
+        statusMapping(StatusCode.Conflict,            jsonBody[ConflictAnomaly]          .description("conflicting value")),
+        statusMapping(StatusCode.BadRequest,          jsonBody[Anomalies]                .description("invalid input, multiple validation")),
+        statusMapping(StatusCode.NotImplemented,      jsonBody[NotImplementedCatastrophe].description("not implemented")),
+        statusMapping(StatusCode.InternalServerError, jsonBody[Catastrophe]              .description("internal server error")),
+        statusMapping(StatusCode.InternalServerError, jsonBody[Throwable]                .description("internal server error")),
+        // format: on
       )
     )
   }

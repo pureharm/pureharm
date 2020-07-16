@@ -1,9 +1,10 @@
 package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
-import busymachines.pureharm.rest.Http4sDsl
 import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
 import sttp.tapir.server.http4s.Http4sServerOptions
+
+import scala.annotation.implicitNotFound
 
 /**
   * Encapsulates all things needed to translate
@@ -63,6 +64,20 @@ import sttp.tapir.server.http4s.Http4sServerOptions
   *   }
   * }}}
   */
+@implicitNotFound(
+  // format: off
+"""
+The purpose of an Http4sRuntime is to bundle in everything you need to be able to define http4s routes,
+both on their own and/or using tapir.
+
+Possible reasons why you can't find it:
+  - usually, you subclass the abstract Http4sRuntime in your app and you instantiate it only once.
+  - so search where it is instantiate it, and make sure you propagate it to where it's needed
+
+See scaladoc for more information
+"""
+  // format: on
+)
 abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
   implicit def F:            EffectType
   implicit def contextShift: ContextShift[F]
@@ -82,7 +97,7 @@ abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
       ),
   )
 
-  val dsl: Http4sDsl[F] = Http4sDsl[F]
+  val dsl: org.http4s.dsl.Http4sDsl[F] = org.http4s.dsl.Http4sDsl[F]
 
   implicit protected class OptionsOps(ops: Http4sServerOptions[F]) {
 

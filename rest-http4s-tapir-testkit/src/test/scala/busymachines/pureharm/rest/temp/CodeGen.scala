@@ -1,4 +1,4 @@
-package busymachines.pureharm.rest.testkit.temp
+package busymachines.pureharm.rest.temp
 
 import busymachines.pureharm.testkit.PureharmTest
 

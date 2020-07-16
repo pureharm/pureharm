@@ -1,8 +1,7 @@
-package busymachines.pureharm.rest
+package busymachines.pureharm.internals.rest
 
 import java.util.UUID
 
-import busymachines.pureharm.internals.rest.PureharmTapirSchemas
 import busymachines.pureharm.phantom.Spook
 import sttp.tapir
 
@@ -10,14 +9,8 @@ import sttp.tapir
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
-object PureharmRestTapirImplicits extends PureharmRestTapirImplicits
 
-trait PureharmRestTapirImplicits {
-
-  @inline private def genericPhantomTypePathMatcher[Underlying, PT](implicit
-    tc: tapir.Codec.PlainCodec[Underlying],
-    p:  Spook[Underlying, PT],
-  ): tapir.Codec.PlainCodec[PT] = tc.map(p.spook _)(p.despook)
+trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
 
   implicit def phantomTypeTapirStringPathCodec[PT](implicit
     tc: tapir.Codec.PlainCodec[String],
@@ -44,6 +37,25 @@ trait PureharmRestTapirImplicits {
     p:  Spook[Byte, PT],
   ): tapir.Codec.PlainCodec[PT] = genericPhantomTypePathMatcher[Byte, PT]
 
+  implicit def phantomTypeTapirShortPathCodec[PT](implicit
+    tc: tapir.Codec.PlainCodec[Short],
+    p:  Spook[Short, PT],
+  ): tapir.Codec.PlainCodec[PT] = genericPhantomTypePathMatcher[Short, PT]
+
+  implicit def phantomTypeTapirBooleanPathCodec[PT](implicit
+    tc: tapir.Codec.PlainCodec[Boolean],
+    p:  Spook[Boolean, PT],
+  ): tapir.Codec.PlainCodec[PT] = genericPhantomTypePathMatcher[Boolean, PT]
+
+  @inline private def genericPhantomTypePathMatcher[Underlying, PT](implicit
+    tc: tapir.Codec.PlainCodec[Underlying],
+    p:  Spook[Underlying, PT],
+  ): tapir.Codec.PlainCodec[PT] = tc.map(p.spook _)(p.despook)
+
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+
   implicit def genericSchema[Underlying, PT: Spook[Underlying, *]](implicit
     sc: tapir.Schema[Underlying]
   ): tapir.Schema[PT] =
@@ -52,18 +64,19 @@ trait PureharmRestTapirImplicits {
       case Some(original) => Option(s"$original — type name: ${Spook[Underlying, PT].symbolicName}")
     })
 
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+
   implicit def genericValidator[Underlying, PT: Spook[Underlying, *]](implicit
     sc: tapir.Validator[Underlying]
   ): tapir.Validator[PT] = sc.contramap(Spook[Underlying, PT].despook)
 
   /**
-    * While it's a bit iffy that technically,
-    * only AnomaliesBase contains the "messages"
-    * fields... it is much easier to do this,
-    * since it's technically true, furthermore,
-    * this makes erroring out of the application
-    * much easier
+    * Basically, it's union of the schema of AnomalyBase and AnomaliesBase,
+    * + any non-anomaly throwable is being wrapped in an UnhandledAnomaly
     */
-  implicit val tapirSchemaAnomalies: tapir.Schema[Throwable] =
-    PureharmTapirSchemas.tapirSchemaAnomalies
+  implicit val tapirSchemaThrowableAnomaly: tapir.Schema[Throwable] = PureharmTapirSchemas.tapirSchemaAnomalies
+
+  implicit def pureharmTapirAuthOps(o: tapir.TapirAuth.type): TapirOps.AuthOps = new TapirOps.AuthOps(o)
 }

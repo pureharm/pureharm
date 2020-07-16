@@ -49,7 +49,7 @@ object CompilerSettings {
                                  Seq(
                                    compilerPlugin(kindProjector.cross(CrossVersion.full)),
                                    compilerPlugin(betterMonadicFor),
-                                   compilerPlugin(splain).cross(CrossVersion.patch),
+                                   //compilerPlugin(splain).cross(CrossVersion.patch),
                                  )
                                }),
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {

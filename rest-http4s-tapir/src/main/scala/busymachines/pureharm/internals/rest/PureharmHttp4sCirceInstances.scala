@@ -1,4 +1,4 @@
-package busymachines.pureharm.rest
+package busymachines.pureharm.internals.rest
 
 import fs2.Chunk
 import io.circe.Printer
@@ -35,7 +35,7 @@ trait PureharmHttp4sCirceInstances {
         val bytes = printer.printToByteBuffer(json)
         Chunk.byteBuffer(bytes)
       }
-      .withContentType(`Content-Type`(MediaType.application.json))
+      .withContentType(`Content-Type`(org.http4s.MediaType.application.json))
       .contramap(t => Encoder[T].apply(t))
 
   implicit def syncEntityJsonDecoder[F[_]: Sync, T: Decoder]: EntityDecoder[F, T] =

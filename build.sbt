@@ -402,6 +402,8 @@ lazy val `rest-http4s-tapir` = project
       tapirCore.withDottyCompat(scalaVersion.value),
       tapirCirce.withDottyCompat(scalaVersion.value),
       tapirHttp4s.withDottyCompat(scalaVersion.value),
+      tapirOpenAPI.withDottyCompat(scalaVersion.value),
+      tapirCirceYAML.withDottyCompat(scalaVersion.value),
     ),
   )
   .dependsOn(
@@ -417,10 +419,7 @@ lazy val `rest-http4s-tapir-testkit` = project
   .settings(CompilerSettings.commonSettings)
   .settings(
     name := "pureharm-rest-testkit-http4s-tapir",
-    libraryDependencies ++= Seq(
-      tapirOpenAPI.withDottyCompat(scalaVersion.value)   % Test,
-      tapirCirceYAML.withDottyCompat(scalaVersion.value) % Test,
-    ),
+    libraryDependencies ++= Nil,
   )
   .dependsOn(
     `core`,

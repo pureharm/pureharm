@@ -1,9 +1,5 @@
 package busymachines.pureharm.rest.temp
 
-import sttp.model.StatusCode
-import sttp.tapir.model.UsernamePassword
-import sttp.tapir.server.http4s.Http4sServerOptions
-
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
@@ -11,16 +7,12 @@ import sttp.tapir.server.http4s.Http4sServerOptions
 object TempTapirEndpoints {
 
   import busymachines.pureharm.rest._
-  import busymachines.pureharm.rest.implicits._
-  import sttp.tapir._
-  import sttp.tapir.json.circe._
 
   val testPath: String = "test"
 
   //TEMP IMPLEMENTATION
   //-------------------------------------------------
   import busymachines.pureharm.anomaly._
-  import busymachines.pureharm.phantom._
   import busymachines.pureharm.effects._
   import busymachines.pureharm.effects.implicits._
 
@@ -41,36 +33,14 @@ object TempTapirEndpoints {
       new TestHttp4sRuntime(ec)
   }
 
-  implicit class TempOps(o: TapirAuth.type) {
-
-    def xCustomAuthHeader[T: Codec[String, *, CodecFormat.TextPlain]](
-      headerName: String
-    ): EndpointInput.Auth.Http[T] = {
-      val codec     = implicitly[Codec[List[String], T, CodecFormat.TextPlain]]
-      val authCodec = Codec.list(Codec.string).map(codec).schema(codec.schema)
-      EndpointInput.Auth.Http(
-        "Custom",
-        header[T](headerName)(authCodec).description(
-          s"Authentication done with token required in header: $headerName"
-        ),
-      )
-    }
-
-  }
-
   //using this over Authentication to double as CSRF token as well
   private lazy val AuthTokenHeaderName = "X-AUTH-TOKEN"
-
-//  type AuthedEndpoint[F[_], In, Out] = PartialServerEndpoint[MyAuthContext, In, AnomalyBase, Out, Nothing, F]
 
   val authedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
     phEndpoint.in(auth.xCustomAuthHeader[MyAuthToken](AuthTokenHeaderName))
 
   val bearerAuthedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
     phEndpoint.in(auth.bearer[MyAuthToken])
-
-  val basicAuthedEndpoint: SimpleEndpoint[UsernamePassword, Unit] =
-    phEndpoint.in(auth.basic[UsernamePassword])
 
   val apiKeyAuthedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
     phEndpoint.in(auth.apiKey[MyAuthToken](query[MyAuthToken]("apiKey")))

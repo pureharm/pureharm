@@ -1,7 +1,6 @@
 package busymachines.pureharm.rest.temp
 
 import busymachines.pureharm.rest._
-import busymachines.pureharm.rest.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
