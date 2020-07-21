@@ -34,8 +34,9 @@ addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
 addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do212Release",       s";useScala212;cleanPublishSigned;sonatypeBundleRelease")
-addCommandAlias("do213Release",       s";useScala213;cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("do212Release",       ";useScala212;cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("do213Release",       ";useScala213;cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("doRelease",          ";do212Release;do213Release")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 // format: on
