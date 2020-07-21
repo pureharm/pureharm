@@ -57,6 +57,10 @@ trait PureharmTapirAliases {
   /** Codec.scala */
   type TapirCodec[L, H, CF <: CodecFormat] = sttp.tapir.Codec[L, H, CF]
   val TapirCodec: sttp.tapir.Codec.type = sttp.tapir.Codec
+  type TapirPlainCodec[T] = sttp.tapir.Codec.PlainCodec[T]
+
+  val TapirCodecs: busymachines.pureharm.internals.rest.TapirCodecs.type =
+    busymachines.pureharm.internals.rest.TapirCodecs
 
   /** DecodeResult.scala */
   type DecodeResult[+T] = sttp.tapir.DecodeResult[T]

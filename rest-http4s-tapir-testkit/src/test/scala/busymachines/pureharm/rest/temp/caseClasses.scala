@@ -19,18 +19,21 @@ package busymachines.pureharm.rest.temp
 
 import busymachines.pureharm.json._
 import busymachines.pureharm.json.implicits._
+import busymachines.pureharm.effects.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
 final case class MyInputType(
-  f1: PHString,
-  f2: PHInt,
-  f3: PHLong,
-  fl: List[PHLong],
-  f4: List[PHUUID],
-  f5: Option[PHString],
+  f1:  PHString,
+  f2:  PHInt,
+  f3:  PHLong,
+  fl:  List[PHLong],
+  f4:  List[PHUUID],
+  f5:  Option[PHString],
+  sf6: SafePHUUIDStr,
+  sf7: SafePHUUIDThr,
 )
 
 object MyInputType {
@@ -38,13 +41,15 @@ object MyInputType {
 }
 
 final case class MyOutputType(
-  id: PHUUID,
-  f1: PHString,
-  f2: PHInt,
-  f3: PHLong,
-  fl: List[PHLong],
-  f4: List[PHUUID],
-  f5: Option[PHString],
+  id:  PHUUID,
+  f1:  PHString,
+  f2:  PHInt,
+  f3:  PHLong,
+  fl:  List[PHLong],
+  f4:  List[PHUUID],
+  f5:  Option[PHString],
+  sf6: SafePHUUIDStr,
+  sf7: SafePHUUIDThr,
 )
 
 object MyOutputType {
