@@ -38,14 +38,14 @@ final private[pureharm] case class CirceDecodingAnomaly(
     val reverseHistory = failure.history.reverse
     reverseHistory match {
       //this indicates a missing field
-      case CursorOp.DownField(fn) :: Nil if (failure.message.contains(CirceDecodingAnomaly.MissingFieldIndicator)) =>
+      case CursorOp.DownField(fn) :: Nil if failure.message.contains(CirceDecodingAnomaly.MissingFieldIndicator) =>
         Anomaly.Parameters(
           "missingField" -> fn,
           "path"         -> (reverseHistory.map(lensOpToString) ++
             countArrayFailureIndex(failure.history).map(idx => s"failed to decode array element index [$idx]").toList),
         ) ++ super.parameters
 
-      case _                             =>
+      case _                                                                                                     =>
         Anomaly.Parameters(
           "expectedType" -> failure.message,
           "path"         -> (reverseHistory.map(lensOpToString) ++
