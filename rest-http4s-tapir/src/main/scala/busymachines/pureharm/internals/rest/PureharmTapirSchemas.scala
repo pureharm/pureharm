@@ -26,6 +26,11 @@ import sttp.tapir
   */
 object PureharmTapirSchemas {
 
+  private val idFN       = tapir.FieldName("id")
+  private val messageFN  = tapir.FieldName("message")
+  private val messagesFN = tapir.FieldName("messages")
+  private val paramsFN   = tapir.FieldName("parameters")
+
   val tapirSchemaAnomalies: tapir.Schema[Throwable] = {
     import cats.data.NonEmptyChain
     import cats.implicits._
@@ -41,10 +46,10 @@ object PureharmTapirSchemas {
     )
 
     //using Chain because adding things with symbolic operators to an Iterable is... is...
-    val baseSchema = NonEmptyChain(
-      "id"         -> tapir.Schema.schemaForString,
-      "message"    -> tapir.Schema.schemaForString,
-      "parameters" -> tapir.Schema.schemaForOption(
+    val baseSchema: NonEmptyChain[(tapir.FieldName, sttp.tapir.Schema[_])] = NonEmptyChain(
+      idFN      -> tapir.Schema.schemaForString,
+      messageFN -> tapir.Schema.schemaForString,
+      paramsFN  -> tapir.Schema.schemaForOption(
         tapir.Schema.schemaForMap[SeqStringWrapper](seqOrString)
       ),
     )
@@ -59,7 +64,7 @@ object PureharmTapirSchemas {
       tapir.SchemaType.SProduct(
         tapir.SchemaType.SObjectInfo("io.circe.JsonObject"),
         baseSchema
-          .append("messages" -> tapir.Schema.schemaForOption[AnomalyBase](schemaAnomalyBase))
+          .append(messagesFN -> tapir.Schema.schemaForOption[AnomalyBase](schemaAnomalyBase))
           .toIterable,
       )
     )
