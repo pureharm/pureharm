@@ -43,11 +43,13 @@ import com.jsuereth.sbtpgp.PgpKeys._
   * as described here:
   *
   * https://github.com/sbt/sbt-pgp/issues/69
+  *
+  * !!! IMPORTANT !!!
+  * to prevent your OS asking you for the password even though you passed it to sbt in case that happens, see this:
+  * see: https://unix.stackexchange.com/questions/60213/gpg-asks-for-password-even-with-passphrase/190885#190885
   */
 object PublishingSettings {
 
-  // see: https://unix.stackexchange.com/questions/60213/gpg-asks-for-password-even-with-passphrase/190885#190885
-  // how to prevent your OS asking you for the password even though you passed it to sbt
   def sonatypeSettings: Seq[Setting[_]] = Seq(
     // See: https://github.com/sbt/sbt-pgp/blob/4ec2ff0359c74a31bcd26399af85e86d1845bf3b/sbt-pgp/src/main/scala/com/jsuereth/sbtpgp/PgpSettings.scala#L48
     // this way we prioritize the use of the environment variable, to be honest, only then do we use fallback
