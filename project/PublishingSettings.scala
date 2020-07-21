@@ -15,9 +15,11 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
+
 import sbt._
 import sbt.Keys._
 import xerial.sbt.Sonatype.SonatypeKeys._
+import com.jsuereth.sbtpgp.PgpKeys.pgpPassphrase
 
 /**
   * All instructions for publishing to sonatype can be found on the sbt-plugin page:
@@ -45,6 +47,9 @@ import xerial.sbt.Sonatype.SonatypeKeys._
 object PublishingSettings {
 
   def sonatypeSettings: Seq[Setting[_]] = Seq(
+    // See: https://github.com/sbt/sbt-pgp/blob/4ec2ff0359c74a31bcd26399af85e86d1845bf3b/sbt-pgp/src/main/scala/com/jsuereth/sbtpgp/PgpSettings.scala#L48
+    // this way we prioritize the use of the environment variable, to be honest, only then do we use fallback
+    pgpPassphrase := scala.util.Properties.envOrNone("PGP_PASSPHRASE").map(_.toCharArray),
     sonatypeProfileName        := CompilerSettings.organizationName,
     publishArtifact in Compile := true,
     publishArtifact in Test    := false,
