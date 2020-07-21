@@ -19,7 +19,7 @@
 import sbt._
 import sbt.Keys._
 import xerial.sbt.Sonatype.SonatypeKeys._
-import com.jsuereth.sbtpgp.PgpKeys.pgpPassphrase
+import com.jsuereth.sbtpgp.PgpKeys._
 
 /**
   * All instructions for publishing to sonatype can be found on the sbt-plugin page:
@@ -46,10 +46,15 @@ import com.jsuereth.sbtpgp.PgpKeys.pgpPassphrase
   */
 object PublishingSettings {
 
+  // see: https://unix.stackexchange.com/questions/60213/gpg-asks-for-password-even-with-passphrase/190885#190885
+  // how to prevent your OS asking you for the password even though you passed it to sbt
   def sonatypeSettings: Seq[Setting[_]] = Seq(
     // See: https://github.com/sbt/sbt-pgp/blob/4ec2ff0359c74a31bcd26399af85e86d1845bf3b/sbt-pgp/src/main/scala/com/jsuereth/sbtpgp/PgpSettings.scala#L48
     // this way we prioritize the use of the environment variable, to be honest, only then do we use fallback
-    pgpPassphrase := scala.util.Properties.envOrNone("PGP_PASSPHRASE").map(_.toCharArray),
+    pgpPassphrase              := scala.util.Properties.envOrNone("PGP_PASSPHRASE").map(_.toCharArray),
+    pgpSelectPassphrase        := pgpPassphrase.value,
+    // the name of the key that you can find out using $ gpg --list-keys, and it's the longest hex string it outputs
+    pgpSigningKey              := scala.util.Properties.envOrNone("PGP_SIGNING_KEY"),
     sonatypeProfileName        := CompilerSettings.organizationName,
     publishArtifact in Compile := true,
     publishArtifact in Test    := false,
