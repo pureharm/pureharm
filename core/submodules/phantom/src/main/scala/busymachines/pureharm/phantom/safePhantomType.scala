@@ -112,3 +112,7 @@ trait SafeSpook[E, T, PT] {
 
   def symbolicName: String
 }
+
+object SafeSpook {
+  @inline def apply[E, T, PT](implicit s: SafeSpook[E, T, PT]): SafeSpook[E, T, PT] = s
+}

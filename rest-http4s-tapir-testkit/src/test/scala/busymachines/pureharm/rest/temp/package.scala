@@ -19,8 +19,10 @@ package busymachines.pureharm.rest
 
 import java.util.UUID
 
-import busymachines.pureharm.phantom.PhantomType
-import cats.effect.Sync
+import busymachines.pureharm.anomaly.InvalidInputAnomaly
+import busymachines.pureharm.phantom._
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -70,4 +72,20 @@ package object temp {
     def generate[F[_]: Sync]: F[PHHeader] = Sync[F].delay(this.unsafeGenerate)
   }
 
+  type SafePHUUIDStr = SafePHUUIDStr.Type
+
+  object SafePHUUIDStr extends SafePhantomType[String, UUID] {
+    override def check(value: UUID): Either[String, UUID] = value.pure[Either[String, *]]
+    def unsafeGenerate: SafePHUUIDStr = this.unsafe(UUID.randomUUID())
+    def generate[F[_]: Sync]: F[SafePHUUIDStr] = Sync[F].delay(unsafeGenerate)
+  }
+
+  type SafePHUUIDThr = SafePHUUIDThr.Type
+
+  object SafePHUUIDThr extends SafePhantomType[Throwable, UUID] {
+    override def check(value: UUID): Either[Throwable, UUID] = value.pure[Either[Throwable, *]]
+
+    def unsafeGenerate: SafePHUUIDThr = this.unsafe(UUID.randomUUID())
+    def generate[F[_]: Sync]: F[SafePHUUIDThr] = Sync[F].delay(unsafeGenerate)
+  }
 }

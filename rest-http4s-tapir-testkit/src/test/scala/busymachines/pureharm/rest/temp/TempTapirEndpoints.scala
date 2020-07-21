@@ -45,13 +45,15 @@ object TempTapirEndpoints {
         _ <- F.delay(println(s"I AM $ctx"))
         _ <- F.delay(println(s"GET LOGIC HERE — $id"))
       } yield MyOutputType(
-        id = id,
-        f1 = PHString.unsafeGenerate,
-        f2 = PHInt.unsafeGenerate,
-        f3 = PHLong.unsafeGenerate,
-        fl = List(PHLong.unsafeGenerate),
-        f4 = List(PHUUID.unsafeGenerate, PHUUID.unsafeGenerate, PHUUID.unsafeGenerate),
-        f5 = Option(PHString.unsafeGenerate),
+        id  = id,
+        f1  = PHString.unsafeGenerate,
+        f2  = PHInt.unsafeGenerate,
+        f3  = PHLong.unsafeGenerate,
+        fl  = List(PHLong.unsafeGenerate),
+        f4  = List(PHUUID.unsafeGenerate, PHUUID.unsafeGenerate, PHUUID.unsafeGenerate),
+        f5  = Option(PHString.unsafeGenerate),
+        sf6 = SafePHUUIDStr.unsafeGenerate,
+        sf7 = SafePHUUIDThr.unsafeGenerate,
       )
     }
 
@@ -62,13 +64,15 @@ object TempTapirEndpoints {
         _   <- Sync[F].delay(println(s"POST LOGIC HERE — $input"))
         id  <- PHUUID.generate[F]
       } yield MyOutputType(
-        id = id,
-        f1 = input.f1,
-        f2 = input.f2,
-        f3 = input.f3,
-        fl = input.fl,
-        f4 = input.f4,
-        f5 = input.f5,
+        id  = id,
+        f1  = input.f1,
+        f2  = input.f2,
+        f3  = input.f3,
+        fl  = input.fl,
+        f4  = input.f4,
+        f5  = input.f5,
+        sf6 = input.sf6,
+        sf7 = input.sf7,
       )
   }
 
@@ -126,6 +130,16 @@ object TempTapirEndpoints {
     val testGetEndpoint: SimpleEndpoint[(MyAuthToken, PHUUID), MyOutputType] =
       authedEndpoint.get
         .in("test" / path[PHUUID])
+        .out(jsonBody[MyOutputType])
+        .out(statusCode(StatusCode.Ok))
+
+    //Unfortunately, providing implicitly such codecs degrades compilation by one order of magnitude.
+    implicit private val c: TapirPlainCodec[SafePHUUIDThr] =
+      TapirCodecs.safePhantomTypePlainCodec[java.util.UUID, SafePHUUIDThr]
+
+    val testGetEndpointSafePHUUIDThr: SimpleEndpoint[(MyAuthToken, SafePHUUIDThr), MyOutputType] =
+      authedEndpoint.get
+        .in("test_safe_thr" / path[SafePHUUIDThr])
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
 

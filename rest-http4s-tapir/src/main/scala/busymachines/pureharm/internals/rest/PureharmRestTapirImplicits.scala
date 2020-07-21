@@ -19,7 +19,7 @@ package busymachines.pureharm.internals.rest
 
 import java.util.UUID
 
-import busymachines.pureharm.phantom.Spook
+import busymachines.pureharm.phantom.{SafeSpook, Spook}
 import sttp.tapir
 
 /**
@@ -73,7 +73,7 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
 
-  implicit def genericSchema[Underlying, PT: Spook[Underlying, *]](implicit
+  implicit def phantomTypeGenericSchema[Underlying, PT: Spook[Underlying, *]](implicit
     sc: tapir.Schema[Underlying]
   ): tapir.Schema[PT] =
     sc.copy(description = sc.description match {
@@ -81,13 +81,25 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
       case Some(original) => Option(s"$original — type name: ${Spook[Underlying, PT].symbolicName}")
     })
 
+  implicit def safePhantomTypeGenericSchema[E, Underlying, PT: SafeSpook[E, Underlying, *]](implicit
+    sc: tapir.Schema[Underlying]
+  ): tapir.Schema[PT] =
+    sc.copy(description = sc.description match {
+      case None           => Option(SafeSpook[E, Underlying, PT].symbolicName)
+      case Some(original) => Option(s"$original — type name: ${SafeSpook[E, Underlying, PT].symbolicName}")
+    })
+
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
 
-  implicit def genericValidator[Underlying, PT: Spook[Underlying, *]](implicit
+  implicit def phantomTypeGenericValidator[Underlying, PT: Spook[Underlying, *]](implicit
     sc: tapir.Validator[Underlying]
   ): tapir.Validator[PT] = sc.contramap(Spook[Underlying, PT].despook)
+
+  implicit def safePhantomTypeGenericValidator[E, Underlying, PT: SafeSpook[E, Underlying, *]](implicit
+    sc: tapir.Validator[Underlying]
+  ): tapir.Validator[PT] = sc.contramap(SafeSpook[E, Underlying, PT].despook)
 
   /**
     * Basically, it's union of the schema of AnomalyBase and AnomaliesBase,

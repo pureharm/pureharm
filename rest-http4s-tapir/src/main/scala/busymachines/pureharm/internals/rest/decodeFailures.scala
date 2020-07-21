@@ -28,7 +28,7 @@ import busymachines.pureharm.anomaly._
 final private[pureharm] case class CirceDecodingAnomaly(
   failure: DecodingFailure
 ) extends InvalidInputAnomaly(
-    "Failed to decode JSON. See 'parameters.path' for a history of decoding failure.",
+    "Failed to decode JSON. See 'parameters.path' for a history of decoding failure. And 'parameters' for details.",
     Option(failure),
   ) {
 
@@ -36,11 +36,23 @@ final private[pureharm] case class CirceDecodingAnomaly(
 
   override val parameters: Anomaly.Parameters = {
     val reverseHistory = failure.history.reverse
-    Anomaly.Parameters(
-      "expectedType" -> failure.message,
-      "path"         -> (reverseHistory.map(lensOpToString) ++
-        countArrayFailureIndex(failure.history).map(idx => s"failed to decode array element index [$idx]").toList),
-    ) ++ super.parameters
+    reverseHistory match {
+      //this indicates a missing field
+      case CursorOp.DownField(fn) :: Nil if failure.message.contains(CirceDecodingAnomaly.MissingFieldIndicator) =>
+        Anomaly.Parameters(
+          "missingField" -> fn,
+          "path"         -> (reverseHistory.map(lensOpToString) ++
+            countArrayFailureIndex(failure.history).map(idx => s"failed to decode array element index [$idx]").toList),
+        ) ++ super.parameters
+
+      case _                                                                                                     =>
+        Anomaly.Parameters(
+          "expectedType" -> failure.message,
+          "path"         -> (reverseHistory.map(lensOpToString) ++
+            countArrayFailureIndex(failure.history).map(idx => s"failed to decode array element index [$idx]").toList),
+        ) ++ super.parameters
+    }
+
   }
 
   /**
@@ -73,7 +85,15 @@ final private[pureharm] case class CirceDecodingAnomaly(
 }
 
 object CirceDecodingAnomaly {
+  /**
+    * When a field is missing, circe usually answers with this message:
+    * DecodingFailure(Attempt to decode value on failed cursor, List(DownField(fl)))
+    *
+    * So we are kinda left to interpret strings, which sucks and is brittle...
+    */
+  private val MissingFieldIndicator: String = "Attempt to decode value on failed cursor"
   case object ID extends AnomalyID { override val name: String = "rest_json_0" }
+
 }
 
 //--------------------------------------------
