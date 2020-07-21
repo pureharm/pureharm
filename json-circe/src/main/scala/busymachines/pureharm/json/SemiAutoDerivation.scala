@@ -46,7 +46,7 @@ Deriving decoders in pureharm style can run into one of the several problems:
    _
    2) if your case class has some field of type SafePhantomType[E, T], you need to have a Show[E] for its error, since circe uses Strings for errors. Usually, if your error is a Throwable, pureharm.effects.implicits._ contains Show[Throwable] otherwise roll your own.
    _
-   3) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implciits package.
+   3) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implicits package.
    _
    4) As usual for circe, make sure you have in scope Decoder (xor Codec) for any type that is not a case class. To debug write step by step explicit implicits for your case class field types w/ stubs until you narrow down your problem, eg:
       case class F(f1: F1, f2: F2)
@@ -77,7 +77,7 @@ _
 Deriving encoders in pureharm style can run into one of the several problems:
    1) if your case class has any PhantomType[T]/SafePhantomType[_, T] for any T, then make sure you have an Encoder (xor Codec) for T, AND the PureharmJsonImplicits in scope, usually by mixing that trait into your myapp.json.implicits._ and importing it.
    _
-   2) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implciits package.
+   2) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implicits package.
    _
    3) As usual for circe, make sure you have in scope Encoder (xor Codec) for any type that is not a case class. To debug write step by step explicit implicits for your case class field types w/ stubs until you narrow down your problem, eg:
       case class F(f1: F1, f2: F2)
@@ -112,7 +112,7 @@ Deriving codecs in pureharm style can run into one of the several problems:
    _
    2) if your case class has some field of type SafePhantomType[E, T], you need to have a Show[E] for its error, since circe uses Strings for errors. Usually, if your error is a Throwable, pureharm.effects.implicits._ contains Show[Throwable] otherwise roll your own.
    _
-   3) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implciits package.
+   3) Make sure you have one, and only one io.circe.generic.extras.Configuration in scope. In pureharm, this is usually brought int in by mixing in PureharmJsonImplicits into your myapp.json.implicits package.
    _
    4) As usual for circe, make sure you have in scope Encoder/Decoder (xor Codec) for any type that is not a case class. To debug write step by step explicit implicits for your case class field types w/ stubs until you narrow down your problem, eg:
       case class F(f1: F1, f2: F2)
@@ -140,9 +140,9 @@ Deriving codecs in pureharm style can run into one of the several problems:
     // format: off
     @implicitNotFound(
 """
-Codec[${A}] failed to be derived.
+Decoder[${A}] failed to be derived.
 _
-Deriving Codec for enumerations can run into the following problem:
+Deriving Decoder for enumerations can run into the following problem:
    1) make sure that your sealed trait hierarchy contains subtypes that are only case objects or case classes with zero parameters
 """)
     // format: on
