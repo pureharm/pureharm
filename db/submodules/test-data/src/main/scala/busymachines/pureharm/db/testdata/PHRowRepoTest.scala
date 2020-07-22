@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.db.testdata
 
-import busymachines.pureharm.effects._
 import busymachines.pureharm.db.testkit._
+import busymachines.pureharm.effects._
 import busymachines.pureharm.identifiable._
 
 /**

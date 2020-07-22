@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.internals.json
 
-import io.circe._
 import busymachines.pureharm.effects._
+import io.circe._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

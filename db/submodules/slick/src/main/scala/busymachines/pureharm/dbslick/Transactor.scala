@@ -18,7 +18,6 @@
 package busymachines.pureharm.dbslick
 
 import busymachines.pureharm.db._
-
 import busymachines.pureharm.effects._
 
 /**

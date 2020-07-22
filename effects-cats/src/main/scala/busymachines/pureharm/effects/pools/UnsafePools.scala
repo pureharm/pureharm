@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.effects.pools
 
-import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, PoolMainCPU, Util}
+import busymachines.pureharm.internals.effects.pools._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

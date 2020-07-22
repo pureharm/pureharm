@@ -19,8 +19,7 @@ package busymachines.pureharm.dbslick.psql
 
 import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.dbslick._
-import busymachines.pureharm.internals.dbslick._
-import busymachines.pureharm.internals.dbslick.psql
+import busymachines.pureharm.internals.dbslick.{psql, _}
 
 /**
   * If by any chance you are not using Postgres, then

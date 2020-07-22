@@ -17,9 +17,9 @@
   */
 package busymachines.pureharm.identifiable
 
-import busymachines.pureharm.internals.identifiable.IdentifiableLowPriorityImplicits
-
 import scala.annotation.implicitNotFound
+
+import busymachines.pureharm.internals.identifiable.IdentifiableLowPriorityImplicits
 
 /**
   * @tparam T

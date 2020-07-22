@@ -17,14 +17,13 @@
   */
 package busymachines.pureharm.internals.effects
 
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
+import busymachines.pureharm.internals.effects.types.{Attempt, MonadAttempt}
 import cats._
 import cats.effect._
 import cats.implicits._
-
-import scala.concurrent.duration._
-import busymachines.pureharm.internals.effects.types.{Attempt, MonadAttempt}
-
-import scala.language.postfixOps
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019

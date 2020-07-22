@@ -19,8 +19,8 @@ package busymachines.pureharm.internals.dbdoobie
 
 import busymachines.pureharm.db._
 import busymachines.pureharm.dbdoobie._
-import doobie.hikari.HikariTransactor
 import busymachines.pureharm.effects._
+import doobie.hikari.HikariTransactor
 
 /**
   * There is little point in using something other than a

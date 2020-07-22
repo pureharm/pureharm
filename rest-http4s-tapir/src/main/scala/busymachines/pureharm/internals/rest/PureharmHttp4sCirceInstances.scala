@@ -17,13 +17,13 @@
   */
 package busymachines.pureharm.internals.rest
 
+import busymachines.pureharm.effects._
+import busymachines.pureharm.json._
 import fs2.Chunk
 import io.circe.Printer
 import org.http4s._
 import org.http4s.circe.CirceInstances
 import org.http4s.headers.`Content-Type`
-import busymachines.pureharm.effects._
-import busymachines.pureharm.json._
 
 /**
   * You need to have this in scope if you want "seamless" serializing/deserializing

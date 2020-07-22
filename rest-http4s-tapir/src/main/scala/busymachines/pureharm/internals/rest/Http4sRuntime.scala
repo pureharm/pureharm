@@ -17,11 +17,11 @@
   */
 package busymachines.pureharm.internals.rest
 
-import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
-import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
-import sttp.tapir.server.http4s.Http4sServerOptions
-
 import scala.annotation.implicitNotFound
+
+import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
+import sttp.tapir.server.http4s.Http4sServerOptions
+import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
 
 /**
   * Encapsulates all things needed to translate

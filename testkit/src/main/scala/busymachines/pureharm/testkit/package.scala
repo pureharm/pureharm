@@ -17,11 +17,11 @@
   */
 package busymachines.pureharm
 
+import scala.annotation.implicitNotFound
+
 import busymachines.pureharm.effects._
 import busymachines.pureharm.phantom.PhantomType
 import io.chrisdavenport.log4cats._
-
-import scala.annotation.implicitNotFound
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

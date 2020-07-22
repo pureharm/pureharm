@@ -17,12 +17,12 @@
   */
 package busymachines.pureharm.testkit.util
 
+import scala.reflect.ClassTag
+
 import busymachines.pureharm.effects.Attempt
 import busymachines.pureharm.effects.implicits._
-import org.scalactic.{source, Prettifier}
+import org.scalactic.{Prettifier, source}
 import org.scalatest._
-
-import scala.reflect.ClassTag
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

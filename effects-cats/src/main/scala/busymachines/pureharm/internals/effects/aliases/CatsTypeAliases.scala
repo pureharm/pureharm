@@ -17,10 +17,10 @@
   */
 package busymachines.pureharm.internals.effects.aliases
 
-import cats.{effect => ce}
-
 import scala.annotation.implicitNotFound
 import scala.{concurrent => sc}
+
+import cats.{effect => ce}
 
 /**
   * Trait to mixin all sorts of type aliases for most commonly used

@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.internals.dbslick
 
-import busymachines.pureharm.effects.MonadError
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.effects.MonadError
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

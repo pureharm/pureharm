@@ -17,10 +17,10 @@
   */
 package busymachines.pureharm.internals.dbslick
 
-import busymachines.pureharm.phantom._
-import busymachines.pureharm.effects.implicits._
-
 import scala.reflect.ClassTag
+
+import busymachines.pureharm.effects.implicits._
+import busymachines.pureharm.phantom._
 
 /**
   * Unfortunately type inference rarely (if ever) works

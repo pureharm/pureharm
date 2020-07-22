@@ -17,11 +17,11 @@
   */
 package busymachines.pureharm.json
 
+import scala.annotation.implicitNotFound
+
 import io.circe.generic.extras.codec.ConfiguredAsObjectCodec
 import io.circe.generic.extras.{decoding, encoding, semiauto => circeSemiAuto}
 import shapeless.Lazy
-
-import scala.annotation.implicitNotFound
 
 /**
   * Code mostly gotten from:

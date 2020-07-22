@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.internals.dbslick
 
-import busymachines.pureharm.effects._
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
 /**
