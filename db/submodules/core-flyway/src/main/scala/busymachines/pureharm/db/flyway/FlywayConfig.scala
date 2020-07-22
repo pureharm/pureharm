@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.db.flyway
 
+import busymachines.pureharm.db.SchemaName
 import busymachines.pureharm.config._
 import busymachines.pureharm.config.implicits._
 
