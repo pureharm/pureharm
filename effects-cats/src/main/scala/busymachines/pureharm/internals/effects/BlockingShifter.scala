@@ -55,6 +55,8 @@ sealed trait BlockingShifter[F[_]] {
 
 object BlockingShifter {
 
+  def apply[F[_]](implicit summon: BlockingShifter[F]): BlockingShifter[F] = summon
+
   /**
     * See [[Pools.cached]] on where to get a proper thread pool
     */
