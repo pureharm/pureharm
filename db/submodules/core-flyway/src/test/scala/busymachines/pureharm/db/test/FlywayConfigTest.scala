@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.db.test
 
+import busymachines.pureharm.db.SchemaName
 import busymachines.pureharm.db.flyway._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
