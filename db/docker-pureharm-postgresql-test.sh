@@ -9,10 +9,11 @@
 
 # parameters #
 
+POSTGRES_VERSION=12.3-alpine            # see https://hub.docker.com/_/postgres
 CONTAINER_NAME=postgres_pureharm_test   # Name of the docker container used to run postgres
-EXPOSED_PORT=20010                      #this is the port on the host machine; most likely you want to change this one.
-INTERNAL_PORT=5432                      #this is the default port on which postgresql starts on within the container.
-MAX_CONNECTIONS=500                     #default is 115, and since this is only for testing it's OK to just up the number, since we care more about isolation than about performance.
+EXPOSED_PORT=20010                      # this is the port on the host machine; most likely you want to change this one.
+INTERNAL_PORT=5432                      # this is the default port on which postgresql starts on within the container.
+MAX_CONNECTIONS=500                     # default is 115, and since this is only for testing it's OK to just up the number, since we care more about isolation than about performance.
 DB_NAME=pureharm_test
 DB_USER=pureharmony
 DB_PASS=pureharmony
@@ -33,6 +34,6 @@ else
 		-e POSTGRES_DB=$DB_NAME \
 		-e POSTGRES_USER=$DB_USER \
 		-e POSTGRES_PASSWORD=$DB_PASS \
-		postgres:12.3-alpine \
+		postgres:$POSTGRES_VERSION \
 		postgres -N $MAX_CONNECTIONS
 fi
