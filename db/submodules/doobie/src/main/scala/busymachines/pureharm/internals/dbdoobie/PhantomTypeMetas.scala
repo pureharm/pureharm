@@ -17,6 +17,8 @@
   */
 package busymachines.pureharm.internals.dbdoobie
 
+import scala.reflect.runtime.universe.TypeTag
+
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phantom.{SafeSpook, Spook}
@@ -24,7 +26,6 @@ import doobie.{Get, Meta, Put}
 import io.circe._
 import io.circe.parser._
 import org.postgresql.util.PGobject
-import scala.reflect.runtime.universe.TypeTag
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

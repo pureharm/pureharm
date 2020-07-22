@@ -22,9 +22,9 @@ package busymachines.pureharm.internals.json
   * @since 10 Jun 2019
   */
 import busymachines.pureharm.anomaly._
+import cats.implicits._
 import io.circe.Decoder.Result
 import io.circe._
-import cats.implicits._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

@@ -18,9 +18,9 @@
 package busymachines.pureharm.internals.dbdoobie
 
 import busymachines.pureharm.db._
+import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.identifiable.Identifiable
 
 /**

@@ -17,12 +17,12 @@
   */
 package busymachines.pureharm.internals.json
 
-import busymachines.pureharm.phantom._
+import scala.annotation.implicitNotFound
+
 import busymachines.pureharm.effects.Show
 import busymachines.pureharm.effects.implicits._
+import busymachines.pureharm.phantom._
 import io.circe.{Decoder, Encoder}
-
-import scala.annotation.implicitNotFound
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

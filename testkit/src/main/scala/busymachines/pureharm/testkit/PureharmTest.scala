@@ -19,12 +19,12 @@ package busymachines.pureharm.testkit
 
 import java.util.concurrent.TimeUnit
 
-import org.scalatest._
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalactic.source
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit.util._
+import org.scalactic.source
+import org.scalatest._
 import org.scalatest.exceptions._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * This is an experimental base class,

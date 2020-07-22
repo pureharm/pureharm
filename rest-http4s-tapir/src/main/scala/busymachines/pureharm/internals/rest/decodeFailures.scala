@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.internals.rest
 
-import io.circe.{CursorOp, DecodingFailure}
 import busymachines.pureharm.anomaly._
+import io.circe.{CursorOp, DecodingFailure}
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

@@ -17,10 +17,10 @@
   */
 package busymachines.pureharm.internals.effects
 
-import scala.concurrent.duration._
-import busymachines.pureharm.effects._
-
 import scala.collection.compat._
+import scala.concurrent.duration._
+
+import busymachines.pureharm.effects._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs

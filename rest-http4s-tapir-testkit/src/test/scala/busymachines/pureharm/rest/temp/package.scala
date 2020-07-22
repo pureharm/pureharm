@@ -19,7 +19,6 @@ package busymachines.pureharm.rest
 
 import java.util.UUID
 
-import busymachines.pureharm.anomaly.InvalidInputAnomaly
 import busymachines.pureharm.phantom._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._

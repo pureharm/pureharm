@@ -17,7 +17,7 @@
   */
 package busymachines.pureharm.effects
 
-import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstances}
+import busymachines.pureharm.internals.effects.{PureharmUnlawfulInstances, aliases}
 
 /**
   * Define your own "effects" package and write something like this:

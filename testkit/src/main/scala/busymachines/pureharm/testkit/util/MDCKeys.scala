@@ -17,10 +17,10 @@
   */
 package busymachines.pureharm.testkit.util
 
+import scala.concurrent.duration.FiniteDuration
+
 import org.scalactic.source
 import org.scalatest._
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
   * Common keys used in MDC contexts for loggers... allows us to be somewhat consistent

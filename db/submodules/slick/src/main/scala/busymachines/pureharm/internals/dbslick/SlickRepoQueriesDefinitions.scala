@@ -17,11 +17,11 @@
   */
 package busymachines.pureharm.internals.dbslick
 
-import busymachines.pureharm.identifiable.Identifiable
-import busymachines.pureharm.effects._
 import busymachines.pureharm.db._
 import busymachines.pureharm.db.psql.PSQLExceptionInterpreters
 import busymachines.pureharm.dbslick._
+import busymachines.pureharm.effects._
+import busymachines.pureharm.identifiable.Identifiable
 
 /**
   * See [[busymachines.pureharm.dbslick.PureharmSlickPostgresProfile]]

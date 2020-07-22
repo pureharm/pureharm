@@ -61,17 +61,17 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0") //https://github.com/sc
   * {{{
   *   // ===> sbt shell
   *
-  *   > scalafixEnable                         // Setup scalafix for active session.
+  *   > scalafixEnable           // Setup scalafix for active session. — enabling by default slows down compilation
   *
-  *   > scalafix                               // Run all rules configured in .scalafix.conf
+  *   > scalafix                 // Run all rules configured in .scalafix.conf
   *
-  *   > scalafix RemoveUnusedImports           // Run only RemoveUnusedImports rule
+  *   > scalafix OrganizeImports // Run only RemoveUnusedImports rule
   *
-  *   > myProject/scalafix RemoveUnusedImports // Run rule in one project only
+  *   > myProject/scalafix      // Run rule in one project only
   *
   * }}}
   */
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.17") //https://github.com/scalacenter/scalafix/releases
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.19") //https://github.com/scalacenter/scalafix/releases
 
 /**
   * https://github.com/lampepfl/dotty/releases
