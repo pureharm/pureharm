@@ -17,7 +17,8 @@
   */
 package busymachines.pureharm.internals.config
 
-import busymachines.pureharm.config.ConfigAggregateAnomalies
+import busymachines.pureharm.anomaly.NotImplementedCatastrophe
+import busymachines.pureharm.config.{ConfigAggregateAnomalies, ConfigSourceLoadingAnomaly}
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import pureconfig._
@@ -56,7 +57,8 @@ trait ConfigLoader[Config] {
     *   object ConfigX extends ConfigLoader[ConfigX]{
     *     override val configReader: ConfigReader[ConfigX] = semiauto.derive[ConfigX]
     *
-    *     override def default[F: Sync] = this.load("test.config")
+    *     //defined in supertype, and uses pureconfig.ConfigSource.default, override when necessary
+    *     override def configSource[F[_]](implicit F: Sync[F]): F[ConfigSource] = ???
     *   }
     * }}}
     *
@@ -64,26 +66,56 @@ trait ConfigLoader[Config] {
     */
   implicit def configReader: ConfigReader[Config]
 
-  def default[F[_]: Sync]: F[Config]
+  /**
+    * Override this to provide non default source, simply by using pureconfig's useful data:
+    *
+    * //etc. or fetch your config from external service, etc.
+    * F.delay(ConfigSource.file(...))
+    */
+  def configSource[F[_]](implicit F: Sync[F]): F[ConfigSource] = F.delay(ConfigSource.default)
+
+  @scala.deprecated(
+    "Usage of this is discouraged, please just explicitly use .fromNamespace, or write your own. Will be removed, in 0.0.7, and then you can just drop your override modifier",
+    "0.0.6-M4",
+  )
+  def default[F[_]: Sync]: F[Config] =
+    Sync[F].raiseError(
+      NotImplementedCatastrophe(
+        "Config.default now defaults to non-implemented, please use something else, or roll your own"
+      )
+    )
 
   /**
     * Override in subtypes when needed
     */
   def fromNamespace[F[_]: Sync](namespace: String): F[Config] = this.load(namespace)
 
+  @scala.deprecated(
+    "Usage of this is discouraged, please just explicitly use .fromNamespaceR, or write your own. Will be removed, in 0.0.7, and then you can just drop your override modifier",
+    "0.0.6-M4",
+  )
   final def defaultR[F[_]: Sync]: Resource[F, Config] = Resource.liftF(default)
 
   final def fromNamespaceR[F[_]: Sync](namespace: String): Resource[F, Config] =
     Resource.liftF(fromNamespace(namespace))
 
   protected def load[F[_]: Sync](implicit reader: ConfigReader[Config]): F[Config] =
-    configToF(ConfigSource.default.load[Config](Derivation.Successful(reader)))
+    for {
+      source <- configSource[F].adaptError(e => ConfigSourceLoadingAnomaly(e))
+      value  <- configToF(source.load[Config](Derivation.Successful(reader)))(Option.empty)
+    } yield value
 
   protected def load[F[_]: Sync](namespace: String)(implicit reader: ConfigReader[Config]): F[Config] =
-    configToF(ConfigSource.default.at(namespace).load[Config](Derivation.Successful(reader))).adaptError {
-      case f: ConfigAggregateAnomalies => f.withNamespace(namespace)
-    }
+    for {
+      source <- configSource[F].adaptError(e => ConfigSourceLoadingAnomaly(e))
+      value  <- configToF(source.at(namespace).load[Config](Derivation.Successful(reader)))(Option(namespace))
+        .adaptError {
+          case f: ConfigAggregateAnomalies => f.withNamespace(namespace)
+        }
+    } yield value
 
-  private def configToF[F[_]](thunk: => Either[ConfigReaderFailures, Config])(implicit F: Sync[F]): F[Config] =
-    F.delay(thunk.leftMap((err: ConfigReaderFailures) => ConfigAggregateAnomalies(err): Throwable)).rethrow
+  private def configToF[F[_]](
+    thunk:     => Either[ConfigReaderFailures, Config]
+  )(namespace: Option[String])(implicit F: Sync[F]): F[Config] =
+    F.delay(thunk.leftMap((err: ConfigReaderFailures) => ConfigAggregateAnomalies(err, namespace): Throwable)).rethrow
 }

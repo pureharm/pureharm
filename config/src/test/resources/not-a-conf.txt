@@ -1,0 +1,10 @@
+pureharm.config.test {
+  phantom-int = 81234
+  phantom-string = "phantom-not-a-config"
+  phantom-boolean = true
+  phantom-list = [1, 2, 3]
+  phantom-set = ["value1", "value1", "value2"]
+  phantom-finite-duration = 10 minutes
+  phantom-duration = 10 minutes
+  safe-phantom-int = 123
+}

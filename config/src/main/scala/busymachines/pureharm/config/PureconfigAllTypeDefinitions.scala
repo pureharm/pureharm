@@ -29,6 +29,9 @@ trait PureconfigAllTypeDefinitions {
   final type ConfigWriter[A] = pureconfig.ConfigWriter[A]
   final val ConfigWriter: pureconfig.ConfigWriter.type = pureconfig.ConfigWriter
 
+  final type ConfigSource = pureconfig.ConfigSource
+  final val ConfigSource: pureconfig.ConfigSource.type = pureconfig.ConfigSource
+
   final type ConfigLoader[A] = config.ConfigLoader[A]
   final val semiauto: pureconfig.generic.semiauto.type = pureconfig.generic.semiauto
 }

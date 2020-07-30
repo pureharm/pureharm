@@ -15,30 +15,21 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.db
+package busymachines.pureharm.config.test
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-final case class DBConnectionConfig(
-  host:     DBHost,
-  dbName:   DatabaseName,
-  username: DBUsername,
-  password: DBPassword,
-  schema:   Option[SchemaName],
-) {
-
-  def jdbcURL: JDBCUrl = schema match {
-    case None     => JDBCUrl.postgresql(host, dbName)
-    case Some(sc) => JDBCUrl.postgresql(host, dbName, sc)
-  }
-}
-
 import busymachines.pureharm.config._
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 
-object DBConnectionConfig extends ConfigLoader[DBConnectionConfig] {
-  import busymachines.pureharm.config.implicits._
+private[test] class PureharmTestConfigLoaderFromSource(filePath: String) extends ConfigLoader[PureharmTestConfig] {
 
-  implicit override def configReader: ConfigReader[DBConnectionConfig] = semiauto.deriveReader[DBConnectionConfig]
+  override def configSource[F[_]](implicit F: Sync[F]): F[ConfigSource] =
+    F.delay(java.nio.file.Paths.get(this.getClass.getClassLoader.getResource(filePath).toURI))
+      .map(ConfigSource.file)
+
+  override def configReader: ConfigReader[PureharmTestConfig] = PureharmTestConfig.configReader
 }

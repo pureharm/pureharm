@@ -17,27 +17,27 @@
   */
 package busymachines.pureharm.config.test
 
-import busymachines.pureharm.config._
-
-import scala.concurrent.duration._
+import busymachines.pureharm.config.ConfigSourceLoadingAnomaly
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit.PureharmTest
+
+import scala.concurrent.duration._
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-final class PureharmTestConfigTest extends PureharmTest {
+final class PureharmTestConfigFromDefaultSourceTest extends PureharmTest {
 
-  test("load config with phantom common types") {
-
+  test("load config from correct custom path") {
+    val correct = new PureharmTestConfigLoaderFromSource("not-a-conf.txt")
     for {
-      read <- PureharmTestConfig.testConfig[IO]
+      read <- correct.fromNamespace[IO]("pureharm.config.test")
     } yield assert(
       read === PureharmTestConfig(
-        PhantomInt(42),
-        PhantomString("phantom"),
-        PhantomBoolean(false),
+        PhantomInt(81234),
+        PhantomString("phantom-not-a-config"),
+        PhantomBoolean(true),
         PhantomList(List(1, 2, 3)),
         PhantomSet(Set("value1", "value2")),
         PhantomFiniteDuration(10.minutes),
@@ -45,21 +45,12 @@ final class PureharmTestConfigTest extends PureharmTest {
         SafePhantomInt.unsafe(123),
       )
     )
-
   }
 
-  test("fail when loading invalid config") {
+  test("load config from incorrect custom path") {
+    val incorrectSource = new PureharmTestConfigLoaderFromSource("please-no-NPE.txt")
     for {
-      readAtt <- PureharmTestConfig.fromNamespace[IO]("pureharm.config.test.invalid").attempt
-    } yield assertFailure[ConfigAggregateAnomalies](readAtt)
-  }
-
-  test("fail on safe phantom type when loading invalid config") {
-    for {
-      readAtt <- PureharmTestConfig.fromNamespace[IO]("pureharm.config.test.invalid.safephantom").attempt
-      failure = interceptFailure[ConfigAggregateAnomalies](readAtt)
-    } yield {
-      assert(failure.firstAnomaly.message.contains("TEST_CASE_INVALID_SAFE_PHANTOM_ANOMALY"), "... failure type")
-    }
+      attempt <- incorrectSource.fromNamespace[IO]("pureharm.config.test").attempt
+    } yield assertFailure[ConfigSourceLoadingAnomaly](attempt)
   }
 }

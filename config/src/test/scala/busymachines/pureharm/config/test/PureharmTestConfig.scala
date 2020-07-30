@@ -42,6 +42,6 @@ private[test] object PureharmTestConfig extends ConfigLoader[PureharmTestConfig]
   implicit override val configReader: ConfigReader[PureharmTestConfig] =
     semiauto.deriveReader[PureharmTestConfig]
 
-  override def default[F[_]: Sync]: F[PureharmTestConfig] =
+  def testConfig[F[_]: Sync]: F[PureharmTestConfig] =
     this.load("pureharm.config.test")
 }

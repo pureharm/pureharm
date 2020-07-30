@@ -77,8 +77,6 @@ final case class FlywayConfig(
 
 object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConfigFluentApi {
 
-  import busymachines.pureharm.effects._
-
   override def defaultConfig: FlywayConfig = FlywayConfig()
 
   override def withLocations(locations: MigrationLocation*):      FlywayConfig =
@@ -109,8 +107,6 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
 
   implicit override val configReader: ConfigReader[FlywayConfig] =
     alternateRepresentationReader.orElse(semiauto.deriveReader[FlywayConfig])
-
-  override def default[F[_]: Sync]: F[FlywayConfig] = this.load[F]("pureharm.db.migration")
 
   /**
     * This allows us to specify a single string, instead of a list of strings,
