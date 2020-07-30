@@ -17,8 +17,8 @@
   */
 package busymachines.pureharm.config.test
 
-import busymachines.pureharm.config.ConfigSourceLoadingAnomaly
 import busymachines.pureharm.effects._
+import busymachines.pureharm.internals.config.ConfigSourceLoadingAnomaly
 import busymachines.pureharm.testkit.PureharmTest
 
 import scala.concurrent.duration._

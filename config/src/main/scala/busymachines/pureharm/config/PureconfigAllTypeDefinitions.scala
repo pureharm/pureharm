@@ -34,4 +34,13 @@ trait PureconfigAllTypeDefinitions {
 
   final type ConfigLoader[A] = config.ConfigLoader[A]
   final val semiauto: pureconfig.generic.semiauto.type = pureconfig.generic.semiauto
+
+  final type ConfigAggregateAnomalies = config.ConfigAggregateAnomalies
+  final val ConfigAggregateAnomalies: config.ConfigAggregateAnomalies.type = config.ConfigAggregateAnomalies
+
+  final type ConfigReadingAnomaly = config.ConfigReadingAnomaly
+  final val ConfigReadingAnomaly: config.ConfigReadingAnomaly.type = config.ConfigReadingAnomaly
+
+  final type ConfigSourceLoadingAnomaly = config.ConfigSourceLoadingAnomaly
+  final val ConfigSourceLoadingAnomaly: config.ConfigSourceLoadingAnomaly.type = config.ConfigSourceLoadingAnomaly
 }

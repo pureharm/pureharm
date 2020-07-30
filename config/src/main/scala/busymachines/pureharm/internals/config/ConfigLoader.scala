@@ -18,7 +18,6 @@
 package busymachines.pureharm.internals.config
 
 import busymachines.pureharm.anomaly.NotImplementedCatastrophe
-import busymachines.pureharm.config.{ConfigAggregateAnomalies, ConfigSourceLoadingAnomaly}
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import pureconfig._
