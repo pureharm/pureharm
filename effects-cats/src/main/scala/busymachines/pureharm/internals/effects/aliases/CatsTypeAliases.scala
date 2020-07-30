@@ -17,7 +17,6 @@
   */
 package busymachines.pureharm.internals.effects.aliases
 
-import scala.annotation.implicitNotFound
 import scala.{concurrent => sc}
 
 import cats.{effect => ce}
