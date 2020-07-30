@@ -62,5 +62,4 @@ trait PureconfigAllTypeDefinitions {
 
   final type ConfigReaderFailures     = pureconfig.error.ConfigReaderFailures
   final type ConfigReaderException[T] = pureconfig.error.ConfigReaderException[T]
-  final type ConfigValueLocation      = pureconfig.error.ConfigValueLocation
 }

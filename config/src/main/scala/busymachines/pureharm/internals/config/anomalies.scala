@@ -33,7 +33,7 @@ final case class ConfigReadingAnomaly(c: ConfigReaderFailure)
     val orig: Anomaly.Parameters = super.parameters ++ Anomaly.Parameters(
       "reason" -> c.description
     )
-    val loc = c.location.map(l => "location" -> l.description: (String, Anomaly.Parameter))
+    val loc = c.origin.map(l => "location" -> l.description: (String, Anomaly.Parameter))
     orig.++(loc.toMap: Anomaly.Parameters)
   }
 }
@@ -46,7 +46,7 @@ final case class ConfigAggregateAnomalies(cs: ConfigReaderFailures, namespace: O
   override val id: AnomalyID = ConfigAggregateAnomaliesID
 
   override val firstAnomaly:    ConfigReadingAnomaly       = ConfigReadingAnomaly(cs.head)
-  override val restOfAnomalies: List[ConfigReadingAnomaly] = cs.tail.map(ConfigReadingAnomaly.apply)
+  override val restOfAnomalies: List[ConfigReadingAnomaly] = cs.tail.map(ConfigReadingAnomaly.apply).toList
 
   def withNamespace(ns: String): ConfigAggregateAnomalies = this.copy(namespace = Option(ns))
 }
