@@ -43,4 +43,24 @@ trait PureconfigAllTypeDefinitions {
 
   final type ConfigSourceLoadingAnomaly = config.ConfigSourceLoadingAnomaly
   final val ConfigSourceLoadingAnomaly: config.ConfigSourceLoadingAnomaly.type = config.ConfigSourceLoadingAnomaly
+
+  final type ConfigReaderFailure = pureconfig.error.ConfigReaderFailure
+  final type ConvertFailure      = pureconfig.error.ConvertFailure
+  final type ThrowableFailure    = pureconfig.error.ThrowableFailure
+  final type CannotRead          = pureconfig.error.CannotRead
+  final type CannotReadFile      = pureconfig.error.CannotReadFile
+  final type CannotReadUrl       = pureconfig.error.CannotReadUrl
+  final type CannotReadResource  = pureconfig.error.CannotReadResource
+  final type CannotParse         = pureconfig.error.CannotParse
+
+  final val ConvertFailure:     pureconfig.error.ConvertFailure.type     = pureconfig.error.ConvertFailure
+  final val ThrowableFailure:   pureconfig.error.ThrowableFailure.type   = pureconfig.error.ThrowableFailure
+  final val CannotReadFile:     pureconfig.error.CannotReadFile.type     = pureconfig.error.CannotReadFile
+  final val CannotReadUrl:      pureconfig.error.CannotReadUrl.type      = pureconfig.error.CannotReadUrl
+  final val CannotReadResource: pureconfig.error.CannotReadResource.type = pureconfig.error.CannotReadResource
+  final val CannotParse:        pureconfig.error.CannotParse.type        = pureconfig.error.CannotParse
+
+  final type ConfigReaderFailures     = pureconfig.error.ConfigReaderFailures
+  final type ConfigReaderException[T] = pureconfig.error.ConfigReaderException[T]
+  final type ConfigValueLocation      = pureconfig.error.ConfigValueLocation
 }
