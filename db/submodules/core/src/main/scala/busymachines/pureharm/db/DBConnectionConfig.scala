@@ -38,11 +38,7 @@ final case class DBConnectionConfig(
 import busymachines.pureharm.config._
 
 object DBConnectionConfig extends ConfigLoader[DBConnectionConfig] {
-  import busymachines.pureharm.effects.Sync
   import busymachines.pureharm.config.implicits._
 
   implicit override def configReader: ConfigReader[DBConnectionConfig] = semiauto.deriveReader[DBConnectionConfig]
-
-  override def default[F[_]: Sync]: F[DBConnectionConfig] =
-    this.load("pureharm.db.connection")
 }
