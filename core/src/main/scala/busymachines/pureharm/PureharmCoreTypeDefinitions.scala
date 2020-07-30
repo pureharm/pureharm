@@ -34,4 +34,10 @@ trait PureharmCoreTypeDefinitions {
   final type PhantomType[T]        = phantom.PhantomType[T]
   final type SafePhantomType[E, T] = phantom.SafePhantomType[E, T]
   final type AttemptPhantomType[T] = phantom.SafePhantomType[Throwable, T]
+
+  final type Spook[T, PT] = phantom.Spook[T, PT]
+  final val Spook: phantom.Spook.type = phantom.Spook
+
+  final type SafeSpook[E, T, PT] = phantom.SafeSpook[E, T, PT]
+  final val SafeSpook: phantom.SafeSpook.type = phantom.SafeSpook
 }
