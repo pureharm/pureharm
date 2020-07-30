@@ -32,7 +32,7 @@ final class PureharmTestConfigTest extends PureharmTest {
   test("load config with phantom common types") {
 
     for {
-      read <- PureharmTestConfig.default[IO]
+      read <- PureharmTestConfig.testConfig[IO]
     } yield assert(
       read === PureharmTestConfig(
         PhantomInt(42),

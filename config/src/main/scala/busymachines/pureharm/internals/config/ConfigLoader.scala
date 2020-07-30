@@ -17,6 +17,7 @@
   */
 package busymachines.pureharm.internals.config
 
+import busymachines.pureharm.anomaly.NotImplementedCatastrophe
 import busymachines.pureharm.config.ConfigAggregateAnomalies
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
@@ -64,13 +65,26 @@ trait ConfigLoader[Config] {
     */
   implicit def configReader: ConfigReader[Config]
 
-  def default[F[_]: Sync]: F[Config]
+  @scala.deprecated(
+    "Usage of this is discouraged, please just explicitly use .fromNamespace, or write your own. Will be removed, in 0.0.7, and then you can just drop your override modifier",
+    "0.0.6-M4",
+  )
+  def default[F[_]: Sync]: F[Config] =
+    Sync[F].raiseError(
+      NotImplementedCatastrophe(
+        "Config.default now defaults to non-implemented, please use something else, or roll your own"
+      )
+    )
 
   /**
     * Override in subtypes when needed
     */
   def fromNamespace[F[_]: Sync](namespace: String): F[Config] = this.load(namespace)
 
+  @scala.deprecated(
+    "Usage of this is discouraged, please just explicitly use .fromNamespaceR, or write your own. Will be removed, in 0.0.7, and then you can just drop your override modifier",
+    "0.0.6-M4",
+  )
   final def defaultR[F[_]: Sync]: Resource[F, Config] = Resource.liftF(default)
 
   final def fromNamespaceR[F[_]: Sync](namespace: String): Resource[F, Config] =
