@@ -15,7 +15,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.config
+package busymachines.pureharm.internals.config
 
 import busymachines.pureharm.anomaly._
 import pureconfig.error.{ConfigReaderFailure, ConfigReaderFailures}

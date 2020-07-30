@@ -17,7 +17,6 @@
   */
 package busymachines.pureharm.internals.effects.aliases
 
-import scala.annotation.implicitNotFound
 import scala.{concurrent => sc}
 
 import cats.{effect => ce}
@@ -171,7 +170,6 @@ private[pureharm] trait CatsTypeAliases {
   final val Show: cats.Show.type = cats.Show
 
   //----------- cats-effect types -----------
-  @implicitNotFound("Custom Sync not found message")
   final type Sync[F[_]] = ce.Sync[F]
   final val Sync: ce.Sync.type = ce.Sync
 

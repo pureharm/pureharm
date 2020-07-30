@@ -68,4 +68,7 @@ trait PureharmAnomalyTypeDefinitions {
 
   final type NotImplementedCatastrophe = anomaly.NotImplementedCatastrophe
   final val NotImplementedCatastrophe: anomaly.NotImplementedCatastrophe.type = anomaly.NotImplementedCatastrophe
+
+  final type UnhandledCatastrophe = anomaly.UnhandledCatastrophe
+  final val UnhandledCatastrophe: anomaly.UnhandledCatastrophe.type = anomaly.UnhandledCatastrophe
 }
