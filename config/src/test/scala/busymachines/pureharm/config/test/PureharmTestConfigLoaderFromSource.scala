@@ -15,23 +15,21 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package busymachines.pureharm.config
-
-import busymachines.pureharm.internals.config
+package busymachines.pureharm.config.test
 
 /**
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
-trait PureconfigAllTypeDefinitions {
-  final type ConfigReader[A] = pureconfig.ConfigReader[A]
-  final val ConfigReader: pureconfig.ConfigReader.type = pureconfig.ConfigReader
-  final type ConfigWriter[A] = pureconfig.ConfigWriter[A]
-  final val ConfigWriter: pureconfig.ConfigWriter.type = pureconfig.ConfigWriter
+import busymachines.pureharm.config._
+import busymachines.pureharm.effects._
+import busymachines.pureharm.effects.implicits._
 
-  final type ConfigSource = pureconfig.ConfigSource
-  final val ConfigSource: pureconfig.ConfigSource.type = pureconfig.ConfigSource
+private[test] class PureharmTestConfigLoaderFromSource(filePath: String) extends ConfigLoader[PureharmTestConfig] {
 
-  final type ConfigLoader[A] = config.ConfigLoader[A]
-  final val semiauto: pureconfig.generic.semiauto.type = pureconfig.generic.semiauto
+  override def configSource[F[_]](implicit F: Sync[F]): F[ConfigSource] =
+    F.delay(java.nio.file.Paths.get(this.getClass.getClassLoader.getResource(filePath).toURI))
+      .map(ConfigSource.file)
+
+  override def configReader: ConfigReader[PureharmTestConfig] = PureharmTestConfig.configReader
 }

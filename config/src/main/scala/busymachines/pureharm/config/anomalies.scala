@@ -30,7 +30,7 @@ final case class ConfigReadingAnomaly(c: ConfigReaderFailure)
   override val id: AnomalyID = ConfigReadingAnomalyID
 
   override val parameters: Anomaly.Parameters = {
-    val orig: Anomaly.Parameters = Anomaly.Parameters(
+    val orig: Anomaly.Parameters = super.parameters ++ Anomaly.Parameters(
       "reason" -> c.description
     )
     val loc = c.location.map(l => "location" -> l.description: (String, Anomaly.Parameter))
@@ -51,6 +51,19 @@ final case class ConfigAggregateAnomalies(cs: ConfigReaderFailures, namespace: O
   def withNamespace(ns: String): ConfigAggregateAnomalies = this.copy(namespace = Option(ns))
 }
 
+final case class ConfigSourceLoadingAnomaly(cause: Throwable)
+  extends InvalidInputAnomaly(s"Failed to load config because: ${cause.toString}", causedBy = Option(cause)) {
+
+  override val id: AnomalyID = ConfigSourceLoadingAnomalyID
+
+  override val parameters: Anomaly.Parameters = {
+    super.parameters ++ Anomaly.Parameters(
+      "stackTrace" -> cause.getStackTrace.map(_.toString).toSeq
+    )
+  }
+}
+
 //----------------------------- config ----------------------------
-case object ConfigReadingAnomalyID     extends AnomalyID { override val name: String = "ph-config-001" }
-case object ConfigAggregateAnomaliesID extends AnomalyID { override val name: String = "ph-config-002" }
+case object ConfigReadingAnomalyID       extends AnomalyID { override val name: String = "ph-config-001" }
+case object ConfigAggregateAnomaliesID   extends AnomalyID { override val name: String = "ph-config-002" }
+case object ConfigSourceLoadingAnomalyID extends AnomalyID { override val name: String = "ph-config-003" }
