@@ -87,10 +87,9 @@ object TempTapirEndpoints {
 
   //----- Create one of these for your app
   final class TestHttp4sRuntime[F[_]](
-    override val blockingEC:   ExecutionContextCT
+    override val blockingShifter: BlockingShifter[F]
   )(implicit
-    override val F:            Sync[F],
-    override val contextShift: ContextShift[F],
+    override val F:               Sync[F]
   ) extends Http4sRuntime[F, Sync[F]] {
 
     override val http4sServerOptions: Http4sServerOptions[F] =
@@ -99,8 +98,10 @@ object TempTapirEndpoints {
 
   object TestHttp4sRuntime {
 
-    def apply[F[_]](ec: ExecutionContextCT)(implicit f: Sync[F], cs: ContextShift[F]): TestHttp4sRuntime[F] =
-      new TestHttp4sRuntime(ec)
+    def apply[F[_]](
+      blockingShifter: BlockingShifter[F]
+    )(implicit f:      Sync[F]): TestHttp4sRuntime[F] =
+      new TestHttp4sRuntime(blockingShifter)
   }
 
   ////------------------------------------------------

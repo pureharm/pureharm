@@ -18,8 +18,8 @@
 package busymachines.pureharm.internals.rest
 
 import scala.annotation.implicitNotFound
-
-import busymachines.pureharm.effects.{ContextShift, ExecutionContextCT, Sync}
+import busymachines.pureharm.effects.{ContextShift, Sync}
+import busymachines.pureharm.internals.effects.BlockingShifter
 import sttp.tapir.server.http4s.Http4sServerOptions
 import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
 
@@ -96,15 +96,16 @@ See scaladoc for more information
   // format: on
 )
 abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
-  implicit def F:            EffectType
-  implicit def contextShift: ContextShift[F]
-  def blockingEC:            ExecutionContextCT
+  implicit def F:               EffectType
+  implicit def blockingShifter: BlockingShifter[F]
+
+  implicit def contextShift: ContextShift[F] = blockingShifter.contextShift
 
   implicit def http4sServerOptions: Http4sServerOptions[F] = _defaultOps
 
   private[this] lazy val _defaultOps = Http4sServerOptions[F](
     createFile               = Http4sServerOptions.defaultCreateFile[F],
-    blockingExecutionContext = blockingEC,
+    blockingExecutionContext = blockingShifter.blocker.blockingContext,
     ioChunkSize              = 8192,
     decodeFailureHandler     = PureharmTapirDecodeFailureHandler.handler(), //ServerDefaults.decodeFailureHandler,
     logRequestHandling       = Http4sServerOptions

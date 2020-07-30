@@ -36,9 +36,11 @@ object TempRestMain extends PureharmIOApp {
     implicit val CE: ConcurrentEffect[IO] = IO.ioConcurrentEffect(contextShift)
     for {
       http4sPool <- UnsafePools.cached("htt4s").pure[IO]
-      implicit0(http4sRuntime: TestHttp4sRuntime[IO]) <- TestHttp4sRuntime[IO](http4sPool)(CE, contextShift).pure[IO]
-      app        <- MyAppEcology.everything[IO](CE, http4sRuntime)
-      _          <- MyAppDocs.printYAML[IO](app.restAPIs)
+      blockingShifter = BlockingShifter.fromExecutionContext[IO](http4sPool)(contextShift)
+      implicit0(http4sRuntime: TestHttp4sRuntime[IO]) <-
+        TestHttp4sRuntime[IO](blockingShifter).pure[IO]
+      app <- MyAppEcology.everything[IO](CE, http4sRuntime)
+      _ <- MyAppDocs.printYAML[IO](app.restAPIs)
       blazeServer = blazeServerBuilder[IO](app.http4sApp)(CE, timer, http4sRuntime)
       _ <- blazeServer.serve.compile.drain
     } yield ExitCode.Success
@@ -48,7 +50,7 @@ object TempRestMain extends PureharmIOApp {
     app:        HttpApp[F]
   )(implicit F: ConcurrentEffect[F], timer: Timer[F], runtime: TestHttp4sRuntime[F]): BlazeServerBuilder[F] = {
     import org.http4s.server.blaze._
-    BlazeServerBuilder[F](runtime.blockingEC)
+    BlazeServerBuilder[F](runtime.blockingShifter.blocker.blockingContext)
       .bindHttp(12345, "localhost")
       .withHttpApp(app)
   }
