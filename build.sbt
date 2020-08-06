@@ -60,6 +60,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
     core,
     `effects-cats`,
     testkit,
+    time,
     `config`,
     `json-circe`,
     `db-core`,
@@ -150,6 +151,24 @@ lazy val `effects-cats` = project
   .dependsOn(
     `core-phantom`,
     `core-anomaly`,
+  )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++ TIME +++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `time` = project
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    name := "pureharm-time",
+    libraryDependencies ++= Seq(),
+  )
+  .dependsOn(
+    `core-phantom`,
+    `core-anomaly`,
+    `effects-cats`,
+    asTestingLibrary(testkit),
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
