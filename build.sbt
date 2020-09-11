@@ -476,7 +476,7 @@ lazy val log4catsVersion:        String = "1.1.1"    //https://github.com/Christ
 lazy val logbackVersion:         String = "1.2.3"    //https://github.com/qos-ch/logback/releases
 lazy val http4sVersion:          String = "0.21.7"   //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:           String = "0.16.16"  //https://github.com/softwaremill/tapir/releases
-lazy val scalaTestVersion:       String = "3.2.0"    //https://github.com/scalatest/scalatest/releases
+lazy val scalaTestVersion:       String = "3.2.2"    //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== SCALA ===================================
