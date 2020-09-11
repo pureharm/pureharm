@@ -110,7 +110,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *   It only captures the latest failure, if it encounters one.
     */
   def reattempt(
-    errorLog:       (Throwable, String) => F[Unit]
+    errorLog:      (Throwable, String) => F[Unit]
   )(
     retries:        Int,
     betweenRetries: FiniteDuration,
@@ -210,7 +210,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
                   s"effect failed: ${e.getMessage}. retries left=$rs, but first waiting: $betweenRetries",
                 )
                 _     <- Timer[F].sleep(betweenRetries)
-                value <- recursiveRetry(fa)(retries - 1, newSoFar.plus(betweenRetries))
+                value <- recursiveRetry(fa)(rs - 1, newSoFar.plus(betweenRetries))
               } yield value: (FiniteDuration, Attempt[A])
             }
             else {
