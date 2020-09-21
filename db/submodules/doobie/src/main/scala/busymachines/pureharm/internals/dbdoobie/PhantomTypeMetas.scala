@@ -50,7 +50,7 @@ trait PhantomTypeMetas {
     put:   Put[Underlying],
   ): Put[Phantom] = put.contramap(spook.despook)
 
-  implicit def jsonMeta[A](implicit codec: Codec[A]): Meta[A] =
+  def jsonMeta[A](implicit codec: Codec[A]): Meta[A] =
     Meta.Advanced
       .other[PGobject]("jsonb")
       .imap { a =>
