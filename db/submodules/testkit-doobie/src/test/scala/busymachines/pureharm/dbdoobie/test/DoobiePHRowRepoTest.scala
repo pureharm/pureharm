@@ -68,7 +68,7 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
   }
 
   test("insert row1 + row2 (w/ same unique_json) -> conflict") { implicit repo =>
-    import DoobieDoobiePHRowTable.jsonCodec
+    import DoobieDoobiePHRowTable.phJSONColJsonCodec
     import busymachines.pureharm.json.implicits._
     for {
       _       <- repo.insert(data.row1)
