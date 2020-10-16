@@ -67,7 +67,8 @@ private[test] object DoobiePHRowRepo {
     val unique_int:    Column = createColumn("unique_int")
     val unique_json:   Column = createColumn("unique_json")
 
-    implicit val jsonCodec: Codec[PHJSONCol] = derive.codec[PHJSONCol]
+    implicit val phJSONColJsonCodec: Codec[PHJSONCol] = derive.codec[PHJSONCol]
+    implicit val phJSONColJsonMeta:  Meta[PHJSONCol]  = jsonMeta[PHJSONCol]
 
     override val showPK: Show[PhantomPK] = Show[PhantomPK]
     override val metaPK: Meta[PhantomPK] = Meta[PhantomPK]

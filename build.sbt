@@ -468,13 +468,13 @@ lazy val circeVersion:           String = "0.13.0"   //https://github.com/circe/
 lazy val pureconfigVersion:      String = "0.13.0"   //https://github.com/pureconfig/pureconfig/releases
 lazy val attoVersion:            String = "0.8.0"    //https://github.com/tpolecat/atto/releases
 lazy val slickVersion:           String = "3.3.3"    //https://github.com/slick/slick/releases
-lazy val postgresqlVersion:      String = "42.2.16"  //java — https://github.com/pgjdbc/pgjdbc/releases
+lazy val postgresqlVersion:      String = "42.2.18"  //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.4.5"    //java — https://github.com/brettwooldridge/HikariCP/releases
 lazy val doobieVersion:          String = "0.9.2"    //https://github.com/tpolecat/doobie/releases
-lazy val flywayVersion:          String = "6.5.5"    //java — https://github.com/flyway/flyway/releases
+lazy val flywayVersion:          String = "7.0.3"    //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.1.1"    //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"    //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:          String = "0.21.7"   //https://github.com/http4s/http4s/releases
+lazy val http4sVersion:          String = "0.21.8"   //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:           String = "0.16.16"  //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:       String = "3.2.2"    //https://github.com/scalatest/scalatest/releases
 

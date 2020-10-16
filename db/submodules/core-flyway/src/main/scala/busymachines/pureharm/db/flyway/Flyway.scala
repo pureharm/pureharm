@@ -40,7 +40,7 @@ object Flyway {
     for {
       fw   <- flywayInit[F](url, username, password, flywayConfig)
       migs <- F.delay(fw.migrate())
-    } yield migs
+    } yield migs.migrationsExecuted
 
   def migrate[F[_]](
     dbConfig:     DBConnectionConfig,
@@ -51,7 +51,7 @@ object Flyway {
     for {
       fw   <- flywayInit[F](dbConfig.jdbcURL, dbConfig.username, dbConfig.password, flywayConfig)
       migs <- F.delay(fw.migrate())
-    } yield migs
+    } yield migs.migrationsExecuted
 
   def clean[F[_]: Sync](dbConfig: DBConnectionConfig): F[Unit] =
     this.clean[F](url = dbConfig.jdbcURL, username = dbConfig.username, password = dbConfig.password)
