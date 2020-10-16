@@ -49,7 +49,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13") //https://github.co
   * https://github.com/scalameta/sbt-scalafmt/releases
   *
   */
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0") //https://github.com/scalameta/sbt-scalafmt/releases
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.2") //https://github.com/scalameta/sbt-scalafmt/releases
 
 /**
   * Refactoring/linting tool for scala.
@@ -71,9 +71,9 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.0") //https://github.com/sc
   *
   * }}}
   */
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.19") //https://github.com/scalacenter/scalafix/releases
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.21") //https://github.com/scalacenter/scalafix/releases
 
 /**
   * https://github.com/lampepfl/dotty/releases
   */
-addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.4.1")
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.4.2")
