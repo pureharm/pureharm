@@ -21,12 +21,12 @@
 
 //see: https://github.com/liancheng/scalafix-organize-imports
 //and the project-specific config in .scalafix.conf
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.0"
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
 
 // format: off
 addCommandAlias("useScala212", s"++${CompilerSettings.scala2_12}")
 addCommandAlias("useScala213", s"++${CompilerSettings.scala2_13}")
-addCommandAlias("useDotty",    s"++${CompilerSettings.dottyVersion}")
+addCommandAlias("useScala30",  s"++${CompilerSettings.scala3_0}")
 
 addCommandAlias("recompile",      ";clean;compile;")
 addCommandAlias("build",          ";compile;Test/compile")
