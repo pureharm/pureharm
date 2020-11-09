@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,13 +16,11 @@
   */
 package busymachines.pureharm.anomaly
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 
-/**
-  * [[java.lang.Error]] is a reasonable choice for a super-class.
+/** [[java.lang.Error]] is a reasonable choice for a super-class.
   * It's not caught by NonFatal(_)pattern matches. Which means that
   * we can properly propagate "irrecoverable errors" one a per "request"
   * basis and at the same time not crash our application into oblivion.

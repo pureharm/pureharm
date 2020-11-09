@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -27,8 +26,7 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
 import org.scalatest._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
 final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with ParallelTestExecution {

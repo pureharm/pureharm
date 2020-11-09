@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -24,8 +23,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.dbdoobie._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 03 Jul 2020
   */
 private[test] trait DoobieExtPHRowRepo[F[_]] extends Repo[F, ExtPHRow, PhantomUUID]

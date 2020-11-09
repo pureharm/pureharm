@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import scala.{concurrent => sc}
 
 import cats.{effect => ce}
 
-/**
-  * Trait to mixin all sorts of type aliases for most commonly used
+/** Trait to mixin all sorts of type aliases for most commonly used
   * effects. This trait should be mixed in each of your projects
   * to gain "one import experience" for your effect needs.
   *

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import java.util.concurrent.{ExecutorService, ThreadFactory}
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
 private[pureharm] object Util {
@@ -56,8 +54,7 @@ private[pureharm] object Util {
       underlying.reportFailure(t)
   }
 
-  /**
-    * @param prefix
+  /** @param prefix
     *   A thread factory where the name + daemon status is prefixed to the thread ID.
     * @return
     */

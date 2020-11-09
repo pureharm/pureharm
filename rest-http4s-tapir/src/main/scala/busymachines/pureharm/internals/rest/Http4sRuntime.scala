@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -23,8 +22,7 @@ import busymachines.pureharm.internals.effects.BlockingShifter
 import sttp.tapir.server.http4s.Http4sServerOptions
 import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
 
-/**
-  * Encapsulates all things needed to translate
+/** Encapsulates all things needed to translate
   * tapir Endpoints to http4s Route.
   *
   * This abstract class should be extended and the EffectType

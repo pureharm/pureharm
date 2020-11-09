@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.anomaly
 
 import busymachines.pureharm.anomaly.Anomaly.Parameters
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jul 2020
   */
 abstract class UnhandledCatastrophe(

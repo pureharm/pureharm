@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
 abstract class RepoTest[E, PK, Trans](implicit show: Show[PK]) extends DBTest[Trans] {

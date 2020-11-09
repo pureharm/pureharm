@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,14 +18,12 @@ package busymachines.pureharm.db.testdata
 
 import busymachines.pureharm.db._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 27 Jan 2020
   */
 object PHRTestDBConfig {
 
-  /**
-    * All these values come from this file:
+  /** All these values come from this file:
     * db/docker-pureharm-postgresql-test.sh
     */
   val dbConfig: DBConnectionConfig = DBConnectionConfig(

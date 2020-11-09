@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,14 +18,12 @@ package busymachines.pureharm.effects.pools
 
 import busymachines.pureharm.internals.effects.pools._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jun 2019
   */
 object UnsafePools {
 
-  /**
-    * This is a reasonable default to back up your application's
+  /** This is a reasonable default to back up your application's
     * ContextShift. Make sure that you NEVER do blocking I/O on this
     * thread pool. NEVER! — it's not that hard as long as you respect
     * referential transparency, and are careful with using 3rd party
@@ -57,15 +54,13 @@ object UnsafePools {
   def defaultMainExecutionContext(threadNamePrefix: String = "main-cpu-fixed"): ExecutionContextMainFT =
     PoolMainCPU.default(threadNamePrefix)
 
-  /**
-    * Like [[defaultMainExecutionContext]], but with a custom upper bound for threads,
+  /** Like [[defaultMainExecutionContext]], but with a custom upper bound for threads,
     * instead one based on the number of available processors
     */
   def mainExecutionContext(threadNamePrefix: String = "main-cpu-fixed", maxThreads: Int): ExecutionContextMainFT =
     PoolMainCPU.main(threadNamePrefix, maxThreads)
 
-  /**
-    * !!! WARNING !!!
+  /** !!! WARNING !!!
     * Prefer [[Pools.fixed]], unless you know what you are doing.
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)
@@ -102,8 +97,7 @@ object UnsafePools {
   def fixed(threadNamePrefix: String = "fixed", maxThreads: Int, daemons: Boolean = false): ExecutionContextFT =
     PoolFixed.unsafeFixed(threadNamePrefix, maxThreads, daemons)
 
-  /**
-    * !!! WARNING !!!
+  /** !!! WARNING !!!
     * Prefer [[Pools.cached]], unless you know what you are doing.
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)
@@ -127,8 +121,7 @@ object UnsafePools {
   def cached(threadNamePrefix: String, daemons: Boolean = false): ExecutionContextCT =
     PoolCached.unsafeCached(threadNamePrefix, daemons)
 
-  /**
-    * !!! WARNING !!!
+  /** !!! WARNING !!!
     * Prefer [[Pools.singleThreaded]], unless you know what you are doing.
     * The behavior the the Execution context itself is the same
     * for both, but the former is actually safer to use :)

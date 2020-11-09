@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.dbslick.test
 
 import busymachines.pureharm.dbslick.PureharmSlickPostgresProfile
 
-/**
-  * This is an example of the recommended way of setting up your Pureharm slickDB
+/** This is an example of the recommended way of setting up your Pureharm slickDB
   * profile object (sans a lot of other compatibility things)
   *
   * ---------

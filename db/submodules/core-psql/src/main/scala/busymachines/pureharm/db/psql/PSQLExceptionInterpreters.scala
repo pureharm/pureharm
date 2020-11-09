@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import org.postgresql.util._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Jul 2020
   */
 object PSQLExceptionInterpreters {
@@ -44,8 +42,7 @@ object PSQLExceptionInterpreters {
     private val untilNextDoubleQuote: Parser[String] =
       manyUntil(anyChar, doubleQuote).map(_.mkString(""))
 
-    /**
-      * Consumes the last parenthesis as well
+    /** Consumes the last parenthesis as well
       */
     def untilLastClosedParens: Parser[String] = for {
       head      <- manyUntil(anyChar, closeParens).map(_.mkString(""))
@@ -53,8 +50,7 @@ object PSQLExceptionInterpreters {
       tail      <- if (remaining.contains(')')) untilLastClosedParens else "".pure[Parser]
     } yield s"$head$tail"
 
-    /**
-      * usually has the value of format:
+    /** usually has the value of format:
       * {{{
       *   Key (id)=(row1_id) already exists.
       * }}}
@@ -74,8 +70,7 @@ object PSQLExceptionInterpreters {
 
     }
 
-    /**
-      * example:
+    /** example:
       * {{{
       *   Key (row_id)=(120-3921-039213) is not present in table "pureharm_rows".
       * }}}
@@ -97,8 +92,7 @@ object PSQLExceptionInterpreters {
 
   }
 
-  /**
-    * Only call when [[PSQLException#getSQLState]] == [[PSQLStates.UniqueViolation]]
+  /** Only call when [[PSQLException#getSQLState]] == [[PSQLStates.UniqueViolation]]
     *
     * Will attempt to extract the values of the state by doing regex over the
     * error message... yey, java?
@@ -108,8 +102,7 @@ object PSQLExceptionInterpreters {
       .unique[Attempt](e.getServerErrorMessage.getDetail)
       .map(t => DBUniqueConstraintViolationAnomaly(t._1, t._2))
 
-  /**
-    * Only call when [[PSQLException#getSQLState]] == [[PSQLStates.ForeignKeyViolation]]
+  /** Only call when [[PSQLException#getSQLState]] == [[PSQLStates.ForeignKeyViolation]]
     *
     * Will attempt to extract the values of the state by doing regex over the
     * error message... yey, java?

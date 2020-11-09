@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -23,15 +22,13 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.identifiable.Identifiable
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   */
 abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]) {
   def name: TableName
 
-  /**
-    * Should be overriden as non implicit since doobie doesn't
+  /** Should be overriden as non implicit since doobie doesn't
     * provide semiauto-derivation so you want to write in your subclasses:
     * {{{
     *   override def readE: Read[MyCaseClass] = Read[MyCaseClass]
@@ -63,8 +60,7 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
       final val QM    = "?"
       final val Comma = ", "
 
-      /**
-        * @return
+      /** @return
         *  Comma separated enumeration of all columns:
         *  {{{
         *     pk, column1, column 2
@@ -73,8 +69,7 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
       lazy val tuple: String =
         commaSeparated(columnNames)
 
-      /**
-        * @return
+      /** @return
         *  Comma seperated enumeration of all given columns:
         *  {{{
         *     pk, column1, column 2
@@ -88,8 +83,7 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
       def tupleInParens(col: Column, cols: Column*): String =
         s"(${tuple(col, cols: _*)})"
 
-      /**
-        * @return
+      /** @return
         *   Comma separated enumeration of ? corresponding
         *   to the total number of columns in the table
         */
@@ -123,8 +117,7 @@ abstract class TableWithPK[E, PK](implicit private val iden: Identifiable[E, PK]
   private lazy val cnsWithoutPK: List[Column] =
     orderedColumns.toList
 
-  /**
-    * Relies on side-effects and may pure FP dieties forgive me!!
+  /** Relies on side-effects and may pure FP dieties forgive me!!
     *
     * Use only in contexts where evaluation is DETERMINISTIC!
     * i.e. in val definitions, or if you don't care to reuse, shove them in a list

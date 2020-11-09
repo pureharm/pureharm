@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -23,8 +22,7 @@ import io.circe.generic.extras.codec.ConfiguredAsObjectCodec
 import io.circe.generic.extras.{decoding, encoding, semiauto => circeSemiAuto}
 import shapeless.Lazy
 
-/**
-  * Code mostly gotten from:
+/** Code mostly gotten from:
   * [[io.circe.generic.extras.semiauto.DerivationHelper]],
   * these are just aliases + some extra to help along the pureharm-style
   * of doing work.

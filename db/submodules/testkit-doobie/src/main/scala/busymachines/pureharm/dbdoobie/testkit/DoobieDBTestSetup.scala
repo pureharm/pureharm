@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -26,14 +25,12 @@ import busymachines.pureharm.testkit._
 import busymachines.pureharm.testkit.util.{MDCKeys, PureharmTestRuntime}
 import org.scalatest._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
   */
 trait DoobieDBTestSetup extends DBTestSetup[Transactor[IO]] {
 
-  /**
-    * Should be overridden to create a connection config appropriate for the test
+  /** Should be overridden to create a connection config appropriate for the test
     */
   override def dbConfig(meta: TestData)(implicit logger: TestLogger): DBConnectionConfig
 

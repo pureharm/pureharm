@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.phantom
 
-/**
-  * Example use case:
+/** Example use case:
   * {{{
   * package object api {
   *   object SpecificString extends PhantomType[String]
@@ -36,21 +34,18 @@ trait PhantomType[T] {
   final type Tag  = this.type
   final type Type = T @@ Tag
 
-  /**
-    * Override if you want to do pure transformations on your value
+  /** Override if you want to do pure transformations on your value
     * before tagging.
     */
   @inline def apply(v: T): Type = tag[Tag][T](v)
 
-  /**
-    * alias for [[apply]]
+  /** alias for [[apply]]
     */
   @inline final def spook(v: T): Type = apply(v)
 
   @inline final def despook(t: Type): T = t
 
-  /**
-    * Override for a custom spook instance
+  /** Override for a custom spook instance
     */
   implicit def spookInstance: Spook[T, Type] = defaultSpook
 
@@ -62,8 +57,7 @@ trait PhantomType[T] {
 
 }
 
-/**
-  * Use this typeclass to talk generically about PhantomType. For instance, the way
+/** Use this typeclass to talk generically about PhantomType. For instance, the way
   * we define generic circe encoders/decoders is the following (taken from pureharm-json-circe):
   * {{{
   *       implicit final def phatomTypeEncoder[Underlying, Phantom](implicit

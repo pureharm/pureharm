@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -24,8 +23,7 @@ import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phantom._
 import io.circe.{Decoder, Encoder}
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
 object PureharmJsonInstances {

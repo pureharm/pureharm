@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,11 +20,10 @@ import scala.reflect.ClassTag
 
 import busymachines.pureharm.effects.Attempt
 import busymachines.pureharm.effects.implicits._
-import org.scalactic.{Prettifier, source}
+import org.scalactic.{source, Prettifier}
 import org.scalatest._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Jun 2020
   */
 trait PureharmAssertions {

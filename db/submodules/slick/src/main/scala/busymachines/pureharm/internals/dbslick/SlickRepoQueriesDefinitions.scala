@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -23,8 +22,7 @@ import busymachines.pureharm.dbslick._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.identifiable.Identifiable
 
-/**
-  * See [[busymachines.pureharm.dbslick.PureharmSlickPostgresProfile]]
+/** See [[busymachines.pureharm.dbslick.PureharmSlickPostgresProfile]]
   * On how to get to use this. Don't blame me, it's how you usually do stuff
   * with slick.
   *
@@ -39,8 +37,7 @@ trait SlickRepoQueriesDefinitions {
   import busymachines.pureharm.effects.implicits._
   import busymachines.pureharm.dbslick.instances._
 
-  /**
-    * @tparam E
+  /** @tparam E
     *   The type of value to be inserted into the table
     * @tparam PK
     *   The type of the value by which to uniquely identify the
@@ -59,8 +56,7 @@ trait SlickRepoQueriesDefinitions {
   //===========================================================================
   //===========================================================================
 
-  /**
-    * @tparam E
+  /** @tparam E
     *   The type of value to be inserted into the table
     * @tparam PK
     *   The type of the value by which to uniquely identify the
@@ -75,8 +71,7 @@ trait SlickRepoQueriesDefinitions {
     implicit val connectionIOEC: ConnectionIOEC,
   ) extends Repo[ConnectionIO, E, PK] {
 
-    /**
-      * Because creating this object is done via a macro,
+    /** Because creating this object is done via a macro,
       * we have to actually override in each implementer and
       * call this with the explicit type for ``TA``
       * {{{
@@ -91,8 +86,8 @@ trait SlickRepoQueriesDefinitions {
     def find(pk: PK): ConnectionIO[Option[E]] = dao.filter(_.id === pk).result.headOption
 
     def retrieve(pk: PK)(implicit show: Show[PK]): ConnectionIO[E] =
-      (dao.filter(_.id === pk).result.head: ConnectionIO[E]).adaptError {
-        case NonFatal(e) => DBEntryNotFoundAnomaly(pk.show, Option(e))
+      (dao.filter(_.id === pk).result.head: ConnectionIO[E]).adaptError { case NonFatal(e) =>
+        DBEntryNotFoundAnomaly(pk.show, Option(e))
       }
 
     def insert(e: E): ConnectionIO[PK] =
@@ -101,13 +96,12 @@ trait SlickRepoQueriesDefinitions {
     def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
       val expectedSize = es.size
       for {
-        insertedOpt <- dao.++=(es).widenCIO.adaptError {
-          case bux: java.sql.BatchUpdateException =>
-            DBBatchInsertFailedAnomaly(
-              expectedSize = expectedSize,
-              actualSize   = 0,
-              causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
-            )
+        insertedOpt <- dao.++=(es).widenCIO.adaptError { case bux: java.sql.BatchUpdateException =>
+          DBBatchInsertFailedAnomaly(
+            expectedSize = expectedSize,
+            actualSize   = 0,
+            causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
+          )
         }
         _           <- insertedOpt match {
           //From docs: None if the database returned no row * count for some part of the batch

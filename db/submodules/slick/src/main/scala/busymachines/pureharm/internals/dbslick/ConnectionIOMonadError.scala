@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.dbslick
 import busymachines.pureharm.dbslick._
 import busymachines.pureharm.effects._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 04 Apr 2019
   */
 final private[internals] class ConnectionIOMonadError(implicit ec: ConnectionIOEC)

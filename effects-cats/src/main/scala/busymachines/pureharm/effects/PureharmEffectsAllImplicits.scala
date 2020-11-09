@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,10 +16,9 @@
   */
 package busymachines.pureharm.effects
 
-import busymachines.pureharm.internals.effects.{PureharmUnlawfulInstances, aliases}
+import busymachines.pureharm.internals.effects.{aliases, PureharmUnlawfulInstances}
 
-/**
-  * Define your own "effects" package and write something like this:
+/** Define your own "effects" package and write something like this:
   * {{{
   *   package mystuff
   *

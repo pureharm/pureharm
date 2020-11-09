@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -25,8 +24,7 @@ import org.http4s._
 import org.http4s.circe.CirceInstances
 import org.http4s.headers.`Content-Type`
 
-/**
-  * You need to have this in scope if you want "seamless" serializing/deserializing
+/** You need to have this in scope if you want "seamless" serializing/deserializing
   * to/from JSON in your HttpRoutes endpoints.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -36,8 +34,7 @@ trait PureharmHttp4sCirceInstances {
 
   import PureharmHttp4sCirceInstances._
 
-  /**
-    * This code was copied from [[org.http4s.circe.CirceInstances#jsonEncoderWithPrinter]]
+  /** This code was copied from [[org.http4s.circe.CirceInstances#jsonEncoderWithPrinter]]
     * Ideally, we would have done directly:
     * {{{
     *   circeInstance.jsonEncoderOf[F, T]

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.anomaly.InvalidInputAnomaly
 import busymachines.pureharm.phantom._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
 package object test {
@@ -32,8 +30,7 @@ package object test {
 
   object SafeWeight extends SafePhantomType[Throwable, Int] {
 
-    /**
-      * @return
+    /** @return
       *   - Right — of the original (or transformed) value to be tagged
       *   - Left — of the failure type you want
       */

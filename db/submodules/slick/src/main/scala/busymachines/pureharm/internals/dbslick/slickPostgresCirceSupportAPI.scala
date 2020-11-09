@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.dbslick
 import busymachines.pureharm.json._
 import busymachines.pureharm.json.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
 trait SlickPostgresCirceSupportAPI {
@@ -32,8 +30,7 @@ trait SlickPostgresCirceSupportAPI {
 
   import enclosingPostgresProfile._
 
-  /**
-    * Override if by any chance you need to use legacy "json" type
+  /** Override if by any chance you need to use legacy "json" type
     * instead of new and improved "jsonb".
     */
   protected def jsonPostgresType: PostgresqlJSON = PostgresqlJSON.jsonb

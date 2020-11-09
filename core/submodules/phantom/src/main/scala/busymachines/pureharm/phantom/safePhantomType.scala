@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.phantom
 
-/**
-  * See [[PhantomType]], but basically, the apply
+/** See [[PhantomType]], but basically, the apply
   * method returns an `Either[E, A]`
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -31,8 +29,7 @@ trait SafePhantomType[E, T] {
   final type Tag  = this.type
   final type Type = T @@ Tag
 
-  /**
-    * @return
+  /** @return
     *   - Right — of the original (or transformed) value to be tagged
     *   - Left — of the failure type you want
     */
@@ -41,16 +38,14 @@ trait SafePhantomType[E, T] {
   @inline final def apply(v: T): Either[E, Type] =
     check(v).map(a => unsafe(a))
 
-  /**
-    * alias for [[apply]]
+  /** alias for [[apply]]
     */
   @inline final def spook(v: T): Either[E, Type] =
     apply(v)
 
   @inline final def despook(t: Type): T = t
 
-  /**
-    * Please use only when you know what you are doing,
+  /** Please use only when you know what you are doing,
     * like when reading a value from a Database that
     * was always typed with this specific Phantom.
     *
@@ -62,8 +57,7 @@ trait SafePhantomType[E, T] {
   @inline final def unsafe(v: T): Type =
     tag[Tag][T](v)
 
-  /**
-    * Override for a custom spook instance
+  /** Override for a custom spook instance
     */
   implicit def safeSpookInstance: SafeSpook[E, T, Type] = defaultSpook
 
@@ -78,8 +72,7 @@ trait SafePhantomType[E, T] {
   }
 }
 
-/**
-  * Use this typeclass to talk generically about SafePhantomType. For instance, the way
+/** Use this typeclass to talk generically about SafePhantomType. For instance, the way
   * we define generic circe encoders/decoders is the following (taken from pureharm-json-circe):
   * {{{
   *    //don't like the Show[E] too much :/

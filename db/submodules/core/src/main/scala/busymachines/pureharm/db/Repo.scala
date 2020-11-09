@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.db
 
 import busymachines.pureharm.effects.{Show, Traverse}
 
-/**
-  * @tparam E
+/** @tparam E
   *   The type of elements manipulated by this DAO
   * @tparam PK
   *   The "primary key", or "id" if you will, by which elements
@@ -32,8 +30,7 @@ import busymachines.pureharm.effects.{Show, Traverse}
 trait Repo[R[_], E, PK] {
   def find(pk: PK): R[Option[E]]
 
-  /**
-    * Required to render the [[PK]] to return in anomaly
+  /** Required to render the [[PK]] to return in anomaly
     *
     * @return
     *  Fails with [[DBEntryNotFoundAnomaly]] when

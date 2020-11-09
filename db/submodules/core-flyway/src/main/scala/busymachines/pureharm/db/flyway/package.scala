@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,15 +18,13 @@ package busymachines.pureharm.db
 
 import busymachines.pureharm.phantom._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
   */
 package object flyway {
 
   object MigrationLocation extends PhantomType[String] {
-    /**
-      * The default location of flyway migrations
+    /** The default location of flyway migrations
       */
     def default: this.Type = this.apply("db/migration")
   }

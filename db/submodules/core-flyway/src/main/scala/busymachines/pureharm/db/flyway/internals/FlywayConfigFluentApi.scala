@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.db.flyway.internals
 import busymachines.pureharm.db.SchemaName
 import busymachines.pureharm.db.flyway._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
   */
 private[db] trait FlywayConfigFluentApi {

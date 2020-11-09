@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,16 +19,14 @@ package busymachines.pureharm.effects.test
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * This is an example of "main" method, built using pureharm.
+/** This is an example of "main" method, built using pureharm.
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
 object PureharmIOAppTest extends PureharmIOApp {
 
-  /**
-    * We want to ensure that this is evaluated only once, otherwise we introduce
+  /** We want to ensure that this is evaluated only once, otherwise we introduce
     * too many possibilities of shooting oneself in the foot.
     *
     * {{{

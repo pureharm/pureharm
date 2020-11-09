@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.db.testkit
 
 import busymachines.pureharm.identifiable.Identifiable
 
-/**
-  * Basic representation of data that the user ought to provide
+/** Basic representation of data that the user ought to provide
   * for a full test of the [[busymachines.pureharm.db.Repo]]
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

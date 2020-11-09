@@ -3,8 +3,7 @@ package busymachines.pureharm.internals.effects
 import cats._
 import cats.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 23 Jun 2020
   */
 trait PureharmUnlawfulInstances {

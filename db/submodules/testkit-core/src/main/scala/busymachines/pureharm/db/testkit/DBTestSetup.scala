@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -26,8 +25,7 @@ import busymachines.pureharm.testkit._
 import busymachines.pureharm.testkit.util.{MDCKeys, PureharmTestRuntime}
 import org.scalatest.TestData
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 25 Jun 2020
   */
 trait DBTestSetup[DBTransactor] {
@@ -35,21 +33,18 @@ trait DBTestSetup[DBTransactor] {
 
   implicit class TestSetupClassName(config: DBConnectionConfig) {
 
-    /**
-      * @see [[schemaName]]
+    /** @see [[schemaName]]
       */
     def withSchemaFromClassAndTest(meta:   TestData): DBConnectionConfig =
       config.copy(schema = Option(schemaName(meta)))
 
-    /**
-      * @see [[schemaName]]
+    /** @see [[schemaName]]
       */
     def withSchemaFromClassAndTest(prefix: String, meta: TestData): DBConnectionConfig =
       config.copy(schema = Option(schemaName(prefix, meta)))
   }
 
-  /**
-    * Should be overridden to create a connection config appropriate for the test
+  /** Should be overridden to create a connection config appropriate for the test
     *
     * To ensure unique schema names for test cases use the extension methods:
     * [[TestSetupClassName.withSchemaFromClassAndTest]]
@@ -95,7 +90,7 @@ trait DBTestSetup[DBTransactor] {
         )
       )
 
-      _    <- logger.info(MDCKeys(meta))("SETUP — done preparing DB").to[Resource[IO, *]]
+      _ <- logger.info(MDCKeys(meta))("SETUP — done preparing DB").to[Resource[IO, *]]
     } yield ()
 
   protected def _cleanDB(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, Unit] =
@@ -105,16 +100,14 @@ trait DBTestSetup[DBTransactor] {
       _ <- logger.info(MDCKeys(meta))("SETUP — done cleaning DB").to[Resource[IO, *]]
     } yield ()
 
-  /**
-    * @return
+  /** @return
     *   The schema name in the format of:
     *   ${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
     */
   def schemaName(meta: TestData): SchemaName =
     truncateSchemaName(SchemaName(s"${schemaNameFromClassAndLineNumber(meta)}"))
 
-  /**
-    * @return
+  /** @return
     *   The schema name in the format of:
     *   $prefix_${getClass.SimpleName()_${testLineNumber Fallback to testName hash if line number not available}}
     */
@@ -129,8 +122,7 @@ trait DBTestSetup[DBTransactor] {
   protected def schemaNameFromClass: String =
     getClass.getSimpleName.replace("$", "").toLowerCase
 
-  /**
-    * When creating a schema we discriminate using the line number when defined,
+  /** When creating a schema we discriminate using the line number when defined,
     * otherwise using the hash of the test name, we print it out to the console,
     * so no worries, you can still identify the test easily.
     * @return

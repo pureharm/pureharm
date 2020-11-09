@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -24,15 +23,13 @@ import busymachines.pureharm.internals.effects.types.{Attempt, MonadAttempt}
 import cats._
 import cats.effect._
 import cats.implicits._
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
   */
 
 final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extends AnyVal {
 
-  /**
-    * @param unit
+  /** @param unit
     *   You probably don't want a granularity larger than [[MILLISECONDS]]
     *   for accurate timing.
     *
@@ -47,8 +44,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
   )(implicit F: MonadAttempt[F], timer: Timer[F]): F[(FiniteDuration, Attempt[A])] =
     PureharmTimedAttemptReattemptSyntaxOps.timedAttempt(unit)(fa)
 
-  /**
-    * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
+  /** Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
     *
@@ -79,8 +75,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
   ): F[(FiniteDuration, Attempt[A])] =
     PureharmTimedAttemptReattemptSyntaxOps.timedReattempt(errorLog, timeUnit)(retries, betweenRetries)(fa)
 
-  /**
-    * Same as overload [[timedReattempt]], but does not report any failures.
+  /** Same as overload [[timedReattempt]], but does not report any failures.
     */
   def timedReattempt(
     timeUnit:       TimeUnit
@@ -94,8 +89,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     PureharmTimedAttemptReattemptSyntaxOps
       .timedReattempt(PureharmTimedAttemptReattemptSyntaxOps.noLog[F], timeUnit)(retries, betweenRetries)(fa)
 
-  /**
-    * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
+  /** Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
     *
@@ -110,7 +104,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
     *   It only captures the latest failure, if it encounters one.
     */
   def reattempt(
-    errorLog:      (Throwable, String) => F[Unit]
+    errorLog:       (Throwable, String) => F[Unit]
   )(
     retries:        Int,
     betweenRetries: FiniteDuration,
@@ -120,8 +114,7 @@ final class PureharmTimedAttemptReattemptSyntaxOps[F[_], A](val fa: F[A]) extend
   ): F[A] =
     PureharmTimedAttemptReattemptSyntaxOps.reattempt(errorLog)(retries, betweenRetries)(fa)
 
-  /**
-    * Same semantics as overload [[reattempt]]but does not report any error
+  /** Same semantics as overload [[reattempt]]but does not report any error
     */
   def reattempt(
     retries:        Int,
@@ -145,8 +138,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
 
   }
 
-  /**
-    * @param timeUnit
+  /** @param timeUnit
     *   You probably don't want a granularity larger than [[MILLISECONDS]]
     *   for accurate timing.
     *
@@ -167,8 +159,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
       end   <- realTime(timeUnit)(F, timer)
     } yield (end.minus(start), att)
 
-  /**
-    * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
+  /** Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
     *
@@ -223,8 +214,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
     recursiveRetry(fa)(retries, 0 seconds)
   }
 
-  /**
-    * Runs an effect ``F[A]`` a maximum of ``retries`` time, until
+  /** Runs an effect ``F[A]`` a maximum of ``retries`` time, until
     * it is not failed. Between each retry it waits ``betweenRetries``.
     * It also measures the time elapsed in total.
     *
@@ -248,8 +238,7 @@ object PureharmTimedAttemptReattemptSyntaxOps {
   ): F[A] =
     this.timedReattempt(errorLog, NANOSECONDS)(retries, betweenRetries)(fa).map(_._2).rethrow
 
-  /**
-    * Same semantics as overload [[reattempt]]but does not report any error
+  /** Same semantics as overload [[reattempt]]but does not report any error
     */
   def reattempt[F[_]: Sync: Timer, A](
     retries:        Int,

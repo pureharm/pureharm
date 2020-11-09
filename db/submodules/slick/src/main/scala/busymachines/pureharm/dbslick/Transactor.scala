@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.dbslick
 import busymachines.pureharm.db._
 import busymachines.pureharm.effects._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
   */
 trait Transactor[F[_]] {
@@ -44,16 +42,14 @@ trait Transactor[F[_]] {
    */
   def recreateSession: F[Unit]
 
-  /**
-    * The execution context used to run all blocking database input/output.
+  /** The execution context used to run all blocking database input/output.
     *
     * This is the execution context that slick manages internally. Do not
     * use this unless you know what you are doing.
     */
   def ioExecutionContext: ExecutionContext
 
-  /**
-    * Please use only to compensate for the lacks of this evergrowing
+  /** Please use only to compensate for the lacks of this evergrowing
     * API. Prefer to make this wrapper support what you want to do,
     * rather than using this thing.
     *
@@ -63,8 +59,7 @@ trait Transactor[F[_]] {
     */
   val slickDB: DatabaseBackend
 
-  /**
-    * Please use only to compensate for the lacks of this evergrowing
+  /** Please use only to compensate for the lacks of this evergrowing
     * API. Prefer to make this wrapper support what you want to do,
     * rather than using this thing.
     *
@@ -114,8 +109,7 @@ object Transactor {
       asyncConfig = asyncConfig,
     )
 
-  /**
-    * Prefer using [[pgSQLHikari]] instead.
+  /** Prefer using [[pgSQLHikari]] instead.
     *
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.
@@ -134,8 +128,7 @@ object Transactor {
       asyncConfig = asyncConfig,
     )
 
-  /**
-    * Prefer using [[pgSQLHikari]] instead.
+  /** Prefer using [[pgSQLHikari]] instead.
     *
     * You really need to know what you are doing and
     * ensure proper cleanup if using this.

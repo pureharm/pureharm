@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects._
 
-/**
-  * Basically the problem is as such:
+/** Basically the problem is as such:
   * 1) ideally, you probably want only one [[PureharmTestRuntime]] instantiated in your entire test run
   *    to not waste resources and startup time...
   * 2) and you want easy usage...

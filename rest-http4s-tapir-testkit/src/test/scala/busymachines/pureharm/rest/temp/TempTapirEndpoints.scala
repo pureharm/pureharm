@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.rest.temp
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
 object TempTapirEndpoints {
@@ -174,8 +172,8 @@ object TempTapirEndpoints {
       case (myInputType: MyInputType) => domain.postLogic(myInputType)(MyAuthToken.unsafeGenerate)
     }
 
-    val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRouteRecoverErrors {
-      case (auth: MyAuthToken, ph: PHUUID) => domain.getLogic(ph)(auth)
+    val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRouteRecoverErrors { case (auth: MyAuthToken, ph: PHUUID) =>
+      domain.getLogic(ph)(auth)
     }
 
     val testGetEndpointQueryParamsRoute: HttpRoutes[F] = testGetEndpointQueryParams.toRouteRecoverErrors {

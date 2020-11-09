@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import scala.concurrent.duration._
 
 import busymachines.pureharm.effects._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 May 2019
   */
 private[internals] object FutureOps {
@@ -31,8 +29,7 @@ private[internals] object FutureOps {
 
   @inline def void(f: Future[_])(implicit ec: ExecutionContext): Future[Unit] = f.map(unitFunction)
 
-  /**
-    * See [[Await.result]]
+  /** See [[Await.result]]
     */
   @inline def unsafeRunSync[A](f: Future[A], atMost: Duration = Duration.Inf): A = Await.result(f, atMost)
 
@@ -52,8 +49,7 @@ private[internals] object FutureOps {
 //  )(fn: A => Future[B])(implicit bf: BuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[Unit] =
 //    Future.traverse(in)(fn).map(_ => ())
 
-  /**
-    * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+  /** Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.traverse]]
@@ -63,8 +59,7 @@ private[internals] object FutureOps {
   )(fn: A => Future[B])(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.traverse(in)(fn))
 
-  /**
-    * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+  /** Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.traverse]]
@@ -88,8 +83,7 @@ private[internals] object FutureOps {
 //  )(implicit bf: BuildFrom[M[Future[A]], A, To], executor: ExecutionContext): Future[Unit] =
 //    this.void(Future.sequence(in))
 
-  /**
-    * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+  /** Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.sequence]]
@@ -99,8 +93,7 @@ private[internals] object FutureOps {
   )(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.sequence(in))
 
-  /**
-    * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+  /** Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
     * for the combined effects.
     *
     * @see [[scala.concurrent.Future.sequence]]
@@ -110,8 +103,7 @@ private[internals] object FutureOps {
   )(implicit executor: ExecutionContext): Future[Unit] =
     this.void(Future.sequence(in))
 
-  /**
-    * Syntactically inspired from [[Future.traverse]], but it differs semantically
+  /** Syntactically inspired from [[Future.traverse]], but it differs semantically
     * insofar as this method does not attempt to run any futures in parallel. "M" stands
     * for "monadic", as opposed to "applicative" which is the foundation for the formal definition
     * of "traverse" (even though in Scala it is by accident-ish)
@@ -158,8 +150,7 @@ private[internals] object FutureOps {
     }
   }
 
-  /**
-    * @see [[serialize]]
+  /** @see [[serialize]]
     *
     * Similar to [[serialize]], but discards all content. i.e. used only
     * for the combined effects.

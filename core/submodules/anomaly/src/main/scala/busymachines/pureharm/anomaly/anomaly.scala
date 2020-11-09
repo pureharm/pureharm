@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,13 +18,11 @@ package busymachines.pureharm.anomaly
 
 import scala.collection.immutable.Seq
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 
-/**
-  * You should express your business logic expected ways
+/** You should express your business logic expected ways
   * of failure using this trait.
   */
 abstract class Anomaly(
@@ -39,8 +36,7 @@ abstract class Anomaly(
   }
 }
 
-/**
-  * Some suggested naming conventions are put here so that they're easily accessible.
+/** Some suggested naming conventions are put here so that they're easily accessible.
   * These can also be found in the scaladoc of [[busymachines.pureharm.anomaly.MeaningfulAnomalies]]
   *
   * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.NotFound]]
@@ -85,8 +81,7 @@ object Anomaly extends AnomalyConstructors[Anomaly] {
 
   type Parameters = Map[String, Parameter]
 
-  /**
-    * the reason why this type signature does not return Parameters is a pragmatic one.
+  /** the reason why this type signature does not return Parameters is a pragmatic one.
     * Intellij does not infer it correctly in the IDE and yields a false negative.
     *
     * As far as the client code is concerned this is the same, and scalac properly
@@ -145,8 +140,7 @@ trait AnomalyBase extends Product with Serializable {
   def parameters: Anomaly.Parameters = Anomaly.Parameters.empty
 }
 
-/**
-  * This is a hack until dotty (scala 3.0) comes along with union types.
+/** This is a hack until dotty (scala 3.0) comes along with union types.
   * Until then, boiler plate freedom is given by the implicit
   * conversions found in the package object
   */

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -25,8 +24,7 @@ import org.scalactic.source
 import org.scalatest._
 import org.scalatest.funsuite.FixtureAnyFunSuite
 
-/**
-  * This is an experimental base class,
+/** This is an experimental base class,
   * at some point it should be moved to a testkit module
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -37,8 +35,7 @@ abstract class PureharmTestWithResource
   final override type FixtureParam = ResourceType
   final type MetaData              = TestData
 
-  /**
-    * @see [[PureharmTestRuntimeLazyConversions]]
+  /** @see [[PureharmTestRuntimeLazyConversions]]
     *     for details as to why this is a def
     */
   implicit def runtime: PureharmTestRuntime = PureharmTestRuntime
@@ -49,8 +46,7 @@ abstract class PureharmTestWithResource
   import busymachines.pureharm.effects.implicits._
 
   type ResourceType
-  /**
-    * Instead of the "before and after shit" simply init, and close
+  /** Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     *
     * @param meta
@@ -82,9 +78,7 @@ abstract class PureharmTestWithResource
     val fout: IO[Outcome] = for {
       _   <- testLogger.info(mdc)(s"ACQUIRING FIXTURE")
       out <- resource(test)
-        .onError {
-          case e => testLogger.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]]
-        }
+        .onError { case e => testLogger.warn(mdc, e)("INIT — FAILED").to[Resource[IO, *]] }
         .use(ftest)
     } yield out
 

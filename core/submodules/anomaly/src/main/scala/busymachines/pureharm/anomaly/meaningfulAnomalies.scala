@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.anomaly
 
-/**
-  * Some suggested naming conventions are put here so that they're easily accessible.
+/** Some suggested naming conventions are put here so that they're easily accessible.
   * These can also be found in the scaladoc of [[busymachines.pureharm.AnomalyID]]
   *
   * - [[busymachines.pureharm.anomaly.MeaningfulAnomalies.NotFound]]
@@ -41,8 +39,7 @@ package busymachines.pureharm.anomaly
   */
 object MeaningfulAnomalies {
 
-  /**
-    * Meaning:
+  /** Meaning:
     *
     * "you cannot find something; it may or may not exist, and I'm not going
     * to tell you anything else"
@@ -50,8 +47,7 @@ object MeaningfulAnomalies {
   trait NotFound
   private[pureharm] val NotFoundMsg = "Not found"
 
-  /**
-    * Meaning:
+  /** Meaning:
     *
     * "something is wrong in the way you authorized, you can try again slightly
     * differently"
@@ -59,8 +55,7 @@ object MeaningfulAnomalies {
   trait Unauthorized
   private[pureharm] val UnauthorizedMsg = "Unauthorized"
 
-  /**
-    * Meaning:
+  /** Meaning:
     *
     * "it exists, but you're not even allowed to know about that;
     * so for short, you can't find it".
@@ -68,16 +63,14 @@ object MeaningfulAnomalies {
   trait Forbidden
   private[pureharm] val ForbiddenMsg = "Forbidden"
 
-  /**
-    * Meaning:
+  /** Meaning:
     *
     * "you know it exists, but you are not allowed to see it"
     */
   trait Denied
   private[pureharm] val DeniedMsg = "Denied"
 
-  /**
-    * Obviously, whenever some input data is wrong.
+  /** Obviously, whenever some input data is wrong.
     *
     * This one is probably your best friend, and the one you
     * have to specialize the most for any given problem domain.
@@ -97,8 +90,7 @@ object MeaningfulAnomalies {
   trait InvalidInput
   private[pureharm] val InvalidInputMsg = "Invalid input"
 
-  /**
-    * Special type of invalid input
+  /** Special type of invalid input
     *
     * E.g. when you're duplicating something that ought to be unique,
     * like ids, emails.

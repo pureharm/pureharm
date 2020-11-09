@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import scala.concurrent.duration.FiniteDuration
 import org.scalactic.source
 import org.scalatest._
 
-/**
-  * Common keys used in MDC contexts for loggers... allows us to be somewhat consistent
+/** Common keys used in MDC contexts for loggers... allows us to be somewhat consistent
   * through the entire app especially since in logs these get sorted, so we can prefix
   * them universally
   *

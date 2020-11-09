@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -26,8 +25,7 @@ import org.scalatest._
 import org.scalatest.exceptions._
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
-  * This is an experimental base class,
+/** This is an experimental base class,
   * at some point it should be moved to a testkit module
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -40,8 +38,7 @@ abstract class PureharmTest
   private lazy val testLogger_ = TestLogger.fromClass(this.getClass)
   implicit def testLogger: TestLogger = testLogger_
 
-  /**
-    * @see [[PureharmTestRuntimeLazyConversions]]
+  /** @see [[PureharmTestRuntimeLazyConversions]]
     *     for details as to why this is a def
     */
   implicit def runtime: PureharmTestRuntime = PureharmTestRuntime
@@ -71,7 +68,7 @@ abstract class PureharmTest
         case Left(e: TestCanceledException) =>
           testLogger.info(mdc.++(MDCKeys(Exceptional(e), d)))("FINISHED") *> IO.raiseError[Assertion](e)
 
-        case Left(e)    =>
+        case Left(e) =>
           testLogger.warn(mdc.++(MDCKeys(Exceptional(e), d)))(
             "TERMINATED — fail tests with assertions, not by throwing random"
           ) *> IO.raiseError[Assertion](e)

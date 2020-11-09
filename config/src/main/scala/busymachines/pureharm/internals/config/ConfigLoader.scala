@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -23,8 +22,7 @@ import busymachines.pureharm.effects.implicits._
 import pureconfig._
 import pureconfig.error.ConfigReaderFailures
 
-/**
-  * Important to note:
+/** Important to note:
   * Given a case class:
   * {{{
   *   final case class TestConfig(
@@ -41,8 +39,7 @@ import pureconfig.error.ConfigReaderFailures
   */
 trait ConfigLoader[Config] {
 
-  /**
-    * This exists to force semi-auto-derivation, and it allows us to build
+  /** This exists to force semi-auto-derivation, and it allows us to build
     * proper functions. Simply do:
     *
     * {{{
@@ -65,8 +62,7 @@ trait ConfigLoader[Config] {
     */
   implicit def configReader: ConfigReader[Config]
 
-  /**
-    * Override this to provide non default source, simply by using pureconfig's useful data:
+  /** Override this to provide non default source, simply by using pureconfig's useful data:
     *
     * //etc. or fetch your config from external service, etc.
     * F.delay(ConfigSource.file(...))
@@ -84,8 +80,7 @@ trait ConfigLoader[Config] {
       )
     )
 
-  /**
-    * Override in subtypes when needed
+  /** Override in subtypes when needed
     */
   def fromNamespace[F[_]: Sync](namespace: String): F[Config] = this.load(namespace)
 
@@ -108,9 +103,7 @@ trait ConfigLoader[Config] {
     for {
       source <- configSource[F].adaptError { case e => ConfigSourceLoadingAnomaly(e) }
       value  <- configToF(source.at(namespace).load[Config](Derivation.Successful(reader)))(Option(namespace))
-        .adaptError {
-          case f: ConfigAggregateAnomalies => f.withNamespace(namespace)
-        }
+        .adaptError { case f: ConfigAggregateAnomalies => f.withNamespace(namespace) }
     } yield value
 
   private def configToF[F[_]](

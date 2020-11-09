@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -26,8 +25,7 @@ import busymachines.pureharm.json._
 import busymachines.pureharm.internals.json.{JsonDecoding, JsonParsing}
 import busymachines.pureharm.json.test._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 final class JsonUtilsTest extends AnyFlatSpec with EitherValues with Matchers {

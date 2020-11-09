@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.db
 
 import busymachines.pureharm.db
 
-/**
-  * This trait provides convenience aliases to mix in directly
+/** This trait provides convenience aliases to mix in directly
   * into client code in order to minimize imports.
   *
   * E.g:

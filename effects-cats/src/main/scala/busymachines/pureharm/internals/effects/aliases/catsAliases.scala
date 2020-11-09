@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.effects.aliases
 import cats.effect.syntax.AllCatsEffectSyntax
 import cats.{instances, syntax}
 
-/**
-  * Mix this trait into your own effects package to get all cats, cats-effect, and pureharm syntax in one
+/** Mix this trait into your own effects package to get all cats, cats-effect, and pureharm syntax in one
   * import!
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

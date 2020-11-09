@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -24,8 +23,7 @@ import busymachines.pureharm.dbdoobie.implicits._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   */
 abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Repo[ConnectionIO, E, PK] {
@@ -63,13 +61,12 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
   override def insertMany(es: Iterable[E]): ConnectionIO[Unit] = {
     val expectedSize = es.size
     for {
-      inserted <- Update[E](insertSQL).updateMany(es).adaptError {
-        case bux: java.sql.BatchUpdateException =>
-          DBBatchInsertFailedAnomaly(
-            expectedSize = expectedSize,
-            actualSize   = 0,
-            causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
-          )
+      inserted <- Update[E](insertSQL).updateMany(es).adaptError { case bux: java.sql.BatchUpdateException =>
+        DBBatchInsertFailedAnomaly(
+          expectedSize = expectedSize,
+          actualSize   = 0,
+          causedBy     = Option(bux.getCause).map(PSQLExceptionInterpreters.adapt.apply),
+        )
       }
       _        <- (inserted != expectedSize).ifTrueRaise[ConnectionIO](
         DBBatchInsertFailedAnomaly(
@@ -120,8 +117,7 @@ abstract class DoobieRepoQueries[E, PK, Table <: TableWithPK[E, PK]] extends Rep
   private val insertSQL: String =
     s"INSERT INTO ${table.name} ${table.row.sql.tupleInParens} VALUES ${table.row.sql.qmsInParens}"
 
-  /**
-    * Generate something like:
+  /** Generate something like:
     * {{{
     *
     * }}}

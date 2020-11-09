@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -577,16 +576,14 @@ lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion 
 //=============================================================================
 //================================  BUILD UTILS ===============================
 //=============================================================================
-/**
-  * See SBT docs:
+/** See SBT docs:
   * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
   *
   * Ensures dependencies between the ``test`` parts of the modules
   */
 def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
 
-/**
-  * See SBT docs:
+/** See SBT docs:
   * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
   *
   * or an example:

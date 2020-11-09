@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.effects
 import busymachines.pureharm.anomaly.{AnomalyBase, UnhandledCatastrophe}
 import busymachines.pureharm.effects._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 May 2019
   */
 object PureharmSyntax {
@@ -64,8 +62,7 @@ object PureharmSyntax {
   final class FOps[F[_], A] private[PureharmSyntax] (val fa: F[A]) extends AnyVal {
     import cats.implicits._
 
-    /**
-      * Wraps any non-anomaly as an [[UnhandledCatastrophe]], this usually signals
+    /** Wraps any non-anomaly as an [[UnhandledCatastrophe]], this usually signals
       * a bug, as pureharm encourages that any throwables be such anomalies.
       */
     def attemptAnomaly(implicit F: ApplicativeAttempt[F]): F[Either[AnomalyBase, A]] =
@@ -152,8 +149,7 @@ object PureharmSyntax {
   final class PureAttemptOps[A] private[PureharmSyntax] (val fa: Attempt[A]) extends AnyVal {
     import cats.implicits._
 
-    /**
-      * @return
+    /** @return
       *  The original failure, or value, if the given effect also
       *  fails that failure is ignored
       */
@@ -162,8 +158,7 @@ object PureharmSyntax {
       case Right(v)  => F.pure(v)
     }
 
-    /**
-      * !!! Warning !!! Throws exceptions in your face
+    /** !!! Warning !!! Throws exceptions in your face
       *
       * @return
       */
@@ -173,8 +168,7 @@ object PureharmSyntax {
     }
   }
 
-  /**
-    * This helps mimick operations on the ``Attempt`` using
+  /** This helps mimick operations on the ``Attempt`` using
     * the standard ``Either`` companion, thus making all
     * those ops also available.
     *
@@ -241,19 +235,15 @@ object PureharmSyntax {
     import cats.implicits._
     import cats.effect.Sync
 
-    /**
-      * We want to be able to run arbitrary effects of the same type
+    /** We want to be able to run arbitrary effects of the same type
       * if a Sync fails.
       */
-    def onErrorF(fu: F[_])(implicit F: Sync[F]): F[A] = fa.onError {
-      case _ => fu.void
-    }
+    def onErrorF(fu: F[_])(implicit F: Sync[F]): F[A] = fa.onError { case _ => fu.void }
   }
 
   //--------------------------- Future --------------------------
 
-  /**
-    * The scala standard library is extremely annoying because
+  /** The scala standard library is extremely annoying because
     * various effects don't have similar syntax for essentially
     * the same operation.
     */
@@ -267,8 +257,7 @@ object PureharmSyntax {
     //=========================================================================
     import scala.collection.compat._
 
-    /**
-      * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+    /** Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
       * for the combined effects.
       *
       * @see [[scala.concurrent.Future.traverse]]
@@ -276,8 +265,7 @@ object PureharmSyntax {
     @inline def traverse_[A, B](in: Seq[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.traverse_(in)(fn)
 
-    /**
-      * Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
+    /** Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
       * for the combined effects.
       *
       * @see [[scala.concurrent.Future.traverse]]
@@ -285,8 +273,7 @@ object PureharmSyntax {
     @inline def traverse_[A, B](in: Set[A])(fn: A => Future[B])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.traverse_(in)(fn)
 
-    /**
-      * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+    /** Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
       * for the combined effects.
       *
       * @see [[scala.concurrent.Future.sequence]]
@@ -294,8 +281,7 @@ object PureharmSyntax {
     @inline def sequence_[A](in: Seq[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.sequence_(in)
 
-    /**
-      * Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
+    /** Similar to [[scala.concurrent.Future.sequence]], but discards all content. i.e. used only
       * for the combined effects.
       *
       * @see [[scala.concurrent.Future.sequence]]
@@ -303,8 +289,7 @@ object PureharmSyntax {
     @inline def sequence_[A](in: Set[Future[A]])(implicit ec: ExecutionContext): Future[Unit] =
       FutureOps.sequence_(in)
 
-    /**
-      * Syntactically inspired from [[Future.traverse]], but it differs semantically
+    /** Syntactically inspired from [[Future.traverse]], but it differs semantically
       * insofar as this method does not attempt to run any futures in parallel. "M" stands
       * for "monadic", as opposed to "applicative" which is the foundation for the formal definition
       * of "traverse" (even though in Scala it is by accident-ish)
@@ -332,8 +317,7 @@ object PureharmSyntax {
       ec:                                                     ExecutionContext,
     ): Future[C[B]] = FutureOps.serialize(col)(fn)
 
-    /**
-      * @see [[serialize]]
+    /** @see [[serialize]]
       *
       * Similar to [[serialize]], but discards all content. i.e. used only
       * for the combined effects.
@@ -351,8 +335,7 @@ object PureharmSyntax {
 
   final class FutureReferenceDelayedOps[A] private[PureharmSyntax] (f: => Future[A]) {
 
-    /**
-      * Delay the side-effects of this [[Future]] into an [[F]] which can have implementations for
+    /** Delay the side-effects of this [[Future]] into an [[F]] which can have implementations for
       * [[Async]] and [[ContextShift]].
       *
       * This is the important operation when it comes to inter-op between
@@ -392,8 +375,7 @@ object PureharmSyntax {
 
   //--------------------------- IO --------------------------
 
-  /**
-    * Syntax to emulate what exists on the `Future` companion object. Useful when
+  /** Syntax to emulate what exists on the `Future` companion object. Useful when
     * migrating code from scala std Future to IO <3.
     */
   final class IOPseudoCompanionOps private[PureharmSyntax] (val companion: IO.type) extends AnyVal {
@@ -410,15 +392,13 @@ object PureharmSyntax {
     @inline def sequence_[F[_]: Traverse, A](fioa: F[IO[A]]): IO[Unit] =
       Traverse[F].sequence_(fioa)
 
-    /**
-      * Alias for [[traverse]]. On IO if you want concurrency you use parTraverse. This is not
+    /** Alias for [[traverse]]. On IO if you want concurrency you use parTraverse. This is not
       * Future, it actually makes sense... but its useful for transitioning.
       */
     @inline def serialize[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[F[B]] =
       Traverse[F].traverse(fs)(fn)
 
-    /**
-      * Alias for [[traverse_]]. On IO if you want concurrency you use parTraverse. This is not
+    /** Alias for [[traverse_]]. On IO if you want concurrency you use parTraverse. This is not
       * Future, it actually makes sense... but its useful for transitioning.
       */
     @inline def serialize_[F[_]: Traverse, A, B](fs: F[A])(fn: A => IO[B]): IO[Unit] =

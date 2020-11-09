@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -26,8 +25,7 @@ import busymachines.pureharm.dbslick.testkit._
 import busymachines.pureharm.testkit._
 import org.scalatest._
 
-/**
-  * To properly run this test, you probably want to start the
+/** To properly run this test, you probably want to start the
   * PostgreSQL server inside docker using the following script:
   * {{{
   *   ./db/docker-pureharm-postgresql-test.sh

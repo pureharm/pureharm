@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.dbslick
 import busymachines.pureharm.dbslick.ConnectionIO
 import slick.dbio.{DBIOAction, Effect, NoStream}
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 01 Aug 2019
   */
 object PureharmSlickConnectionIOOps {
@@ -35,8 +33,7 @@ object PureharmSlickConnectionIOOps {
 
   final class PureharmSlickWidenCIO[R, S <: NoStream, Eff <: Effect](val cio: DBIOAction[R, S, Eff]) extends AnyVal {
 
-    /**
-      * Necessary because type inference kinda fails when you have something like:
+    /** Necessary because type inference kinda fails when you have something like:
       * DBIOAction[R, NoStream, Effect.Read] and you want a ConnectionIO[R] to use all
       * fancy ops. You can easily assign such a type to something of type ConnectionIO[R],
       * but syntax OPS are not being added.

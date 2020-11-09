@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -24,8 +23,7 @@ import busymachines.pureharm.rest.temp.TempTapirEndpoints.{MyAuthStack, SomeAPI,
 import org.http4s.HttpRoutes
 import org.http4s.server.Router
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jul 2020
   */
 object MyAppEcology {
