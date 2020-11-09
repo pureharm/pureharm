@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import java.util.UUID
 import busymachines.pureharm.phantom.{SafeSpook, Spook}
 import sttp.tapir
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
 
@@ -101,8 +99,7 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
     sc: tapir.Validator[Underlying]
   ): tapir.Validator[PT] = sc.contramap(SafeSpook[E, Underlying, PT].despook)
 
-  /**
-    * Basically, it's union of the schema of AnomalyBase and AnomaliesBase,
+  /** Basically, it's union of the schema of AnomalyBase and AnomaliesBase,
     * + any non-anomaly throwable is being wrapped in an UnhandledAnomaly
     */
   implicit val tapirSchemaThrowableAnomaly: tapir.Schema[Throwable] = PureharmTapirSchemas.tapirSchemaAnomalies

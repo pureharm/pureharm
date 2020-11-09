@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.effects.pools.test
 
 import busymachines.pureharm.effects._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
 final private[test] class PHTestPools[F[_]](
@@ -36,8 +34,7 @@ private[test] object PHTestPools {
   import org.scalactic.source.Position
   import org.scalatest.Assertions.assert
 
-  /**
-    * @param expectContains
+  /** @param expectContains
     *   checks to see if the Thread Name executing this function
     *   contains the given string
     * @return

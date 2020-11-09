@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.internals.config.ConfigAggregateAnomalies
 import busymachines.pureharm.testkit.PureharmTest
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jun 2019
   */
 final class PureharmTestConfigTest extends PureharmTest {

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.dbslick
 
-/**
-  * For now we only expose one single configuration,
+/** For now we only expose one single configuration,
   * in future versions we'll provide more configurable,
   * and type-safe DSL, so you don't accidentally shoot yourself
   * in the foot by providing a possibly dead-locking config.

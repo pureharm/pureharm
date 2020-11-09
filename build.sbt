@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,12 +21,12 @@
 
 //see: https://github.com/liancheng/scalafix-organize-imports
 //and the project-specific config in .scalafix.conf
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.0"
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
 
 // format: off
 addCommandAlias("useScala212", s"++${CompilerSettings.scala2_12}")
 addCommandAlias("useScala213", s"++${CompilerSettings.scala2_13}")
-addCommandAlias("useDotty",    s"++${CompilerSettings.dottyVersion}")
+addCommandAlias("useScala30",  s"++${CompilerSettings.scala3_0}")
 
 addCommandAlias("recompile",      ";clean;compile;")
 addCommandAlias("build",          ";compile;Test/compile")
@@ -459,19 +458,19 @@ lazy val testkit = project
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollCompatVersion: String = "2.1.6"    //https://github.com/scala/scala-collection-compat/releases
+lazy val scalaCollCompatVersion: String = "2.2.0"    //https://github.com/scala/scala-collection-compat/releases
 lazy val shapelessVersion:       String = "2.4.0-M1" //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:            String = "2.2.0"    //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.2.0"    //https://github.com/typelevel/cats-effect/releases
 lazy val fs2Version:             String = "2.4.4"    //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val circeVersion:           String = "0.13.0"   //https://github.com/circe/circe/releases
-lazy val pureconfigVersion:      String = "0.13.0"   //https://github.com/pureconfig/pureconfig/releases
+lazy val pureconfigVersion:      String = "0.14.0"   //https://github.com/pureconfig/pureconfig/releases
 lazy val attoVersion:            String = "0.8.0"    //https://github.com/tpolecat/atto/releases
 lazy val slickVersion:           String = "3.3.3"    //https://github.com/slick/slick/releases
 lazy val postgresqlVersion:      String = "42.2.18"  //java — https://github.com/pgjdbc/pgjdbc/releases
 lazy val hikariCPVersion:        String = "3.4.5"    //java — https://github.com/brettwooldridge/HikariCP/releases
 lazy val doobieVersion:          String = "0.9.2"    //https://github.com/tpolecat/doobie/releases
-lazy val flywayVersion:          String = "7.0.3"    //java — https://github.com/flyway/flyway/releases
+lazy val flywayVersion:          String = "7.1.1"    //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:        String = "1.1.1"    //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:         String = "1.2.3"    //https://github.com/qos-ch/logback/releases
 lazy val http4sVersion:          String = "0.21.8"   //https://github.com/http4s/http4s/releases
@@ -577,16 +576,14 @@ lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion 
 //=============================================================================
 //================================  BUILD UTILS ===============================
 //=============================================================================
-/**
-  * See SBT docs:
+/** See SBT docs:
   * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
   *
   * Ensures dependencies between the ``test`` parts of the modules
   */
 def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test->test"
 
-/**
-  * See SBT docs:
+/** See SBT docs:
   * https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
   *
   * or an example:

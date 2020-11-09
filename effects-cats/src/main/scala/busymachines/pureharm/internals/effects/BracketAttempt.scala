@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.internals.effects
 
-/**
-  * Pseudo companion object for [[busymachines.pureharm.effects.BracketAttempt]]
+/** Pseudo companion object for [[busymachines.pureharm.effects.BracketAttempt]]
   * type, alias.
   *
   * The reason this is not implemented using the same pattern as in

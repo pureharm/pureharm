@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import scala.reflect.ClassTag
 import busymachines.pureharm.effects.implicits._
 import busymachines.pureharm.phantom._
 
-/**
-  * Unfortunately type inference rarely (if ever) works
+/** Unfortunately type inference rarely (if ever) works
   * with something fully generic like
   * {{{
   *     trait LowPriorityPhantomTypeInstances {

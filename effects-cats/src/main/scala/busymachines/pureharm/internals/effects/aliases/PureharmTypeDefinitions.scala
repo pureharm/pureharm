@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.effects.aliases
 import busymachines.pureharm.internals.effects
 import busymachines.pureharm.internals.effects.types
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
 trait PureharmTypeDefinitions {
@@ -32,8 +30,7 @@ trait PureharmTypeDefinitions {
 
   final type AttemptT[F[_], R] = types.AttemptT[F, R]
   final val AttemptT: cats.data.EitherT.type = types.AttemptT
-  /**
-    * Useful since we don't have partial kind application by default
+  /** Useful since we don't have partial kind application by default
     * Usage:
     * {{{
     *   def canFail[F[_]: ApplicativeAttempt, T](p1: T) : F[T] = ???
@@ -42,8 +39,7 @@ trait PureharmTypeDefinitions {
   final type ApplicativeAttempt[F[_]] = types.ApplicativeAttempt[F]
   final val ApplicativeAttempt: effects.ApplicativeAttempt.type = effects.ApplicativeAttempt
 
-  /**
-    * Useful since we don't have partial kind application by default
+  /** Useful since we don't have partial kind application by default
     * Usage:
     * {{{
     *   def canFail[F[_]: MonadAttempt, T](p1: T) : F[T] = ???
@@ -55,8 +51,7 @@ trait PureharmTypeDefinitions {
   final type BracketAttempt[F[_]] = types.BracketAttempt[F]
   final val BracketAttempt: effects.BracketAttempt.type = effects.BracketAttempt
 
-  /**
-    * Used to block on an F[A], and ensure that all recovery and
+  /** Used to block on an F[A], and ensure that all recovery and
     * shifting back is always done.
     *
     * For instance, always ensure that any F[A] that

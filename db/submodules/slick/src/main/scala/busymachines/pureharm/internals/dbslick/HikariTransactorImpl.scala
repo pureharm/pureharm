@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.dbslick._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 02 Apr 2019
   */
 final private[pureharm] class HikariTransactorImpl[F[_]] private (
@@ -64,8 +62,7 @@ final private[pureharm] class HikariTransactorImpl[F[_]] private (
       _ <- F.delay(s.close())
     } yield ()
 
-  /**
-    * The execution context used to run all blocking database input/output.
+  /** The execution context used to run all blocking database input/output.
     *
     * This is the execution context that slick manages internally. Do not
     * use this unless you know what you are doing.
@@ -91,8 +88,7 @@ private[pureharm] object HikariTransactorImpl {
   ): Resource[F, Transactor[F]] =
     Resource.make(unsafeCreate[F](dbProfile)(url, username, password, asyncConfig))(_.shutdown)
 
-  /**
-    * Prefer using [[resource]] unless you know what you are doing.
+  /** Prefer using [[resource]] unless you know what you are doing.
     */
   def unsafeCreate[F[_]: Concurrent: ContextShift](
     slickProfile: JDBCProfileAPI
@@ -105,7 +101,7 @@ private[pureharm] object HikariTransactorImpl {
     val F = Async[F]
 
     for {
-      hikari     <- F.delay {
+      hikari <- F.delay {
         val hikariConfig = new HikariConfig()
         hikariConfig.setJdbcUrl(url)
         hikariConfig.setUsername(username)

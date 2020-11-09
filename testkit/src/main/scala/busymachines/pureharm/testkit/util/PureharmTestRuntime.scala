@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.testkit.util
 
 import busymachines.pureharm.effects._
 
-/**
-  * Usually overriding the "executionContext" should be enough
+/** Usually overriding the "executionContext" should be enough
   */
 trait PureharmTestRuntime {
 

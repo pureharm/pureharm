@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.db._
 import busymachines.pureharm.db.testdata._
 import busymachines.pureharm.dbdoobie._
 
-/**
-  * Use this also as a rough outline of how you ought to structure
+/** Use this also as a rough outline of how you ought to structure
   * your code. Create a trait that extends the
   * [[Repo[F, MyCaseClass, MyPrimaryKeyType]]]
   * add whatever new methods/override the default ones you need here.

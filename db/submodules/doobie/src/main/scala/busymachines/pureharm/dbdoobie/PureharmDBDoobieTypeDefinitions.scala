@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.dbdoobie
 
 import busymachines.pureharm.internals
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 24 Sep 2019
   */
 trait PureharmDBDoobieTypeDefinitions
@@ -29,16 +27,14 @@ trait PureharmDBDoobieTypeDefinitions
 
   val ConnectionIO: doobie.implicits.AsyncConnectionIO.type = doobie.implicits.AsyncConnectionIO
 
-  /**
-    * Denotes the EC on which connections are managed,
+  /** Denotes the EC on which connections are managed,
     * backed up by a fixed thread pool with the number of threads
     * equal to the number of connections
     */
   val DoobieConnectionEC: internals.dbdoobie.DoobieConnectionEC.type = internals.dbdoobie.DoobieConnectionEC
   type DoobieConnectionEC = internals.dbdoobie.DoobieConnectionEC
 
-  /**
-    * Denotes the EC on which transactions(dbops) are managed,
+  /** Denotes the EC on which transactions(dbops) are managed,
     * backed up by a cached thread pool because blocking
     * i/o is executed on this one
     */

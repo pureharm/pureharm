@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.db.PureharmDBCoreTypeDefinitions
 import busymachines.pureharm.dbslick._
 import busymachines.pureharm.internals.dbslick.{psql, _}
 
-/**
-  * If by any chance you are not using Postgres, then
+/** If by any chance you are not using Postgres, then
   * you should be using [[PureharmSlickDBProfile]] as a
   * starting point and mixing in whatever you have specific
   * for your database.
@@ -34,8 +32,7 @@ import busymachines.pureharm.internals.dbslick.{psql, _}
 trait PureharmSlickPostgresProfile
   extends slick.jdbc.PostgresProfile with PureharmDBCoreTypeDefinitions with PureharmDBSlickTypeDefinitions { self =>
 
-  /**
-    * We use this trick to propagate the profile from the top level object to the
+  /** We use this trick to propagate the profile from the top level object to the
     * definition of the "api" object. Otherwise we can't possibly reuse stuff that
     * should make a living there.
     *

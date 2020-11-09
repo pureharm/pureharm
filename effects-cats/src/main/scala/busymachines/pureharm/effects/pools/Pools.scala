@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,16 +19,14 @@ package busymachines.pureharm.effects.pools
 import busymachines.pureharm.internals.effects.pools.{PoolCached, PoolFixed, Util}
 import cats.effect._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
 object Pools {
 
   def availableCPUs[F[_]: Sync]: Resource[F, Int] = Resource.liftF(Sync[F].delay(Util.unsafeAvailableCPUs))
 
-  /**
-    * Cached pools should be used for blocking i/o. Without very
+  /** Cached pools should be used for blocking i/o. Without very
     * stringent back-pressure and 100% certainty that you never
     * overload with blocking i/o you will almost certainly
     * freeze your application into oblivion by doing blocking i/o
@@ -51,8 +48,7 @@ object Pools {
   ): Resource[F, ExecutionContextCT] =
     PoolCached.cached(threadNamePrefix, daemons)
 
-  /**
-    * The difference between this one and [[ExecutionContextMainFT]] is that
+  /** The difference between this one and [[ExecutionContextMainFT]] is that
     * this one allows to us to have a fixed thread pool with 1 thread.
     *
     * N.B.: places where it is advisable to have a fixed thread pool:
@@ -87,8 +83,7 @@ object Pools {
   ): Resource[F, ExecutionContextFT] =
     PoolFixed.fixed(threadNamePrefix, maxThreads, daemons)
 
-  /**
-    * A simple thread pool with one single thread. Be careful how you use it.
+  /** A simple thread pool with one single thread. Be careful how you use it.
     */
   def singleThreaded[F[_]: Sync](
     threadNamePrefix: String = "single-thread",

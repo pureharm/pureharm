@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.internals.rest
 
 import sttp.tapir.generic.internal.SchemaMagnoliaDerivation
 
-/**
-  * Mirrors: [[sttp.tapir.TapirAliases]] but it realiases Codec to TapirCodec
+/** Mirrors: [[sttp.tapir.TapirAliases]] but it realiases Codec to TapirCodec
   * because that conflicts with Circe's Codec, and that's way too annoying.
   */
 trait PureharmTapirAliases {
@@ -28,8 +26,7 @@ trait PureharmTapirAliases {
   type SimpleEndpoint[I, O]        = sttp.tapir.Endpoint[I, Throwable, O, Nothing]
   type StreamingEndpoint[I, O, +S] = sttp.tapir.Endpoint[I, Throwable, O, S]
 
-  /**
-    * This should serve as your basis for most endpoints in your app.
+  /** This should serve as your basis for most endpoints in your app.
     * It provides grade A interpretation of all Anomaly types, plus
     * the good old mapping to status codes. You can easily glance the
     * mapping from the implementation. But here it is for easy glancing:

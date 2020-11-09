@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import scala.annotation.implicitNotFound
 
 import busymachines.pureharm.internals.identifiable.IdentifiableLowPriorityImplicits
 
-/**
-  * @tparam T
+/** @tparam T
   *   the type
   * @tparam ID
   *   the value by which our value of type ``T`` can be uniquely identified

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -40,26 +39,24 @@ final class SlickCompositeTest extends DBTest[Transactor[IO]] {
 
   private val data = PHRowRepoTest.pureharmRows
 
-  test("insert - row1 + ext1") {
-    case (row, ext) =>
-      for {
-        _ <- row.insert(data.row1)
-        _ <- ext.insert(data.ext1)
-      } yield succeed
+  test("insert - row1 + ext1") { case (row, ext) =>
+    for {
+      _ <- row.insert(data.row1)
+      _ <- ext.insert(data.ext1)
+    } yield succeed
   }
 
-  test("insert ext1 -> foreign key does not exist") {
-    case (_, ext) =>
-      for {
-        att <- ext.insert(data.extNoFPK).attempt
-        failure = interceptFailure[DBForeignKeyConstraintViolationAnomaly](att)
-      } yield {
-        assert(failure.table == "pureharm_external_rows", "table")
-        assert(failure.constraint == "pureharm_external_rows_row_id_fkey", "constraint")
-        assert(failure.foreignTable == "pureharm_rows", "foreign_table")
-        assert(failure.value == "120-3921-039213", "value")
-        assert(failure.column == "row_id", "column")
-      }
+  test("insert ext1 -> foreign key does not exist") { case (_, ext) =>
+    for {
+      att <- ext.insert(data.extNoFPK).attempt
+      failure = interceptFailure[DBForeignKeyConstraintViolationAnomaly](att)
+    } yield {
+      assert(failure.table == "pureharm_external_rows", "table")
+      assert(failure.constraint == "pureharm_external_rows_row_id_fkey", "constraint")
+      assert(failure.foreignTable == "pureharm_rows", "foreign_table")
+      assert(failure.value == "120-3921-039213", "value")
+      assert(failure.column == "row_id", "column")
+    }
   }
 }
 

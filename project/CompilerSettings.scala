@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,9 +19,9 @@ import Keys._
 import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 
 object CompilerSettings {
-  lazy val scala2_12:        String = "2.12.12"    //https://github.com/scala/scala/releases
-  lazy val scala2_13:        String = "2.13.3"     //https://github.com/scala/scala/releases
-  lazy val dottyVersion:     String = "0.27.0-RC1" //https://github.com/lampepfl/dotty/releases
+  lazy val scala2_12:        String = "2.12.12"  //https://github.com/scala/scala/releases
+  lazy val scala2_13:        String = "2.13.3"   //https://github.com/scala/scala/releases
+  lazy val scala3_0:         String = "3.0.0-M1" //https://github.com/lampepfl/dotty/releases
   lazy val mainScalaVersion: String = scala2_13
 
   //https://github.com/typelevel/kind-projector/releases
@@ -41,7 +40,7 @@ object CompilerSettings {
       organization in ThisBuild := organizationName,
       homepage                  := Some(url(pureharmHomepage)),
       scalaVersion              := mainScalaVersion,
-      crossScalaVersions        := List(scala2_12, scala2_13, dottyVersion),
+      crossScalaVersions        := List(scala2_12, scala2_13, scala3_0),
       libraryDependencies ++= (if (isDotty.value) {
                                  Nil
                                }
@@ -55,13 +54,12 @@ object CompilerSettings {
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => scala2_12Flags ++ betterForPluginCompilerFlags
         case Some((2, 13)) => scala2_13Flags ++ betterForPluginCompilerFlags
-        case _             => dottyFlags
+        case _             => scala3_0Flags
       }),
       javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
     )
 
-  /**
-    * tpolecat's glorious compile flag list:
+  /** tpolecat's glorious compile flag list:
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
   def scala2_12Flags: Seq[String] = Seq(
@@ -111,8 +109,7 @@ object CompilerSettings {
     "-Ypartial-unification",            // Enable partial unification in type constructor inference
   )
 
-  /**
-    * tpolecat's glorious compile flag list adapted for scala 2.13 (fewer flags):
+  /** tpolecat's glorious compile flag list adapted for scala 2.13 (fewer flags):
     * https://tpolecat.github.io/2017/04/25/scalac-flags.html
     */
   def scala2_13Flags: Seq[String] = Seq(
@@ -154,7 +151,7 @@ object CompilerSettings {
     "-Wconf:any:warning-verbose",    // Gives extra information about warning
   )
 
-  def dottyFlags: Seq[String] = Seq(
+  def scala3_0Flags: Seq[String] = Seq(
     "-language:Scala2Compat",
     "-language:implicitConversions", // Allow definition of implicit functions called views
     "-deprecation",                  // Emit warning and location for usages of deprecated APIs.
@@ -164,8 +161,7 @@ object CompilerSettings {
     "-unchecked",                    // Enable additional warnings where generated code depends on assumptions.
   )
 
-  /**
-    * These are flags specific to the "better-monadic-for" plugin:
+  /** These are flags specific to the "better-monadic-for" plugin:
     * https://github.com/oleg-py/better-monadic-for
     */
   def betterForPluginCompilerFlags: Seq[String] = Seq(

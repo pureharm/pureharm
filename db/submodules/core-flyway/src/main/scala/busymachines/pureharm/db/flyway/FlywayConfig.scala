@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.db.SchemaName
 import busymachines.pureharm.config._
 import busymachines.pureharm.config.implicits._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
   * --
   * Currently does not support all possible flyway configurations, any new supported ones will be
@@ -108,8 +106,7 @@ object FlywayConfig extends ConfigLoader[FlywayConfig] with internals.FlywayConf
   implicit override val configReader: ConfigReader[FlywayConfig] =
     alternateRepresentationReader.orElse(semiauto.deriveReader[FlywayConfig])
 
-  /**
-    * This allows us to specify a single string, instead of a list of strings,
+  /** This allows us to specify a single string, instead of a list of strings,
     * if that is the case that we want. This is actually quite an important feature,
     * because, for instance, in amazon ECS you can't really inject a list into a config
     * file via an environment variable, you inject a string representing the array,

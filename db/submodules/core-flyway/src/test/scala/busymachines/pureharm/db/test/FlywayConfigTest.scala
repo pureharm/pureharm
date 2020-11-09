@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.db.flyway._
 import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 30 Jul 2019
   */
 final class FlywayConfigTest extends PureharmTest {

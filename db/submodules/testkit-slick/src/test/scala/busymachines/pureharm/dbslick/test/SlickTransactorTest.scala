@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -25,14 +24,12 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.testkit._
 import org.scalatest._
 
-/**
-  * @author Daniel Incicau, daniel.incicau@busymachines.com
+/** @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 27/01/2020
   */
 final class SlickTransactorTest extends PureharmTestWithResource {
 
-  /**
-    * Instead of the "before and after shit" simply init, and close
+  /** Instead of the "before and after shit" simply init, and close
     * everything in this Resource...
     */
   override def resource(meta: MetaData): Resource[IO, Transactor[IO]] =

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.internals.rest
 import busymachines.pureharm.anomaly._
 import io.circe.{CursorOp, DecodingFailure}
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jul 2020
   */
 
@@ -45,7 +43,7 @@ final private[pureharm] case class CirceDecodingAnomaly(
             countArrayFailureIndex(failure.history).map(idx => s"failed to decode array element index [$idx]").toList),
         ) ++ super.parameters
 
-      case _                                                                                                     =>
+      case _ =>
         Anomaly.Parameters(
           "expectedType" -> failure.message,
           "path"         -> (reverseHistory.map(lensOpToString) ++
@@ -55,8 +53,7 @@ final private[pureharm] case class CirceDecodingAnomaly(
 
   }
 
-  /**
-    * For instance, for a list of 4 elements, we expect to see such a history:
+  /** For instance, for a list of 4 elements, we expect to see such a history:
     * {{{
     *   List(MoveRight, MoveRight, MoveRight, DownArray, DownField(f4))
     * }}}
@@ -85,8 +82,7 @@ final private[pureharm] case class CirceDecodingAnomaly(
 }
 
 object CirceDecodingAnomaly {
-  /**
-    * When a field is missing, circe usually answers with this message:
+  /** When a field is missing, circe usually answers with this message:
     * DecodingFailure(Attempt to decode value on failed cursor, List(DownField(fl)))
     *
     * So we are kinda left to interpret strings, which sucks and is brittle...

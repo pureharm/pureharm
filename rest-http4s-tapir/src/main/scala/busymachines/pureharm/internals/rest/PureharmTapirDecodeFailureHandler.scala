@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import busymachines.pureharm.effects.implicits._
 import sttp.model.StatusCode
 import sttp.tapir.server.DecodeFailureHandling._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 14 Jul 2020
   */
 object PureharmTapirDecodeFailureHandler {
@@ -34,8 +32,7 @@ object PureharmTapirDecodeFailureHandler {
 
   implicit val sc: Schema[Throwable] = PureharmTapirSchemas.tapirSchemaAnomalies
 
-  /**
-    * Used for reporting error messages when
+  /** Used for reporting error messages when
     *
     * Note for devs:
     * Use [[sttp.tapir.server.ServerDefaults.decodeFailureHandler]] as a reference
@@ -113,8 +110,7 @@ object PureharmTapirDecodeFailureHandler {
     }
   }
 
-  /**
-    * Tapir says "invalid" even when stuff is missing, which is annoying
+  /** Tapir says "invalid" even when stuff is missing, which is annoying
     * @see
     * sttp.tapir.server.ServerDefaults.FailureMessages#failureSourceMessage
     */
@@ -124,7 +120,7 @@ object PureharmTapirDecodeFailureHandler {
 
   def anomalyResponse(code: StatusCode, ctx: DecodeFailureContext): DecodeFailureHandling = {
     val anomaly: Throwable = ctx.failure match {
-      case DecodeResult.Missing                    =>
+      case DecodeResult.Missing                =>
         ctx.input match {
           case qp: EndpointInput.Query[_] =>
             MissingQueryParam(qp.name, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
@@ -135,9 +131,9 @@ object PureharmTapirDecodeFailureHandler {
           case _:  EndpointInput[_]       =>
             MissingRequestPartGeneric(SeeDiagnostic, tapirResponse(ctx).replace(TapirDefaultMessage, Missing))
         }
-      case DecodeResult.Multiple(vs)               =>
+      case DecodeResult.Multiple(vs)           =>
         InvalidMultiple(tapirResponse(ctx), vs.map(_.toString))
-      case DecodeResult.Error(original, error)     =>
+      case DecodeResult.Error(original, error) =>
         error match {
           case e: io.circe.DecodingFailure => CirceDecodingAnomaly(e)
           case e: io.circe.ParsingFailure  => CirceParsingAnomaly(e)
@@ -170,14 +166,14 @@ object PureharmTapirDecodeFailureHandler {
 
   private[internals] def __debug(failure: DecodeResult.Failure): Unit = {
     failure match {
-      case DecodeResult.Missing                    =>
+      case DecodeResult.Missing =>
         println("""
                   |
                   |DecodeResult.Missing    
                   |
                   |""".stripMargin)
 
-      case DecodeResult.Multiple(vs)               =>
+      case DecodeResult.Multiple(vs)           =>
         println(s"""
                    |
                    |DecodeResult.Multiple(
@@ -185,7 +181,7 @@ object PureharmTapirDecodeFailureHandler {
                    |)
                    |
                    |""".stripMargin)
-      case DecodeResult.Error(original, error)     =>
+      case DecodeResult.Error(original, error) =>
         println(s"""
                    |
                    |case DecodeResult.Error(

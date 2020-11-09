@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 import io.circe._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 object JsonDecoding {
@@ -49,8 +47,7 @@ final case class JsonDecodingAnomaly(msg: String) extends InvalidInputAnomaly(ms
   override val id: AnomalyID = JsonAnomalyIDs.JsonDecodingAnomalyID
 }
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 object JsonParsing {

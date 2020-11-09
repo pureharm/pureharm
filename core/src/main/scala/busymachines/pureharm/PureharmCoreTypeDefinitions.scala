@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm
 
-/**
-  * Convenience trait to mix in into your own domain specific
+/** Convenience trait to mix in into your own domain specific
   * modules for easy single-import experiences
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import busymachines.pureharm.dbdoobie._
 import busymachines.pureharm.effects._
 import doobie.hikari.HikariTransactor
 
-/**
-  * There is little point in using something other than a
+/** There is little point in using something other than a
   * Hikari Transactor for this...
   *
   * @author Lorand Szakacs, https://github.com/lorandszakacs

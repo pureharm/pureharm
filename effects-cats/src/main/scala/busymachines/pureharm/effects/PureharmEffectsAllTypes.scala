@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,8 +19,7 @@ package busymachines.pureharm.effects
 import busymachines.pureharm.effects.pools.aliases.PureharmPoolAliases
 import busymachines.pureharm.internals.effects.aliases
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
 trait PureharmEffectsAllTypes

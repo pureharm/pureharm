@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -19,8 +18,7 @@ package busymachines.pureharm.internals.effects
 
 import busymachines.pureharm.effects._
 
-/**
-  * Used to block on an F[A], and ensure that all recovery and
+/** Used to block on an F[A], and ensure that all recovery and
   * shifting back is always done.
   *
   * For instance, always ensure that any F[A] that
@@ -57,22 +55,19 @@ object BlockingShifter {
 
   def apply[F[_]](implicit summon: BlockingShifter[F]): BlockingShifter[F] = summon
 
-  /**
-    * See [[Pools.cached]] on where to get a proper thread pool
+  /** See [[Pools.cached]] on where to get a proper thread pool
     */
   def fromExecutionContext[F[_]: ContextShift](ec: ExecutionContextCT): BlockingShifter[F] =
     new BlockingShifterImpl(ContextShift[F], Blocker.liftExecutionContext(ec))
 
-  /**
-    * Unsafe because you should really instantiate this using a cached thread pool.
+  /** Unsafe because you should really instantiate this using a cached thread pool.
     *
     * Use this unless you really know what you are doing. Otherwise prefer [[fromExecutionContext]]
     */
   def unsafeFromExecutionContext[F[_]: ContextShift](ec: ExecutionContext): BlockingShifter[F] =
     new BlockingShifterImpl(ContextShift[F], Blocker.liftExecutionContext(ec))
 
-  /**
-    * Prefer [[fromExecutionContext]], unless you know for certain that this
+  /** Prefer [[fromExecutionContext]], unless you know for certain that this
     * blocker was instantiated with the proper underlying execution context.
     */
   def unsafeFromBlocker[F[_]: ContextShift](blocker: Blocker): BlockingShifter[F] =

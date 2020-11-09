@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,14 +16,12 @@
   */
 package busymachines.pureharm.json
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 11 Jun 2019
   */
 trait DefaultTypeDiscriminatorConfig {
 
-  /**
-    * This exists to give us the default behavior of deserializing sealed trait
+  /** This exists to give us the default behavior of deserializing sealed trait
     * hierarchies by adding and "_type" field to the json, instead of creating
     * a property for each variant.
     *

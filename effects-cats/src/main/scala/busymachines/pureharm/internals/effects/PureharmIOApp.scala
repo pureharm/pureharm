@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -20,14 +19,12 @@ package busymachines.pureharm.internals.effects
 import cats.Later
 import cats.effect._
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 15 Jun 2019
   */
 trait PureharmIOApp extends IOApp {
 
-  /**
-    * We want to ensure that this is evaluated only once, otherwise we introduce
+  /** We want to ensure that this is evaluated only once, otherwise we introduce
     * too many possibilities of shooting oneself in the foot.
     *
     * {{{
@@ -55,8 +52,7 @@ trait PureharmIOApp extends IOApp {
     */
   final override protected def contextShift: ContextShift[IO] = ioRuntime.value._1
 
-  /**
-    * Removing implicitness brought in by [[IOApp]], to make it clearer
+  /** Removing implicitness brought in by [[IOApp]], to make it clearer
     * what's going on.
     */
   final override protected def timer: Timer[IO] = ioRuntime.value._2

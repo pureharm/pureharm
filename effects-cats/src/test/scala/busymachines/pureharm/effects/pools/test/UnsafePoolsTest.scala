@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -22,8 +21,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
 
-/**
-  * We usually run two things on a given thread pool,
+/** We usually run two things on a given thread pool,
   * so that one can manually inspect thread names in the console
   * to glimpse some behavior
   *

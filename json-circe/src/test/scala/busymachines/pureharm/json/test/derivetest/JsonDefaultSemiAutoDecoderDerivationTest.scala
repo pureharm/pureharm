@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.json.test._
 
-/**
-  * Here we test [[busymachines.pureharm.json.Decoder]] derivation
+/** Here we test [[busymachines.pureharm.json.Decoder]] derivation
   *
   * See the [[Melon]] hierarchy
   *

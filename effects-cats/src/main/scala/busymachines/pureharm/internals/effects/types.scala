@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2017-2019 BusyMachines
+/** Copyright (c) 2017-2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -17,8 +16,7 @@
   */
 package busymachines.pureharm.internals.effects
 
-/**
-  * @author Lorand Szakacs, https://github.com/lorandszakacs
+/** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jun 2019
   */
 object types {
@@ -28,8 +26,7 @@ object types {
 
   type AttemptT[F[_], R] = cats.data.EitherT[F, Throwable, R]
   val AttemptT: cats.data.EitherT.type = cats.data.EitherT
-  /**
-    * Useful since we don't have partial kind application by default
+  /** Useful since we don't have partial kind application by default
     * Usage:
     * {{{
     *   def canFail[F[_]: ApplicativeAttempt, T](p1: T) : F[T] = ???
@@ -37,8 +34,7 @@ object types {
     */
   type ApplicativeAttempt[F[_]] = cats.ApplicativeError[F, Throwable]
 
-  /**
-    * Useful since we don't have partial kind application by default
+  /** Useful since we don't have partial kind application by default
     * Usage:
     * {{{
     *   def canFail[F[_]: MonadAttempt, T](p1: T) : F[T] = ???
