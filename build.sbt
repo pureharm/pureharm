@@ -459,7 +459,7 @@ lazy val testkit = project
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollCompatVersion: String = "2.1.6"    //https://github.com/scala/scala-collection-compat/releases
+lazy val scalaCollCompatVersion: String = "2.2.0"    //https://github.com/scala/scala-collection-compat/releases
 lazy val shapelessVersion:       String = "2.4.0-M1" //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:            String = "2.2.0"    //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.2.0"    //https://github.com/typelevel/cats-effect/releases
