@@ -21,7 +21,7 @@
   *
   * https://github.com/xerial/sbt-sonatype/releases
   */
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.4") //https://github.com/xerial/sbt-sonatype/releases
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.5") //https://github.com/xerial/sbt-sonatype/releases
 
 /** Signs all the jars, used in conjunction with sbt-sonatype.
   *
