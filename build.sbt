@@ -19,6 +19,11 @@
 //#############################################################################
 //#############################################################################
 
+lazy val mainVersion = "0.0.7-SNAPSHOT"
+lazy val jsonVersion = "0.0.7-SNAPSHOT"
+lazy val dbVersion   = "0.0.7-SNAPSHOT"
+lazy val restVersion = "0.0.7-SNAPSHOT"
+
 //see: https://github.com/liancheng/scalafix-organize-imports
 //and the project-specific config in .scalafix.conf
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
@@ -136,11 +141,10 @@ lazy val `effects-cats` = mainModule("effects-cats")
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val testkit = mainModule("testkit")
+lazy val `testkit` = mainModule("testkit")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-testkit",
     libraryDependencies ++= Seq(
       scalaTest,
       log4cats,
@@ -157,7 +161,7 @@ lazy val testkit = mainModule("testkit")
 //++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `json-circe` = mainModule("json-circe")
+lazy val `json-circe` = jsonModule("circe")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -589,12 +593,16 @@ def asTestingLibrary(p: Project): ClasspathDependency = p % "test -> compile"
 
 def mainModule(mod: String): Project =
   Project(id = s"pureharm-$mod", base = file(s"main/$mod"))
-    .settings(name := s"pureharm-$mod")
+    .settings(name := s"pureharm-$mod", version := mainVersion)
+
+def jsonModule(mod: String): Project =
+  Project(id = s"pureharm-json-$mod", base = file(s"json/$mod"))
+    .settings(name := s"pureharm-json-$mod", version := jsonVersion)
 
 def dbModule(mod:   String): Project =
   Project(id = s"pureharm-db-$mod", base = file(s"db/$mod"))
-    .settings(name := s"pureharm-db-$mod")
+    .settings(name := s"pureharm-db-$mod", version := dbVersion)
 
 def restModule(mod: String): Project =
   Project(id = s"pureharm-rest-$mod", base = file(s"rest/$mod"))
-    .settings(name := s"pureharm-rest-$mod")
+    .settings(name := s"pureharm-rest-$mod", version := restVersion)
