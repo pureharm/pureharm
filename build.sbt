@@ -24,7 +24,6 @@
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
 
 // format: off
-addCommandAlias("useScala212", s"++${CompilerSettings.scala2_12}")
 addCommandAlias("useScala213", s"++${CompilerSettings.scala2_13}")
 addCommandAlias("useScala30",  s"++${CompilerSettings.scala3_0}")
 
@@ -37,9 +36,9 @@ addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
 addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do212Release",       ";useScala212;cleanPublishSigned;sonatypeBundleRelease")
 addCommandAlias("do213Release",       ";useScala213;cleanPublishSigned;sonatypeBundleRelease")
-addCommandAlias("doRelease",          ";do212Release;do213Release")
+addCommandAlias("do30Release",        ";useScala30;cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("doRelease",          ";do213Release;do30Release")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 // format: on
@@ -458,7 +457,7 @@ lazy val testkit = project
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollCompatVersion: String = "2.2.0"    //https://github.com/scala/scala-collection-compat/releases
+lazy val scalaCollCompatVersion: String = "2.3.1"    //https://github.com/scala/scala-collection-compat/releases
 lazy val shapelessVersion:       String = "2.4.0-M1" //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:            String = "2.2.0"    //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion:      String = "2.2.0"    //https://github.com/typelevel/cats-effect/releases

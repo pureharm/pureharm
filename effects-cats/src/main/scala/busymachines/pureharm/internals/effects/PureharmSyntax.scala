@@ -19,6 +19,8 @@ package busymachines.pureharm.internals.effects
 import busymachines.pureharm.anomaly.{AnomalyBase, UnhandledCatastrophe}
 import busymachines.pureharm.effects._
 
+import scala.collection.BuildFrom
+
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 May 2019
   */
@@ -255,7 +257,6 @@ object PureharmSyntax {
     //=========================================================================
     //=============================== Traversals ==============================
     //=========================================================================
-    import scala.collection.compat._
 
     /** Similar to [[scala.concurrent.Future.traverse]], but discards all content. i.e. used only
       * for the combined effects.
