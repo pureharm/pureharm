@@ -30,8 +30,8 @@ lazy val restVersion   = "0.0.7-SNAPSHOT"
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
 
 // format: off
-addCommandAlias("useScala213", s"++${CompilerSettings.scala2_13}")
-addCommandAlias("useScala30",  s"++${CompilerSettings.scala3_0}")
+addCommandAlias("ph-useScala213", s"++${CompilerSettings.scala2_13}")
+addCommandAlias("ph-useScala30",  s"++${CompilerSettings.scala3_0}")
 
 addCommandAlias("recompile",      ";clean;compile;")
 addCommandAlias("build",          ";compile;Test/compile")
@@ -75,13 +75,29 @@ lazy val restModules = List(
   "rest-http4s-tapir-testkit",
 )
 
-addCommandAlias("ph-publish-main-local", s"${mainModules.map(s => localPublishAlias(s)).mkString(";")}")
+addCommandAlias("ph-publish-main-local", s"${sequence(mainModules, localPublishAlias)}")
+addCommandAlias("ph-publish-config-local", s"${sequence(configModules, localPublishAlias)}")
+addCommandAlias("ph-publish-json-local", s"${sequence(jsonModules, localPublishAlias)}")
+addCommandAlias("ph-publish-db-local", s"${sequence(dbModules, localPublishAlias)}")
+addCommandAlias("ph-publish-rest-local", s"${sequence(restModules, localPublishAlias)}")
+
+addCommandAlias("ph-publish-main", s"${sequence(mainModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-config", s"${sequence(configModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-json", s"${sequence(jsonModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-db", s"${sequence(dbModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-rest", s"${sequence(restModules, publishAlias)};sonatypeBundleRelease")
+
+addCommandAlias("do213MainRelease", ";ph-useScala213;ph-publish-main")
+addCommandAlias("do30MainRelease", ";ph-useScala30;ph-publish-main")
+addCommandAlias("doMainRelease", ";do213MainRelease;do30MainRelease")
+addCommandAlias("doMainLocal", ";ph-useScala213;ph-publish-main-local;ph-useScala30;ph-publish-main-local")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 
 def rebuildAlias(mod: String): String = s"pureharm-$mod/clean;pureharm-$mod/compile;pureharm-$mod/Test/compile"
 def localPublishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishLocal"
 def publishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishSigned;"
+def sequence(l: List[String], f: String => String): String = l.map(f).mkString(";")
 // format: on
 //*****************************************************************************
 //*****************************************************************************
@@ -133,10 +149,13 @@ lazy val `core-phantom` = mainModule("core-phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
+    libraryDependencies += (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) => shapeless2
+      case _             => shapeless3
+    }),
     libraryDependencies ++= Seq(
-      shapeless,
-      scalaTest % Test,
-    )
+      scalaTest % Test
+    ),
   )
 
 //#############################################################################
@@ -145,10 +164,13 @@ lazy val `core-identifiable` = mainModule("core-identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
+    libraryDependencies += (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) => shapeless2
+      case _             => shapeless3
+    }),
     libraryDependencies ++= Seq(
-      shapeless,
-      scalaTest % Test,
-    )
+      scalaTest % Test
+    ),
   )
   .dependsOn(
     `core-phantom`
@@ -223,8 +245,7 @@ lazy val `config` = configModule
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      shapeless,
-      pureConfig,
+      pureConfig
     )
   )
   .dependsOn(
@@ -495,7 +516,8 @@ lazy val `rest-http4s-tapir-testkit` = restModule("http4s-tapir-testkit")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val shapelessVersion:  String = "2.4.0-M1"  //https://github.com/milessabin/shapeless/releases
+lazy val shapeless2Version: String = "2.4.0-M1"  //https://github.com/milessabin/shapeless/releases
+lazy val shapeless3Version: String = "3.0.0-M1"  //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:       String = "2.2.0"     //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion: String = "2.2.0"     //https://github.com/typelevel/cats-effect/releases
 lazy val fs2Version:        String = "2.4.4"     //https://github.com/functional-streams-for-scala/fs2/releases
@@ -529,7 +551,8 @@ lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % c
 lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % circeVersion withSources ()
 
 //https://github.com/milessabin/shapeless/releases
-lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
+lazy val shapeless2: ModuleID = "com.chuusai" %% "shapeless" % shapeless2Version withSources ()
+lazy val shapeless3: ModuleID = "com.chuusai" %% "shapeless" % shapeless3Version withSources ()
 
 //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val fs2: ModuleID = "co.fs2" %% "fs2-core" % fs2Version withSources ()
