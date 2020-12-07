@@ -19,7 +19,7 @@ import Keys._
 import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 
 object CompilerSettings {
-  lazy val scala2_13:        String = "2.13.3"   //https://github.com/scala/scala/releases
+  lazy val scala2_13:        String = "2.13.4"   //https://github.com/scala/scala/releases
   lazy val scala3_0:         String = "3.0.0-M1" //https://github.com/lampepfl/dotty/releases
   lazy val mainScalaVersion: String = scala2_13
 
