@@ -24,7 +24,7 @@ object CompilerSettings {
   lazy val mainScalaVersion: String = scala2_13
 
   //https://github.com/typelevel/kind-projector/releases
-  lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % "0.11.0"
+  lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % "0.11.2"
   //https://github.com/oleg-py/better-monadic-for/releases
   lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % "0.3.1"
 
