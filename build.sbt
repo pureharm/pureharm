@@ -19,10 +19,11 @@
 //#############################################################################
 //#############################################################################
 
-lazy val mainVersion = "0.0.7-SNAPSHOT"
-lazy val jsonVersion = "0.0.7-SNAPSHOT"
-lazy val dbVersion   = "0.0.7-SNAPSHOT"
-lazy val restVersion = "0.0.7-SNAPSHOT"
+lazy val mainVersion   = "0.0.7-SNAPSHOT"
+lazy val configVersion = "0.0.7-SNAPSHOT"
+lazy val jsonVersion   = "0.0.7-SNAPSHOT"
+lazy val dbVersion     = "0.0.7-SNAPSHOT"
+lazy val restVersion   = "0.0.7-SNAPSHOT"
 
 //see: https://github.com/liancheng/scalafix-organize-imports
 //and the project-specific config in .scalafix.conf
@@ -38,14 +39,49 @@ addCommandAlias("rebuild",        ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
-addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
 addCommandAlias("do213Release",       ";useScala213;cleanPublishSigned;sonatypeBundleRelease")
 addCommandAlias("do30Release",        ";useScala30;cleanPublishSigned;sonatypeBundleRelease")
 addCommandAlias("doRelease",          ";do213Release;do30Release")
 
+lazy val mainModules = List(
+  "core-anomaly",
+  "core-phantom",
+  "core-identifiable",
+  "effects-cats",
+  "testkit",
+)
+lazy val configModules = List(
+  "config",
+)
+lazy val jsonModules = List(
+  "json-circe",
+)
+lazy val dbModules = List(
+  "core",
+  "core-flyway",
+  "core-psql",
+  "doobie",
+  "slick",
+  "slick-psql",
+  "testkit-core",
+  "testkit-doobie",
+  "testkit-slick",
+)
+
+lazy val restModules = List(
+  "rest-http4s-tapir",
+  "rest-http4s-tapir-testkit",
+)
+
+addCommandAlias("ph-publish-main-local", s"${mainModules.map(s => localPublishAlias(s)).mkString(";")}")
+
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
+
+def rebuildAlias(mod: String): String = s"pureharm-$mod/clean;pureharm-$mod/compile;pureharm-$mod/Test/compile"
+def localPublishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishLocal"
+def publishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishSigned;"
 // format: on
 //*****************************************************************************
 //*****************************************************************************
@@ -149,7 +185,7 @@ lazy val `testkit` = mainModule("testkit")
       scalaTest,
       log4cats,
       logbackClassic,
-    ),
+    )
   )
   .dependsOn(
     `core-anomaly`,
@@ -182,7 +218,7 @@ lazy val `json-circe` = jsonModule("circe")
 //++++++++++++++++++++++++++++++++++ CONFIG +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `config` = mainModule("config")
+lazy val `config` = configModule
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -598,6 +634,10 @@ def mainModule(mod: String): Project =
 def jsonModule(mod: String): Project =
   Project(id = s"pureharm-json-$mod", base = file(s"json/$mod"))
     .settings(name := s"pureharm-json-$mod", version := jsonVersion)
+
+def configModule: Project =
+  Project(id = s"pureharm-config", base = file(s"config"))
+    .settings(name := s"pureharm-config", version := configVersion)
 
 def dbModule(mod:   String): Project =
   Project(id = s"pureharm-db-$mod", base = file(s"db/$mod"))
