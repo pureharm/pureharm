@@ -120,7 +120,6 @@ lazy val root = Project(id = "pureharm", base = file("."))
     `db-core-flyway`,
     `db-core-psql`,
     `db-slick`,
-    `db-slick-psql`,
     `db-doobie`,
     `db-testkit-core`,
     `db-testkit-doobie`,
@@ -421,26 +420,6 @@ lazy val `db-slick` = dbModule("slick")
 
 //#############################################################################
 
-@scala.deprecated("Will be removed in the future, just depend on db-slick", "0.0.6-M3")
-lazy val `db-slick-psql` = dbModule("slick-psql")
-  .settings(PublishingSettings.sonatypeSettings)
-  .settings(CompilerSettings.commonSettings)
-  .settings(
-    libraryDependencies ++= Nil
-  )
-  .dependsOn(
-    `core-anomaly`,
-    `core-phantom`,
-    `core-identifiable`,
-    `effects-cats`,
-    `config`,
-    `json-circe`,
-    `db-core`,
-    `db-slick`,
-    asTestingLibrary(`db-testkit-core`),
-    asTestingLibrary(`db-testkit-slick`),
-    asTestingLibrary(`db-test-data`),
-  )
 
 //#############################################################################
 
