@@ -19,14 +19,19 @@
 //#############################################################################
 //#############################################################################
 
+lazy val mainVersion   = "0.0.7-SNAPSHOT"
+lazy val configVersion = "0.0.7-SNAPSHOT"
+lazy val jsonVersion   = "0.0.7-SNAPSHOT"
+lazy val dbVersion     = "0.0.7-SNAPSHOT"
+lazy val restVersion   = "0.0.7-SNAPSHOT"
+
 //see: https://github.com/liancheng/scalafix-organize-imports
 //and the project-specific config in .scalafix.conf
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
 
 // format: off
-addCommandAlias("useScala212", s"++${CompilerSettings.scala2_12}")
-addCommandAlias("useScala213", s"++${CompilerSettings.scala2_13}")
-addCommandAlias("useScala30",  s"++${CompilerSettings.scala3_0}")
+addCommandAlias("ph-useScala213", s"++${CompilerSettings.scala2_13}")
+addCommandAlias("ph-useScala30",  s"++${CompilerSettings.scala3_0}")
 
 addCommandAlias("recompile",      ";clean;compile;")
 addCommandAlias("build",          ";compile;Test/compile")
@@ -34,14 +39,65 @@ addCommandAlias("rebuild",        ";clean;compile;Test/compile")
 addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
 addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
 addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
-addCommandAlias("doLocal",        ";clean;update;compile;publishLocal")
 
 addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do212Release",       ";useScala212;cleanPublishSigned;sonatypeBundleRelease")
 addCommandAlias("do213Release",       ";useScala213;cleanPublishSigned;sonatypeBundleRelease")
-addCommandAlias("doRelease",          ";do212Release;do213Release")
+addCommandAlias("do30Release",        ";useScala30;cleanPublishSigned;sonatypeBundleRelease")
+addCommandAlias("doRelease",          ";do213Release;do30Release")
+
+lazy val mainModules = List(
+  "core-anomaly",
+  "core-phantom",
+  "core-identifiable",
+  "effects-cats",
+  "testkit",
+)
+lazy val configModules = List(
+  "config",
+)
+lazy val jsonModules = List(
+  "json-circe",
+)
+lazy val dbModules = List(
+  "core",
+  "core-flyway",
+  "core-psql",
+  "doobie",
+  "slick",
+  "slick-psql",
+  "testkit-core",
+  "testkit-doobie",
+  "testkit-slick",
+)
+
+lazy val restModules = List(
+  "rest-http4s-tapir",
+  "rest-http4s-tapir-testkit",
+)
+
+addCommandAlias("ph-publish-main-local", s"${sequence(mainModules, localPublishAlias)}")
+addCommandAlias("ph-publish-config-local", s"${sequence(configModules, localPublishAlias)}")
+addCommandAlias("ph-publish-json-local", s"${sequence(jsonModules, localPublishAlias)}")
+addCommandAlias("ph-publish-db-local", s"${sequence(dbModules, localPublishAlias)}")
+addCommandAlias("ph-publish-rest-local", s"${sequence(restModules, localPublishAlias)}")
+
+addCommandAlias("ph-publish-main", s"${sequence(mainModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-config", s"${sequence(configModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-json", s"${sequence(jsonModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-db", s"${sequence(dbModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-rest", s"${sequence(restModules, publishAlias)};sonatypeBundleRelease")
+
+addCommandAlias("do213MainRelease", ";ph-useScala213;ph-publish-main")
+addCommandAlias("do30MainRelease", ";ph-useScala30;ph-publish-main")
+addCommandAlias("doMainRelease", ";do213MainRelease;do30MainRelease")
+addCommandAlias("doMainLocal", ";ph-useScala213;ph-publish-main-local;ph-useScala30;ph-publish-main-local")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
+
+def rebuildAlias(mod: String): String = s"pureharm-$mod/clean;pureharm-$mod/compile;pureharm-$mod/Test/compile"
+def localPublishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishLocal"
+def publishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishSigned;"
+def sequence(l: List[String], f: String => String): String = l.map(f).mkString(";")
 // format: on
 //*****************************************************************************
 //*****************************************************************************
@@ -56,7 +112,6 @@ lazy val root = Project(id = "pureharm", base = file("."))
     `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
-    core,
     `effects-cats`,
     testkit,
     `config`,
@@ -65,7 +120,6 @@ lazy val root = Project(id = "pureharm", base = file("."))
     `db-core-flyway`,
     `db-core-psql`,
     `db-slick`,
-    `db-slick-psql`,
     `db-doobie`,
     `db-testkit-core`,
     `db-testkit-doobie`,
@@ -79,52 +133,43 @@ lazy val root = Project(id = "pureharm", base = file("."))
 //+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val core = project
-  .settings(PublishingSettings.sonatypeSettings)
-  .settings(CompilerSettings.commonSettings)
-  .settings(
-    name := "pureharm-core",
-    libraryDependencies ++= Nil,
-  )
-  .dependsOn(
-    `core-anomaly`,
-    `core-phantom`,
-    `core-identifiable`,
-  )
-
-//#############################################################################
-
-lazy val `core-anomaly` = subModule("core", "anomaly")
+lazy val `core-anomaly` = mainModule("core-anomaly")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      scalaTest.withDottyCompat(scalaVersion.value) % Test
+      scalaTest % Test
     )
   )
 
 //#############################################################################
 
-lazy val `core-phantom` = subModule("core", "phantom")
+lazy val `core-phantom` = mainModule("core-phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
+    libraryDependencies += (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) => shapeless2
+      case _             => shapeless3
+    }),
     libraryDependencies ++= Seq(
-      shapeless.withDottyCompat(scalaVersion.value),
-      scalaTest.withDottyCompat(scalaVersion.value) % Test,
-    )
+      scalaTest % Test
+    ),
   )
 
 //#############################################################################
 
-lazy val `core-identifiable` = subModule("core", "identifiable")
+lazy val `core-identifiable` = mainModule("core-identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
+    libraryDependencies += (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) => shapeless2
+      case _             => shapeless3
+    }),
     libraryDependencies ++= Seq(
-      shapeless.withDottyCompat(scalaVersion.value),
-      scalaTest.withDottyCompat(scalaVersion.value) % Test,
-    )
+      scalaTest % Test
+    ),
   )
   .dependsOn(
     `core-phantom`
@@ -134,17 +179,15 @@ lazy val `core-identifiable` = subModule("core", "identifiable")
 //++++++++++++++++++++++++++++++++++ EFFECTS ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `effects-cats` = project
+lazy val `effects-cats` = mainModule("effects-cats")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-effects-cats",
     libraryDependencies ++= Seq(
-      catsCore.withDottyCompat(scalaVersion.value),
-      catsEffect.withDottyCompat(scalaVersion.value),
-      scalaCollectionCompat.withDottyCompat(scalaVersion.value),
-      scalaTest.withDottyCompat(scalaVersion.value) % Test,
-    ),
+      catsCore,
+      catsEffect,
+      scalaTest % Test,
+    )
   )
   .dependsOn(
     `core-phantom`,
@@ -152,19 +195,38 @@ lazy val `effects-cats` = project
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `json-circe` = project
+lazy val `testkit` = mainModule("testkit")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-json-circe",
     libraryDependencies ++= Seq(
-      circeCore.withDottyCompat(scalaVersion.value),
-      circeGenericExtras.withDottyCompat(scalaVersion.value),
-      circeParser.withDottyCompat(scalaVersion.value),
-    ),
+      scalaTest,
+      log4cats,
+      logbackClassic,
+    )
+  )
+  .dependsOn(
+    `core-anomaly`,
+    `core-phantom`,
+    `effects-cats`,
+  )
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+lazy val `json-circe` = jsonModule("circe")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      circeCore,
+      circeGenericExtras,
+      circeParser,
+    )
   )
   .dependsOn(
     `core-anomaly`,
@@ -177,15 +239,13 @@ lazy val `json-circe` = project
 //++++++++++++++++++++++++++++++++++ CONFIG +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `config` = project
+lazy val `config` = configModule
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-config",
     libraryDependencies ++= Seq(
-      shapeless.withDottyCompat(scalaVersion.value),
-      pureConfig.withDottyCompat(scalaVersion.value),
-    ),
+      pureConfig
+    )
   )
   .dependsOn(
     `core-anomaly`,
@@ -198,32 +258,34 @@ lazy val `config` = project
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `db-core` = subModule("db", "core")
+lazy val `db-core` = dbModule("core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `config`,
   )
 
 //#############################################################################
 
-lazy val `db-core-psql` = subModule("db", "core-psql")
+lazy val `db-core-psql` = dbModule("core-psql")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++=
       Seq(
-        atto.withDottyCompat(scalaVersion.value),
+        atto,
         postgresql,
       )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `config`,
     `db-core`,
@@ -231,7 +293,7 @@ lazy val `db-core-psql` = subModule("db", "core-psql")
   )
 //#############################################################################
 
-lazy val `db-core-flyway` = subModule("db", "core-flyway")
+lazy val `db-core-flyway` = dbModule("core-flyway")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -240,7 +302,8 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
     )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `config`,
     `db-core`,
@@ -249,18 +312,20 @@ lazy val `db-core-flyway` = subModule("db", "core-flyway")
 
 //#############################################################################
 
-lazy val `db-testkit-core` = subModule("db", "testkit-core")
+lazy val `db-testkit-core` = dbModule("testkit-core")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
       logbackClassic,
-      log4cats.withDottyCompat(scalaVersion.value),
-      scalaTest.withDottyCompat(scalaVersion.value),
+      log4cats,
+      scalaTest,
     )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     `effects-cats`,
     `config`,
     `db-core`,
@@ -270,14 +335,15 @@ lazy val `db-testkit-core` = subModule("db", "testkit-core")
 //#############################################################################
 
 //used only in the interior of pureharm to test the implementations!
-lazy val `db-test-data` = subModule("db", "test-data")
+lazy val `db-test-data` = dbModule("test-data")
   .settings(PublishingSettings.noPublishSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `config`,
     `db-core`,
@@ -286,19 +352,21 @@ lazy val `db-test-data` = subModule("db", "test-data")
   )
 
 //#############################################################################
-lazy val `db-doobie` = subModule("db", "doobie")
+lazy val `db-doobie` = dbModule("doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      doobieCore.withDottyCompat(scalaVersion.value),
-      doobieHikari.withDottyCompat(scalaVersion.value),
-      doobiePSQL.withDottyCompat(scalaVersion.value),
+      doobieCore,
+      doobieHikari,
+      doobiePSQL,
       postgresql,
     )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     `effects-cats`,
     `config`,
     `json-circe`,
@@ -308,14 +376,16 @@ lazy val `db-doobie` = subModule("db", "doobie")
 
 //#############################################################################
 
-lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
+lazy val `db-testkit-doobie` = dbModule("testkit-doobie")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     `effects-cats`,
     `config`,
     `db-core`,
@@ -328,17 +398,19 @@ lazy val `db-testkit-doobie` = subModule("db", "testkit-doobie")
 
 //#############################################################################
 
-lazy val `db-slick` = subModule("db", "slick")
+lazy val `db-slick` = dbModule("slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      slick.withDottyCompat(scalaVersion.value),
+      slick,
       hikari,
     )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     `effects-cats`,
     `config`,
     `json-circe`,
@@ -348,37 +420,20 @@ lazy val `db-slick` = subModule("db", "slick")
 
 //#############################################################################
 
-@scala.deprecated("Will be removed in the future, just depend on db-slick", "0.0.6-M3")
-lazy val `db-slick-psql` = subModule("db", "slick-psql")
-  .settings(PublishingSettings.sonatypeSettings)
-  .settings(CompilerSettings.commonSettings)
-  .settings(
-    libraryDependencies ++= Nil
-  )
-  .dependsOn(
-    `core`,
-    `effects-cats`,
-    `config`,
-    `json-circe`,
-    `db-core`,
-    `db-slick`,
-    asTestingLibrary(`db-testkit-core`),
-    asTestingLibrary(`db-testkit-slick`),
-    asTestingLibrary(`db-test-data`),
-  )
-
 //#############################################################################
 
-lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
+lazy val `db-testkit-slick` = dbModule("testkit-slick")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      slickTestkit.withDottyCompat(scalaVersion.value)
+      slickTestkit
     )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
     `effects-cats`,
     `config`,
     `json-circe`,
@@ -394,62 +449,43 @@ lazy val `db-testkit-slick` = subModule("db", "testkit-slick")
 //+++++++++++++++++++++++++++++++++++ HTTP ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `rest-http4s-tapir` = project
+lazy val `rest-http4s-tapir` = restModule("http4s-tapir")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-rest-http4s-tapir",
     libraryDependencies ++= Seq(
-      http4sDSL.withDottyCompat(scalaVersion.value),
-      http4sCirce.withDottyCompat(scalaVersion.value),
-      http4sServer.withDottyCompat(scalaVersion.value),
-      tapirCore.withDottyCompat(scalaVersion.value),
-      tapirCirce.withDottyCompat(scalaVersion.value),
-      tapirHttp4s.withDottyCompat(scalaVersion.value),
-      tapirOpenAPI.withDottyCompat(scalaVersion.value),
-      tapirCirceYAML.withDottyCompat(scalaVersion.value),
-    ),
+      http4sDSL,
+      http4sCirce,
+      http4sServer,
+      tapirCore,
+      tapirCirce,
+      tapirHttp4s,
+      tapirOpenAPI,
+      tapirCirceYAML,
+    )
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `json-circe`,
   )
 
 //#############################################################################
 
-lazy val `rest-http4s-tapir-testkit` = project
+lazy val `rest-http4s-tapir-testkit` = restModule("http4s-tapir-testkit")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    name := "pureharm-rest-testkit-http4s-tapir",
-    libraryDependencies ++= Nil,
+    libraryDependencies ++= Nil
   )
   .dependsOn(
-    `core`,
+    `core-anomaly`,
+    `core-phantom`,
     `effects-cats`,
     `json-circe`,
     `rest-http4s-tapir`,
     testkit,
-  )
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-lazy val testkit = project
-  .settings(PublishingSettings.sonatypeSettings)
-  .settings(CompilerSettings.commonSettings)
-  .settings(
-    name := "pureharm-testkit",
-    libraryDependencies ++= Seq(
-      scalaTest.withDottyCompat(scalaVersion.value),
-      log4cats.withDottyCompat(scalaVersion.value),
-      logbackClassic,
-    ),
-  )
-  .dependsOn(
-    `core`,
-    `effects-cats`,
   )
 
 //*****************************************************************************
@@ -458,32 +494,24 @@ lazy val testkit = project
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val scalaCollCompatVersion: String = "2.2.0"    //https://github.com/scala/scala-collection-compat/releases
-lazy val shapelessVersion:       String = "2.4.0-M1" //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:            String = "2.2.0"    //https://github.com/typelevel/cats/releases
-lazy val catsEffectVersion:      String = "2.2.0"    //https://github.com/typelevel/cats-effect/releases
-lazy val fs2Version:             String = "2.4.4"    //https://github.com/functional-streams-for-scala/fs2/releases
-lazy val circeVersion:           String = "0.13.0"   //https://github.com/circe/circe/releases
-lazy val pureconfigVersion:      String = "0.14.0"   //https://github.com/pureconfig/pureconfig/releases
-lazy val attoVersion:            String = "0.8.0"    //https://github.com/tpolecat/atto/releases
-lazy val slickVersion:           String = "3.3.3"    //https://github.com/slick/slick/releases
-lazy val postgresqlVersion:      String = "42.2.18"  //java — https://github.com/pgjdbc/pgjdbc/releases
-lazy val hikariCPVersion:        String = "3.4.5"    //java — https://github.com/brettwooldridge/HikariCP/releases
-lazy val doobieVersion:          String = "0.9.2"    //https://github.com/tpolecat/doobie/releases
-lazy val flywayVersion:          String = "7.1.1"    //java — https://github.com/flyway/flyway/releases
-lazy val log4catsVersion:        String = "1.1.1"    //https://github.com/ChristopherDavenport/log4cats/releases
-lazy val logbackVersion:         String = "1.2.3"    //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:          String = "0.21.8"   //https://github.com/http4s/http4s/releases
-lazy val tapirVersion:           String = "0.16.16"  //https://github.com/softwaremill/tapir/releases
-lazy val scalaTestVersion:       String = "3.2.2"    //https://github.com/scalatest/scalatest/releases
-
-//=============================================================================
-//=================================== SCALA ===================================
-//=============================================================================
-
-//https://github.com/scala/scala-collection-compat/releases
-lazy val scalaCollectionCompat: ModuleID =
-  "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollCompatVersion withSources ()
+lazy val shapeless2Version: String = "2.4.0-M1"  //https://github.com/milessabin/shapeless/releases
+lazy val shapeless3Version: String = "3.0.0-M1"  //https://github.com/milessabin/shapeless/releases
+lazy val catsVersion:       String = "2.3.0"     //https://github.com/typelevel/cats/releases
+lazy val catsEffectVersion: String = "2.3.0"     //https://github.com/typelevel/cats-effect/releases
+lazy val fs2Version:        String = "2.4.6"     //https://github.com/functional-streams-for-scala/fs2/releases
+lazy val circeVersion:      String = "0.13.0"    //https://github.com/circe/circe/releases
+lazy val pureconfigVersion: String = "0.14.0"    //https://github.com/pureconfig/pureconfig/releases
+lazy val attoVersion:       String = "0.8.0"     //https://github.com/tpolecat/atto/releases
+lazy val slickVersion:      String = "3.3.3"     //https://github.com/slick/slick/releases
+lazy val postgresqlVersion: String = "42.2.18"   //java — https://github.com/pgjdbc/pgjdbc/releases
+lazy val hikariCPVersion:   String = "3.4.5"     //java — https://github.com/brettwooldridge/HikariCP/releases
+lazy val doobieVersion:     String = "0.10.0-M2" //https://github.com/tpolecat/doobie/releases
+lazy val flywayVersion:     String = "7.3.1"     //java — https://github.com/flyway/flyway/releases
+lazy val log4catsVersion:   String = "1.1.1"     //https://github.com/ChristopherDavenport/log4cats/releases
+lazy val logbackVersion:    String = "1.2.3"     //https://github.com/qos-ch/logback/releases
+lazy val http4sVersion:     String = "0.21.14"   //https://github.com/http4s/http4s/releases
+lazy val tapirVersion:      String = "0.17.0"    //https://github.com/softwaremill/tapir/releases
+lazy val scalaTestVersion:  String = "3.2.3"     //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //================================= TYPELEVEL =================================
@@ -501,7 +529,8 @@ lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % c
 lazy val circeParser:        ModuleID = "io.circe" %% "circe-parser"         % circeVersion withSources ()
 
 //https://github.com/milessabin/shapeless/releases
-lazy val shapeless: ModuleID = "com.chuusai" %% "shapeless" % shapelessVersion withSources ()
+lazy val shapeless2: ModuleID = "com.chuusai" %% "shapeless" % shapeless2Version withSources ()
+lazy val shapeless3: ModuleID = "com.chuusai" %% "shapeless" % shapeless3Version withSources ()
 
 //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val fs2: ModuleID = "co.fs2" %% "fs2-core" % fs2Version withSources ()
@@ -599,6 +628,22 @@ def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test
   */
 def asTestingLibrary(p: Project): ClasspathDependency = p % "test -> compile"
 
-def subModule(parent: String, mod: String): Project =
-  Project(id = s"pureharm-$parent-$mod", base = file(s"./$parent/submodules/$mod"))
-    .settings(name := s"pureharm-$parent-$mod")
+def mainModule(mod: String): Project =
+  Project(id = s"pureharm-$mod", base = file(s"main/$mod"))
+    .settings(name := s"pureharm-$mod", version := mainVersion)
+
+def jsonModule(mod: String): Project =
+  Project(id = s"pureharm-json-$mod", base = file(s"json/$mod"))
+    .settings(name := s"pureharm-json-$mod", version := jsonVersion)
+
+def configModule: Project =
+  Project(id = s"pureharm-config", base = file(s"config"))
+    .settings(name := s"pureharm-config", version := configVersion)
+
+def dbModule(mod:   String): Project =
+  Project(id = s"pureharm-db-$mod", base = file(s"db/$mod"))
+    .settings(name := s"pureharm-db-$mod", version := dbVersion)
+
+def restModule(mod: String): Project =
+  Project(id = s"pureharm-rest-$mod", base = file(s"rest/$mod"))
+    .settings(name := s"pureharm-rest-$mod", version := restVersion)
