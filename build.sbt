@@ -36,11 +36,11 @@ addCommandAlias("ph-publish-db-local", s"${publishAlias("db-publish")}")
 addCommandAlias("ph-publish-rest-local", s"${publishAlias("rest-publish")}")
 
 //setting the version because sonatypePublishBundle looks for a folder with the version in ThisBuild... for whatever reason...
-addCommandAlias("ph-publish-kernel", s""";set version in ThisBuild := "$kernelVersion";${publishAlias("kernel-publish")}""")
-addCommandAlias("ph-publish-config", s""";set version in ThisBuild := "$configVersion";${publishAlias("config")}""")
-addCommandAlias("ph-publish-json", s""";set version in ThisBuild := "$jsonVersion";${publishAlias("json-publish")}""")
-addCommandAlias("ph-publish-db", s""";set version in ThisBuild := "$dbVersion";${publishAlias("db-publish")}""")
-addCommandAlias("ph-publish-rest", s""";set version in ThisBuild := "$restVersion";${publishAlias("rest-publish")}""")
+addCommandAlias("ph-publish-kernel", s""";clean;set version in ThisBuild := "$kernelVersion";${publishAlias("kernel-publish")}""")
+addCommandAlias("ph-publish-config", s""";clean;set version in ThisBuild := "$configVersion";${publishAlias("config")}""")
+addCommandAlias("ph-publish-json", s""";clean;set version in ThisBuild := "$jsonVersion";${publishAlias("json-publish")}""")
+addCommandAlias("ph-publish-db", s""";clean;set version in ThisBuild := "$dbVersion";${publishAlias("db-publish")}""")
+addCommandAlias("ph-publish-rest", s""";clean;set version in ThisBuild := "$restVersion";${publishAlias("rest-publish")}""")
 
 addCommandAlias("do213KernelRelease", ";ph-useScala213;ph-publish-kernel")
 addCommandAlias("do30KernelRelease", ";ph-useScala30;ph-publish-kernel")
@@ -220,9 +220,9 @@ lazy val `testkit` = kernelModule("testkit")
 //++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//used only as a proxy for triggering publish of all kernel modules, does not contain source code.
+//used only as a proxy for triggering publish of all json modules, does not contain source code.
 lazy val `json-publish` = Project(id = s"pureharm-json-publish", base = file(s"json"))
-  .settings(name := s"pureharm-json-publish", version := kernelVersion)
+  .settings(name := s"pureharm-json-publish", version := jsonVersion)
   .settings(PublishingSettings.noPublishSettings)
   .settings(CompilerSettings.commonSettings)
   .aggregate(
@@ -268,6 +268,22 @@ lazy val `config` = configModule
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//used only as a proxy for triggering publish of all db modules, does not contain source code.
+lazy val `db-publish` = Project(id = s"pureharm-db-publish", base = file(s"db"))
+  .settings(name := s"pureharm-db-publish", version := dbVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `db-core`,
+    `db-core-psql`,
+    `db-core-flyway`,
+    `db-testkit-core`,
+    `db-doobie`,
+    `db-testkit-doobie`,
+    `db-slick`,
+    `db-testkit-slick`,
+  )
 
 lazy val `db-core` = dbModule("core")
   .settings(PublishingSettings.sonatypeSettings)
@@ -459,6 +475,16 @@ lazy val `db-testkit-slick` = dbModule("testkit-slick")
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++ HTTP ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//used only as a proxy for triggering publish of all db modules, does not contain source code.
+lazy val `rest-publish` = Project(id = s"pureharm-rest-publish", base = file(s"rest"))
+  .settings(name := s"pureharm-rest-publish", version := restVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `rest-http4s-tapir`,
+    `rest-http4s-tapir-testkit`,
+  )
 
 lazy val `rest-http4s-tapir` = restModule("http4s-tapir")
   .settings(PublishingSettings.sonatypeSettings)
