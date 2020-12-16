@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 BusyMachines
+/** Copyright (c) 2019 BusyMachines
   *
   * See company homepage at: https://www.busymachines.com/
   *
@@ -21,8 +20,7 @@ import sbt.Keys._
 import xerial.sbt.Sonatype.SonatypeKeys._
 import com.jsuereth.sbtpgp.PgpKeys._
 
-/**
-  * All instructions for publishing to sonatype can be found on the sbt-plugin page:
+/** All instructions for publishing to sonatype can be found on the sbt-plugin page:
   * http://www.scala-sbt.org/release/docs/Using-Sonatype.html
   *
   * and some here:
@@ -63,6 +61,8 @@ object PublishingSettings {
     publishMavenStyle          := true,
     pomIncludeRepository       := (_ => false),
     //new since sbt-pgp 3.4, see: https://github.com/xerial/sbt-sonatype/#uploading-artifacts-in-parallel
+    sonatypeBundleDirectory    := (ThisBuild / baseDirectory).value / target.value.getName / "sonatype-staging" / version.value,
+    sonatypeSessionName        := s"[sbt-sonatype] ${name.value} ${version.value}",
     publishTo                  := sonatypePublishToBundle.value,
     licenses                   := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
     scmInfo                    := Option(

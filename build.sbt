@@ -25,67 +25,54 @@ lazy val jsonVersion   = "0.0.7-SNAPSHOT"
 lazy val dbVersion     = "0.0.7-SNAPSHOT"
 lazy val restVersion   = "0.0.7-SNAPSHOT"
 
-//see: https://github.com/liancheng/scalafix-organize-imports
-//and the project-specific config in .scalafix.conf
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
-
 // format: off
 addCommandAlias("ph-useScala213", s"++${CompilerSettings.scala2_13}")
 addCommandAlias("ph-useScala30",  s"++${CompilerSettings.scala3_0}")
 
-lazy val kernelModules = List(
-  "core-anomaly",
-  "core-phantom",
-  "core-identifiable",
-  "effects-cats",
-  "testkit",
-)
-lazy val configModules = List(
-  "config",
-)
-lazy val jsonModules = List(
-  "json-circe",
-)
-lazy val dbModules = List(
-  "core",
-  "core-flyway",
-  "core-psql",
-  "doobie",
-  "slick",
-  "slick-psql",
-  "testkit-core",
-  "testkit-doobie",
-  "testkit-slick",
-)
+addCommandAlias("ph-publish-kernel-local", s"${publishAlias("kernel-publish")}")
+addCommandAlias("ph-publish-config-local", s"${publishAlias("config")}")
+addCommandAlias("ph-publish-json-local", s"${publishAlias("json-publish")}")
+addCommandAlias("ph-publish-db-local", s"${publishAlias("db-publish")}")
+addCommandAlias("ph-publish-rest-local", s"${publishAlias("rest-publish")}")
 
-lazy val restModules = List(
-  "rest-http4s-tapir",
-  "rest-http4s-tapir-testkit",
-)
-
-addCommandAlias("ph-publish-kernel-local", s"${sequence(kernelModules, localPublishAlias)}")
-addCommandAlias("ph-publish-config-local", s"${sequence(configModules, localPublishAlias)}")
-addCommandAlias("ph-publish-json-local", s"${sequence(jsonModules, localPublishAlias)}")
-addCommandAlias("ph-publish-db-local", s"${sequence(dbModules, localPublishAlias)}")
-addCommandAlias("ph-publish-rest-local", s"${sequence(restModules, localPublishAlias)}")
-
-addCommandAlias("ph-publish-kernel", s"${sequence(kernelModules, publishAlias)};sonatypeBundleRelease")
-addCommandAlias("ph-publish-config", s"${sequence(configModules, publishAlias)};sonatypeBundleRelease")
-addCommandAlias("ph-publish-json", s"${sequence(jsonModules, publishAlias)};sonatypeBundleRelease")
-addCommandAlias("ph-publish-db", s"${sequence(dbModules, publishAlias)};sonatypeBundleRelease")
-addCommandAlias("ph-publish-rest", s"${sequence(restModules, publishAlias)};sonatypeBundleRelease")
+//setting the version because sonatypePublishBundle looks for a folder with the version in ThisBuild... for whatever reason...
+addCommandAlias("ph-publish-kernel", s""";clean;set version in ThisBuild := "$kernelVersion";${publishAlias("kernel-publish")}""")
+addCommandAlias("ph-publish-config", s""";clean;set version in ThisBuild := "$configVersion";${publishAlias("config")}""")
+addCommandAlias("ph-publish-json", s""";clean;set version in ThisBuild := "$jsonVersion";${publishAlias("json-publish")}""")
+addCommandAlias("ph-publish-db", s""";clean;set version in ThisBuild := "$dbVersion";${publishAlias("db-publish")}""")
+addCommandAlias("ph-publish-rest", s""";clean;set version in ThisBuild := "$restVersion";${publishAlias("rest-publish")}""")
 
 addCommandAlias("do213KernelRelease", ";ph-useScala213;ph-publish-kernel")
 addCommandAlias("do30KernelRelease", ";ph-useScala30;ph-publish-kernel")
-addCommandAlias("doMainRelease", ";do213MainRelease;do30KernelRelease")
-addCommandAlias("doMainLocal", ";ph-useScala213;ph-publish-kernel-local;ph-useScala30;ph-publish-kernel-local")
+addCommandAlias("doKernelRelease", ";do213KernelRelease;do30KernelRelease")
+addCommandAlias("doKernelLocal", ";ph-useScala213;ph-publish-kernel-local;ph-useScala30;ph-publish-kernel-local")
 
-addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
+addCommandAlias("do213ConfigRelease", ";ph-useScala213;ph-publish-config")
+addCommandAlias("do30ConfigRelease", ";ph-useScala30;ph-publish-config")
+addCommandAlias("doConfigRelease", ";do213ConfigRelease;do30ConfigRelease")
+addCommandAlias("doConfigLocal", ";ph-useScala213;ph-publish-config-local;ph-useScala30;ph-publish-config-local")
+
+addCommandAlias("do213JsonRelease", ";ph-useScala213;ph-publish-json")
+addCommandAlias("do30JsonRelease", ";ph-useScala30;ph-publish-json")
+addCommandAlias("doJsonRelease", ";do213JsonRelease;do30JsonRelease")
+addCommandAlias("doJsonLocal", ";ph-useScala213;ph-publish-json-local;ph-useScala30;ph-publish-json-local")
+
+addCommandAlias("do213DBRelease", ";ph-useScala213;ph-publish-db")
+addCommandAlias("do30DBRelease", ";ph-useScala30;ph-publish-db")
+addCommandAlias("doDBRelease", ";do213DBRelease;do30DBRelease")
+addCommandAlias("doDBLocal", ";ph-useScala213;ph-publish-db-local;ph-useScala30;ph-publish-db-local")
+
+addCommandAlias("do213RestRelease", ";ph-useScala213;ph-publish-rest")
+addCommandAlias("do30RestRelease", ";ph-useScala30;ph-publish-rest")
+addCommandAlias("doRestRelease", ";do213RestRelease;do30RestRelease")
+addCommandAlias("doRestLocal", ";ph-useScala213;ph-publish-rest-local;ph-useScala30;ph-publish-rest-local")
+
+addCommandAlias("do213Release", ";ph-useScala213;ph-publish-kernel;ph-publish-config;ph-publish-json;ph-publish-db;ph-publish-rest")
+addCommandAlias("do30Release", ";ph-useScala30;ph-publish-kernel;ph-publish-config;ph-publish-json;ph-publish-db;ph-publish-rest")
 
 def rebuildAlias(mod: String): String = s"pureharm-$mod/clean;pureharm-$mod/compile;pureharm-$mod/Test/compile"
 def localPublishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishLocal"
-def publishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishSigned;"
-def sequence(l: List[String], f: String => String): String = l.map(f).mkString(";")
+def publishAlias(mod: String): String = s"${rebuildAlias(mod)};pureharm-$mod/publishSigned;sonatypeBundleRelease"
 // format: on
 //*****************************************************************************
 //*****************************************************************************
@@ -100,6 +87,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
     `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
+    `core`,
     `effects-cats`,
     testkit,
     `config`,
@@ -118,9 +106,35 @@ lazy val root = Project(id = "pureharm", base = file("."))
   )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++ KERNEL +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//used only as a proxy for triggering publish of all kernel modules, does not contain source code.
+lazy val `kernel-publish` = Project(id = s"pureharm-kernel-publish", base = file(s"kernel"))
+  .settings(name := s"pureharm-kernel-publish", version := kernelVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `core`,
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
+    `effects-cats`,
+    `testkit`,
+  )
+
+lazy val `core` = kernelModule("core")
+  .settings(PublishingSettings.sonatypeSettings)
+  .settings(CompilerSettings.commonSettings)
+  .dependsOn(
+    `core-anomaly`,
+    `core-phantom`,
+    `core-identifiable`,
+    `effects-cats`,
+    `testkit`,
+  )
+
+//#############################################################################
 lazy val `core-anomaly` = kernelModule("core-anomaly")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
@@ -206,6 +220,15 @@ lazy val `testkit` = kernelModule("testkit")
 //++++++++++++++++++++++++++++++++++++ JSON +++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//used only as a proxy for triggering publish of all json modules, does not contain source code.
+lazy val `json-publish` = Project(id = s"pureharm-json-publish", base = file(s"json"))
+  .settings(name := s"pureharm-json-publish", version := jsonVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `json-circe`
+  )
+
 lazy val `json-circe` = jsonModule("circe")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
@@ -245,6 +268,22 @@ lazy val `config` = configModule
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++ DB +++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//used only as a proxy for triggering publish of all db modules, does not contain source code.
+lazy val `db-publish` = Project(id = s"pureharm-db-publish", base = file(s"db"))
+  .settings(name := s"pureharm-db-publish", version := dbVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `db-core`,
+    `db-core-psql`,
+    `db-core-flyway`,
+    `db-testkit-core`,
+    `db-doobie`,
+    `db-testkit-doobie`,
+    `db-slick`,
+    `db-testkit-slick`,
+  )
 
 lazy val `db-core` = dbModule("core")
   .settings(PublishingSettings.sonatypeSettings)
@@ -437,6 +476,16 @@ lazy val `db-testkit-slick` = dbModule("testkit-slick")
 //+++++++++++++++++++++++++++++++++++ HTTP ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//used only as a proxy for triggering publish of all db modules, does not contain source code.
+lazy val `rest-publish` = Project(id = s"pureharm-rest-publish", base = file(s"rest"))
+  .settings(name := s"pureharm-rest-publish", version := restVersion)
+  .settings(PublishingSettings.noPublishSettings)
+  .settings(CompilerSettings.commonSettings)
+  .aggregate(
+    `rest-http4s-tapir`,
+    `rest-http4s-tapir-testkit`,
+  )
+
 lazy val `rest-http4s-tapir` = restModule("http4s-tapir")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
@@ -620,7 +669,7 @@ def kernelModule(mod: String): Project =
   Project(id = s"pureharm-$mod", base = file(s"kernel/$mod"))
     .settings(name := s"pureharm-$mod", version := kernelVersion)
 
-def jsonModule(mod: String): Project =
+def jsonModule(mod:   String): Project =
   Project(id = s"pureharm-json-$mod", base = file(s"json/$mod"))
     .settings(name := s"pureharm-json-$mod", version := jsonVersion)
 
@@ -628,10 +677,10 @@ def configModule: Project =
   Project(id = s"pureharm-config", base = file(s"config"))
     .settings(name := s"pureharm-config", version := configVersion)
 
-def dbModule(mod:   String): Project =
+def dbModule(mod:     String): Project =
   Project(id = s"pureharm-db-$mod", base = file(s"db/$mod"))
     .settings(name := s"pureharm-db-$mod", version := dbVersion)
 
-def restModule(mod: String): Project =
+def restModule(mod:   String): Project =
   Project(id = s"pureharm-rest-$mod", base = file(s"rest/$mod"))
     .settings(name := s"pureharm-rest-$mod", version := restVersion)
