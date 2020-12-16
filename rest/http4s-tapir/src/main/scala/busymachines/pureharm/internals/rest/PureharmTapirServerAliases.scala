@@ -30,9 +30,9 @@ trait PureharmTapirServerAliases {
 
   val ServerDefaults: sttp.tapir.server.ServerDefaults.type = sttp.tapir.server.ServerDefaults
 
-  type ServerEndpoint[I, E, O, +S, F[_]]              = sttp.tapir.server.ServerEndpoint[I, E, O, S, F]
-  type PartialServerEndpoint[U, I, E, O, +S, F[_]]    = sttp.tapir.server.PartialServerEndpoint[U, I, E, O, S, F]
-  type ServerEndpointInParts[U, R, I, E, O, +S, F[_]] = sttp.tapir.server.ServerEndpointInParts[U, R, I, E, O, S, F]
+  type ServerEndpoint[I, E, O, -R, F[_]]              = sttp.tapir.server.ServerEndpoint[I, E, O, R, F]
+  type PartialServerEndpoint[U, I, E, O, -R, F[_]]    = sttp.tapir.server.PartialServerEndpoint[U, I, E, O, R, F]
+  type ServerEndpointInParts[U, IR, I, E, O, -R, F[_]] = sttp.tapir.server.ServerEndpointInParts[U, IR, I, E, O, R, F]
 
   type SimpleServerEndpoint[I, O, F[_]] = sttp.tapir.server.ServerEndpoint[I, Throwable, O, Nothing, F]
 

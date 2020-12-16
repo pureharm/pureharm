@@ -77,7 +77,7 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
     sc.copy(description = sc.description match {
       case None           => Option(Spook[Underlying, PT].symbolicName)
       case Some(original) => Option(s"$original — type name: ${Spook[Underlying, PT].symbolicName}")
-    })
+    }).asInstanceOf[tapir.Schema[PT]]
 
   implicit def safePhantomTypeGenericSchema[E, Underlying, PT: SafeSpook[E, Underlying, *]](implicit
     sc: tapir.Schema[Underlying]
@@ -85,7 +85,7 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
     sc.copy(description = sc.description match {
       case None           => Option(SafeSpook[E, Underlying, PT].symbolicName)
       case Some(original) => Option(s"$original — type name: ${SafeSpook[E, Underlying, PT].symbolicName}")
-    })
+    }).asInstanceOf[tapir.Schema[PT]]
 
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

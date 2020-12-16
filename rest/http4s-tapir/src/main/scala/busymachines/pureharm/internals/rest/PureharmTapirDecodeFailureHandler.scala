@@ -62,7 +62,7 @@ object PureharmTapirDecodeFailureHandler {
     badRequestOnPathInvalidIfPathShapeMatches: Boolean = true,
   ): DecodeFailureHandler = { ctx: DecodeFailureContext =>
     val tapirDefaultFlow: PartialFunction[DecodeFailureContext, DecodeFailureHandling] = {
-      case DecodeFailureContext(input, _) =>
+      case DecodeFailureContext(input, _, _) =>
         input match {
           case _: EndpointInput.Query[_]             => anomalyResponse(StatusCode.BadRequest, ctx)
           case _: EndpointInput.QueryParams[_]       => anomalyResponse(StatusCode.BadRequest, ctx)
@@ -78,6 +78,7 @@ object PureharmTapirDecodeFailureHandler {
               if (badRequestOnPathErrorIfPathShapeMatches && ctx.failure.isInstanceOf[DecodeResult.Error]) ||
                 (badRequestOnPathInvalidIfPathShapeMatches && ctx.failure.isInstanceOf[DecodeResult.InvalidValue]) =>
             anomalyResponse(StatusCode.BadRequest, ctx)
+          case _: EndpointInput.Auth[_]              => anomalyResponse(StatusCode.Unauthorized, ctx)
           // other basic endpoints - the request doesn't match, but not returning a response (trying other endpoints)
           case _: EndpointInput.Basic[_]             => noMatch
           // all other inputs (tuples, mapped) - responding with bad request
@@ -118,6 +119,7 @@ object PureharmTapirDecodeFailureHandler {
   private val Missing:             String = "Missing"
   private val SeeDiagnostic:       String = "[See diagnostic]"
 
+  //TODO: make use of ctx.failure
   def anomalyResponse(code: StatusCode, ctx: DecodeFailureContext): DecodeFailureHandling = {
     val anomaly: Throwable = ctx.failure match {
       case DecodeResult.Missing                =>

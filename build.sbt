@@ -420,7 +420,6 @@ lazy val `db-slick` = dbModule("slick")
 
 //#############################################################################
 
-
 //#############################################################################
 
 lazy val `db-testkit-slick` = dbModule("testkit-slick")
@@ -510,8 +509,8 @@ lazy val doobieVersion:     String = "0.10.0-M2" //https://github.com/tpolecat/d
 lazy val flywayVersion:     String = "7.3.1"     //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:   String = "1.1.1"     //https://github.com/ChristopherDavenport/log4cats/releases
 lazy val logbackVersion:    String = "1.2.3"     //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:     String = "0.21.14"    //https://github.com/http4s/http4s/releases
-lazy val tapirVersion:      String = "0.16.16"   //https://github.com/softwaremill/tapir/releases
+lazy val http4sVersion:     String = "0.21.14"   //https://github.com/http4s/http4s/releases
+lazy val tapirVersion:      String = "0.17.0"    //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:  String = "3.2.3"     //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================

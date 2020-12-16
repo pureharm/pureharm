@@ -34,6 +34,7 @@ object TapirOps {
         header[T](headerName)(authCodec).description(
           s"Authentication done with token required in header: $headerName"
         ),
+        challenge = EndpointInput.WWWAuthenticate.bearer(headerName),
       )
     }
 

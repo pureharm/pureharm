@@ -26,7 +26,7 @@ import sttp.tapir._
 private[internals] object PureharmTapirEndpoint {
   import busymachines.pureharm.json.{Codec => CCodec}
 
-  def phEndpoint: Endpoint[Unit, Throwable, Unit, Nothing] = {
+  def phEndpoint: Endpoint[Unit, Throwable, Unit, Any] = {
     import sttp.tapir.json.circe._
 
     implicit val thrCC: CCodec[Throwable] = AnomalyJsonCodec.pureharmThrowableCodec

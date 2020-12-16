@@ -31,15 +31,15 @@ object TempRestMain extends PureharmIOApp {
   import busymachines.pureharm.rest.temp.TempTapirEndpoints._
 
   override def run(args: List[String]): IO[ExitCode] = {
-    implicit val CE: ConcurrentEffect[IO] = IO.ioConcurrentEffect(contextShift)
+    implicit val F: ConcurrentEffect[IO] = IO.ioConcurrentEffect(contextShift)
     for {
       http4sPool <- UnsafePools.cached("htt4s").pure[IO]
       blockingShifter = BlockingShifter.fromExecutionContext[IO](http4sPool)(contextShift)
       implicit0(http4sRuntime: TestHttp4sRuntime[IO]) <-
-        TestHttp4sRuntime[IO](blockingShifter).pure[IO]
-      app <- MyAppEcology.everything[IO](CE, http4sRuntime)
+        TestHttp4sRuntime[IO](blockingShifter)(F, timer).pure[IO]
+      app <- MyAppEcology.everything[IO](F, http4sRuntime)
       _ <- MyAppDocs.printYAML[IO](app.restAPIs)
-      blazeServer = blazeServerBuilder[IO](app.http4sApp)(CE, timer, http4sRuntime)
+      blazeServer = blazeServerBuilder[IO](app.http4sApp)(F, timer, http4sRuntime)
       _ <- blazeServer.serve.compile.drain
     } yield ExitCode.Success
   }

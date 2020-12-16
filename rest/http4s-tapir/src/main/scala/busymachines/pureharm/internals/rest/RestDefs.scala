@@ -16,17 +16,18 @@
   */
 package busymachines.pureharm.internals.rest
 
-import busymachines.pureharm.effects.{BlockingShifter, ContextShift, Sync}
+import busymachines.pureharm.effects.{BlockingShifter, Concurrent, ContextShift, Timer}
 import sttp.tapir.server.http4s.Http4sServerOptions
 
 /**
   */
-trait RestDefs[F[_], ET <: Sync[F], RT <: Http4sRuntime[F, ET]] {
+trait RestDefs[F[_], ET <: Concurrent[F], RT <: Http4sRuntime[F, ET]] {
 
   protected def http4sRuntime: RT
   implicit def F:               ET                 = http4sRuntime.F
   implicit def blockingShifter: BlockingShifter[F] = http4sRuntime.blockingShifter
   implicit def contextShift:    ContextShift[F]    = http4sRuntime.contextShift
+  implicit def timer:           Timer[F]           = http4sRuntime.timer
 
   implicit def tapirHttp4Ops: Http4sServerOptions[F] = http4sRuntime.http4sServerOptions
 }

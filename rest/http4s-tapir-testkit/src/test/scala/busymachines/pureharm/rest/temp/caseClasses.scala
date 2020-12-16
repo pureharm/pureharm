@@ -16,6 +16,7 @@
   */
 package busymachines.pureharm.rest.temp
 
+import busymachines.pureharm.rest._
 import busymachines.pureharm.json._
 import busymachines.pureharm.json.implicits._
 import busymachines.pureharm.effects.implicits._
@@ -36,6 +37,7 @@ final case class MyInputType(
 
 object MyInputType {
   implicit val codec: Codec[MyInputType] = derive.codec[MyInputType]
+  implicit val schema: Schema[MyInputType] = Schema.derived
 }
 
 final case class MyOutputType(
@@ -52,4 +54,5 @@ final case class MyOutputType(
 
 object MyOutputType {
   implicit val codec: Codec[MyOutputType] = derive.codec[MyOutputType]
+  implicit val schema: Schema[MyOutputType] = Schema.derived
 }

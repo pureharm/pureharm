@@ -17,7 +17,7 @@
 package busymachines.pureharm.internals.rest
 
 import scala.annotation.implicitNotFound
-import busymachines.pureharm.effects.{ContextShift, Sync}
+import busymachines.pureharm.effects.{Concurrent, ContextShift, Timer}
 import busymachines.pureharm.internals.effects.BlockingShifter
 import sttp.tapir.server.http4s.Http4sServerOptions
 import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
@@ -26,7 +26,7 @@ import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
   * tapir Endpoints to http4s Route.
   *
   * This abstract class should be extended and the EffectType
-  * fixed. http4s needs at least [[Sync]], but sometimes in your
+  * fixed. http4s needs at least [[]], but sometimes in your
   * specific app you might need a stronger constraint, and
   * you ought to define subclasses of this with stronger
   * constraints, and propagate those.
@@ -36,12 +36,12 @@ import sttp.tapir.server.{DecodeFailureContext, DecodeFailureHandling}
   *     final class TestHttp4sRuntime[F[_]](
   *     override val blockingEC:   ExecutionContextCT
   *   )(implicit
-  *     override val F:            Sync[F],
+  *     override val F:            Concurrent[F],
   *     override val contextShift: ContextShift[F],
-  *   ) extends Http4sRuntime[F, Sync[F]] {}
+  *   ) extends Http4sRuntime[F, Concurrent[F]] {}
   *
   *   object TestHttp4sRuntime {
-  *     def apply[F[_]](ec: ExecutionContextCT)(implicit f: Sync[F], cs: ContextShift[F]): TestHttp4sRuntime[F] =
+  *     def apply[F[_]](ec: ExecutionContextCT)(implicit f: Concurrent[F], cs: ContextShift[F]): TestHttp4sRuntime[F] =
   *       new TestHttp4sRuntime(ec)
   *   }
   * }}}
@@ -93,9 +93,10 @@ See scaladoc for more information
 """
   // format: on
 )
-abstract class Http4sRuntime[F[_], EffectType <: Sync[F]] {
+abstract class Http4sRuntime[F[_], EffectType <: Concurrent[F]] {
   implicit def F:               EffectType
   implicit def blockingShifter: BlockingShifter[F]
+  implicit def timer:           Timer[F]
 
   implicit def contextShift: ContextShift[F] = blockingShifter.contextShift
 

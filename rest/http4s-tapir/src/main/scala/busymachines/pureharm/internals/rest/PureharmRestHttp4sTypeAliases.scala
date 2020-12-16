@@ -16,7 +16,7 @@
   */
 package busymachines.pureharm.internals.rest
 
-import cats.effect.Sync
+import busymachines.pureharm.effects.Concurrent
 import org.http4s
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -32,9 +32,9 @@ trait PureharmRestHttp4sTypeAliases {
   type Http4sDsl[F[_]] = http4s.dsl.Http4sDsl[F]
   val Http4sDsl: http4s.dsl.Http4sDsl.type = http4s.dsl.Http4sDsl
 
-  type Http4sRuntime[F[_], EffectType <: Sync[F]] =
+  type Http4sRuntime[F[_], EffectType <: Concurrent[F]] =
     busymachines.pureharm.internals.rest.Http4sRuntime[F, EffectType]
 
-  type RestDefs[F[_], ET <: Sync[F], RT <: Http4sRuntime[F, ET]] =
+  type RestDefs[F[_], ET <: Concurrent[F], RT <: Http4sRuntime[F, ET]] =
     busymachines.pureharm.internals.rest.RestDefs[F, ET, RT]
 }

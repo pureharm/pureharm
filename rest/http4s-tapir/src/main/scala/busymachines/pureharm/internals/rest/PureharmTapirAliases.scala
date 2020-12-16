@@ -16,6 +16,7 @@
   */
 package busymachines.pureharm.internals.rest
 
+import sttp.tapir.{LowPrioritySchema, SchemaExtensions}
 import sttp.tapir.generic.internal.SchemaMagnoliaDerivation
 
 /** Mirrors: [[sttp.tapir.TapirAliases]] but it realiases Codec to TapirCodec
@@ -23,8 +24,7 @@ import sttp.tapir.generic.internal.SchemaMagnoliaDerivation
   */
 trait PureharmTapirAliases {
 
-  type SimpleEndpoint[I, O]        = sttp.tapir.Endpoint[I, Throwable, O, Nothing]
-  type StreamingEndpoint[I, O, +S] = sttp.tapir.Endpoint[I, Throwable, O, S]
+  type SimpleEndpoint[I, O] = sttp.tapir.Endpoint[I, Throwable, O, Any]
 
   /** This should serve as your basis for most endpoints in your app.
     * It provides grade A interpretation of all Anomaly types, plus
@@ -67,7 +67,7 @@ trait PureharmTapirAliases {
   val Defaults: sttp.tapir.Defaults.type = sttp.tapir.Defaults
 
   /** Endpoint.scala */
-  type Endpoint[I, E, O, +S] = sttp.tapir.Endpoint[I, E, O, S]
+  type Endpoint[I, E, O, -R] = sttp.tapir.Endpoint[I, E, O, R]
   val Endpoint: sttp.tapir.Endpoint.type = sttp.tapir.Endpoint
 
   type EndpointInfo = sttp.tapir.EndpointInfo
@@ -82,9 +82,6 @@ trait PureharmTapirAliases {
 
   type EndpointIO[I] = sttp.tapir.EndpointIO[I]
   val EndpointIO: sttp.tapir.EndpointIO.type = sttp.tapir.EndpointIO
-
-  type StreamingEndpointIO[I, +S] = sttp.tapir.StreamingEndpointIO[I, S]
-  val StreamingEndpointIO: sttp.tapir.StreamingEndpointIO.type = sttp.tapir.StreamingEndpointIO
 
   /** package.scala */
   type RawPart           = sttp.tapir.RawPart
@@ -101,7 +98,9 @@ trait PureharmTapirAliases {
 
   /** Schema.scala */
   type Schema[T] = sttp.tapir.Schema[T]
-  val Schema: sttp.tapir.Schema.type with SchemaMagnoliaDerivation = sttp.tapir.Schema
+
+  val Schema: sttp.tapir.Schema.type with SchemaExtensions with SchemaMagnoliaDerivation with LowPrioritySchema =
+    sttp.tapir.Schema
 
   /** Tapir.scala */
   type Tapir              = sttp.tapir.Tapir

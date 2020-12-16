@@ -87,8 +87,9 @@ object TempTapirEndpoints {
   final class TestHttp4sRuntime[F[_]](
     override val blockingShifter: BlockingShifter[F]
   )(implicit
-    override val F:               Sync[F]
-  ) extends Http4sRuntime[F, Sync[F]] {
+    override val F:               Concurrent[F],
+    override val timer:           Timer[F],
+  ) extends Http4sRuntime[F, Concurrent[F]] {
 
     override val http4sServerOptions: Http4sServerOptions[F] =
       super.http4sServerOptions.withCustomHeaderAuthValidation(AuthTokenHeaderName)
@@ -98,14 +99,14 @@ object TempTapirEndpoints {
 
     def apply[F[_]](
       blockingShifter: BlockingShifter[F]
-    )(implicit f:      Sync[F]): TestHttp4sRuntime[F] =
+    )(implicit f:      Concurrent[F], t: Timer[F]): TestHttp4sRuntime[F] =
       new TestHttp4sRuntime(blockingShifter)
   }
 
   ////------------------------------------------------
 
   // ----- Create one of these for your app
-  trait MyAppRest[F[_]] extends RestDefs[F, Sync[F], TestHttp4sRuntime[F]]
+  trait MyAppRest[F[_]] extends RestDefs[F, Concurrent[F], TestHttp4sRuntime[F]]
 
   // ----- And create as many of these as you need
   final class SomeAPI[F[_]](
@@ -187,8 +188,8 @@ object TempTapirEndpoints {
         F.delay[Unit](println(s"header: $header")) >> domain.getLogic(ph)(auth)
     }
 
-    val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors {
-      case (auth: MyAuthToken, myInputType: MyInputType) => domain.postLogic(myInputType)(auth)
+    val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors { case (auth: MyAuthToken, myInputType) =>
+      domain.postLogic(myInputType)(auth)
     }
 
     val routes: HttpRoutes[F] = NEList
