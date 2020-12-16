@@ -19,7 +19,7 @@
 //#############################################################################
 //#############################################################################
 
-lazy val mainVersion   = "0.0.7-SNAPSHOT"
+lazy val kernelVersion = "0.0.7-SNAPSHOT"
 lazy val configVersion = "0.0.7-SNAPSHOT"
 lazy val jsonVersion   = "0.0.7-SNAPSHOT"
 lazy val dbVersion     = "0.0.7-SNAPSHOT"
@@ -33,19 +33,7 @@ ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports"
 addCommandAlias("ph-useScala213", s"++${CompilerSettings.scala2_13}")
 addCommandAlias("ph-useScala30",  s"++${CompilerSettings.scala3_0}")
 
-addCommandAlias("recompile",      ";clean;compile;")
-addCommandAlias("build",          ";compile;Test/compile")
-addCommandAlias("rebuild",        ";clean;compile;Test/compile")
-addCommandAlias("rebuild-update", ";clean;update;compile;Test/compile")
-addCommandAlias("ci",             ";scalafmtCheck;rebuild-update;test")
-addCommandAlias("ci-quick",       ";scalafmtCheck;build;test")
-
-addCommandAlias("cleanPublishSigned", ";recompile;publishSigned")
-addCommandAlias("do213Release",       ";useScala213;cleanPublishSigned;sonatypeBundleRelease")
-addCommandAlias("do30Release",        ";useScala30;cleanPublishSigned;sonatypeBundleRelease")
-addCommandAlias("doRelease",          ";do213Release;do30Release")
-
-lazy val mainModules = List(
+lazy val kernelModules = List(
   "core-anomaly",
   "core-phantom",
   "core-identifiable",
@@ -75,22 +63,22 @@ lazy val restModules = List(
   "rest-http4s-tapir-testkit",
 )
 
-addCommandAlias("ph-publish-main-local", s"${sequence(mainModules, localPublishAlias)}")
+addCommandAlias("ph-publish-kernel-local", s"${sequence(kernelModules, localPublishAlias)}")
 addCommandAlias("ph-publish-config-local", s"${sequence(configModules, localPublishAlias)}")
 addCommandAlias("ph-publish-json-local", s"${sequence(jsonModules, localPublishAlias)}")
 addCommandAlias("ph-publish-db-local", s"${sequence(dbModules, localPublishAlias)}")
 addCommandAlias("ph-publish-rest-local", s"${sequence(restModules, localPublishAlias)}")
 
-addCommandAlias("ph-publish-main", s"${sequence(mainModules, publishAlias)};sonatypeBundleRelease")
+addCommandAlias("ph-publish-kernel", s"${sequence(kernelModules, publishAlias)};sonatypeBundleRelease")
 addCommandAlias("ph-publish-config", s"${sequence(configModules, publishAlias)};sonatypeBundleRelease")
 addCommandAlias("ph-publish-json", s"${sequence(jsonModules, publishAlias)};sonatypeBundleRelease")
 addCommandAlias("ph-publish-db", s"${sequence(dbModules, publishAlias)};sonatypeBundleRelease")
 addCommandAlias("ph-publish-rest", s"${sequence(restModules, publishAlias)};sonatypeBundleRelease")
 
-addCommandAlias("do213MainRelease", ";ph-useScala213;ph-publish-main")
-addCommandAlias("do30MainRelease", ";ph-useScala30;ph-publish-main")
-addCommandAlias("doMainRelease", ";do213MainRelease;do30MainRelease")
-addCommandAlias("doMainLocal", ";ph-useScala213;ph-publish-main-local;ph-useScala30;ph-publish-main-local")
+addCommandAlias("do213KernelRelease", ";ph-useScala213;ph-publish-kernel")
+addCommandAlias("do30KernelRelease", ";ph-useScala30;ph-publish-kernel")
+addCommandAlias("doMainRelease", ";do213MainRelease;do30KernelRelease")
+addCommandAlias("doMainLocal", ";ph-useScala213;ph-publish-kernel-local;ph-useScala30;ph-publish-kernel-local")
 
 addCommandAlias("lint", ";scalafixEnable;rebuild;scalafix;scalafmtAll")
 
@@ -133,7 +121,7 @@ lazy val root = Project(id = "pureharm", base = file("."))
 //+++++++++++++++++++++++++++++++++++ CORE ++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `core-anomaly` = mainModule("core-anomaly")
+lazy val `core-anomaly` = kernelModule("core-anomaly")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -144,7 +132,7 @@ lazy val `core-anomaly` = mainModule("core-anomaly")
 
 //#############################################################################
 
-lazy val `core-phantom` = mainModule("core-phantom")
+lazy val `core-phantom` = kernelModule("core-phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -159,7 +147,7 @@ lazy val `core-phantom` = mainModule("core-phantom")
 
 //#############################################################################
 
-lazy val `core-identifiable` = mainModule("core-identifiable")
+lazy val `core-identifiable` = kernelModule("core-identifiable")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -179,7 +167,7 @@ lazy val `core-identifiable` = mainModule("core-identifiable")
 //++++++++++++++++++++++++++++++++++ EFFECTS ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `effects-cats` = mainModule("effects-cats")
+lazy val `effects-cats` = kernelModule("effects-cats")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -198,7 +186,7 @@ lazy val `effects-cats` = mainModule("effects-cats")
 //++++++++++++++++++++++++++++++++++ TESTKIT ++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-lazy val `testkit` = mainModule("testkit")
+lazy val `testkit` = kernelModule("testkit")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
@@ -628,9 +616,9 @@ def fullDependency(p: Project): ClasspathDependency = p % "compile->compile;test
   */
 def asTestingLibrary(p: Project): ClasspathDependency = p % "test -> compile"
 
-def mainModule(mod: String): Project =
-  Project(id = s"pureharm-$mod", base = file(s"main/$mod"))
-    .settings(name := s"pureharm-$mod", version := mainVersion)
+def kernelModule(mod: String): Project =
+  Project(id = s"pureharm-$mod", base = file(s"kernel/$mod"))
+    .settings(name := s"pureharm-$mod", version := kernelVersion)
 
 def jsonModule(mod: String): Project =
   Project(id = s"pureharm-json-$mod", base = file(s"json/$mod"))
