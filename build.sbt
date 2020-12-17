@@ -130,8 +130,6 @@ lazy val `core` = kernelModule("core")
     `core-anomaly`,
     `core-phantom`,
     `core-identifiable`,
-    `effects-cats`,
-    `testkit`,
   )
 
 //#############################################################################
