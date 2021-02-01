@@ -542,7 +542,7 @@ lazy val postgresqlVersion: String = "42.2.18"   //java — https://github.com/p
 lazy val hikariCPVersion:   String = "3.4.5"     //java — https://github.com/brettwooldridge/HikariCP/releases
 lazy val doobieVersion:     String = "0.10.0"    //https://github.com/tpolecat/doobie/releases
 lazy val flywayVersion:     String = "7.5.2"     //java — https://github.com/flyway/flyway/releases
-lazy val log4catsVersion:   String = "1.2.0-RC2" //https://github.com/ChristopherDavenport/log4cats/releases
+lazy val log4catsVersion:   String = "1.2.0-RC2" //https://github.com/typelevel/log4cats/releases
 lazy val logbackVersion:    String = "1.2.3"     //https://github.com/qos-ch/logback/releases
 lazy val http4sVersion:     String = "0.21.16"   //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:      String = "0.17.8"    //https://github.com/softwaremill/tapir/releases
@@ -632,7 +632,7 @@ lazy val atto:       ModuleID = "org.tpolecat"          %% "atto-core"  % attoVe
 //=================================  LOGGING ==================================
 //=============================================================================
 //https://github.com/ChristopherDavenport/log4cats/releases
-lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion withSources ()
+lazy val log4cats = "org.typelevel" %% "log4cats-slf4j" % log4catsVersion withSources ()
 
 //https://github.com/qos-ch/logback/releases — it is the backend implementation used by log4cats-slf4j
 lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion withSources ()
