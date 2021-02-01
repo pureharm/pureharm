@@ -531,8 +531,8 @@ lazy val `rest-http4s-tapir-testkit` = restModule("http4s-tapir-testkit")
 
 lazy val shapeless2Version: String = "2.4.0-M1"  //https://github.com/milessabin/shapeless/releases
 lazy val shapeless3Version: String = "3.0.0-M1"  //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:       String = "2.3.0"     //https://github.com/typelevel/cats/releases
-lazy val catsEffectVersion: String = "2.3.0"     //https://github.com/typelevel/cats-effect/releases
+lazy val catsVersion:       String = "2.3.1"     //https://github.com/typelevel/cats/releases
+lazy val catsEffectVersion: String = "2.3.1"     //https://github.com/typelevel/cats-effect/releases
 lazy val fs2Version:        String = "2.4.6"     //https://github.com/functional-streams-for-scala/fs2/releases
 lazy val circeVersion:      String = "0.13.0"    //https://github.com/circe/circe/releases
 lazy val pureconfigVersion: String = "0.14.0"    //https://github.com/pureconfig/pureconfig/releases
