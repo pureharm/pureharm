@@ -20,15 +20,6 @@ package busymachines.pureharm.internals.rest
   * @since 16 Jul 2020
   */
 trait PureharmTapirModelAliases {
-  type Cookie = sttp.model.Cookie
-  val Cookie: sttp.model.Cookie.type = sttp.model.Cookie
-
-  type CookieValueWithMeta = sttp.model.CookieValueWithMeta
-  val CookieValueWithMeta: sttp.model.CookieValueWithMeta.type = sttp.model.CookieValueWithMeta
-
-  type CookieWithMeta = sttp.model.CookieWithMeta
-  val CookieWithMeta: sttp.model.CookieWithMeta.type = sttp.model.CookieWithMeta
-
   type HasHeaders = sttp.model.HasHeaders
 
   type Header = sttp.model.Header

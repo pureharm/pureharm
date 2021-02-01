@@ -53,10 +53,15 @@ object MyAppDocs {
     import sttp.tapir.openapi._
     import sttp.tapir.docs.openapi._
 
-    List[Endpoint[_, _, _, _]](
-      rapi.someAPI.testGetEndpoint,
-      rapi.someAPI.testPostEndpoint,
-    ).toOpenAPI("MyAppEndpoints", "1.0.0")
+    OpenAPIDocsInterpreter
+      .toOpenAPI(
+        List[Endpoint[_, _, _, _]](
+          rapi.someAPI.testGetEndpoint,
+          rapi.someAPI.testPostEndpoint,
+        ),
+        title   = "MyAppEndpoints",
+        version = "1.0.0",
+      )
       .servers(List(Server("http://localhost:12345/api").description("localhost server")))
 
   }

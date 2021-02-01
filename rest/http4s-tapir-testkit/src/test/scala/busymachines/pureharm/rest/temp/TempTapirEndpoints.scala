@@ -16,6 +16,8 @@
   */
 package busymachines.pureharm.rest.temp
 
+import sttp.tapir.server.http4s.Http4sServerInterpreter
+
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
@@ -165,31 +167,33 @@ object TempTapirEndpoints {
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
 
-    val nonAuthedGetRoute: HttpRoutes[F] = nonAuthedGetEndpoint.toRouteRecoverErrors { _ =>
+    val nonAuthedGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(nonAuthedGetEndpoint) { _ =>
       domain.getLogic(PHUUID.unsafeGenerate)(MyAuthToken.unsafeGenerate)
     }
 
-    val nonAuthedPostRoute: HttpRoutes[F] = nonAuthedPostEndpoint.toRouteRecoverErrors {
+    val nonAuthedPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(nonAuthedPostEndpoint) {
       case (myInputType: MyInputType) => domain.postLogic(myInputType)(MyAuthToken.unsafeGenerate)
     }
 
-    val testGetRoute: HttpRoutes[F] = testGetEndpoint.toRouteRecoverErrors { case (auth: MyAuthToken, ph: PHUUID) =>
-      domain.getLogic(ph)(auth)
+    val testGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetEndpoint) {
+      case (auth: MyAuthToken, ph: PHUUID) =>
+        domain.getLogic(ph)(auth)
     }
 
-    val testGetEndpointQueryParamsRoute: HttpRoutes[F] = testGetEndpointQueryParams.toRouteRecoverErrors {
+    val testGetEndpointQueryParamsRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetEndpointQueryParams) {
       case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
         F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
           domain.getLogic(ph)(auth)
     }
 
-    val testGetWithHeaderRoute: HttpRoutes[F] = testGetWithHeaderEndpoint.toRouteRecoverErrors {
+    val testGetWithHeaderRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetWithHeaderEndpoint) {
       case (auth: MyAuthToken, ph: PHUUID, header: PHHeader) =>
         F.delay[Unit](println(s"header: $header")) >> domain.getLogic(ph)(auth)
     }
 
-    val testPostRoute: HttpRoutes[F] = testPostEndpoint.toRouteRecoverErrors { case (auth: MyAuthToken, myInputType) =>
-      domain.postLogic(myInputType)(auth)
+    val testPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testPostEndpoint) {
+      case (auth: MyAuthToken, myInputType) =>
+        domain.postLogic(myInputType)(auth)
     }
 
     val routes: HttpRoutes[F] = NEList

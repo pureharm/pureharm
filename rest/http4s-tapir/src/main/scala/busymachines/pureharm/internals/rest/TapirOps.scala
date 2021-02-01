@@ -30,11 +30,12 @@ object TapirOps {
       val codec     = implicitly[Codec[List[String], T, CodecFormat.TextPlain]]
       val authCodec = Codec.list(Codec.string).map(codec).schema(codec.schema)
       EndpointInput.Auth.Http(
-        "Custom",
-        header[T](headerName)(authCodec).description(
+        scheme             = "Custom",
+        input              = header[T](headerName)(authCodec).description(
           s"Authentication done with token required in header: $headerName"
         ),
-        challenge = EndpointInput.WWWAuthenticate.bearer(headerName),
+        challenge          = EndpointInput.WWWAuthenticate.bearer(headerName),
+        securitySchemeName = Option("Custom Auth Header"),
       )
     }
 
