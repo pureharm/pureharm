@@ -17,7 +17,7 @@
 package busymachines.pureharm.internals.rest
 
 import busymachines.pureharm.effects.{BlockingShifter, Concurrent, ContextShift, Timer}
-import sttp.tapir.server.http4s.Http4sServerOptions
+import sttp.tapir.server.http4s.{Http4sServerInterpreter, Http4sServerOptions}
 
 /**
   */
@@ -29,5 +29,6 @@ trait RestDefs[F[_], ET <: Concurrent[F], RT <: Http4sRuntime[F, ET]] {
   implicit def contextShift:    ContextShift[F]    = http4sRuntime.contextShift
   implicit def timer:           Timer[F]           = http4sRuntime.timer
 
-  implicit def tapirHttp4Ops: Http4sServerOptions[F] = http4sRuntime.http4sServerOptions
+  implicit def tapirHttp4Ops: Http4sServerOptions[F]  = http4sRuntime.http4sServerOptions
+  implicit val http4sServer:  Http4sServerInterpreter = Http4sServerInterpreter
 }
