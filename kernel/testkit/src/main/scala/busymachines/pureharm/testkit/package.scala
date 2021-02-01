@@ -20,7 +20,7 @@ import scala.annotation.implicitNotFound
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.phantom.PhantomType
-import io.chrisdavenport.log4cats._
+import org.typelevel.log4cats._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 26 Jun 2020
