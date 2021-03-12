@@ -29,15 +29,15 @@ package object dbslick {
   final type SlickSession        = slick.jdbc.JdbcProfile#Backend#Session
   final type SlickJDBCProfileAPI = slick.jdbc.JdbcProfile#API
 
-  final object JDBCProfileAPI extends PhantomType[SlickJDBCProfileAPI]
+  final object JDBCProfileAPI extends SproutSub[SlickJDBCProfileAPI]
   final type JDBCProfileAPI = JDBCProfileAPI.Type
 
-  final object DatabaseBackend extends PhantomType[SlickBackendDB]
+  final object DatabaseBackend extends SproutSub[SlickBackendDB]
   final type DatabaseBackend = DatabaseBackend.Type
 
-  final object DatabaseSession extends PhantomType[SlickSession]
+  final object DatabaseSession extends SproutSub[SlickSession]
   final type DatabaseSession = DatabaseSession.Type
 
-  final object ConnectionIOEC extends PhantomType[scala.concurrent.ExecutionContext]
+  final object ConnectionIOEC extends SproutSub[scala.concurrent.ExecutionContext]
   final type ConnectionIOEC = ConnectionIOEC.Type
 }

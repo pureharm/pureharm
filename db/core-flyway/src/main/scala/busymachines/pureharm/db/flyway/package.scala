@@ -23,20 +23,20 @@ import busymachines.pureharm.phantom._
   */
 package object flyway {
 
-  object MigrationLocation extends PhantomType[String] {
+  object MigrationLocation extends SproutSub[String] {
     /** The default location of flyway migrations
       */
     def default: this.Type = this.apply("db/migration")
   }
   type MigrationLocation = MigrationLocation.Type
 
-  object IgnoreMissingMigrations extends PhantomType[Boolean] {
+  object IgnoreMissingMigrations extends SproutSub[Boolean] {
     val False: this.Type = this.apply(false)
     val True:  this.Type = this.apply(true)
   }
   type IgnoreMissingMigrations = IgnoreMissingMigrations.Type
 
-  object CleanOnValidationError extends PhantomType[Boolean] {
+  object CleanOnValidationError extends SproutSub[Boolean] {
     val False: this.Type = this.apply(false)
     val True:  this.Type = this.apply(true)
   }
