@@ -36,12 +36,13 @@ final class JsonDefaultSemiAutoPhantomMelon extends PureharmTest {
 
   test("... encode + decode phantomMelon") {
     val originalPhantomMelon: Melon = PhantomMelon(
-      weight     = Weight(42),
-      safeWeight = SafeWeight.unsafe(42),
-      weights    = Weights(List(1, 2)),
-      weightsSet = WeigthsSet(Set(3, 4)),
-      duo        = MelonDuo((5, "duo")),
-      trio       = MelonTrio((6, "trio", List(1, 2, 3))),
+      weight        = Weight(42),
+      safeWeight    = SafeWeight.unsafe(42),
+      refinedWeight = RefinedWeight[Try](42).get,
+      weights       = Weights(List(1, 2)),
+      weightsSet    = WeigthsSet(Set(3, 4)),
+      duo           = MelonDuo((5, "duo")),
+      trio          = MelonTrio((6, "trio", List(1, 2, 3))),
     )
 
     val encoded = originalPhantomMelon.asJson
@@ -52,12 +53,13 @@ final class JsonDefaultSemiAutoPhantomMelon extends PureharmTest {
 
   test("... encode + fail on decode of wrong safePhantomMelon") {
     val originalPhantomMelon: Melon = PhantomMelon(
-      weight     = Weight(42),
-      safeWeight = SafeWeight.unsafe(-1),
-      weights    = Weights(List(1, 2)),
-      weightsSet = WeigthsSet(Set(3, 4)),
-      duo        = MelonDuo((5, "duo")),
-      trio       = MelonTrio((6, "trio", List(1, 2, 3))),
+      weight        = Weight(42),
+      safeWeight    = SafeWeight.unsafe(-1),
+      refinedWeight = RefinedWeight[Try](42).get,
+      weights       = Weights(List(1, 2)),
+      weightsSet    = WeigthsSet(Set(3, 4)),
+      duo           = MelonDuo((5, "duo")),
+      trio          = MelonTrio((6, "trio", List(1, 2, 3))),
     )
 
     val encoded = originalPhantomMelon.asJson

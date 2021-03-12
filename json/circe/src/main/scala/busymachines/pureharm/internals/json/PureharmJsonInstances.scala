@@ -51,10 +51,30 @@ object PureharmJsonInstances {
       spook:   SafeSpook[E, Underlying, Phantom],
       decoder: Decoder[Underlying],
       @implicitNotFound(
-        """Deriving a io.circe.Decoder[${Phantom}] for safe phantom types, requires you to have a Show[${E}] in scope. If your error is of type Trhroable, then pureharm.effects.implicits._ contains a Show instance for it. If you used pureharm style, then myapp.effects._ package should have one"""
+        """Deriving a io.circe.Decoder[${Phantom}] for safe phantom types, requires you to have a Show[${E}] in scope. If your error is of type Throwable, then pureharm.effects.implicits._ contains a Show instance for it. If you used pureharm style, then myapp.effects._ package should have one"""
       )
       show:    Show[E],
     ): Decoder[Phantom] = decoder.emap(u => spook.spook(u).leftMap(_.show))
+
+    implicit final def pureharmSproutCirceEncoder[Old, New](implicit
+      oldType: OldType[Old, New],
+      encoder: Encoder[Old],
+    ): Encoder[New] = encoder.contramap(oldType.oldType)
+
+    implicit final def pureharmSproutCirceDecoder[Old, New](implicit
+      newType: NewType[Old, New],
+      decoder: Decoder[Old],
+    ): Decoder[New] = decoder.map(newType.newType)
+
+    implicit final def pureharmSproutRefinedCirceDecoder[Old, New, E](implicit
+      newType: RefinedType[Old, New, E],
+      decoder: Decoder[Old],
+      @implicitNotFound(
+        """Deriving a io.circe.Decoder[${Phantom}] for refined sprout types, requires you to have a Show[${E}] in scope. If your error is of type Throwable, then pureharm.effects.implicits._ contains a Show instance for it. If you used pureharm style, then myapp.effects._ package should have one"""
+      )
+      show:    Show[E],
+    ): Decoder[New] = decoder.emap(u => newType.newType[Either[E, *]](u).leftMap(_.show))
+
   }
 
 }
