@@ -60,6 +60,29 @@ object PureharmConfigInstances {
       writer: ConfigWriter[Underlying],
     ): ConfigWriter[Phantom] = writer.contramap(spook.despook)
 
+    implicit final def pureharmNewTypeConfigRead[Underlying, New](implicit
+      newType: NewType[Underlying, New],
+      reader:  ConfigReader[Underlying],
+    ): ConfigReader[New] = reader.map(newType.newType)
+
+    implicit final def pureharmNewTypeConfigWriter[Underlying, New](implicit
+      oldType: OldType[Underlying, New],
+      reader:  ConfigWriter[Underlying],
+    ): ConfigWriter[New] = reader.contramap(oldType.oldType)
+
+    implicit final def pureharmRefinedTypeConfigReader[Underlying, New, E](implicit
+      refined: RefinedType[Underlying, New, E],
+      reader:  ConfigReader[Underlying],
+      show:    Show[E],
+      ushow:   Show[Underlying],
+    ): ConfigReader[New] =
+      reader.emap(s =>
+        refined
+          .newType[Either[E, *]](s)
+          .leftMap(e =>
+            CannotConvert(value = s.show, toType = s"PhantomType[${s.getClass.getCanonicalName}]", because = e.show)
+          )
+      )
   }
 
 }
