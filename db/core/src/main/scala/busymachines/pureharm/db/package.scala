@@ -16,20 +16,20 @@
   */
 package busymachines.pureharm
 
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.phantom._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
 package object db {
-  final object DBHost extends PhantomType[String]
+  final object DBHost extends SproutSub[String]
 
   /** Please include port in host, if needed, e.g.
     * {{{localhost:5432}}}
     */
   final type DBHost = DBHost.Type
 
-  final object JDBCUrl extends PhantomType[String] {
+  final object JDBCUrl extends SproutSub[String] {
 
     def postgresql(host: DBHost, db: DatabaseName): this.Type =
       this.apply(s"jdbc:postgresql://$host/$db")
@@ -40,19 +40,19 @@ package object db {
 
   final type JDBCUrl = JDBCUrl.Type
 
-  final object DBUsername extends PhantomType[String]
+  final object DBUsername extends SproutSub[String]
   final type DBUsername = DBUsername.Type
 
-  final object DBPassword extends PhantomType[String]
+  final object DBPassword extends SproutSub[String]
   final type DBPassword = DBPassword.Type
 
-  final object TableName extends PhantomType[String]
+  final object TableName extends SproutSub[String]
   final type TableName = TableName.Type
 
-  final object DatabaseName extends PhantomType[String]
+  final object DatabaseName extends SproutSub[String]
   final type DatabaseName = DatabaseName.Type
 
-  final object SchemaName extends PhantomType[String] {
+  final object SchemaName extends SproutSub[String] {
     def public: SchemaName = SchemaName("public")
   }
   final type SchemaName = SchemaName.Type

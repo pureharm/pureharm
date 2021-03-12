@@ -28,7 +28,7 @@ package object dbdoobie {
     * backed up by a fixed thread pool with the number of threads
     * equal to the number of connections
     */
-  object DoobieConnectionEC extends PhantomType[ExecutionContext] {
+  object DoobieConnectionEC extends SproutSub[ExecutionContext] {
     def safe(ec: ExecutionContextFT): this.Type = this.apply(ec)
   }
 
@@ -40,7 +40,7 @@ package object dbdoobie {
     */
   type DoobieBlocker = DoobieBlocker.Type
 
-  object DoobieBlocker extends PhantomType[Blocker] {
+  object DoobieBlocker extends SproutSub[Blocker] {
     def safe(ec: ExecutionContextCT): this.Type = this(Blocker.liftExecutionContext(ec))
   }
 
