@@ -26,4 +26,4 @@ trait PureharmRestAliasesAndImplicits
   extends sttp.tapir.Tapir with sttp.tapir.server.http4s.TapirHttp4sServer with internals.rest.PureharmTapirAliases
   with internals.rest.PureharmTapirModelAliases with internals.rest.PureharmTapirServerAliases
   with internals.rest.PureharmHttp4sCirceInstances with internals.rest.PureharmRestHttp4sTypeAliases
-  with internals.rest.PureharmRestTapirImplicits {}
+  with internals.rest.PureharmPhantomTypeRestTapirImplicits {}

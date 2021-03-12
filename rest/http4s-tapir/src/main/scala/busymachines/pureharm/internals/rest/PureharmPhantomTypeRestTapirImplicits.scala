@@ -17,15 +17,14 @@
 package busymachines.pureharm.internals.rest
 
 import java.util.UUID
-
-import busymachines.pureharm.phantom.{SafeSpook, Spook}
+import busymachines.pureharm.phantom._
 import sttp.tapir
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
 
-trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
+trait PureharmPhantomTypeRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
 
   implicit def phantomTypeTapirStringPathCodec[PT](implicit
     tc: tapir.Codec.PlainCodec[String],
@@ -91,6 +90,22 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
 
+  implicit def pureharmSproutTypeGenericSchema[Underlying, New: OldType[Underlying, *]](implicit
+    sc: tapir.Schema[Underlying]
+  ): tapir.Schema[New] =
+    sc.copy(description = sc.description match {
+      case None           => Option(OldType[Underlying, New].symbolicName)
+      case Some(original) => Option(s"$original — type name: ${OldType[Underlying, New].symbolicName}")
+    }).asInstanceOf[tapir.Schema[New]]
+
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+
+  implicit def pureharmSproutTypeGenericValidator[Old, New: OldType[Old, *]](implicit
+    sc: tapir.Validator[Old]
+  ): tapir.Validator[New] = sc.contramap(OldType[Old, New].oldType)
+
   implicit def phantomTypeGenericValidator[Underlying, PT: Spook[Underlying, *]](implicit
     sc: tapir.Validator[Underlying]
   ): tapir.Validator[PT] = sc.contramap(Spook[Underlying, PT].despook)
@@ -105,4 +120,7 @@ trait PureharmRestTapirImplicits extends sttp.tapir.json.circe.TapirJsonCirce {
   implicit val tapirSchemaThrowableAnomaly: tapir.Schema[Throwable] = PureharmTapirSchemas.tapirSchemaAnomalies
 
   implicit def pureharmTapirAuthOps(o: tapir.TapirAuth.type): TapirOps.AuthOps = new TapirOps.AuthOps(o)
+
+  implicit def pureharmTapirCodecOps[Old](c: sttp.tapir.Codec.PlainCodec[Old]): TapirOps.CodecOps[Old] =
+    new TapirOps.CodecOps[Old](c)
 }

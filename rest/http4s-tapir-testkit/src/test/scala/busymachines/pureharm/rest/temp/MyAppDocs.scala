@@ -16,8 +16,8 @@
   */
 package busymachines.pureharm.rest.temp
 
-import busymachines.pureharm.rest._
 import busymachines.pureharm.effects._
+import busymachines.pureharm.rest.temp.TempTapirEndpoints.SomeAPI
 import sttp.tapir.openapi._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -25,8 +25,8 @@ import sttp.tapir.openapi._
   */
 object MyAppDocs {
 
-  def printYAML[F[_]: Sync](rapi: MyAppEcology.RestAPIs[F]): F[Unit] = {
-    val yaml = generateYAML[F](rapi)
+  def printYAML[F[_]: Sync]: F[Unit] = {
+    val yaml = generateYAML[F]
     Sync[F].delay(
       println(s"""
                  |
@@ -44,21 +44,18 @@ object MyAppDocs {
     )
   }
 
-  def generateYAML[F[_]: Monad](rapi: MyAppEcology.RestAPIs[F]): String = {
+  def generateYAML[F[_]: Monad]: String = {
     import sttp.tapir.openapi.circe.yaml._
-    generate[F](rapi).toYaml
+    generate[F].toYaml
   }
 
-  def generate[F[_]: Monad](rapi: MyAppEcology.RestAPIs[F]): OpenAPI = {
+  def generate[F[_]: Monad]: OpenAPI = {
     import sttp.tapir.openapi._
     import sttp.tapir.docs.openapi._
 
     OpenAPIDocsInterpreter
       .toOpenAPI(
-        List[Endpoint[_, _, _, _]](
-          rapi.someAPI.testGetEndpoint,
-          rapi.someAPI.testPostEndpoint,
-        ),
+        SomeAPI.endpoints,
         title   = "MyAppEndpoints",
         version = "1.0.0",
       )

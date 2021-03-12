@@ -31,12 +31,11 @@ final case class MyInputType(
   fl:  List[PHLong],
   f4:  List[PHUUID],
   f5:  Option[PHString],
-  sf6: SafePHUUIDStr,
-  sf7: SafePHUUIDThr,
+  sf6: SafePHUUIDThr,
 )
 
 object MyInputType {
-  implicit val codec: Codec[MyInputType] = derive.codec[MyInputType]
+  implicit val codec:  Codec[MyInputType]  = derive.codec[MyInputType]
   implicit val schema: Schema[MyInputType] = Schema.derived
 }
 
@@ -48,11 +47,10 @@ final case class MyOutputType(
   fl:  List[PHLong],
   f4:  List[PHUUID],
   f5:  Option[PHString],
-  sf6: SafePHUUIDStr,
-  sf7: SafePHUUIDThr,
+  sf6: SafePHUUIDThr,
 )
 
 object MyOutputType {
-  implicit val codec: Codec[MyOutputType] = derive.codec[MyOutputType]
+  implicit val codec:  Codec[MyOutputType]  = derive.codec[MyOutputType]
   implicit val schema: Schema[MyOutputType] = Schema.derived
 }

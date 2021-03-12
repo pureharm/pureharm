@@ -29,68 +29,50 @@ package object temp {
 
   type PHString = PHString.Type
 
-  @scala.annotation.nowarn
-  object PHString extends PhantomType[String] {
+  object PHString extends Sprout[String] {
     def unsafeGenerate: PHString = this.apply(scala.util.Random.nextString(10))
     def generate[F[_]: Sync]: F[PHString] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHLong = PHLong.Type
 
-  @scala.annotation.nowarn
-  object PHLong extends PhantomType[Long] {
+  object PHLong extends Sprout[Long] {
     def unsafeGenerate: PHLong = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[PHLong] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHInt = PHInt.Type
 
-  @scala.annotation.nowarn
-  object PHInt extends PhantomType[Int] {
+  object PHInt extends Sprout[Int] {
     def unsafeGenerate: PHInt = this.apply((scala.util.Random.nextInt() % 900) + 100)
     def generate[F[_]: Sync]: F[PHInt] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHUUID = PHUUID.Type
 
-  @scala.annotation.nowarn
-  object PHUUID extends PhantomType[UUID] {
+  object PHUUID extends SproutSub[UUID] {
     def unsafeGenerate: PHUUID = this.apply(UUID.randomUUID())
     def generate[F[_]: Sync]: F[PHUUID] = Sync[F].delay(unsafeGenerate)
   }
 
   type MyAuthToken = MyAuthToken.Type
 
-  @scala.annotation.nowarn
-  object MyAuthToken extends PhantomType[Long] {
+  object MyAuthToken extends Sprout[Long] {
     def unsafeGenerate: MyAuthToken = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[MyAuthToken] = Sync[F].delay(this.unsafeGenerate)
   }
 
   type PHHeader = PHHeader.Type
 
-  @scala.annotation.nowarn
-  object PHHeader extends PhantomType[Long] {
+  object PHHeader extends Sprout[Long] {
     def unsafeGenerate: PHHeader = this.apply((scala.util.Random.nextLong() % 9000L) + 1000L)
     def generate[F[_]: Sync]: F[PHHeader] = Sync[F].delay(this.unsafeGenerate)
   }
 
-  type SafePHUUIDStr = SafePHUUIDStr.Type
-
-  @scala.annotation.nowarn
-  object SafePHUUIDStr extends SafePhantomType[String, UUID] {
-    override def check(value: UUID): Either[String, UUID] = value.pure[Either[String, *]]
-    def unsafeGenerate: SafePHUUIDStr = this.unsafe(UUID.randomUUID())
-    def generate[F[_]: Sync]: F[SafePHUUIDStr] = Sync[F].delay(unsafeGenerate)
-  }
-
   type SafePHUUIDThr = SafePHUUIDThr.Type
 
-  @scala.annotation.nowarn
-  object SafePHUUIDThr extends SafePhantomType[Throwable, UUID] {
-    override def check(value: UUID): Either[Throwable, UUID] = value.pure[Either[Throwable, *]]
-
-    def unsafeGenerate: SafePHUUIDThr = this.unsafe(UUID.randomUUID())
-    def generate[F[_]: Sync]: F[SafePHUUIDThr] = Sync[F].delay(unsafeGenerate)
+  object SafePHUUIDThr extends SproutRefinedThrow[UUID] {
+    override def refine[F[_]](o: UUID)(implicit m: MonadError[F, Throwable]): F[UUID] = o.pure[F]
+    def generate[F[_]: Sync]: F[SafePHUUIDThr] = Sync[F].delay(newType[Try](UUID.randomUUID()).get)
   }
 }
