@@ -65,6 +65,7 @@ final class SafePhantomTypeSpec extends AnyFunSpec {
 private object SafePhantomTypeSpec {
   private val FailureString = "cannot be empty"
 
+  @scala.annotation.nowarn
   private object SafeSpooked extends SafePhantomType[String, String] {
 
     override def check(value: String): Either[String, String] =
@@ -73,6 +74,7 @@ private object SafePhantomTypeSpec {
 
   private type SafeSpooked = SafeSpooked.Type
 
+  @scala.annotation.nowarn
   private[pureharm] object OtherSafeSpooked extends SafePhantomType[String, String] {
     override def check(value: String): Either[String, String] = ???
   }

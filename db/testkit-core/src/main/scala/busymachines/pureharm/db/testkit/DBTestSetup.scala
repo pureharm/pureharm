@@ -70,6 +70,7 @@ trait DBTestSetup[DBTransactor] {
       fixture <- dbTransactorInstance(meta)
     } yield fixture
 
+  @scala.annotation.nowarn
   protected def _initDB(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, Unit] =
     for {
       _    <- logger.info(MDCKeys(meta))("SETUP — preparing DB").to[Resource[IO, *]]
@@ -93,6 +94,7 @@ trait DBTestSetup[DBTransactor] {
       _ <- logger.info(MDCKeys(meta))("SETUP — done preparing DB").to[Resource[IO, *]]
     } yield ()
 
+  @scala.annotation.nowarn
   protected def _cleanDB(meta: TestData)(implicit rt: RT, logger: TestLogger): Resource[IO, Unit] =
     for {
       _ <- logger.info(MDCKeys(meta))("SETUP — cleaning DB for a clean slate").to[Resource[IO, *]]

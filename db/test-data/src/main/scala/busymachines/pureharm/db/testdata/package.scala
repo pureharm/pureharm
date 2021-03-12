@@ -26,21 +26,28 @@ import busymachines.pureharm.phantom.PhantomType
   * @since 13 Jun 2019
   */
 package object testdata {
+
+  @scala.annotation.nowarn
   object PhantomByte extends PhantomType[Byte]
   type PhantomByte = PhantomByte.Type
 
+  @scala.annotation.nowarn
   object PhantomInt extends PhantomType[Int]
   type PhantomInt = PhantomInt.Type
 
+  @scala.annotation.nowarn
   object PhantomLong extends PhantomType[Long]
   type PhantomLong = PhantomLong.Type
 
+  @scala.annotation.nowarn
   object PhantomBigDecimal extends PhantomType[BigDecimal]
   type PhantomBigDecimal = PhantomBigDecimal.Type
 
+  @scala.annotation.nowarn
   object PhantomString extends PhantomType[String]
   type PhantomString = PhantomString.Type
 
+  @scala.annotation.nowarn
   object PhantomPK extends PhantomType[String] {
 
     implicit val showPK: Show[this.Type] =
@@ -48,15 +55,19 @@ package object testdata {
   }
   type PhantomPK = PhantomPK.Type
 
+  @scala.annotation.nowarn
   object UniqueString extends PhantomType[String]
   type UniqueString = UniqueString.Type
 
+  @scala.annotation.nowarn
   object UniqueInt extends PhantomType[Int]
   type UniqueInt = UniqueInt.Type
 
+  @scala.annotation.nowarn
   object UniqueJSON extends PhantomType[PHJSONCol]
   type UniqueJSON = UniqueJSON.Type
 
+  @scala.annotation.nowarn
   object PhantomUUID extends PhantomType[UUID] {
     def unsafeFromString(s: String):      PhantomUUID = this(UUID.fromString(s))
     def unsafeFromBytes(a:  Array[Byte]): PhantomUUID = this(UUID.nameUUIDFromBytes(a))

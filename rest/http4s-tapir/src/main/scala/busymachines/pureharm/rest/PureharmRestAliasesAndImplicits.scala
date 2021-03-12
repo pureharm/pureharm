@@ -21,6 +21,7 @@ import busymachines.pureharm.internals
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 16 Jul 2020
   */
+@scala.annotation.nowarn
 trait PureharmRestAliasesAndImplicits
   extends sttp.tapir.Tapir with sttp.tapir.server.http4s.TapirHttp4sServer with internals.rest.PureharmTapirAliases
   with internals.rest.PureharmTapirModelAliases with internals.rest.PureharmTapirServerAliases
