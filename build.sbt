@@ -148,10 +148,7 @@ lazy val `core-phantom` = kernelModule("core-phantom")
   .settings(PublishingSettings.sonatypeSettings)
   .settings(CompilerSettings.commonSettings)
   .settings(
-    libraryDependencies += (CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 13)) => shapeless2
-      case _             => shapeless3
-    }),
+    libraryDependencies += sprout,
     libraryDependencies ++= Seq(
       scalaTest % Test
     ),
@@ -529,7 +526,8 @@ lazy val `rest-http4s-tapir-testkit` = restModule("http4s-tapir-testkit")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val shapeless2Version: String = "2.4.0-M1"  //https://github.com/milessabin/shapeless/releases
+lazy val sproutVersion:     String = "0.0.1"     //https://github.com/lorandszakacs/sprout/releases
+lazy val shapeless2Version: String = "2.3.3"     //https://github.com/milessabin/shapeless/releases
 lazy val shapeless3Version: String = "3.0.0-M1"  //https://github.com/milessabin/shapeless/releases
 lazy val catsVersion:       String = "2.4.0"     //https://github.com/typelevel/cats/releases
 lazy val catsEffectVersion: String = "2.3.1"     //https://github.com/typelevel/cats-effect/releases
@@ -547,6 +545,13 @@ lazy val logbackVersion:    String = "1.2.3"     //https://github.com/qos-ch/log
 lazy val http4sVersion:     String = "0.21.18"   //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:      String = "0.17.9"    //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:  String = "3.2.3"     //https://github.com/scalatest/scalatest/releases
+
+//=============================================================================
+//=================================== CORE ===================================
+//=============================================================================
+
+//https://github.com/lorandszakacs/sprout/releases
+lazy val sprout = "com.lorandszakacs" %% "sprout" % sproutVersion withSources ()
 
 //=============================================================================
 //================================= TYPELEVEL =================================

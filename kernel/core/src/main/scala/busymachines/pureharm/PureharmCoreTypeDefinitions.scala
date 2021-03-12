@@ -29,8 +29,19 @@ trait PureharmCoreTypeDefinitions {
   final type Identifiable[T, ID] = identifiable.Identifiable[T, ID]
   final val Identifiable: identifiable.Identifiable.type = identifiable.Identifiable
 
-  final type PhantomType[T]        = phantom.PhantomType[T]
+  @scala.deprecated("Use SproutSub for semantic compat, but Sprout is recommended for stricter newtyping", "0.0.7")
+  final type PhantomType[T] = phantom.PhantomType[T]
+
+  @scala.deprecated(
+    "Use SproutRefinedSub for semantic compat, but Sprout is recommended for stricter newtyping",
+    "0.0.7",
+  )
   final type SafePhantomType[E, T] = phantom.SafePhantomType[E, T]
+
+  @scala.deprecated(
+    "Use SproutRefinedSubThrow for semantic compat, but Sprout is recommended for stricter newtyping",
+    "0.0.7",
+  )
   final type AttemptPhantomType[T] = phantom.SafePhantomType[Throwable, T]
 
   final type Spook[T, PT] = phantom.Spook[T, PT]
@@ -38,4 +49,18 @@ trait PureharmCoreTypeDefinitions {
 
   final type SafeSpook[E, T, PT] = phantom.SafeSpook[E, T, PT]
   final val SafeSpook: phantom.SafeSpook.type = phantom.SafeSpook
+
+  type Sprout[O]                = sprout.Sprout[O]
+  type SproutSub[O]             = sprout.SproutSub[O]
+  type SproutRefined[O, E]      = sprout.SproutRefined[O, E]
+  type SproutRefinedSub[O, E]   = sprout.SproutRefinedSub[O, E]
+  type SproutRefinedThrow[O]    = sprout.SproutRefinedThrow[O]
+  type SproutRefinedSubThrow[O] = sprout.SproutRefinedSub[O, Throwable]
+
+  type NewType[O, N] = sprout.NewType[O, N]
+  val NewType: sprout.NewType.type = sprout.NewType
+  type RefinedType[O, N, E] = sprout.RefinedType[O, N, E]
+  val RefinedType: sprout.RefinedType.type = sprout.RefinedType
+  type RefinedTypeThrow[O, N] = sprout.RefinedTypeThrow[O, N]
+  val RefinedTypeThrow: sprout.RefinedTypeThrow.type = sprout.RefinedTypeThrow
 }
