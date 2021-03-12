@@ -19,7 +19,7 @@ package busymachines.pureharm
 import scala.annotation.implicitNotFound
 
 import busymachines.pureharm.effects._
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.phantom._
 import org.typelevel.log4cats._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -44,7 +44,7 @@ package object testkit {
   )
   type TestLogger = TestLogger.Type
 
-  object TestLogger extends PhantomType[StructuredLogger[IO]] {
+  object TestLogger extends SproutSub[StructuredLogger[IO]] {
 
     def fromClass(cl: Class[_]): TestLogger =
       this.apply(slf4j.Slf4jLogger.getLoggerFromName[IO](s"${cl.getCanonicalName}.test.report"))
