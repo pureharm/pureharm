@@ -54,6 +54,20 @@ object PureharmSlickInstances {
       spook:  SafeSpook[Err, Underlying, Phantom],
       column: ColumnType[Underlying],
     ): ColumnType[Phantom] = MappedColumnType.base[Phantom, Underlying](spook.despook, s => spook.spook(s).unsafeGet())
+
+    implicit final def pureharmSproutTypeColumn[Underlying, New: ClassTag](implicit
+      newType: NewType[Underlying, New],
+      column:  ColumnType[Underlying],
+    ): ColumnType[New] = MappedColumnType.base[New, Underlying](newType.oldType, newType.newType)
+
+    implicit final def pureharmSproutRefinedTypeColumn[Underlying, New: ClassTag](implicit
+      spook:  RefinedTypeThrow[Underlying, New],
+      column: ColumnType[Underlying],
+    ): ColumnType[New] = {
+      import cats.implicits._
+      MappedColumnType.base[New, Underlying](spook.oldType, s => spook.newType[scala.util.Try](s).get)
+    }
+
   }
 
 }
