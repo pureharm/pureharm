@@ -542,7 +542,7 @@ lazy val doobieVersion:     String = "0.12.1"   //https://github.com/tpolecat/do
 lazy val flywayVersion:     String = "7.7.0"    //java — https://github.com/flyway/flyway/releases
 lazy val log4catsVersion:   String = "1.2.0"    //https://github.com/typelevel/log4cats/releases
 lazy val logbackVersion:    String = "1.2.3"    //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:     String = "0.21.18"  //https://github.com/http4s/http4s/releases
+lazy val http4sVersion:     String = "0.21.20"  //https://github.com/http4s/http4s/releases
 lazy val tapirVersion:      String = "0.17.16"  //https://github.com/softwaremill/tapir/releases
 lazy val scalaTestVersion:  String = "3.2.3"    //https://github.com/scalatest/scalatest/releases
 
