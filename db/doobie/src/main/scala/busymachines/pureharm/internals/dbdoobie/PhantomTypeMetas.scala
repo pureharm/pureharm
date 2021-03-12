@@ -20,7 +20,7 @@ import scala.reflect.runtime.universe.TypeTag
 
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.phantom.{SafeSpook, Spook}
+import busymachines.pureharm.phantom._
 import doobie.{Get, Meta, Put}
 import io.circe._
 import io.circe.parser._
@@ -30,6 +30,23 @@ import org.postgresql.util.PGobject
   * @since 24 Sep 2019
   */
 trait PhantomTypeMetas {
+
+  implicit final def pureharmSproutOldTypePut[Underlying, New](implicit
+    oldType: OldType[Underlying, New],
+    get:     Put[Underlying],
+  ): Put[New] = get.contramap(oldType.oldType)
+
+  implicit final def pureharmSproutNewTypeGet[Underlying, New](implicit
+    newType: NewType[Underlying, New],
+    meta:    Meta[Underlying],
+  ): Meta[New] = meta.imap(newType.newType)(newType.oldType)
+
+  implicit final def pureharmSproutRefinedTypeGet[Old: TypeTag, New: TypeTag, Err](implicit
+    refined:   RefinedType[Old, New, Err],
+    get:       Get[Old],
+    showErr:   Show[Err],
+    showUnder: Show[Old],
+  ): Get[New] = get.temap(s => refined.newType[Either[Err, *]](s).leftMap(_.show))
 
   implicit final def phantomTypeMeta[Underlying, Phantom](implicit
     spook: Spook[Underlying, Phantom],

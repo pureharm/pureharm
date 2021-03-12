@@ -57,7 +57,7 @@ final class SlickPHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Parall
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
       assert(failure.column == "unique_string", "column name")
-      assert(failure.value == data.row1.uniqueString, "column name")
+      assert(failure.value == UniqueString.oldType(data.row1.uniqueString), "column name")
     }
   }
 
@@ -87,7 +87,7 @@ final class SlickPHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Parall
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
       assert(failure.column == "unique_json", "column name")
-      assertSuccess(failure.value.decodeAs[PHJSONCol])(data.row1.uniqueJSON)
+      assertSuccess(failure.value.decodeAs[PHJSONCol])(UniqueJSON.oldType(data.row1.uniqueJSON))
     }
   }
 }

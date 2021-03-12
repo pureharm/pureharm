@@ -17,58 +17,45 @@
 package busymachines.pureharm.db
 
 import java.util.UUID
-
 import busymachines.pureharm.effects._
 import busymachines.pureharm.effects.implicits._
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.phantom._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019
   */
 package object testdata {
 
-  @scala.annotation.nowarn
-  object PhantomByte extends PhantomType[Byte]
+  object PhantomByte extends Sprout[Byte]
   type PhantomByte = PhantomByte.Type
 
-  @scala.annotation.nowarn
-  object PhantomInt extends PhantomType[Int]
+  object PhantomInt extends Sprout[Int]
   type PhantomInt = PhantomInt.Type
 
-  @scala.annotation.nowarn
-  object PhantomLong extends PhantomType[Long]
+  object PhantomLong extends Sprout[Long]
   type PhantomLong = PhantomLong.Type
 
-  @scala.annotation.nowarn
-  object PhantomBigDecimal extends PhantomType[BigDecimal]
+  object PhantomBigDecimal extends Sprout[BigDecimal]
   type PhantomBigDecimal = PhantomBigDecimal.Type
 
-  @scala.annotation.nowarn
-  object PhantomString extends PhantomType[String]
+  object PhantomString extends Sprout[String]
   type PhantomString = PhantomString.Type
 
-  @scala.annotation.nowarn
-  object PhantomPK extends PhantomType[String] {
-
-    implicit val showPK: Show[this.Type] =
-      Show[String].asInstanceOf[Show[this.Type]]
+  object PhantomPK extends Sprout[String] {
+    implicit val showPK: Show[this.Type] = Show[String].contramap(oldType)
   }
   type PhantomPK = PhantomPK.Type
 
-  @scala.annotation.nowarn
-  object UniqueString extends PhantomType[String]
+  object UniqueString extends Sprout[String]
   type UniqueString = UniqueString.Type
 
-  @scala.annotation.nowarn
-  object UniqueInt extends PhantomType[Int]
+  object UniqueInt extends Sprout[Int]
   type UniqueInt = UniqueInt.Type
 
-  @scala.annotation.nowarn
-  object UniqueJSON extends PhantomType[PHJSONCol]
+  object UniqueJSON extends Sprout[PHJSONCol]
   type UniqueJSON = UniqueJSON.Type
 
-  @scala.annotation.nowarn
-  object PhantomUUID extends PhantomType[UUID] {
+  object PhantomUUID extends Sprout[UUID] {
     def unsafeFromString(s: String):      PhantomUUID = this(UUID.fromString(s))
     def unsafeFromBytes(a:  Array[Byte]): PhantomUUID = this(UUID.nameUUIDFromBytes(a))
 
