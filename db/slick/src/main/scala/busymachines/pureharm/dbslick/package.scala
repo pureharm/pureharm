@@ -16,7 +16,7 @@
   */
 package busymachines.pureharm
 
-import busymachines.pureharm.phantom.PhantomType
+import busymachines.pureharm.phantom._
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 13 Jun 2019

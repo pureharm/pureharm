@@ -54,9 +54,13 @@ final class PhantomTypeSpec extends AnyFunSpec {
 }
 
 private object PhantomTypeSpec {
+
+  @scala.annotation.nowarn
   private object Spooked extends PhantomType[String]
   private type Spooked = Spooked.Type
 
+  @scala.annotation.nowarn
   private[pureharm] object OtherSpooked extends PhantomType[String]
+
   private[pureharm] type OtherSpooked = OtherSpooked.Type
 }

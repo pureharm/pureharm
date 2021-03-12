@@ -25,12 +25,19 @@ import scala.concurrent.duration._
   * @since 16 Jun 2019
   */
 package object test {
+  @scala.annotation.nowarn
   object PhantomInt            extends PhantomType[Int]
+  @scala.annotation.nowarn
   object PhantomString         extends PhantomType[String]
+  @scala.annotation.nowarn
   object PhantomBoolean        extends PhantomType[Boolean]
+  @scala.annotation.nowarn
   object PhantomList           extends PhantomType[List[Int]]
+  @scala.annotation.nowarn
   object PhantomSet            extends PhantomType[Set[String]]
+  @scala.annotation.nowarn
   object PhantomFiniteDuration extends PhantomType[FiniteDuration]
+  @scala.annotation.nowarn
   object PhantomDuration       extends PhantomType[Duration]
 
   type PhantomInt            = PhantomInt.Type
@@ -42,6 +49,7 @@ package object test {
   type PhantomDuration       = PhantomDuration.Type
   type SafePhantomInt        = SafePhantomInt.Type
 
+  @scala.annotation.nowarn
   object SafePhantomInt extends SafePhantomType[Throwable, Int] {
 
     override def check(value: Int): Either[Throwable, Int] = {

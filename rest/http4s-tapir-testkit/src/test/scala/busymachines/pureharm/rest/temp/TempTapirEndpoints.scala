@@ -16,8 +16,6 @@
   */
 package busymachines.pureharm.rest.temp
 
-import sttp.tapir.server.http4s.Http4sServerInterpreter
-
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 10 Jul 2020
   */
@@ -180,6 +178,7 @@ object TempTapirEndpoints {
         domain.getLogic(ph)(auth)
     }
 
+    @scala.annotation.nowarn
     val testGetEndpointQueryParamsRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetEndpointQueryParams) {
       case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
         F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
@@ -191,6 +190,7 @@ object TempTapirEndpoints {
         F.delay[Unit](println(s"header: $header")) >> domain.getLogic(ph)(auth)
     }
 
+    @scala.annotation.nowarn
     val testPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testPostEndpoint) {
       case (auth: MyAuthToken, myInputType) =>
         domain.postLogic(myInputType)(auth)

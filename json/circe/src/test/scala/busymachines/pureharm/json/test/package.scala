@@ -25,9 +25,11 @@ import busymachines.pureharm.effects.implicits._
   */
 package object test {
 
+  @scala.annotation.nowarn
   object Weight extends PhantomType[Int]
   type Weight = Weight.Type
 
+  @scala.annotation.nowarn
   object SafeWeight extends SafePhantomType[Throwable, Int] {
 
     /** @return
@@ -43,15 +45,19 @@ package object test {
   }
   type SafeWeight = SafeWeight.Type
 
+  @scala.annotation.nowarn
   object Weights extends PhantomType[List[Int]]
   type Weights = Weights.Type
 
+  @scala.annotation.nowarn
   object WeigthsSet extends PhantomType[Set[Int]]
   type WeigthsSet = WeigthsSet.Type
 
+  @scala.annotation.nowarn
   object MelonDuo extends PhantomType[(Int, String)]
   type MelonDuo = MelonDuo.Type
 
+  @scala.annotation.nowarn
   object MelonTrio extends PhantomType[(Int, String, List[Int])]
   type MelonTrio = MelonTrio.Type
 
