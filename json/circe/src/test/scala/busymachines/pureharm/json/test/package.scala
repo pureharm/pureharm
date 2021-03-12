@@ -19,15 +19,23 @@ package busymachines.pureharm.json
 import busymachines.pureharm.anomaly.InvalidInputAnomaly
 import busymachines.pureharm.phantom._
 import busymachines.pureharm.effects.implicits._
+import cats.MonadError
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 12 Jun 2019
   */
 package object test {
 
-  @scala.annotation.nowarn
-  object Weight extends PhantomType[Int]
+  object Weight extends SproutSub[Int]
   type Weight = Weight.Type
+
+  type RefinedWeight = RefinedWeight.Type
+
+  object RefinedWeight extends SproutRefinedThrow[Int] {
+
+    override def refine[F[_]](o: Int)(implicit m: MonadError[F, Throwable]): F[Int] =
+      if (o > 0) o.pure[F] else InvalidInputAnomaly("Weight should be larger than 0").raiseError[F, Int]
+  }
 
   @scala.annotation.nowarn
   object SafeWeight extends SafePhantomType[Throwable, Int] {
@@ -45,20 +53,16 @@ package object test {
   }
   type SafeWeight = SafeWeight.Type
 
-  @scala.annotation.nowarn
-  object Weights extends PhantomType[List[Int]]
+  object Weights extends Sprout[List[Int]]
   type Weights = Weights.Type
 
-  @scala.annotation.nowarn
-  object WeigthsSet extends PhantomType[Set[Int]]
+  object WeigthsSet extends Sprout[Set[Int]]
   type WeigthsSet = WeigthsSet.Type
 
-  @scala.annotation.nowarn
-  object MelonDuo extends PhantomType[(Int, String)]
+  object MelonDuo extends Sprout[(Int, String)]
   type MelonDuo = MelonDuo.Type
 
-  @scala.annotation.nowarn
-  object MelonTrio extends PhantomType[(Int, String, List[Int])]
+  object MelonTrio extends Sprout[(Int, String, List[Int])]
   type MelonTrio = MelonTrio.Type
 
 }

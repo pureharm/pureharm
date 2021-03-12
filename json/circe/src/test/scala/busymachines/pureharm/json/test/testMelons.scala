@@ -40,12 +40,13 @@ private[test] case class WaterMelon(
 ) extends Melon
 
 private[test] case class PhantomMelon(
-  weight:     Weight,
-  safeWeight: SafeWeight,
-  weights:    Weights,
-  weightsSet: WeigthsSet,
-  duo:        MelonDuo,
-  trio:       MelonTrio,
+  weight:        Weight,
+  safeWeight:    SafeWeight,
+  refinedWeight: RefinedWeight,
+  weights:       Weights,
+  weightsSet:    WeigthsSet,
+  duo:           MelonDuo,
+  trio:          MelonTrio,
 ) extends Melon
 
 private[test] case object SmallMelon extends Melon {
