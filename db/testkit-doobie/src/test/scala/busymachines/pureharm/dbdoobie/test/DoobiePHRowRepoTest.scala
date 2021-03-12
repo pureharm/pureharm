@@ -47,7 +47,7 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
       assert(failure.column == DoobieDoobiePHRowTable.unique_string, "column name")
-      assert(failure.value == data.row1.uniqueString, "column name")
+      assert(failure.value == UniqueString.oldType(data.row1.uniqueString), "column name")
     }
   }
 
@@ -77,7 +77,7 @@ final class DoobiePHRowRepoTest extends PHRowRepoTest[Transactor[IO]] with Paral
       failure = interceptFailure[DBUniqueConstraintViolationAnomaly](attempt)
     } yield {
       assert(failure.column == DoobieDoobiePHRowTable.unique_json, "column name")
-      assertSuccess(failure.value.decodeAs[PHJSONCol])(data.row1.uniqueJSON)
+      assertSuccess(failure.value.decodeAs[PHJSONCol])(UniqueJSON.oldType(data.row1.uniqueJSON))
     }
   }
 }
