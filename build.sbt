@@ -526,25 +526,25 @@ lazy val `rest-http4s-tapir-testkit` = restModule("http4s-tapir-testkit")
 //*****************************************************************************
 //*****************************************************************************
 
-lazy val sproutVersion:     String = "0.0.1"     //https://github.com/lorandszakacs/sprout/releases
-lazy val shapeless2Version: String = "2.3.3"     //https://github.com/milessabin/shapeless/releases
-lazy val shapeless3Version: String = "3.0.0-M1"  //https://github.com/milessabin/shapeless/releases
-lazy val catsVersion:       String = "2.4.2"     //https://github.com/typelevel/cats/releases
-lazy val catsEffectVersion: String = "2.3.3"     //https://github.com/typelevel/cats-effect/releases
-lazy val fs2Version:        String = "2.5.3"     //https://github.com/functional-streams-for-scala/fs2/releases
-lazy val circeVersion:      String = "0.13.0"    //https://github.com/circe/circe/releases
-lazy val pureconfigVersion: String = "0.14.1"    //https://github.com/pureconfig/pureconfig/releases
-lazy val attoVersion:       String = "0.9.2"     //https://github.com/tpolecat/atto/releases
-lazy val slickVersion:      String = "3.3.3"     //https://github.com/slick/slick/releases
-lazy val postgresqlVersion: String = "42.2.18"   //java — https://github.com/pgjdbc/pgjdbc/releases
-lazy val hikariCPVersion:   String = "3.4.5"     //java — https://github.com/brettwooldridge/HikariCP/releases
-lazy val doobieVersion:     String = "0.12.1"    //https://github.com/tpolecat/doobie/releases
-lazy val flywayVersion:     String = "7.7.0"     //java — https://github.com/flyway/flyway/releases
-lazy val log4catsVersion:   String = "1.2.0-RC2" //https://github.com/typelevel/log4cats/releases
-lazy val logbackVersion:    String = "1.2.3"     //https://github.com/qos-ch/logback/releases
-lazy val http4sVersion:     String = "0.21.18"   //https://github.com/http4s/http4s/releases
-lazy val tapirVersion:      String = "0.17.9"    //https://github.com/softwaremill/tapir/releases
-lazy val scalaTestVersion:  String = "3.2.3"     //https://github.com/scalatest/scalatest/releases
+lazy val sproutVersion:     String = "0.0.1"    //https://github.com/lorandszakacs/sprout/releases
+lazy val shapeless2Version: String = "2.3.3"    //https://github.com/milessabin/shapeless/releases
+lazy val shapeless3Version: String = "3.0.0-M1" //https://github.com/milessabin/shapeless/releases
+lazy val catsVersion:       String = "2.4.2"    //https://github.com/typelevel/cats/releases
+lazy val catsEffectVersion: String = "2.3.3"    //https://github.com/typelevel/cats-effect/releases
+lazy val fs2Version:        String = "2.5.3"    //https://github.com/functional-streams-for-scala/fs2/releases
+lazy val circeVersion:      String = "0.13.0"   //https://github.com/circe/circe/releases
+lazy val pureconfigVersion: String = "0.14.1"   //https://github.com/pureconfig/pureconfig/releases
+lazy val attoVersion:       String = "0.9.2"    //https://github.com/tpolecat/atto/releases
+lazy val slickVersion:      String = "3.3.3"    //https://github.com/slick/slick/releases
+lazy val postgresqlVersion: String = "42.2.18"  //java — https://github.com/pgjdbc/pgjdbc/releases
+lazy val hikariCPVersion:   String = "3.4.5"    //java — https://github.com/brettwooldridge/HikariCP/releases
+lazy val doobieVersion:     String = "0.12.1"   //https://github.com/tpolecat/doobie/releases
+lazy val flywayVersion:     String = "7.7.0"    //java — https://github.com/flyway/flyway/releases
+lazy val log4catsVersion:   String = "1.2.0"    //https://github.com/typelevel/log4cats/releases
+lazy val logbackVersion:    String = "1.2.3"    //https://github.com/qos-ch/logback/releases
+lazy val http4sVersion:     String = "0.21.18"  //https://github.com/http4s/http4s/releases
+lazy val tapirVersion:      String = "0.17.9"   //https://github.com/softwaremill/tapir/releases
+lazy val scalaTestVersion:  String = "3.2.3"    //https://github.com/scalatest/scalatest/releases
 
 //=============================================================================
 //=================================== CORE ===================================
