@@ -38,7 +38,7 @@ object TempRestMain extends PureharmIOApp {
       implicit0(http4sRuntime: TestHttp4sRuntime[IO]) <-
         TestHttp4sRuntime[IO](blockingShifter)(F, timer).pure[IO]
       app <- MyAppEcology.everything[IO](F, http4sRuntime)
-      _ <- MyAppDocs.printYAML[IO](app.restAPIs)
+      _ <- MyAppDocs.printYAML[IO]
       blazeServer = blazeServerBuilder[IO](app.http4sApp)(F, timer, http4sRuntime)
       _ <- blazeServer.serve.compile.drain
     } yield ExitCode.Success

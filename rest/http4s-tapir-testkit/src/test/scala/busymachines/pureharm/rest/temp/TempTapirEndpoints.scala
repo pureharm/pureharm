@@ -40,8 +40,9 @@ object TempTapirEndpoints {
 
     def getLogic(id: PHUUID)(implicit auth: MyAuthToken): F[MyOutputType] = withAuth { ctx: MyAuthContext =>
       for {
-        _ <- F.delay(println(s"I AM $ctx"))
-        _ <- F.delay(println(s"GET LOGIC HERE — $id"))
+        _   <- F.delay(println(s"I AM $ctx"))
+        _   <- F.delay(println(s"GET LOGIC HERE — $id"))
+        sf6 <- SafePHUUIDThr.generate[F]
       } yield MyOutputType(
         id  = id,
         f1  = PHString.unsafeGenerate,
@@ -50,8 +51,7 @@ object TempTapirEndpoints {
         fl  = List(PHLong.unsafeGenerate),
         f4  = List(PHUUID.unsafeGenerate, PHUUID.unsafeGenerate, PHUUID.unsafeGenerate),
         f5  = Option(PHString.unsafeGenerate),
-        sf6 = SafePHUUIDStr.unsafeGenerate,
-        sf7 = SafePHUUIDThr.unsafeGenerate,
+        sf6 = sf6,
       )
     }
 
@@ -70,7 +70,6 @@ object TempTapirEndpoints {
         f4  = input.f4,
         f5  = input.f5,
         sf6 = input.sf6,
-        sf7 = input.sf7,
       )
   }
 
@@ -80,8 +79,10 @@ object TempTapirEndpoints {
   private lazy val AuthTokenHeaderName = "X-AUTH-TOKEN"
 
   //----- Create a unified way of doing auth, you can also add in common logic. See tapir docs for that
-  val authedEndpoint: SimpleEndpoint[MyAuthToken, Unit] =
+  val authedEndpoint: SimpleEndpoint[MyAuthToken, Unit] = {
+    import TempSproutCodecs._
     phEndpoint.in(auth.xCustomAuthHeader[MyAuthToken](AuthTokenHeaderName))
+  }
 
   //----- Create one of these for your app
   final class TestHttp4sRuntime[F[_]](
@@ -108,11 +109,8 @@ object TempTapirEndpoints {
   // ----- Create one of these for your app
   trait MyAppRest[F[_]] extends RestDefs[F, Concurrent[F], TestHttp4sRuntime[F]]
 
-  // ----- And create as many of these as you need
-  final class SomeAPI[F[_]](
-    domain:                              SomeOrganizer[F]
-  )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
-    extends MyAppRest[F] {
+  object SomeAPI {
+    import TempSproutCodecs._
 
     val nonAuthedGetEndpoint: SimpleEndpoint[Unit, MyOutputType] =
       phEndpoint.get
@@ -132,10 +130,6 @@ object TempTapirEndpoints {
         .in("test" / path[PHUUID])
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
-
-    //Unfortunately, providing implicitly such codecs degrades compilation by one order of magnitude.
-    implicit private val c: TapirPlainCodec[SafePHUUIDThr] =
-      TapirCodecs.safePhantomTypePlainCodec[java.util.UUID, SafePHUUIDThr]
 
     val testGetEndpointSafePHUUIDThr: SimpleEndpoint[(MyAuthToken, SafePHUUIDThr), MyOutputType] =
       authedEndpoint.get
@@ -165,33 +159,53 @@ object TempTapirEndpoints {
         .out(jsonBody[MyOutputType])
         .out(statusCode(StatusCode.Ok))
 
-    val nonAuthedGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(nonAuthedGetEndpoint) { _ =>
+    val endpoints: List[Endpoint[_, _, _, _]] = List(
+      nonAuthedGetEndpoint,
+      nonAuthedPostEndpoint,
+      testGetEndpoint,
+      testGetEndpointSafePHUUIDThr,
+      testPostEndpoint,
+      testGetEndpointQueryParams,
+      testGetWithHeaderEndpoint,
+    )
+  }
+
+  // ----- And create as many of these as you need
+  final class SomeAPI[F[_]](
+    domain:                              SomeOrganizer[F]
+  )(implicit override val http4sRuntime: TestHttp4sRuntime[F])
+    extends MyAppRest[F] {
+
+    val nonAuthedGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(SomeAPI.nonAuthedGetEndpoint) { _ =>
       domain.getLogic(PHUUID.unsafeGenerate)(MyAuthToken.unsafeGenerate)
     }
 
-    val nonAuthedPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(nonAuthedPostEndpoint) {
+    val nonAuthedPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(SomeAPI.nonAuthedPostEndpoint) {
       case (myInputType: MyInputType) => domain.postLogic(myInputType)(MyAuthToken.unsafeGenerate)
     }
 
-    val testGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetEndpoint) {
+    @scala.annotation.nowarn
+    val testGetRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(SomeAPI.testGetEndpoint) {
       case (auth: MyAuthToken, ph: PHUUID) =>
         domain.getLogic(ph)(auth)
     }
 
     @scala.annotation.nowarn
-    val testGetEndpointQueryParamsRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetEndpointQueryParams) {
-      case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
-        F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
-          domain.getLogic(ph)(auth)
-    }
+    val testGetEndpointQueryParamsRoute: HttpRoutes[F] =
+      http4sServer.toRouteRecoverErrors(SomeAPI.testGetEndpointQueryParams) {
+        case (auth: MyAuthToken, ph: PHUUID, longParam: PHLong, intOpt: Option[PHInt]) =>
+          F.delay[Unit](println(s"params: $longParam --- $intOpt")) >>
+            domain.getLogic(ph)(auth)
+      }
 
-    val testGetWithHeaderRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testGetWithHeaderEndpoint) {
+    @scala.annotation.nowarn
+    val testGetWithHeaderRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(SomeAPI.testGetWithHeaderEndpoint) {
       case (auth: MyAuthToken, ph: PHUUID, header: PHHeader) =>
         F.delay[Unit](println(s"header: $header")) >> domain.getLogic(ph)(auth)
     }
 
     @scala.annotation.nowarn
-    val testPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(testPostEndpoint) {
+    val testPostRoute: HttpRoutes[F] = http4sServer.toRouteRecoverErrors(SomeAPI.testPostEndpoint) {
       case (auth: MyAuthToken, myInputType) =>
         domain.postLogic(myInputType)(auth)
     }

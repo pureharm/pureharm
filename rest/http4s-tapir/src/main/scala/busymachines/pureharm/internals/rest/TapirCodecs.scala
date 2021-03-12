@@ -16,7 +16,7 @@
   */
 package busymachines.pureharm.internals.rest
 
-import busymachines.pureharm.phantom.SafeSpook
+import busymachines.pureharm.phantom._
 import sttp.tapir
 
 /** @author Lorand Szakacs, https://github.com/lorandszakacs
@@ -38,6 +38,24 @@ object TapirCodecs {
       }
     )(
       g = p.despook
+    )
+    tc.map(m)
+  }
+
+  @inline def refinedTypePlainCodec[Underlying, PT](implicit
+    tc: tapir.Codec.PlainCodec[Underlying],
+    p:  RefinedTypeThrow[Underlying, PT],
+  ): tapir.Codec.PlainCodec[PT] = {
+    val m = tapir.Mapping.fromDecode[Underlying, PT](
+      f = { u: Underlying =>
+        p.newType[Either[Throwable, *]](u) match {
+          case Right(v) => tapir.DecodeResult.Value(v)
+          case Left(e)  =>
+            tapir.DecodeResult.Error(s"Invalid type format for type=${p.symbolicName}. ${e.getMessage}", e)
+        }
+      }
+    )(
+      g = p.oldType
     )
     tc.map(m)
   }
