@@ -16,4 +16,8 @@ package object phantom {
   val RefinedType: sprout.RefinedType.type = sprout.RefinedType
   type RefinedTypeThrow[O, N] = sprout.RefinedTypeThrow[O, N]
   val RefinedTypeThrow: sprout.RefinedTypeThrow.type = sprout.RefinedTypeThrow
+
+  type SproutShow[O]  = sprout.SproutShow[O]
+  type SproutEq[O]    = sprout.SproutEq[O]
+  type SproutOrder[O] = sprout.SproutOrder[O]
 }
