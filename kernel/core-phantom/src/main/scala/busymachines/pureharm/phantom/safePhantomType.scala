@@ -22,6 +22,7 @@ package busymachines.pureharm.phantom
   * @author Lorand Szakacs, https://github.com/lorandszakacs
   * @since 09 May 2019
   */
+@scala.deprecated("Use SproutRefinedSub for semantic compat, but Sprout is recommended for stricter newtyping", "0.0.7")
 trait SafePhantomType[E, T] {
   import shapeless.tag
   import tag.@@
