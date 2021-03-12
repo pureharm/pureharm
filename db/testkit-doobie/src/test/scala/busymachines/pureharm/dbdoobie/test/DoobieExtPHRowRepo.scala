@@ -40,10 +40,10 @@ private[test] object DoobieExtPHRowRepo {
     override val name: TableName = schema.PureharmExternalRows
     val row_id:        Column    = createColumn("row_id")
 
-    implicit override val metaPK: Meta[PhantomUUID] = Meta[PhantomUUID]
-    override val showPK:          Show[PhantomUUID] = Show[PhantomUUID]
-    override val readE:           Read[ExtPHRow]    = Read[ExtPHRow]
-    override val writeE:          Write[ExtPHRow]   = Write[ExtPHRow]
+    override val metaPK: Meta[PhantomUUID] = Meta[PhantomUUID]
+    override val showPK: Show[PhantomUUID] = Show[PhantomUUID]
+    override val readE:  Read[ExtPHRow]    = Read[ExtPHRow]
+    override val writeE: Write[ExtPHRow]   = Write[ExtPHRow]
   }
 
   final private object DoobieExtPHRowQueries
@@ -54,6 +54,6 @@ private[test] object DoobieExtPHRowRepo {
   final private class DoobieExtPHRrowRepoImpl[F[_]: BracketAttempt](implicit
     override val transactor: Transactor[F]
   ) extends DoobieRepo[F, ExtPHRow, PhantomUUID, DoobiePHExtRowTable.type] with DoobieExtPHRowRepo[F] {
-    override protected val queries: DoobieExtPHRowQueries.type = DoobieExtPHRowQueries
+    override protected lazy val queries: DoobieExtPHRowQueries.type = DoobieExtPHRowQueries
   }
 }

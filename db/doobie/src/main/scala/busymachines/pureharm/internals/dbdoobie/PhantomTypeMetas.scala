@@ -36,7 +36,7 @@ trait PhantomTypeMetas {
     get:     Put[Underlying],
   ): Put[New] = get.contramap(oldType.oldType)
 
-  implicit final def pureharmSproutNewTypeGet[Underlying, New](implicit
+  implicit final def pureharmSproutNewTypeMeta[Underlying, New](implicit
     newType: NewType[Underlying, New],
     meta:    Meta[Underlying],
   ): Meta[New] = meta.imap(newType.newType)(newType.oldType)
