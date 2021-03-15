@@ -19,11 +19,11 @@
 //#############################################################################
 //#############################################################################
 
-lazy val kernelVersion = "0.0.7-M3"
-lazy val configVersion = "0.0.7-M3"
-lazy val jsonVersion   = "0.0.7-M3"
-lazy val dbVersion     = "0.0.7-M3"
-lazy val restVersion   = "0.0.7-M3"
+lazy val kernelVersion = "0.0.7"
+lazy val configVersion = "0.0.7"
+lazy val jsonVersion   = "0.0.7"
+lazy val dbVersion     = "0.0.7"
+lazy val restVersion   = "0.0.7"
 
 // format: off
 addCommandAlias("ph-useScala213", s"++${CompilerSettings.scala2_13}")
